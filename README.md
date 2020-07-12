@@ -1,6 +1,6 @@
 <!-- PROJECT LOGO -->
 <p align="center">
-  <h2 align="center">Paxinfy<h2>
+  <h2 align="center">UTIVA<h2>
   <h4 align="center" style="color:purple">UTIVA<h4>
 
   <p align="center">
