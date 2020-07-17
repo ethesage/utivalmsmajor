@@ -1,3 +1,4 @@
+import { v4 as uuid } from 'uuid';
 import helpers from '../../helpers';
 
 const { hashPassword } = helpers;
@@ -14,7 +15,19 @@ module.exports = (sequelize, DataTypes) => {
       profilePic: DataTypes.STRING,
       emailNotify: DataTypes.BOOLEAN,
       inAppNotify: DataTypes.BOOLEAN,
-      verified: DataTypes.BOOLEAN,
+      company: DataTypes.STRING,
+      occupation: DataTypes.STRING,
+      region: DataTypes.STRING,
+      country: DataTypes.STRING,
+      gender: DataTypes.STRING,
+      phoneNumber: DataTypes.STRING,
+      bio: DataTypes.TEXT,
+      firstentry: DataTypes.BOOLEAN,
+      linkedin: DataTypes.STRING,
+      updated: DataTypes.BOOLEAN,
+      verifiedPayment: DataTypes.BOOLEAN,
+      verifiedEmail: DataTypes.BOOLEAN,
+      byadmin: DataTypes.BOOLEAN,
     },
     {
       getterMethods: {
@@ -22,14 +35,12 @@ module.exports = (sequelize, DataTypes) => {
           return uuid();
         },
       },
-    },
-    {
       hooks: {
         beforeCreate: async (user) => {
           user.password = await hashPassword(user.password);
         },
       },
-    }
+    },
   );
 
   User.beforeCreate((user) => {
@@ -45,10 +56,19 @@ module.exports = (sequelize, DataTypes) => {
       lastName: this.lastName,
       email: this.email,
       role: this.role,
-      userName: this.userName,
+      company: this.company,
+      region: this.region,
+      gender: this.gender,
+      country: this.country,
+      occupation: this.occupation,
+      profilePic: this.profilePic,
+      phoneNumber: this.phoneNumber,
+      linkedin: this.linkedin,
+      updated: this.updated,
+      firstentry: this.firstentry,
+      verifiedEmail: this.verifiedEmail,
+      verifiedPayment: this.verifiedPayment,
       bio: this.bio,
-      emailNotify: this.emailNotify,
-      inAppNotify: this.inAppNotify,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
     };

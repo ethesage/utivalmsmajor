@@ -8,27 +8,22 @@ export default {
       can: [''],
     },
     user: {
-      can: ['organization:create', 'organization:invite', 'organization:join'],
+      can: [''],
       inherits: ['guest'],
     },
     staff: {
-      can: [{ name: 'content:crud', when: async (params) => params.isAllowed }],
+      can: [''],
       inherits: ['user'],
     },
     admin: {
-      can: ['content:*'],
+      can: ['admin:create'],
       inherits: ['staff'],
     },
     owner: {
-      can: [
-        {
-          name: 'organization:invite',
-          when: async (params) => params.id === params.ownerId,
-        },
-      ],
+      can: [''],
       inherits: ['admin'],
     },
-    god: {
+    tech: {
       can: [''],
       inherits: ['owner'],
     },

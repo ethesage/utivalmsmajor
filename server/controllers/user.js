@@ -4,8 +4,8 @@ import helpers from '../helpers';
 import Mail from '../services/mail/email';
 import { generateToken, verifyToken } from '../helpers/auth';
 
-const userRepository = new dbRepository(models.User);
-const { successStat, errorStat, comparePassword } = helpers;
+// const userRepository = new dbRepository(models.User);
+const { successStat, errorStat, comparePassword, generatePassword } = helpers;
 const { Op } = Sequelize;
 
 /**
@@ -48,10 +48,9 @@ export const signup = async (req, res) => {
 
   if (isExist) return errorStat(res, 409, 'User Already Exist');
 
-  if (isUserName) return errorStat(res, 409, 'UserName Already Exist');
-
   const user = await models.User.create({
     role: 'user',
+    ...req.body.user
   });
 
   const token = generateToken(
@@ -59,11 +58,11 @@ export const signup = async (req, res) => {
     { expiresIn: 60 * 60 * 24 * 3 }
   );
 
-  const link = `${req.protocol}/${req.headers.host}/api/v1/user/confirm_email?emailToken=${token}&id=${user.dataValues.id}`;
+  const link = `${req.protocol}://${req.headers.host}/api/v1/user/confirm_email?emailToken=${token}&id=${user.dataValues.id}`;
 
   const mail = new Mail({
     to: email,
-    subject: 'Welcome to Elegant Columns',
+    subject: 'Welcome to Utiva',
     messageHeader: `Hi, ${user.firstname}!`,
     messageBody:
       'We are exicted to get you started. First, you have to verify your account. Just click on the link below',
@@ -81,6 +80,62 @@ export const signup = async (req, res) => {
   return successStat(res, 201, 'user', { ...user.userResponse(), message });
 };
 
+
+/**
+ * / @static
+ * @description Allows a user to sign up
+ * @param {Object} req - Request object
+ * @param {Object} res - Response object
+ * @returns {Object} object containing user data and access Token
+ * @memberof UserController
+ */
+export const quickCheckOut = async (req, res) => {
+  const { email, fullName } = req.body.user;
+  const isExist = await models.User.findOne({ where: { email } });
+
+  if (isExist) return errorStat(res, 409, 'User Already Exist');
+
+  const userProfile = fullName.split(' ');
+
+  const password = await generatePassword(10);
+
+  const user = await models.User.create({
+    role: 'user',
+    firstentry: true,
+    updated: false,
+    email,
+    password,
+    firstName: userProfile[0],
+    lastName: userProfile[1]
+  });
+
+  const link = `${process.env.FRONTEND_URL}/login`;
+
+  const mail = new Mail({
+    to: email,
+    subject: 'Welcome to Utiva',
+    messageHeader: `Hi, ${user.firstName}!`,
+    messageBody:`
+      'We are exicted to get you started. Below are your login details' 
+      email: ${email},
+      password: ${password}
+      Please login to continue
+      `,
+    iButton: true,
+  });
+  mail.InitButton({
+    text: 'Login',
+    link: link,
+  });
+
+  mail.sendMail();
+
+  await req.session.login(user.role, { user: user.dataValues }, res);
+  let message = 'Registration is successful';
+
+  return successStat(res, 201, 'user', { ...user.userResponse(), message });
+};
+
 /**
  * @static
  * @description Update user profile
@@ -90,28 +145,11 @@ export const signup = async (req, res) => {
  * @memberof UserController
  */
 export const updateUser = async (req, res) => {
-  const { userName } = req.body.user;
-
-  if (!req.session.user) {
-    return errorStat(res, 403, 'Unauthorize Access. Please login.');
-  }
-
   const { id } = req.session.user;
 
   const user = await models.User.findOne({
     where: { id },
   });
-
-  if (userName) {
-    const isUser = await models.User.findOne({
-      where: { userName },
-    });
-    if (isUser) {
-      if (isUser.id !== user.id) {
-        return errorStat(res, 409, 'Username already exist');
-      }
-    }
-  }
 
   await user.update({ ...req.body.user });
 
@@ -138,7 +176,7 @@ export const resetPassword = async (req, res) => {
     { expiresIn: 60 * 15 }
   );
 
-  const link = `${req.protocol}/${req.headers.host}/api/v1/user/change_password?emailToken=${token}&id=${findUser.id}`;
+  const link = `${req.protocol}://${req.headers.host}/api/v1/user/change_password?emailToken=${token}&id=${findUser.id}`;
 
   const mail = new Mail({
     to: email,
@@ -201,7 +239,7 @@ export const changePassword = async (req, res) => {
  * @memberof UserController
  */
 export const confirmEmail = async (req, res) => {
-  const { token, id, resend } = req.query;
+  const { emailToken, id, resend } = req.query;
   if (resend) {
     const user = await models.User.findOne({ where: { id } });
 
@@ -227,11 +265,37 @@ export const confirmEmail = async (req, res) => {
     );
   }
   try {
-    const verify = await verifyToken(token, (err, decoded) => decoded);
+    const verify = await verifyToken(emailToken, (err, decoded) => decoded);
     await models.User.update({ verified: true }, { where: { id: verify.id } });
-    res.redirect(200, process.env.FRONTEND_URL);
+    res.redirect(process.env.FRONTEND_URL);
     return successStat(res, 200, 'message', 'Email verified successfully');
   } catch (err) {
     return errorStat(res, 400, 'Unable to verifiy email');
   }
 };
+
+
+export const adminCreate = async (req, res) => {
+  const { email } = req.body.user;
+
+  try {
+    const isExist = await models.User.findOne({ where: { email } });
+
+    if (isExist) return errorStat(res, 409, 'User Already Exist');
+  
+    const password = await generatePassword(10);
+
+    const user = await models.User.create({
+      ...req.body.user,
+      password,
+      byadmin: true,
+      updated: false,
+      firstentry: true
+    });
+
+    return successStat(res, 201, 'user', { ...user.userResponse(), message: 'User Created' });
+  } catch (e) {
+    console.log(e)
+    return errorStat(res, 409, 'Operation Failed, Please try again later');
+  }
+}
