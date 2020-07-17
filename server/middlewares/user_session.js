@@ -55,7 +55,7 @@ module.exports.main = function easySessionMain(connect, opts) {
         const split = token.split('.');
         const clientToken = [split[0], split[1]].join('.');
         const [, , signature] = split;
-        res.cookie('ec_ll', clientToken, { maxAge: role === 'user' ? userTimeout : freshTimeout });
+        res.cookie('uti_va', clientToken, { maxAge: role === 'user' ? userTimeout : freshTimeout });
 
         // set the signature of the token in the secure token
         req.session.accessload = signature;
@@ -87,7 +87,7 @@ module.exports.main = function easySessionMain(connect, opts) {
    */
   Session.prototype.logout = async function logout(res, cb) {
     this.regenerate((err) => (err ? new Error(err) : cb));
-    res.cookie('ec_ll', '', { maxAge: 0 });
+    res.cookie('uti_va', '', { maxAge: 0 });
   };
 
   /**
@@ -125,14 +125,14 @@ module.exports.main = function easySessionMain(connect, opts) {
       throw new Error('You are not logged in');
     }
 
-    const { ec_ll } = req.cookies;
+    const { uti_va } = req.cookies;
     const signature = req.session.accessload;
 
-    if (!ec_ll || !signature) {
+    if (!uti_va || !signature) {
       throw new Error('Not logged in');
     }
 
-    const token = [ec_ll, signature].join('.');
+    const token = [uti_va, signature].join('.');
 
     await verifyToken(token, async (err) => {
       if (err) {
@@ -140,7 +140,7 @@ module.exports.main = function easySessionMain(connect, opts) {
       }
     });
 
-    res.cookie('ec_ll', ec_ll, { maxAge: this.getRole() === 'user' ? userTimeout : freshTimeout });
+    res.cookie('uti_va', uti_va, { maxAge: this.getRole() === 'user' ? userTimeout : freshTimeout });
     return true;
   };
 
