@@ -7,25 +7,21 @@ export default {
     guest: {
       can: [''],
     },
-    user: {
+    student: {
       can: [''],
       inherits: ['guest'],
     },
-    staff: {
+    trainer: {
       can: [''],
-      inherits: ['user'],
+      inherits: ['student'],
     },
     admin: {
       can: ['admin:create'],
-      inherits: ['staff'],
-    },
-    owner: {
-      can: [''],
-      inherits: ['admin'],
+      inherits: ['trainer'],
     },
     tech: {
       can: [''],
-      inherits: ['owner'],
+      inherits: ['admin'],
     },
   },
 };
