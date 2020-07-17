@@ -49,7 +49,7 @@ export const signup = async (req, res) => {
   if (isExist) return errorStat(res, 409, 'User Already Exist');
 
   const user = await models.User.create({
-    role: 'user',
+    role: 'student',
     ...req.body.user
   });
 
