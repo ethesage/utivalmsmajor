@@ -7,30 +7,21 @@ export default {
     guest: {
       can: [''],
     },
-    user: {
-      can: ['organization:create', 'organization:invite', 'organization:join'],
+    student: {
+      can: [''],
       inherits: ['guest'],
     },
-    staff: {
-      can: [{ name: 'content:crud', when: async (params) => params.isAllowed }],
-      inherits: ['user'],
+    trainer: {
+      can: [''],
+      inherits: ['student'],
     },
     admin: {
-      can: ['content:*'],
-      inherits: ['staff'],
+      can: ['admin:create'],
+      inherits: ['trainer'],
     },
-    owner: {
-      can: [
-        {
-          name: 'organization:invite',
-          when: async (params) => params.id === params.ownerId,
-        },
-      ],
-      inherits: ['admin'],
-    },
-    god: {
+    tech: {
       can: [''],
-      inherits: ['owner'],
+      inherits: ['admin'],
     },
   },
 };

@@ -12,10 +12,10 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   Notification.associate = (models) => {
-    Notification.belongsTo(models.User, {
-      foreignKey: 'receiverId',
-      as: 'receiver',
-    });
+    // Notification.belongsTo(models.User, {
+    //   foreignKey: 'receiverId',
+    //   as: 'receiver',
+    // });
   };
   return Notification;
 };
