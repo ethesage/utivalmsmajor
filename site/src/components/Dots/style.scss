@@ -1,0 +1,39 @@
+@import '../../media';
+
+.dots_container {
+  z-index: 5;
+  flex-wrap: wrap;
+
+  &.v_dots {
+    flex-direction: column;
+    width: auto;
+
+    .dot_button {
+      .dot {
+        width: 8px;
+        height: 8px;
+        &[data-active='active'] {
+          background: $background_grad;
+        }
+      }
+    }
+  }
+
+  .dot_button {
+    padding: 5px 10px;
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 100%;
+      border: 1px solid color(theme);
+      background-color: white;
+      border-radius: 100%;
+
+      &[data-active='active'] {
+        background-color: color(secondary);
+        border: none;
+      }
+    }
+  }
+}

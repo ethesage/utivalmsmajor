@@ -1,0 +1,26 @@
+@import "../../../media";
+
+.sign_up {
+  @include for-size(phone-only) {
+    margin: 50px 0;
+  }
+
+  .form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 10px;
+
+    @include for-size(phone-only) {
+      display: block;
+    }
+
+    .input-div {
+      &:nth-child(5),
+      &:nth-child(6),
+      &:nth-child(7),
+      &:nth-child(12) {
+        grid-column: 1/3;
+      }
+    }
+  }
+}

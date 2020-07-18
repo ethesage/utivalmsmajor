@@ -1,0 +1,26 @@
+.hambuger {
+  fill: inherit;
+
+  &:focus {
+    outline-color: currentColor;
+  }
+  .translate {
+    transition: transform 0.25s cubic-bezier(0.69, 1.95, 0.64, 0.36);
+    transition-delay: 0.25s;
+  }
+  .rotate {
+    transition: transform 0.25s cubic-bezier(0.69, 1.95, 0.64, 0.36);
+    transition-delay: 0s;
+  }
+}
+
+.hambuger.open {
+  .translate {
+    transform: translateY(0);
+    transition-delay: 0s;
+  }
+  .rotate {
+    transform: rotate(0);
+    transition-delay: 0.25s;
+  }
+}

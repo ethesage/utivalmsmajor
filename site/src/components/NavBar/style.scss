@@ -1,0 +1,110 @@
+@import "../../media";
+
+.nav-bar {
+  height: 80px;
+  position: fixed;
+  width: 100%;
+  z-index: 20;
+  background: rgba(white, 0.5);
+  backdrop-filter: blur(10px);
+  &.slide-down {
+    box-shadow: 0 0 10px rgba(black, 0.1);
+  }
+}
+
+.main-nav {
+  height: 100%;
+
+  .logo {
+    width: 100px;
+    height: 80%;
+    // visibility: hidden;
+  }
+
+  .nav-collapse {
+    width: calc(100% - 100px);
+    padding: 0 20px 0 50px;
+    border: 0;
+    position: relative;
+
+    @include for-size(phone-only) {
+      padding: 0;
+    }
+
+    .burger {
+      display: none;
+      cursor: pointer;
+
+      svg {
+        stroke: color(theme);
+        width: 20px;
+        height: 20px;
+      }
+
+      @include for-size(tablet-portrait-up) {
+        display: block;
+      }
+    }
+
+    #input-nav {
+      display: none;
+    }
+
+    .contents {
+      width: 100%;
+
+      @include for-size(tablet-portrait-up) {
+        position: absolute;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 220px;
+        border-radius: 10px;
+        top: 0;
+        opacity: 0;
+        padding: 20px 40px;
+        box-shadow: 0 0 5px rgba(black, 0.1);
+        background: white;
+        visibility: hidden;
+        transition: top 0.5s ease, opacity 0.5s ease;
+
+        &.open {
+          visibility: visible;
+          top: 50px;
+          opacity: 1;
+        }
+
+        a {
+          display: block;
+          margin: 0 0 5px;
+          padding: 10px 5px 3px;
+          font-size: 0.9em;
+        }
+      }
+
+      .lin_con {
+        position: relative;
+        display: inline;
+      }
+    }
+
+    .links {
+      margin: 0 10px;
+      padding-bottom: 2px;
+      font-weight: 500;
+      position: relative;
+      color: color(theme);
+
+      &.link_active {
+        border-bottom: 2px solid color(theme);
+      }
+
+      &.btn {
+        color: white;
+        background: color(secondary);
+        box-shadow: 0px 12px 35px rgba(160, 121, 0, 0.2);
+        padding: 10px;
+        border-radius: 10px;
+      }
+    }
+  }
+}

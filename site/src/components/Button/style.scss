@@ -1,0 +1,72 @@
+@import '../../media';
+
+.btn {
+  border: none;
+  background: color(theme);
+  min-width: 200px;
+  fill: white;
+  display: flex;
+  padding: 10px 10px;
+  align-items: center;
+  min-height: 35px;
+  cursor: pointer;
+  color: white;
+  border-radius: 5px;
+  position: relative;
+  transition: all 0.3s ease 0.2s;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    transition: all 0.3s ease;
+    background: rgba(white, 0.3);
+    width: 300%;
+    height: 300%;
+    top: -150%;
+    left: -100%;
+    border-radius: 100% 0 0 0;
+    opacity: 0;
+    transform-origin: bottom right;
+    transform: translate(50%, 40%);
+  }
+
+  svg {
+    fill: white;
+    height: 10px;
+    width: 0px;
+    opacity: 0;
+    transition: all 0.5s ease;
+  }
+
+  &:hover {
+    box-shadow: 1px 1px 4px rgba(black, 0.5);
+  }
+
+  &.no-hover {
+    &:hover {
+      box-shadow: none;
+    }
+  }
+
+  &:focus {
+    &::before {
+      opacity: 1;
+      transform: translate(0);
+      box-shadow: 1px 1px 4px rgba(black, 0.5);
+    }
+  }
+}
+
+.animate-arrow {
+  &:hover {
+    svg {
+      margin-right: 10px;
+      opacity: 1;
+      width: 50px;
+      @include for-size(tablet-landscape-up) {
+        width: 50px;
+      }
+    }
+  }
+}

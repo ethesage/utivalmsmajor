@@ -1,0 +1,36 @@
+@import "../../../media";
+
+.home_page .courses {
+  .container {
+    margin-top: 50px;
+    .cat-sec {
+      padding-bottom: 10px;
+
+      &:hover {
+        overflow-x: auto;
+      }
+
+      .cat {
+        color: #aaa4a4;
+        cursor: pointer;
+        transition: color 0.3s ease;
+        padding: 10px 20px;
+        white-space: nowrap;
+
+        &[data-active="true"] {
+          background: color(theme);
+          color: white;
+          border-radius: 10px;
+        }
+      }
+    }
+
+    .course-sec {
+      margin-top: 40px;
+
+      @include for-size(onek) {
+        flex-direction: column;
+      }
+    }
+  }
+}

@@ -1,0 +1,64 @@
+@import "../../../media";
+
+.est_mi {
+  .bl-card {
+    height: 500px;
+
+    @include for-size(phone-only) {
+      height: auto;
+    }
+
+    .img-sec {
+      height: 100%;
+      position: relative;
+    }
+    .text-sec {
+      padding-left: 30px;
+      position: relative;
+
+      &:before {
+        content: "";
+        position: absolute;
+        background: url(../../../assets/homepage/quotes.png) no-repeat;
+        background-size: contain;
+        top: 0;
+        transform: translateY(-50%);
+        left: 0;
+        width: 40%;
+        height: 40%;
+
+        @include for-size(tablet-landscape-up) {
+          width: 30%;
+          height: 30%;
+        }
+
+        @include for-size(phone-only) {
+          width: 20%;
+          height: 20%;
+        }
+      }
+
+      p {
+        color: color(theme) !important;
+      }
+
+      > div {
+        h2 {
+          margin-bottom: 5px;
+        }
+      }
+
+      @include for-size(phone-only) {
+        margin-top: 30px;
+        padding: 0;
+        p {
+          font-size: 1em;
+        }
+      }
+
+      p {
+        color: color(text);
+      }
+    }
+  }
+}

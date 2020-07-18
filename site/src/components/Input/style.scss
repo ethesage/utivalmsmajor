@@ -1,0 +1,165 @@
+@import "../../media";
+
+$distance: 0px;
+%selected {
+  color: white;
+  background: color(theme);
+}
+
+.input-div {
+  width: 100%;
+  position: relative;
+  margin-bottom: 20px;
+
+  .input-type {
+    border: none;
+    width: 100%;
+    font-size: 1em;
+    background: color(light);
+    color: color(text);
+    padding: 10px 20px;
+    padding-left: 35px;
+    border-radius: 5px;
+
+    &::-webkit-input-placeholder {
+      color: color(text);
+    }
+
+    .select {
+      position: relative;
+      .currentValue {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        text-align: left;
+        font-size: 1em;
+        color: color(text);
+        position: relative;
+
+        &::after {
+          content: "\25BC";
+          font-size: 0.9em;
+          color: color(theme);
+        }
+
+        img {
+          margin-left: 10px;
+          width: 10px;
+          height: 15px;
+        }
+      }
+
+      .dropDownButtons {
+        z-index: 4;
+        top: 100%;
+        position: absolute;
+        box-shadow: 0 0 3px rgba(black, 0.3);
+        background: white;
+        min-width: 250px;
+        color: color(text);
+        border-radius: 4px;
+        padding: 10px 8px;
+        max-height: 400px;
+        transform: scale(1, 0);
+        // transition: transform 0.2s ease-in-out;
+        transition: 0.3s cubic-bezier(0.25, 0.1, 0.3, 1.5) 0.3s;
+        transform-origin: top;
+        overflow: hidden;
+
+        @include for-size(tablet-landscape-up) {
+          overflow: scroll;
+          ::-webkit-scrollbar {
+            display: none;
+          }
+        }
+
+        &:hover {
+          overflow-y: scroll;
+        }
+
+        .options {
+          display: block;
+          width: 100%;
+          padding: 10px 10px;
+          margin-bottom: 2px;
+          font-size: 1em;
+          border-radius: 4px;
+          text-align: left;
+          color: color(text);
+
+          &:hover {
+            @extend %selected;
+            background: lighten(color(theme), 10%);
+          }
+        }
+
+        .selected {
+          @extend %selected;
+        }
+      }
+
+      .open-drop {
+        transform: scale(1, 1);
+      }
+    }
+
+    .open-drop {
+      + .place-holder {
+        + span {
+          transform: scale(1);
+        }
+      }
+    }
+
+    .invalid {
+      + .place-holder {
+        + span {
+          transform: scale(1);
+          background: orangered;
+        }
+      }
+    }
+
+    .typing,
+    .valid {
+      + .place-holder {
+        bottom: calc(70%);
+        font-size: 0.8em;
+        + span {
+          transform: scale(1);
+        }
+      }
+    }
+
+    .invalid {
+      ~ span {
+        background: orangered;
+      }
+    }
+  }
+
+  .reviel-password {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    right: 35px;
+    top: 6.5px;
+    cursor: pointer;
+
+    svg {
+      fill: rgba(white, 0.7);
+      stroke: rgba(white, 0.7);
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .error {
+    width: 100% !important;
+    margin-top: 2px;
+    margin-left: 5px;
+    font-size: 0.8em;
+    color: #ee9f82 !important;
+  }
+}
