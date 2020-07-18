@@ -1,0 +1,204 @@
+@import "../../../media";
+
+.home_page .gt_str {
+  .gt_str_sec {
+    position: relative;
+    height: 45vw;
+    margin-top: 100px;
+
+    @include for-size(smaller-desktop) {
+      height: 60vw;
+    }
+
+    @include for-size(tablet-landscape-up) {
+      height: 70vw;
+    }
+
+    @include for-size(mid-phone) {
+      height: 60vh;
+    }
+
+    .text-sec {
+      height: 100%;
+      margin: 0 auto;
+
+      .txt-crd {
+        width: 100%;
+        height: 30%;
+        color: white;
+
+        @include for-size(smaller-desktop) {
+          height: 25%;
+        }
+
+        @include for-size(phone-only) {
+          height: 33.3%;
+        }
+
+        .contents {
+          width: 50%;
+          margin-right: 20%;
+          position: relative;
+          height: 100%;
+
+          @include for-size(smaller-desktop) {
+            margin-right: 40%;
+          }
+
+          @include for-size(tablet-landscape-up) {
+            width: 55%;
+          }
+
+          @include for-size(phone-only) {
+            width: 100%;
+            margin: 0;
+            padding: 0 5%;
+          }
+        }
+
+        &:nth-child(1) {
+          background: #6dcb84;
+          .num {
+            span {
+              &::before {
+                height: 50%;
+              }
+
+              &::after {
+                content: "";
+                display: none;
+              }
+            }
+            .num-con {
+              background: #6dcb84;
+            }
+          }
+        }
+
+        &:nth-child(2) {
+          background: #1d3d79;
+          .num .num-con {
+            background: #1d3d79;
+          }
+        }
+
+        &:nth-child(3) {
+          .num {
+            span {
+              &::before {
+                height: 50%;
+                bottom: unset;
+                top: 0;
+              }
+            }
+            .num-con {
+              background: #09ac23;
+            }
+          }
+          background: #09ac23;
+        }
+
+        .num {
+          width: 20%;
+          height: 100%;
+          z-index: 0;
+
+          span {
+            height: 100%;
+            position: relative;
+
+            &::before {
+              content: "";
+              position: absolute;
+              height: 100%;
+              width: 2px;
+              z-index: -1;
+              background: white;
+              left: 50%;
+              transform: translateX(-50%);
+              bottom: 0;
+            }
+
+            &::after {
+              content: "";
+              position: absolute;
+              height: 100%;
+              width: 20px;
+              z-index: -1;
+              background: url(../../../assets/homepage/arrow.png) no-repeat;
+              background-size: contain;
+              left: 50%;
+              transform: translateX(-50%);
+              bottom: 5px;
+            }
+          }
+
+          .num-con {
+            border-radius: 100%;
+            border: 5px solid white;
+            width: 50px;
+            height: 50px;
+            z-index: 1;
+            font-weight: 700;
+
+            @include for-size(tablet-landscape-up) {
+              width: 40px;
+              height: 40px;
+            }
+          }
+
+          @include for-size(tablet-landscape-up) {
+            width: 25%;
+            font-size: 0.8em;
+          }
+        }
+
+        .info {
+          flex-grow: 1;
+
+          h2 {
+            width: 40%;
+            @include for-size(tablet-landscape-up) {
+              font-size: 1em;
+            }
+          }
+
+          p {
+            width: 45%;
+            @include for-size(tablet-landscape-up) {
+              font-size: 0.8em;
+            }
+          }
+
+          @include for-size(mid-phone) {
+            flex-direction: column;
+            h2,
+            p {
+              width: 100%;
+            }
+
+            h2 {
+              margin-bottom: 10px;
+            }
+          }
+        }
+      }
+    }
+
+    .img-sec {
+      position: absolute;
+      width: 40%;
+      height: 100%;
+      right: 0;
+      top: 0;
+
+      @include for-size(phone-only) {
+        display: none;
+      }
+
+      img {
+        object-position: bottom right;
+      }
+    }
+  }
+}

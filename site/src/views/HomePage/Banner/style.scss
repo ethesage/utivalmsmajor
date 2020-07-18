@@ -1,0 +1,76 @@
+@import "../../../media";
+
+.banner {
+  height: 53vw;
+  position: relative;
+  padding-bottom: 5%;
+  min-height: 500px;
+
+  @include for-size(smaller-desktop) {
+    height: 70vw;
+  }
+
+  @include for-size(phone-only) {
+    height: 70vh;
+  }
+
+  .contents {
+    background: #f8fafd;
+    height: 75%;
+    margin: 0 auto;
+    padding-top: 3%;
+    border-radius: 5px;
+    width: 80%;
+
+    @include for-size(phone-only) {
+      max-height: 400px;
+      padding-top: 10%;
+      width: 90%;
+    }
+
+    .hd {
+      margin-bottom: 3%;
+
+      @include for-size(phone-only) {
+        margin-bottom: 6%;
+      }
+    }
+
+    .search-input {
+      border: none;
+      box-shadow: 0px 12px 35px rgba(163, 158, 226, 0.1);
+      border-radius: 10px;
+      // height: 20%;
+      max-height: 60px;
+      min-height: 50px;
+      flex-grow: 1;
+      width: 80%;
+      margin-bottom: 20px;
+      font-size: 1.1em;
+      padding: 0 20px;
+      max-width: 900px;
+
+      @include for-size(phone-only) {
+        min-height: 40px;
+        font-size: 1em;
+      }
+    }
+
+    img {
+      height: 70%;
+    }
+  }
+
+  .ppl-sec {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    height: 50%;
+    width: 100%;
+    transform: translateX(-50%);
+
+    img {
+      object-position: bottom;
+    }
+  }
+}

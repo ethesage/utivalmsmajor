@@ -1,0 +1,20 @@
+.purchase {
+  min-height: 100vh;
+  .nav {
+    height: 80px;
+
+    a {
+      img {
+        width: 100px;
+      }
+    }
+  }
+
+  .hd {
+    margin-top: 40px;
+  }
+
+  .purchase_con {
+    flex-grow: 1;
+  }
+}

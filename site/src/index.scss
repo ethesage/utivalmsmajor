@@ -1,0 +1,317 @@
+@import "./media";
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap");
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  font-family: "Open Sans", sans-serif;
+}
+
+body,
+html {
+  scroll-behavior: smooth;
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  color: color(text);
+}
+
+a {
+  color: color(text);
+  text-decoration: none;
+}
+
+p {
+  line-height: 1.5;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mx-auto {
+  margin: 0 auto;
+}
+
+.my-auto {
+  margin: auto 0;
+}
+
+.m-auto {
+  margin: auto;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.row-reverse {
+  flex-direction: row-reverse;
+}
+
+.col-reverse {
+  flex-direction: column-reverse;
+}
+
+.j-start {
+  justify-content: flex-start;
+}
+.j-end {
+  justify-content: flex-end;
+}
+.j-space {
+  justify-content: space-between;
+}
+
+.al-start {
+  align-items: flex-start;
+}
+.al-end {
+  align-items: flex-end;
+}
+.al-bet {
+  align-content: space-between;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.img,
+svg {
+  width: 100%;
+  height: 100%;
+}
+
+.cover {
+  object-fit: cover;
+}
+
+.contain {
+  object-fit: contain;
+}
+
+.block {
+  display: block;
+}
+
+.theme-color {
+  color: color(theme);
+  fill: color(theme);
+}
+
+.secondary-color {
+  color: color(secondary);
+  fill: color(secondary);
+}
+
+.clipped-text {
+  display: -webkit-box;
+  -webkit-line-clamp: var(--number);
+  -webkit-box-orient: vertical;
+  overflow-y: hidden;
+  text-overflow: ellipsis;
+  hyphens: auto;
+}
+
+.txt-center {
+  text-align: center;
+}
+
+.icon::before {
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  width: 1300px;
+  margin: auto;
+
+  @include for-size(desktop-up) {
+    width: 1100px;
+  }
+
+  @include for-size(smaller-desktop) {
+    width: 90%;
+  }
+}
+
+.full-center {
+  display: grid;
+  align-items: center;
+}
+
+.centered {
+  display: grid;
+  place-content: center;
+}
+
+%centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.absolute-center {
+  @extend %centered;
+}
+
+.before {
+  @extend %centered;
+}
+
+ul,
+li {
+  list-style: none;
+}
+
+.read-more {
+  color: color(theme);
+  font-size: 0.9em;
+}
+
+.underline {
+  border-bottom: 1px solid black;
+}
+
+.card {
+  @include for-size(phone-only) {
+    flex-direction: column;
+  }
+
+  .img-sec,
+  .text-sec {
+    width: 50%;
+
+    @include for-size(phone-only) {
+      width: 90%;
+    }
+  }
+
+  &.var {
+    .img-sec,
+    .text-sec {
+      width: unset;
+
+      @include for-size(phone-only) {
+        width: 90%;
+      }
+    }
+  }
+}
+
+.m-150 {
+  margin-top: 130px;
+
+  @include for-size(desktop-up) {
+    margin-top: 100px;
+  }
+
+  @include for-size(phone-only) {
+    margin-top: 80px;
+  }
+}
+
+.inblock {
+  display: inline-block;
+}
+
+.hd {
+  font-size: 2.7em;
+  color: color(theme);
+  margin-bottom: 15px;
+
+  @include for-size(smaller-desktop) {
+    font-size: 2.5em;
+  }
+
+  @include for-size(tablet-landscape-up) {
+    font-size: 2em;
+  }
+
+  @include for-size(tablet-portrait-up) {
+    font-size: 1.5em;
+  }
+
+  &.middle {
+    text-align: center;
+  }
+}
+
+.reg_text {
+  h2 {
+    color: color(theme);
+    margin-bottom: 10px;
+    font-size: 1.6em;
+
+    @include for-size(smaller-desktop) {
+      font-size: 1.4em;
+    }
+  }
+
+  p {
+    color: color(text_fade);
+    font-size: 1.2em;
+
+    @include for-size(smaller-desktop) {
+      font-size: 1em;
+    }
+    &.spaced {
+      margin-bottom: 20px;
+    }
+  }
+}
+
+.btn {
+  box-shadow: 0px 12px 35px rgba(160, 121, 0, 0.2);
+  padding: 10px 20px;
+  color: white;
+  background: color(secondary);
+  border-radius: 10px;
+
+  a {
+    color: white;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 5px;
+  background: rgba(color(theme), 0.1);
+}
+
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-thumb {
+  // border-right: 4px solid rgba(255, 255, 255, 0);
+  // border-left: 4px solid rgba(255, 255, 255, 0);
+  border-radius: 8px;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: color(theme);
+}
+
+::-webkit-scrollbar-button {
+  background: rgba(color(theme), 0.1);
+}
