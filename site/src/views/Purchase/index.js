@@ -1,14 +1,19 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
-import category from "../../data/categories";
 import Details from "./Details";
+import Payment from "./Payment";
 import "./style.scss";
 
-const course = category[0].data[0];
-
 const Purchase = () => {
-  console.log(course);
+  const [currentPage, setPage] = useState(0);
+  const pages = [<Details proceed={setPage} />, <Payment back={setPage} />];
+  const disRef = useRef();
+
+  useEffect(() => {
+    return () => {};
+  }, []);
+
   return (
     <main className="purchase">
       <div className="nav container flex-row j-start">
@@ -19,10 +24,16 @@ const Purchase = () => {
 
       <h2 className="hd middle">Purchase Course</h2>
       <div className="purchase_con">
-        <div className="nav"></div>
-        <div>
-          <Details data={course} />
+        <div className="nav flex-row">
+          <div data-active={currentPage === 0} className="nav-item">
+            <p className="theme-color">Program Brief</p>
+          </div>
+
+          <div data-active={currentPage === 1} className="nav-item">
+            <p className="theme-color">Payment Method</p>
+          </div>
         </div>
+        <div>{pages[currentPage]}</div>
       </div>
     </main>
   );

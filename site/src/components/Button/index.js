@@ -1,18 +1,16 @@
-import React from 'react';
-import { withRouter } from 'react-router-dom';
-import Arrow from '../../assets/icons/Arrow';
-import './style.scss';
+import React from "react";
+import { withRouter } from "react-router-dom";
+import "./style.scss";
 
 const Button = ({
-  className = '',
+  className = "",
   link,
   onClick,
   text,
   animate,
-  showArrow,
   animateArrow,
   history,
-  noHover
+  noHover,
 }) => {
   const handleClick = () => {
     if (animate) {
@@ -23,12 +21,12 @@ const Button = ({
 
   return (
     <button
-      className={`btn ${animateArrow ? 'animate-arrow' : ''} ${className} ${
-        noHover ? 'no-hover' : ''
+      className={`btn ${animateArrow ? "animate-arrow" : ""} ${className} ${
+        noHover ? "no-hover" : ""
       }`}
       onClick={handleClick}
     >
-      {showArrow ? <Arrow /> : null} <p>{text}</p>
+      <p>{text}</p>
     </button>
   );
 };

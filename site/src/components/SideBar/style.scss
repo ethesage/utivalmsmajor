@@ -1,0 +1,18 @@
+@import "../../media";
+
+.side_nav {
+  background: color(theme);
+  width: 100%;
+  height: 100%;
+
+  .contents {
+    .profile_pic {
+      .img-sec {
+        width: 150px;
+        height: 150px;
+        border-radius: 100%;
+        overflow: hidden;
+      }
+    }
+  }
+}

@@ -11,6 +11,18 @@ $distance: 0px;
   position: relative;
   margin-bottom: 20px;
 
+  input[type="date"]::before {
+    // color: #999;
+    position: absolute;
+    background: inherit;
+    width: 60%;
+    content: attr(placeholder);
+  }
+  input[type="date"]:focus::before {
+    content: "" !important;
+    background: none;
+  }
+
   .input-type {
     border: none;
     width: 100%;

@@ -1,0 +1,136 @@
+@import "../../../media";
+
+.details {
+  .container {
+    .details_con {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      width: 80%;
+
+      @include for-size(tablet-landscape-up) {
+        width: 100%;
+      }
+
+      @include for-size(tablet-portrait-up) {
+        grid-template-columns: 50% 50%;
+      }
+
+      @include for-size(phone-only) {
+        display: block;
+      }
+    }
+
+    .img-sec {
+      border-radius: 5px;
+      height: 250px;
+      margin-right: 50px;
+
+      @include for-size(tablet-portrait-up) {
+        margin-right: 30px;
+      }
+
+      @include for-size(phone-only) {
+        margin: 0 0 40px;
+      }
+
+      img {
+        width: auto;
+        border-radius: 10px;
+
+        @include for-size(tablet-portrait-up) {
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+
+    .text-sec {
+      margin-bottom: 20px;
+      flex-grow: 1;
+      height: 100%;
+      h2 {
+        font-size: 1.1em;
+        margin-bottom: 20px;
+        color: color(theme);
+        @include for-size(phone-only) {
+          font-size: 1em;
+          margin-bottom: 10px;
+        }
+      }
+
+      .clipped-text {
+        margin-bottom: 10px;
+      }
+
+      p {
+        font-size: 0.8em;
+      }
+
+      .c_inf {
+        margin: 10px 0;
+        flex-wrap: wrap;
+        max-width: 300px;
+
+        @include for-size(tablet-portrait-up) {
+          max-width: 220px;
+        }
+
+        @include for-size(phone-only) {
+          margin: 0 0 30px;
+        }
+        small {
+          color: color(theme);
+          font-size: 0.7em;
+          white-space: nowrap;
+          margin-right: 5px;
+        }
+      }
+
+      .ext {
+        max-width: 200px;
+        font-weight: 600;
+        color: white;
+        @include for-size(phone-only) {
+          font-size: 0.9em;
+        }
+      }
+    }
+
+    .summary {
+      grid-column: 2/3;
+      border-top: 1px solid color(fade);
+      padding: 50px 0 0;
+      margin-top: 50px;
+
+      @include for-size(phone-only) {
+        margin-bottom: 100px;
+      }
+
+      .contents {
+        width: 80%;
+
+        .cost-analysis {
+          .flex-row {
+            margin-bottom: 10px;
+
+            &.strong {
+              font-weight: bold;
+            }
+          }
+        }
+      }
+
+      .checkout {
+        margin-top: 50px;
+        .header,
+        .input-div {
+          margin-bottom: 20px;
+        }
+
+        .btn {
+          width: 100%;
+        }
+      }
+    }
+  }
+}

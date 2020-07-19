@@ -7,6 +7,7 @@ import "./App.css";
 const HomePage = lazy(() => import("./views/HomePage"));
 const Auth = lazy(() => import("./views/Auth"));
 const Purchase = lazy(() => import("./views/Purchase"));
+const Dashboard = lazy(() => import("./views/Dashboard"));
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
             <Route exact path="/forgot" component={Auth} />
             <Route exact path="/reset-password" component={Auth} />
             <Route exact path="/purchase" component={Purchase} />
+            <Route exact path="/dashboard" component={Dashboard} />
           </Switch>
         </Suspense>
       </Router>

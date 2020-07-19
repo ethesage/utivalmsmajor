@@ -287,7 +287,16 @@ li {
   padding: 10px 20px;
   color: white;
   background: color(secondary);
-  border-radius: 10px;
+  border-radius: 5px;
+
+  p {
+    pointer-events: none;
+  }
+
+  &.theme {
+    background: color(theme);
+    box-shadow: 0px 12px 35px rgba(color(theme), 0.2);
+  }
 
   a {
     color: white;

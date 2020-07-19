@@ -1,0 +1,44 @@
+@import "../../media";
+
+.dashboard {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  background: color(shade);
+
+  .dh-aside {
+    width: 30%;
+    max-width: 300px;
+    min-width: 250px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    transition: 0.2s ease;
+
+    .contents {
+      z-index: 0;
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    @include for-size(tablet-portrait-up) {
+      width: 0;
+      min-width: 0;
+      overflow: hidden;
+
+      &.open {
+        min-width: 250px;
+      }
+    }
+  }
+
+  .dh-main {
+    flex-grow: 1;
+    overflow: hidden;
+
+    @include for-size(tablet-portrait-up) {
+      width: 100vw;
+    }
+  }
+}
