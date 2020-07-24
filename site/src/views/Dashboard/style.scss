@@ -36,9 +36,21 @@
   .dh-main {
     flex-grow: 1;
     overflow: hidden;
+    height: 100vh;
+    min-height: 100vh;
 
-    @include for-size(tablet-portrait-up) {
-      width: 100vw;
+    .contents {
+      padding: 3% 5%;
+      height: 100%;
+      width: 100%;
+
+      .dash-con {
+        flex-grow: 1;
+      }
+
+      @include for-size(tablet-portrait-up) {
+        width: 100vw;
+      }
     }
   }
 }

@@ -17,13 +17,13 @@ function App() {
         <Suspense fallback={<Loader tempLoad={true} />}>
           <Switch>
             <Route exact path="/" component={HomePage} />
-            <Route exact path="/quickcheckout/:course" component={Auth} />
-            <Route exact path="/signin" component={Auth} />
-            <Route exact path="/signup" component={Auth} />
-            <Route exact path="/forgot" component={Auth} />
-            <Route exact path="/reset-password" component={Auth} />
-            <Route exact path="/purchase" component={Purchase} />
-            <Route exact path="/dashboard" component={Dashboard} />
+            <Route path="/quickcheckout/:course" component={Auth} />
+            <Route path="/signin" component={Auth} />
+            <Route path="/signup" component={Auth} />
+            <Route path="/forgot" component={Auth} />
+            <Route path="/reset-password" component={Auth} />
+            <Route path="/purchase" component={Purchase} />
+            <Route path="/dashboard" component={Dashboard} />
           </Switch>
         </Suspense>
       </Router>

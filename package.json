@@ -10,7 +10,7 @@
     "migrate_test:undo": "cross-env NODE_ENV=test sequelize db:migrate:undo:all",
     "pretest": "npm run migrate_test:undo && npm run migrate_test",
     "test": "jest --detectOpenHandles --verbose --coverage --forceExit",
-    "client": "cd client && npm run dev",
+    "client": "cd site && npm run dev",
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
     "server": "cross-env-shell NODE_ENV=development && set DEBUG=dev & nodemon --exec babel-node server/index.js",
     "migrate": "cross-env sequelize db:migrate",

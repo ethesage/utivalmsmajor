@@ -1,11 +1,14 @@
-import React, { Suspense, lazy, useState, useEffect } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import Loader from "../../components/Loader";
+import React, { useState, useEffect } from "react";
+import { Route, Switch, useRouteMatch } from "react-router-dom";
+import NavBar from "./NavBar";
+// import Footer from './Footer'
 import SideBar from "../../components/SideBar";
+import Home from "./Home";
 import "./style.scss";
 
 const Dashboard = () => {
   const [open, setOpen] = useState(false);
+  let { path, url } = useRouteMatch();
 
   const openBar = () => {
     setOpen(!open);
@@ -34,20 +37,24 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <main className="dashboard">
-      <Router>
-        <Loader />
-        <aside className={`dh-aside ${open ? " open" : ""}`}>
-          <SideBar />
-        </aside>
-        <section className="dh-main">
-          <Suspense fallback={<Loader tempLoad={true} />}>
-            <Switch>
-              {/* <Route exact path="/" component={HomePage} /> */}
-            </Switch>
-          </Suspense>
-        </section>
-      </Router>
+    <main className="dashboard flex-row">
+      <aside className={`dh-aside ${open ? " open" : ""}`}>
+        <SideBar url={url} />
+      </aside>
+      <section className="dh-main">
+        <div className="contents flex-col">
+          <NavBar />
+          <Switch>
+            <Route exact path={path}>
+              <Home />
+            </Route>
+            <Route path={`${path}/courses`}>
+              <Home />
+            </Route>
+          </Switch>
+        </div>
+        {/* </Footer> */}
+      </section>
     </main>
   );
 };
