@@ -22,7 +22,8 @@ const Select = ({
   const handleClick = (name, value, current_name) => {
     setPresentValue(current_name);
     setOpenDrop(false);
-    // handleSelect(name, value);
+    let target = { name, value };
+    handleSelect({ target });
   };
 
   const revileDropDown = () => {

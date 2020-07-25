@@ -1,5 +1,5 @@
-import React, { useRef, useState } from "react";
-import Input from "../../../components/Input";
+import React, { useRef, useState, useEffect } from "react";
+import Input from "../../../components/InputType";
 import useInput from "../../../Hooks/useInput";
 import data from "../../../data/signup";
 import { useToasts } from "react-toast-notifications";
@@ -7,7 +7,8 @@ import { Link } from "react-router-dom";
 import { axiosInstance } from "../../../helpers";
 import Select from "../../../components/Select";
 import Social from "../SocialSec";
-import { minprice, maxprice } from "../../../data/filters";
+import { gender, maxprice } from "../../../data/filters";
+import axois from "axios";
 import "../style.scss";
 import "./style.scss";
 
@@ -20,6 +21,10 @@ function QuickCheckout() {
     inputs: {
       email: "",
       password: "",
+      firstName: "",
+      lastName: "",
+      phoneNumber: "",
+      occupation: "",
     },
     submitButton,
     cb: async (inputs) => {
@@ -31,9 +36,37 @@ function QuickCheckout() {
     },
   });
 
+  const [selects, setSelects] = useState({
+    gender,
+    country: [],
+    region: [],
+  });
+
   const revielPassword = (ref) => {
     setReviel(!reviel);
   };
+
+  useEffect(() => {
+    const get_countries = async () => {
+      let countries = await axois.get(
+        "https://restcountries.eu/rest/v2/all?fields=name"
+      );
+
+      countries = countries.data.map((country) => ({
+        name: country.name,
+        value: country.name,
+      }));
+
+      setSelects({
+        ...selects,
+        country: countries,
+      });
+    };
+
+    get_countries();
+
+    return () => {};
+  }, []);
 
   return (
     <div className="auth_section sign_up">
@@ -42,12 +75,13 @@ function QuickCheckout() {
         <p>Welcome to the Utiva Learning Platform</p>
       </div>
       <form className="form">
-        {data.slice(0, 3).map((form, i) => (
+        {data.map((form, i) => (
           <Input
             key={`login_form_${i}`}
             name={form.name}
             type={form.type}
-            placeHolder={form.placeHolder}
+            itype={form.itype}
+            placeHolder={form.itype ? "" : form.placeHolder}
             value={inputTypes[form.name]}
             errorMsg={form.errorMsg}
             required={form.required}
@@ -55,10 +89,17 @@ function QuickCheckout() {
             revielPassword={revielPassword}
             handleChange={handleChange}
             validateSelf={validateSelf}
+            inputs={selects[form.name]}
+            currentText={form.placeHolder}
+            handleSelect={handleChange}
           />
         ))}
 
-        <Select inputs={minprice} currentText="Gender" />
+        {/* <Select
+          inputs={gender}
+          currentText="Gender"
+          validateSelf={validateSelf}
+        />
         {data.slice(3, 6).map((form, i) => (
           <Input
             key={`login_form_${i}`}
@@ -75,7 +116,7 @@ function QuickCheckout() {
           />
         ))}
 
-        <Select inputs={minprice} currentText="Country" />
+        <Select inputs={gender} currentText="Country" />
         <Select inputs={[]} currentText="Region" />
 
         {data.slice(6, 8).map((form, i) => (
@@ -92,7 +133,7 @@ function QuickCheckout() {
             handleChange={handleChange}
             validateSelf={validateSelf}
           />
-        ))}
+        ))} */}
 
         <button
           ref={submitButton}

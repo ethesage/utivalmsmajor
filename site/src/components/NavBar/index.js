@@ -2,16 +2,18 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { NavLink, Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import Hambuger from "../../assets/icons/Hambuger";
+import { useSelector } from "react-redux";
 import "./style.scss";
 
 const links = [
-  { title: "Login", link: "/login" },
-  { title: "Get Started", link: "/get-started", classname: " btn" },
+  { title: "Login", link: "/signin" },
+  { title: "Get Started", link: "/signup", classname: " btn" },
   { title: "Dashboard", link: "/dashboard", classname: " btn" },
 ];
 
 const NavBar = () => {
   const [checked, setChecked] = useState(false);
+  const user = useSelector((state) => state.auth.user);
 
   const navRef = useRef();
   const currentScroll = useRef();
@@ -71,18 +73,33 @@ const NavBar = () => {
 
           <div className={`contents flex-row j-end${checked ? " open" : ""}`}>
             <div className="l_s">
-              {links.map((link, i) => (
-                <div className="lin_con" key={`sublink_${i}`}>
+              {!!user ? (
+                <div className="lin_con">
                   <NavLink
-                    to={link.link}
-                    className={`links${link.classname || ""}`}
+                    to={links[2].link}
+                    className={`links${links[2].classname || ""}`}
                     activeClassName="link_active"
                     as="div"
                   >
-                    {link.title}
+                    {links[2].title}
                   </NavLink>
                 </div>
-              ))}
+              ) : (
+                <>
+                  {links.slice(0, 2).map((link, i) => (
+                    <div className="lin_con" key={`sublink_${i}`}>
+                      <NavLink
+                        to={link.link}
+                        className={`links${link.classname || ""}`}
+                        activeClassName="link_active"
+                        as="div"
+                      >
+                        {link.title}
+                      </NavLink>
+                    </div>
+                  ))}
+                </>
+              )}
             </div>
           </div>
         </div>
