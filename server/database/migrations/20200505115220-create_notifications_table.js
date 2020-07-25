@@ -15,19 +15,19 @@ module.exports = {
       },
       receiverId: {
         type: Sequelize.INTEGER,
-        references: {
-          model: 'Users',
-          key: 'id',
-          as: 'receiver',
-        },
+        // references: {
+        //   model: 'Users',
+        //   key: 'id',
+        //   as: 'receiver',
+        // },
       },
       senderId: {
         type: Sequelize.INTEGER,
-        references: {
-          model: 'Users',
-          key: 'id',
-          as: 'sender',
-        },
+        // references: {
+        //   model: 'Users',
+        //   key: 'id',
+        //   as: 'sender',
+        // },
       },
       seen: {
         type: Sequelize.BOOLEAN,
