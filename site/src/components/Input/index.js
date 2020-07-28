@@ -23,7 +23,7 @@ const Input = ({
   const inputRef = React.createRef();
 
   useEffect(() => {
-    if (validateSelf) {
+    if (validateSelf && required) {
       const isValid = validate(value, name);
 
       if (!isValid) {
@@ -33,7 +33,7 @@ const Input = ({
     }
 
     return () => {};
-  }, [inputRef, name, validateSelf, value]);
+  }, [inputRef, name, validateSelf, value, required]);
 
   const validateOne = (event) => {
     handleChange(event, error);
@@ -47,7 +47,7 @@ const Input = ({
   };
 
   return (
-    <div className="input-div">
+    <div className={`input-div${required ? " required" : ""}`}>
       <input
         className="input-type"
         ref={inputRef}

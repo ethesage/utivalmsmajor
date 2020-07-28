@@ -7,13 +7,15 @@ import "./style.scss";
 
 const links = [
   { title: "Login", link: "/signin" },
-  { title: "Get Started", link: "/signup", classname: " btn" },
-  { title: "Dashboard", link: "/dashboard", classname: " btn" },
+  { title: "Get Started", link: "/signup", classname: " nav_btn" },
+  { title: "Dashboard", link: "/dashboard", classname: " nav_btn" },
 ];
 
 const NavBar = () => {
   const [checked, setChecked] = useState(false);
   const user = useSelector((state) => state.auth.user);
+
+  console.log(user);
 
   const navRef = useRef();
   const currentScroll = useRef();
@@ -74,7 +76,7 @@ const NavBar = () => {
           <div className={`contents flex-row j-end${checked ? " open" : ""}`}>
             <div className="l_s">
               {!!user ? (
-                <div className="lin_con">
+                <div className="lin_con flex-row">
                   <NavLink
                     to={links[2].link}
                     className={`links${links[2].classname || ""}`}

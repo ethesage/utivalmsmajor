@@ -1,22 +1,34 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { ParallaxProvider } from 'react-scroll-parallax';
-import { ToastProvider } from 'react-toast-notifications';
-import { Provider } from 'react-redux';
-import App from './App';
-import store from './store';
-import * as serviceWorker from './serviceWorker';
-import './index.scss';
+import React, { useEffect } from "react";
+import ReactDOM from "react-dom";
+import { ParallaxProvider } from "react-scroll-parallax";
+import { ToastProvider } from "react-toast-notifications";
+import { Provider, useDispatch } from "react-redux";
+import App from "./App";
+import store from "./store";
+import * as serviceWorker from "./serviceWorker";
+import { login } from "./g_actions/user";
+import "./index.scss";
+
+const Appz = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(login());
+    return () => {};
+  }, [dispatch]);
+
+  return <App />;
+};
 
 ReactDOM.render(
   <Provider store={store}>
     <ToastProvider>
       <ParallaxProvider>
-        <App />
+        <Appz />
       </ParallaxProvider>
     </ToastProvider>
   </Provider>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 
 // If you want your app to work offline and load faster, you can change

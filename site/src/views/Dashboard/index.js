@@ -28,8 +28,8 @@ const Dashboard = () => {
       }
     };
 
-    window.addEventListener("resize", closeSlider);
-    window.addEventListener("scroll", close);
+    // window.addEventListener("resize", closeSlider);
+    // window.addEventListener("scroll", close);
     return () => {
       window.removeEventListener("resize", closeSlider);
       window.removeEventListener("scroll", close);
@@ -37,13 +37,13 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <main className="dashboard flex-row">
+    <main className="dashboard flex-row al-start">
       <aside className={`dh-aside ${open ? " open" : ""}`}>
         <SideBar url={url} />
       </aside>
       <section className="dh-main">
         <div className="contents flex-col">
-          <NavBar />
+          <NavBar open={openBar} grow={open} />
           <Switch>
             <Route exact path={path}>
               <Home />
@@ -52,8 +52,9 @@ const Dashboard = () => {
               <Home />
             </Route>
           </Switch>
+
+          <div className="dash-footer">(c) 2020 Utiva All Rights Reserved</div>
         </div>
-        {/* </Footer> */}
       </section>
     </main>
   );

@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { hot } from "react-hot-loader";
 import Loader from "./components/Loader";
+import Protected from "./components/Protected";
 import "./App.css";
 
 const HomePage = lazy(() => import("./views/HomePage"));
@@ -23,7 +24,7 @@ function App() {
             <Route path="/forgot" component={Auth} />
             <Route path="/reset-password" component={Auth} />
             <Route path="/purchase" component={Purchase} />
-            <Route path="/dashboard" component={Dashboard} />
+            <Protected path="/dashboard" component={Dashboard} />
           </Switch>
         </Suspense>
       </Router>

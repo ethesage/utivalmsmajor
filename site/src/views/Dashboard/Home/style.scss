@@ -1,4 +1,29 @@
 @import "../../../media";
 
-.dash-con {
+.dash-home {
+  .com-profile {
+    padding: 10px 20px;
+    background: color(light);
+    border-radius: 5px;
+
+    @include for-size(phone-only) {
+      flex-direction: column;
+      button {
+        width: auto;
+        margin-top: 30px;
+      }
+    }
+  }
+
+  .p_sec {
+    // display: grid;
+    // grid-template-columns: repeat(3, 1fr);
+    margin-top: 150px;
+    flex-basis: 300px;
+
+    .long {
+      height: 200px;
+      background: #655;
+    }
+  }
 }

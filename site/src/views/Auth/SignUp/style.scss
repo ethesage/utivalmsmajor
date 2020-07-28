@@ -14,7 +14,8 @@
       display: block;
     }
 
-    .input-div {
+    .input-div,
+    button {
       &:nth-child(5),
       &:nth-child(6),
       &:nth-child(7),

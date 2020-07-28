@@ -7,6 +7,8 @@ export const login = () => async (dispatch) => {
     type: "Login",
     payload: { user, isAdmin },
   });
+
+  return { user, isAdmin };
 };
 
 export const log_out = () => async (dispatch) => {

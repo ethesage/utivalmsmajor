@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import Input from "../../../components/Input";
 import useInput from "../../../Hooks/useInput";
 import data from "../../../data/forgot";
+import Button from "../../../components/Button";
 import { useToasts } from "react-toast-notifications";
 import { Link } from "react-router-dom";
 import { axiosInstance } from "../../../helpers";
@@ -13,10 +14,7 @@ function QuickCheckout() {
   const { addToast } = useToasts();
 
   const [handleSubmit, handleChange, inputTypes, validateSelf] = useInput({
-    inputs: {
-      email: "",
-      password: "",
-    },
+    inputs: data,
     submitButton,
     cb: async (inputs) => {
       const response = await axiosInstance.post("/user/login", inputs);
@@ -24,6 +22,10 @@ function QuickCheckout() {
         appearance: "success",
         autoDismiss: true,
       });
+    },
+    btnText: {
+      loading: "Sending...",
+      reg: "Send reset Link",
     },
   });
 
@@ -54,13 +56,12 @@ function QuickCheckout() {
           />
         ))}
 
-        <button
-          ref={submitButton}
+        <Button
+          btnRef={submitButton}
           onClick={handleSubmit}
-          className="s_btn flex-row input-div"
-        >
-          <p>Send reset link</p>
-        </button>
+          className="s_btn flex-row"
+          text="Send reset link"
+        />
       </form>
       <div className="externs flex-row j-space">
         <small>

@@ -7,6 +7,7 @@ const Select = ({
   inputs,
   currentText = "",
   handleSelect,
+  required,
 }) => {
   const [openDrop, setOpenDrop] = useState(false);
   const [presentValue, setPresentValue] = useState("");
@@ -49,7 +50,11 @@ const Select = ({
   });
 
   return (
-    <div className="input-div" onBlur={close} tabIndex={-1}>
+    <div
+      className={`input-div ${required ? "required" : ""}`}
+      onBlur={close}
+      tabIndex={-1}
+    >
       <div className="input-type">
         <div
           className={`select ${openDrop ? "open-drop" : ""}`}

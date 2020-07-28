@@ -15,13 +15,13 @@ const pages = {
   signin: <SignIn />,
   signup: <SignUp />,
   forgot: <Forgot />,
-  'reset-password': <Reset />
+  "reset-password": <Reset />,
 };
 
 const Auth = () => {
   const location = useLocation();
   //   const params = useParams();
-  const [page, setPage] = useState("quickcheckout");
+  const [page, setPage] = useState("signup");
 
   //   console.log(location);
 

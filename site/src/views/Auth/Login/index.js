@@ -1,23 +1,25 @@
 import React, { useRef, useState } from "react";
-import Input from "../../../components/Input";
-import useInput from "../../../Hooks/useInput";
-import data from "../../../data/signIn";
 import { useToasts } from "react-toast-notifications";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import useInput from "../../../Hooks/useInput";
+import Input from "../../../components/Input";
+import Button from "../../../components/Button";
+import data from "../../../data/signIn";
 import { axiosInstance } from "../../../helpers";
+import { login } from "../../../g_actions/user";
 import Social from "../SocialSec";
 import "../style.scss";
 
-function QuickCheckout() {
+function Login() {
   const submitButton = useRef();
   const [reviel, setReviel] = useState(false);
   const { addToast } = useToasts();
+  const dispatch = useDispatch();
+  const history = useHistory();
 
   const [handleSubmit, handleChange, inputTypes, validateSelf] = useInput({
-    inputs: {
-      email: "",
-      password: "",
-    },
+    inputs: data,
     submitButton,
     cb: async (inputs) => {
       const response = await axiosInstance.post("/user/login", inputs);
@@ -25,6 +27,13 @@ function QuickCheckout() {
         appearance: "success",
         autoDismiss: true,
       });
+
+      dispatch(login());
+      history.push("/dashboard");
+    },
+    btnText: {
+      loading: "Logging on...",
+      reg: "Login",
     },
   });
 
@@ -60,13 +69,12 @@ function QuickCheckout() {
           />
         ))}
 
-        <button
-          ref={submitButton}
+        <Button
+          btnRef={submitButton}
           onClick={handleSubmit}
-          className="s_btn flex-row input-div"
-        >
-          <p>Login</p>
-        </button>
+          className="s_btn flex-row"
+          text="Login"
+        />
       </form>
       <div className="externs flex-row j-space">
         <small>
@@ -87,4 +95,4 @@ function QuickCheckout() {
   );
 }
 
-export default QuickCheckout;
+export default Login;
