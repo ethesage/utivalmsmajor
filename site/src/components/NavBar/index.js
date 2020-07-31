@@ -15,8 +15,6 @@ const NavBar = () => {
   const [checked, setChecked] = useState(false);
   const user = useSelector((state) => state.auth.user);
 
-  console.log(user);
-
   const navRef = useRef();
   const currentScroll = useRef();
 

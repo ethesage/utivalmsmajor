@@ -22,7 +22,7 @@
       height: 100%;
     }
 
-    @include for-size(tablet-portrait-up) {
+    @include for-size(tablet-landscape-up) {
       width: 0;
       min-width: 0;
       overflow: hidden;
@@ -50,8 +50,8 @@
         width: 100%;
       }
 
-      @include for-size(tablet-portrait-up) {
-        width: 100vw;
+      @include for-size(tablet-landscape-up) {
+        width: calc(100vw - 8px);
       }
 
       .dash-footer {

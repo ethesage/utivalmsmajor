@@ -1,0 +1,68 @@
+@import "../../media";
+
+.info_con {
+  .file_card {
+    width: 100%;
+    margin-bottom: 20px;
+
+    .left {
+      width: 80%;
+
+      img {
+        width: 30px;
+        margin-right: 5px;
+      }
+
+      .txt-sec {
+        h2 {
+          font-size: 1em;
+        }
+      }
+    }
+
+    .dots {
+      cursor: pointer;
+      position: relative;
+
+      .img-sec {
+        padding: 5px;
+        width: 40px;
+
+        img {
+          pointer-events: none;
+        }
+      }
+
+      .drops {
+        position: absolute;
+        background: white;
+        z-index: 10;
+        right: 0;
+        opacity: 0;
+        top: 0px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(black, 0.2);
+        padding: 10px 20px;
+        visibility: hidden;
+        transition: 0.3s ease;
+
+        &.op-dp_2x {
+          top: 40px;
+          visibility: visible;
+          opacity: 1;
+        }
+
+        li {
+          margin-bottom: 10px;
+          padding: 5px 10px;
+          &:hover {
+            background: #f8fafd;
+          }
+        }
+      }
+    }
+  }
+
+  .add_file {
+  }
+}

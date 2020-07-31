@@ -20,7 +20,7 @@ const Dashboard = () => {
     };
 
     const closeSlider = () => {
-      const smallerScreen = window.matchMedia("(max-width: 800px)");
+      const smallerScreen = window.matchMedia("(max-width: 900px)");
 
       if (smallerScreen.matches) {
         close();

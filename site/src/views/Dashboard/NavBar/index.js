@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import logo from "../../../assets/logo.png";
 import hamburger from "../../../assets/icons/hambuger.png";
 import notifyIcon from "../../../assets/icons/notify.png";
@@ -19,7 +19,9 @@ const NavBar = ({ open, grow }) => {
         <div className="nav-contents flex-row j-space">
           <div className="nav-icons flex-row">
             <img className="nav" onClick={open} src={hamburger} alt="" />
-            <img className="logo" src={logo} alt="png" />
+            <Link to="/">
+              <img className="logo" src={logo} alt="png" />
+            </Link>
           </div>
 
           <div className="info flex-row">

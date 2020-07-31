@@ -5,7 +5,10 @@ import "./style.scss";
 
 const CourseCard = ({
   data: { img, title, desc, duration, value, cost, level, link },
+  size = "",
 }) => {
+  console.log(size);
+
   const cousrecard = useRef();
   useEffect(() => {
     const position = () => {
@@ -28,7 +31,7 @@ const CourseCard = ({
   }, []);
 
   return (
-    <div className="cl_crd smaller" ref={cousrecard}>
+    <div className={`cl_crd smaller ${size}`} ref={cousrecard}>
       <div className="img-sec">
         <Image
           key={img}

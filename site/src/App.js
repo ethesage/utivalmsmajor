@@ -1,7 +1,7 @@
 import React, { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { hot } from "react-hot-loader";
-import Loader from "./components/Loader";
+import Loader from "./components/Loading";
 import Protected from "./components/Protected";
 import "./App.css";
 
