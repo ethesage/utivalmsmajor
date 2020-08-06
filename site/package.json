@@ -23,6 +23,7 @@
     "react-scripts": "3.4.1",
     "react-scroll-parallax": "^2.3.4",
     "react-skeleton-loader": "^1.0.4",
+    "react-sweet-progress": "^1.1.2",
     "react-toast-notifications": "^2.4.0",
     "react-transition-group": "^4.3.0",
     "redux": "^4.0.5",

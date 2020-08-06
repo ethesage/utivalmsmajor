@@ -47,7 +47,7 @@ const Input = ({
   };
 
   return (
-    <div className={`input-div${required ? " required" : ""}`}>
+    <div className="input-div">
       <input
         className="input-type"
         ref={inputRef}
@@ -56,7 +56,7 @@ const Input = ({
         name={name}
         onChange={validateOne}
         value={value}
-        placeholder={placeHolder}
+        placeholder={`${placeHolder} ${required ? "*" : ""}`}
         autoComplete={
           type === "password" && method === "sign-in"
             ? "current-password"

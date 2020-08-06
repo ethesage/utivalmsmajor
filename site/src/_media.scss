@@ -16,7 +16,7 @@
       @content;
     }
   } @else if $size == desktop-up {
-    @media (max-width: 1400px) {
+    @media (max-width: 1500px) {
       @content;
     }
   } @else if $size == big-desktop-up {
@@ -49,6 +49,8 @@
 $colors: (
   theme: #120c64,
   secondary: #fbaf1b,
+  off: #1976d2,
+  approved: #09ac23,
   light: #f8fafd,
   fade: #aaa4a4,
   text: #565656,

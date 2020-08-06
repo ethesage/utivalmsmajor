@@ -3,6 +3,7 @@ import { Route, Switch, useRouteMatch } from "react-router-dom";
 import NavBar from "./NavBar";
 // import Footer from './Footer'
 import SideBar from "../../components/SideBar";
+import Courses from "./Courses";
 import Home from "./Home";
 import "./style.scss";
 
@@ -48,8 +49,8 @@ const Dashboard = () => {
             <Route exact path={path}>
               <Home />
             </Route>
-            <Route path={`${path}/courses`}>
-              <Home />
+            <Route path={`${path}/courses/:courseId?/:section?/:type?/:index?`}>
+              <Courses />
             </Route>
           </Switch>
 

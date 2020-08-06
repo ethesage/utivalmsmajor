@@ -75,11 +75,13 @@ const Welcome = () => {
             thinkers.
           </p>
         </div>
-        <Button
-          className="p_btn short flex-row"
-          link="/dashboard/courses"
-          text="Start Learning"
-        />
+        <a
+          className="btn p_btn flex-row"
+          href="http://utiva.io/courses"
+          target={"_"}
+        >
+          Start Learning
+        </a>
       </div>
     </div>
   );

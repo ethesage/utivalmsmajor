@@ -5,8 +5,8 @@
   position: fixed;
   width: 100%;
   z-index: 20;
-  background: rgba(white, 0.5);
-  backdrop-filter: blur(10px);
+  background: white;
+
   &.slide-down {
     box-shadow: 0 0 10px rgba(black, 0.1);
   }

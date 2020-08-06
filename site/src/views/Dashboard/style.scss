@@ -48,6 +48,7 @@
       .dash-con {
         flex-grow: 1;
         width: 100%;
+        min-height: calc(100vh - 200px);
       }
 
       @include for-size(tablet-landscape-up) {
