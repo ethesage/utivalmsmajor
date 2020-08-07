@@ -7,7 +7,7 @@ import class_icon from "../../../assets/icons/class_icon.png";
 import ResourceBtn from "../../ResourceButton";
 import "./style.scss";
 
-function Classes({ data, i, courseId, section }) {
+function Classes({ data, i, courseId }) {
   const { title, name } = data;
 
   function handleClick(e) {
@@ -71,7 +71,7 @@ function Classes({ data, i, courseId, section }) {
         {!isNaN(i) ? (
           <Link
             className="view"
-            to={`/dashboard/courses/${courseId}/${section}/full/week_${i}`}
+            to={`/dashboard/courses/classroom/full/${courseId}/week_${i}`}
           >
             View full outline
           </Link>

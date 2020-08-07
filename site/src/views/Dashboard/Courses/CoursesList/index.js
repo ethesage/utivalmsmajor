@@ -9,7 +9,7 @@ import "./style.scss";
 const CousreCard = () => {
   return (
     <div className="p_cx_cd">
-      <Link className="img-sec" to={`/dashboard/courses/233456/overview`}>
+      <Link className="img-sec" to={`/dashboard/courses/overview/23356`}>
         <img src={img1} alt="" className="img cover" />
       </Link>
       <div className="txt-sec">

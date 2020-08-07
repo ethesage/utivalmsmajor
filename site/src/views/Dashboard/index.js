@@ -49,7 +49,7 @@ const Dashboard = () => {
             <Route exact path={path}>
               <Home />
             </Route>
-            <Route path={`${path}/courses/:courseId?/:section?/:type?/:index?`}>
+            <Route path={`${path}/courses`}>
               <Courses />
             </Route>
           </Switch>

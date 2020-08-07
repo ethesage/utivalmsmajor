@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { Link, NavLink, useParams } from "react-router-dom";
+import React from "react";
+import { useParams } from "react-router-dom";
 // import Loader from "../../../components/Loader";
-import FullClass from "./FullClass";
 import Classes from "./Classes";
+import NavBar from "../../components/CourseNav";
 import "./style.scss";
 
 const _data = [
@@ -25,34 +25,30 @@ const _data = [
 ];
 
 const Classroom = ({ data }) => {
-  const { courseId, section, type, index } = useParams();
+  const { courseId, section } = useParams();
 
   return (
-    <section className="cx_listnx">
-      {_data.length === 0 ? (
-        // <Loader tempLoad={true} height="100%" load={true} />
-        <div>...loading</div>
-      ) : type !== "full" ? (
-        <div>
-          {_data.map((class_room, i) => (
-            <Classes
-              key={`cx_listnx_${i}`}
-              data={class_room}
-              i={i}
-              courseId={courseId}
-              section={section}
-            />
-          ))}
-        </div>
-      ) : (
-        <FullClass
-          index={index}
-          data={_data}
-          courseId={courseId}
-          section={section}
-        />
-      )}
-    </section>
+    <>
+      <NavBar />
+      <section className="cx_listnx">
+        {_data.length === 0 ? (
+          // <Loader tempLoad={true} height="100%" load={true} />
+          <div>...loading</div>
+        ) : (
+          <div>
+            {_data.map((class_room, i) => (
+              <Classes
+                key={`cx_listnx_${i}`}
+                data={class_room}
+                i={i}
+                courseId={courseId}
+                section={section}
+              />
+            ))}
+          </div>
+        )}
+      </section>
+    </>
   );
 };
 
