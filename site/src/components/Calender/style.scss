@@ -1,0 +1,132 @@
+@import "../../media";
+
+.r_calenx {
+  .input-div {
+    max-width: 200px;
+  }
+
+  .calendar {
+    width: 100%;
+    max-width: 900px;
+    box-shadow: 0px 4px 14px rgba(0, 0, 79, 0.05);
+    border: 1px solid #dcdceb;
+    border-radius: 10px;
+    height: 700px;
+
+    @include for-size(phone-only) {
+      flex-direction: column;
+      height: auto;
+    }
+
+    .calendar-date {
+      box-shadow: 0px 4px 14px rgba(0, 0, 79, 0.05);
+      height: 100%;
+      @include for-size(phone-only) {
+        width: 100%;
+        table,
+        tbody {
+          display: block;
+        }
+      }
+
+      tr {
+        padding: 30px 0;
+
+        @include for-size(phone-only) {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          padding: 20px 0;
+          td {
+            text-align: center !important;
+            font-size: 0.8em;
+            padding: 10px 20px !important;
+          }
+        }
+
+        td {
+          padding: 10px 30px;
+          text-align: left;
+          width: 100%;
+          cursor: pointer;
+          color: color(theme);
+          font-weight: 500;
+
+          &[data-active="true"] {
+            background: rgba(color(theme), 0.1);
+          }
+        }
+      }
+    }
+
+    .calender-body {
+      padding: 20px;
+      flex-grow: 1;
+      @include for-size(phone-only) {
+        width: 100%;
+      }
+
+      thead {
+        display: block;
+        border-bottom: 1px solid #dfe5eb;
+        padding: 10px 0;
+
+        tr {
+          th {
+            span {
+              color: #6d7589;
+            }
+          }
+        }
+      }
+
+      tbody {
+        width: 100%;
+        display: block;
+        tr {
+          td {
+            &.today {
+              span {
+                background: color(off);
+                color: white;
+              }
+            }
+
+            span {
+              font-weight: bold;
+              color: color(text);
+              width: 40px;
+              height: 40px;
+              border-radius: 100%;
+
+              @include for-size(phone-only) {
+                width: 30px;
+                height: 30px;
+              }
+            }
+          }
+        }
+      }
+
+      tr {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        align-content: center;
+        justify-content: center;
+        padding: 20px 0;
+        width: 100%;
+
+        @include for-size(phone-only) {
+          padding: 3px 0;
+        }
+
+        th,
+        td {
+          text-align: center;
+          @include for-size(phone-only) {
+            font-size: 0.8em;
+          }
+        }
+      }
+    }
+  }
+}

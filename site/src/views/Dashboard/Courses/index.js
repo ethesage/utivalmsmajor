@@ -12,6 +12,7 @@ import Classroom from "../../../components/Classroom";
 import FullClass from "../../../components/Classroom/FullClass";
 import Assignment from "../../../components/Assignment";
 import ViewGrade from "../../../components/Assignment/ViewGrade";
+import StudyPlan from "../../StudyPlan";
 import "./style.scss";
 
 const Courses = () => {
@@ -53,6 +54,11 @@ const Courses = () => {
           exact
           path={`${path}/assignment/:courseId/:index`}
           component={Assignment}
+        />
+        <Route
+          exact
+          path={`${path}/study-plan/:courseId`}
+          component={StudyPlan}
         />
       </Switch>
     </section>
