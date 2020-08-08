@@ -71,7 +71,7 @@ app.use(
     cookie: {
       maxAge: 172800 * 1000, // maximum cookie duration is 2 days
       sameSite: isProd || "none",
-      secure: isProd,
+      secure: false,
     },
   })
 );

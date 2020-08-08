@@ -45,7 +45,7 @@ function Signup() {
       const response = await axiosInstance.post("/user/signup", data);
 
       addToast(
-        `Hey ${response.data.user.firstName} Welcome to Elegant Columns`,
+        `Hey ${response.data.user.firstName} Welcome to The Utiva Learning Platform`,
         {
           appearance: "success",
           autoDismiss: true,
