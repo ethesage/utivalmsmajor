@@ -43,6 +43,7 @@ function FullClass({ data = _data }) {
               <NavLink
                 className="side_link"
                 to={`/dashboard/courses/classroom/full/${courseId}/week_${i}`}
+                key={`side_link_courses_${i}`}
               >
                 Week {i + 1}
               </NavLink>

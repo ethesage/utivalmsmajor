@@ -7,8 +7,6 @@ const CourseCard = ({
   data: { img, title, desc, duration, value, cost, level, link },
   size = "",
 }) => {
-  console.log(size);
-
   const cousrecard = useRef();
   useEffect(() => {
     const position = () => {

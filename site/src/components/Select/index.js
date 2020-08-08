@@ -16,10 +16,10 @@ const Select = ({
   const parent = React.createRef();
 
   useEffect(() => {
-    setPresentValue(currentText);
+    setPresentValue(`${currentText}${required ? " *" : ""}`);
 
     return () => {};
-  }, [currentText]);
+  }, [currentText, required]);
 
   const handleClick = (name, value, current_name) => {
     setPresentValue(current_name);
@@ -33,7 +33,9 @@ const Select = ({
   };
 
   const close = (e) => {
+    if (!e.target) setOpenDrop(false);
     if (e.target.classList.contains("currentValue")) return;
+
     setOpenDrop(false);
   };
 
@@ -52,12 +54,7 @@ const Select = ({
   });
 
   return (
-    <div
-      className={`input-div ${required ? "required" : ""}`}
-      onBlur={close}
-      tabIndex={-1}
-      ref={parent}
-    >
+    <div className="input-div" onBlur={close} tabIndex={-1} ref={parent}>
       <div className="input-type">
         <div
           className={`select ${openDrop ? "open-drop" : ""}`}

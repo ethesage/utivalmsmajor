@@ -13,6 +13,7 @@ const patterns = {
   country: /^(?!none)([\w. -])+$/,
   region: /^(?!none)([\w. -])+$/,
   gender: /^(?!none)([\w. -])+$/,
+  comment: /^[\w\s]{2,}$/,
 };
 
 export const validate = (field, Regex) => {
