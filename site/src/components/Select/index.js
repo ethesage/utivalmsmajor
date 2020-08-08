@@ -13,6 +13,7 @@ const Select = ({
   const [presentValue, setPresentValue] = useState("");
 
   const selectRef = React.createRef();
+  const parent = React.createRef();
 
   useEffect(() => {
     setPresentValue(currentText);
@@ -31,7 +32,8 @@ const Select = ({
     setOpenDrop(!openDrop);
   };
 
-  const close = () => {
+  const close = (e) => {
+    if (e.target.classList.contains("currentValue")) return;
     setOpenDrop(false);
   };
 
@@ -54,6 +56,7 @@ const Select = ({
       className={`input-div ${required ? "required" : ""}`}
       onBlur={close}
       tabIndex={-1}
+      ref={parent}
     >
       <div className="input-type">
         <div

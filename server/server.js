@@ -35,7 +35,7 @@ app.use(formData.union());
 
 const Pgstore = connectPg(session);
 
-const whitelist = ["http://localhost:3000"];
+const whitelist = process.env.whiteList.split(",");
 const corsOptions = {
   origin(origin, callback) {
     if (whitelist.indexOf(origin) !== -1 || !origin) {
