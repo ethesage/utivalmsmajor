@@ -10,6 +10,8 @@ import Overview from "../../../components/OverView";
 import CourseList from "./CoursesList";
 import Classroom from "../../../components/Classroom";
 import FullClass from "../../../components/Classroom/FullClass";
+import Assignment from "../../../components/Assignment";
+import ViewGrade from "../../../components/Assignment/ViewGrade";
 import "./style.scss";
 
 const Courses = () => {
@@ -42,8 +44,16 @@ const Courses = () => {
           path={`${path}/classroom/full/:courseId/:index`}
           component={FullClass}
         />
-
-        
+        <Route
+          exact
+          path={`${path}/assignment/view_grade/:id`}
+          component={ViewGrade}
+        />
+        <Route
+          exact
+          path={`${path}/assignment/:courseId/:index`}
+          component={Assignment}
+        />
       </Switch>
     </section>
   );

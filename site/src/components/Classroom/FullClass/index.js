@@ -61,6 +61,7 @@ function FullClass({ data = _data }) {
                   img={assignment}
                   text="Submit Assignment"
                   color="approved"
+                  link={`/dashboard/courses/assignment/${courseId}/${index}`}
                 />
               </div>
             </div>

@@ -60,7 +60,7 @@ module.exports.main = function easySessionMain(connect, opts) {
         const clientToken = [split[0], split[1]].join(".");
         const [, , signature] = split;
         res.cookie("uti_va", clientToken, {
-          maxAge: role === "user" ? userTimeout : freshTimeout,
+          maxAge: role === "student" ? userTimeout : freshTimeout,
           sameSite: isProd || "none",
           secure: isProd,
         });
@@ -152,7 +152,7 @@ module.exports.main = function easySessionMain(connect, opts) {
     });
 
     res.cookie("uti_va", uti_va, {
-      maxAge: this.getRole() === "user" ? userTimeout : freshTimeout,
+      maxAge: this.getRole() === "student" ? userTimeout : freshTimeout,
       sameSite: isProd || "none",
       secure: isProd,
     });

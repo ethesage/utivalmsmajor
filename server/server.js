@@ -10,6 +10,7 @@ import chalk from "chalk";
 import cors from "cors";
 import os from "os";
 import { config } from "dotenv";
+import path from "path";
 import roles from "./helpers/roles";
 import usession from "./middlewares/user_session";
 import Routes from "./routes";
@@ -57,6 +58,8 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use(express.static(path.join(__dirname, "../site/build")));
+
 app.use(
   session({
     store: new Pgstore(),
@@ -75,11 +78,16 @@ app.use(
 
 app.use(usession.main(session, roles));
 
-app.get("/", (req, res) =>
+app.get("/api/v1", (req, res) =>
   res.status(200).json({
     message: "Welcome to utival",
   })
 );
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "../site/build", "index.html"));
+});
+
 Routes(app);
 
 // to catch a 404 and send to error handler
