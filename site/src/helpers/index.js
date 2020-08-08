@@ -33,7 +33,7 @@ export const get_rand = (array) => {
 const baseurl =
   process.env.NODE_ENV === "development"
     ? "http://localhost:4000"
-    : "https://utiva.herokuapp.com";
+    : "https://utiva-staging.herokuapp.com";
 
 export const axiosInstance = axios.create({
   baseURL: `${baseurl}/api/v1`,
