@@ -1,17 +1,17 @@
-import React from "react";
-import Button from "../../../components/Button";
-import CountSection from "./CountSection";
-import Classes from "../../../components/Classes";
-import Files from "../../../components/Files";
-import Activities from "../../../components/Activities";
-import Welcome from "./Welcome";
-import CourseCard from "../../../components/CourseCard";
-import categories from "../../../data/categories";
-import "./style.scss";
+import React from 'react';
+import Button from '../../../components/Button';
+import CountSection from './CountSection';
+import Classes from '../../../components/Classes';
+import Files from '../../../components/Files';
+import Activities from '../../../components/Activities';
+import Welcome from './Welcome';
+import CourseCard from '../../../components/CourseCard';
+import categories from '../../../data/categories';
+import './style.scss';
 
 const InfoSec = ({ txt, children }) => (
   <div className="c_card large flex-col">
-    <nav className="c_card_nav flex-row j-space reg_text">
+    <nav className="c_card_nav flex-row j-space _text">
       <h2>{txt}</h2>
       <p>View All {txt}</p>
     </nav>

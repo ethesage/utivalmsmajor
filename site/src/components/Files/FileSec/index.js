@@ -1,21 +1,21 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import pdf from "../../../assets/dashboard/pdf.png";
-import delete_icon from "../../../assets/icons/delete.png";
-import word from "../../../assets/dashboard/word.png";
-import excel from "../../../assets/dashboard/excel.png";
-import video from "../../../assets/dashboard/video.png";
-import dots from "../../../assets/dashboard/dots.png";
-import "./style.scss";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import pdf from '../../../assets/dashboard/pdf.png';
+import delete_icon from '../../../assets/icons/delete.png';
+// import word from "../../../assets/dashboard/word.png";
+// import excel from "../../../assets/dashboard/excel.png";
+// import video from "../../../assets/dashboard/video.png";
+import dots from '../../../assets/dashboard/dots.png';
+import './style.scss';
 
 const FileSec = ({ personal = false }) => {
   const onClick = (e) => {
-    e.target.nextElementSibling.classList.toggle("op-dp_2x");
+    e.target.nextElementSibling.classList.toggle('op-dp_2x');
   };
 
   const close = (e) => {
-    const opened = document.querySelectorAll(".op-dp_2x");
-    opened.forEach((e) => e.classList.remove("op-dp_2x"));
+    const opened = document.querySelectorAll('.op-dp_2x');
+    opened.forEach((e) => e.classList.remove('op-dp_2x'));
   };
 
   return (
@@ -23,7 +23,7 @@ const FileSec = ({ personal = false }) => {
       <div className="left flex-row j-start">
         <img src={pdf} alt="pdf" />
         <div className="txt-sec">
-          <h2 className="clipped-text" style={{ "--number": 1 }}>
+          <h2 className="clipped-text" style={{ '--number': 1 }}>
             HR Analytics Fundamentals
           </h2>
           {personal ? (

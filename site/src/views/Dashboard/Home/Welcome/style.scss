@@ -1,4 +1,4 @@
-@import "../../../../media";
+@import '../../../../media';
 
 .dash-home .welcome {
   padding: 10px;
@@ -40,14 +40,14 @@
   .text-sec {
     padding: 5% 5% 3%;
 
-    .reg_text {
-      margin-bottom: 5%;
+    ._text {
+      margin-bottom: 4%;
 
       h3 {
         margin-top: 30px;
       }
     }
-    button {
+    a {
       margin: 100px auto 0;
       width: 60%;
     }

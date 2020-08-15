@@ -1,0 +1,38 @@
+@import "../../media";
+
+.snx_mem {
+  width: 100%;
+  background: #ffffff;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  min-height: 250px;
+  max-width: 300px;
+  padding: 20px;
+
+  .img_sec {
+    width: 120px;
+    height: 120px;
+    border-radius: 100%;
+    overflow: hidden;
+    margin-bottom: 30px;
+  }
+
+  .text_sec {
+    p {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    small {
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    a {
+      display: block;
+      img {
+        width: 25px;
+      }
+    }
+  }
+}

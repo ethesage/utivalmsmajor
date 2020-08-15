@@ -1,4 +1,4 @@
-@import "../../../media";
+@import '../../../media';
 
 .dash-home {
   .com-profile {
@@ -103,7 +103,7 @@
       }
 
       @include for-size(smaller-desktop) {
-        overflow-y: scroll;
+        overflow-y: auto;
       }
     }
   }

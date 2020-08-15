@@ -37,7 +37,7 @@ const links = [
   },
 ];
 
-const SideBard = ({ url }) => {
+const SideBard = ({ url, close }) => {
   const user = useSelector((state) => state.auth.user);
   return (
     <div className="side_nav">
@@ -60,6 +60,7 @@ const SideBard = ({ url }) => {
               activeClassName="__active"
               className="link-item flex-row j-start"
               key={`link_${i}`}
+              onClick={close}
             >
               <img src={link.img} alt={link.title} /> <p>{link.title}</p>
             </NavLink>

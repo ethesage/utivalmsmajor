@@ -1,8 +1,8 @@
-import React from "react";
-import CourseCard from "../ActiveCourseCard";
-import Facilitators from "../Facilitators";
-import NavBar from "../CourseNav";
-import "./style.scss";
+import React from 'react';
+import CourseCard from '../ActiveCourseCard';
+import Facilitators from '../Facilitators';
+import NavBar from '../CourseNav';
+import './style.scss';
 
 const Overview = () => {
   return (
@@ -14,7 +14,7 @@ const Overview = () => {
           <Facilitators />
         </div>
 
-        <div className="info_sec reg_text">
+        <div className="info_sec _text">
           <div className="info">
             <h2>Data Accelerator</h2>
             <p>

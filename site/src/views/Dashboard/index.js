@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { Route, Switch, useRouteMatch } from "react-router-dom";
-import NavBar from "./NavBar";
+import React, { useState, useEffect } from 'react';
+import { Route, Switch, useRouteMatch } from 'react-router-dom';
+import NavBar from './NavBar';
 // import Footer from './Footer'
-import SideBar from "../../components/SideBar";
-import Courses from "./Courses";
-import Home from "./Home";
-import "./style.scss";
+import SideBar from '../../components/SideBar';
+import Courses from './Courses';
+import FAQ from '../FAQ';
+import Home from './Home';
+import Files from '../Files';
+import './style.scss';
 
 const Dashboard = () => {
   const [open, setOpen] = useState(false);
@@ -15,13 +17,13 @@ const Dashboard = () => {
     setOpen(!open);
   };
 
-  useEffect(() => {
-    const close = () => {
-      setOpen(false);
-    };
+  const close = () => {
+    setOpen(false);
+  };
 
+  useEffect(() => {
     const closeSlider = () => {
-      const smallerScreen = window.matchMedia("(max-width: 900px)");
+      const smallerScreen = window.matchMedia('(max-width: 900px)');
 
       if (smallerScreen.matches) {
         close();
@@ -29,20 +31,20 @@ const Dashboard = () => {
       }
     };
 
-    // window.addEventListener("resize", closeSlider);
+    window.addEventListener('resize', closeSlider);
     // window.addEventListener("scroll", close);
     return () => {
-      window.removeEventListener("resize", closeSlider);
-      window.removeEventListener("scroll", close);
+      window.removeEventListener('resize', closeSlider);
+      window.removeEventListener('scroll', close);
     };
   }, []);
 
   return (
     <main className="dashboard flex-row al-start">
-      <aside className={`dh-aside ${open ? " open" : ""}`}>
-        <SideBar url={url} />
+      <aside className={`dh-aside ${open ? ' open' : ''}`}>
+        <SideBar url={url} close={close} />
       </aside>
-      <section className="dh-main">
+      <section className="dh-main flex-col">
         <div className="contents flex-col">
           <NavBar open={openBar} grow={open} />
           <Switch>
@@ -52,10 +54,15 @@ const Dashboard = () => {
             <Route path={`${path}/courses`}>
               <Courses />
             </Route>
+            <Route path={`${path}/faqs/:info?`}>
+              <FAQ />
+            </Route>
+            <Route path={`${path}/files/:option?`}>
+              <Files />
+            </Route>
           </Switch>
-
-          <div className="dash-footer">(c) 2020 Utiva All Rights Reserved</div>
         </div>
+        <div className="dash-footer">(c) 2020 Utiva All Rights Reserved</div>
       </section>
     </main>
   );

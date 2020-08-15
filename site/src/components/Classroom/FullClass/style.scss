@@ -1,17 +1,27 @@
-@import "../../../media";
+@import '../../../media';
 
 .cx_listnx_full {
   .side_list {
     margin-right: 50px;
+    @include for-size(phone-only) {
+      margin-right: 20px;
+    }
 
     ul {
       li {
         margin: 0px 0 15px;
         .side_link {
           color: color(text);
-          font-size: 0.8em;
           white-space: nowrap;
-          padding: 5px 10px;
+          font-size: 0.9em;
+          padding: 5px 20px;
+
+          @include for-size(smaller-desktop) {
+            // margin-right: 20px;
+
+            font-size: 0.8em;
+            padding: 5px 10px;
+          }
 
           &.active {
             background: color(secondary);

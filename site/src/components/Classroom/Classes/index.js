@@ -11,7 +11,7 @@ function Classes({ data, i, courseId }) {
   const { title, name } = data;
 
   function handleClick(e) {
-    const elements = document.querySelectorAll(".cx_lis-header");
+    const elements = document.querySelectorAll(".h_con");
 
     elements.forEach((element) => {
       if (e.target === element) return;
@@ -25,12 +25,14 @@ function Classes({ data, i, courseId }) {
 
   return (
     <div className="cx_listnx_con" data-index={i}>
-      <h2
-        className={`cx_lis-header flex-row j-start ${!courseId ? " full" : ""}`}
+      <div
+        className={`h_con ${!courseId ? " full" : ""}`}
         onClick={handleClick}
       >
-        <img src={class_icon} alt="class" /> <span>{name}</span>
-      </h2>
+        <h2 className="cx_lis-header flex-row j-start">
+          <img src={class_icon} alt="class" /> <span>{name}</span>
+        </h2>
+      </div>
       <div className={`cx_lis-content ${!courseId ? " show full" : ""}`}>
         <div className="inf_x">
           <h3>How to Query Data</h3>

@@ -104,9 +104,11 @@ const ViewGrade = ({ data }) => {
   return (
     <section className="cx_listnx_con vx_gax">
       <div className="info_sec">
-        <h2 className="cx_lis-header flex-row j-start full">
-          <span>Week one - SQL For Data</span>
-        </h2>
+        <div className={`h_con full`}>
+          <h2 className="cx_lis-header flex-row j-start">
+            <span>Week one - SQL For Data</span>
+          </h2>
+        </div>
         <div className="cx_lis-content show full">
           <div className="inf_x">
             <h3>How to Query Data</h3>

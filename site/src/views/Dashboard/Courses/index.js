@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   Route,
   Switch,
   useRouteMatch,
-  useParams,
+  // useParams,
   Link,
 } from "react-router-dom";
 import Overview from "../../../components/OverView";
@@ -13,11 +13,12 @@ import FullClass from "../../../components/Classroom/FullClass";
 import Assignment from "../../../components/Assignment";
 import ViewGrade from "../../../components/Assignment/ViewGrade";
 import StudyPlan from "../../StudyPlan";
+import Members from "../../Members";
 import "./style.scss";
 
 const Courses = () => {
-  let { path, url } = useRouteMatch();
-  const { courseId } = useParams();
+  let { path } = useRouteMatch();
+  // const { courseId } = useParams();
 
   return (
     <section className="dash-con mx_courx">
@@ -60,6 +61,7 @@ const Courses = () => {
           path={`${path}/study-plan/:courseId`}
           component={StudyPlan}
         />
+        <Route exact path={`${path}/members/:courseId`} component={Members} />
       </Switch>
     </section>
   );

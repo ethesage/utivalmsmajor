@@ -1,1 +1,64 @@
-@import "../../media";
+@import '../../media';
+
+.info_con {
+  position: relative;
+  height: 100%;
+
+  .file_sec {
+    width: 100%;
+  }
+
+  .add_file {
+    position: sticky;
+    bottom: -10px;
+    left: 0;
+    background: white;
+
+    > div {
+      background: rgba(color(theme), 0.1);
+      border-radius: 10px;
+    }
+  }
+}
+
+.dots {
+  cursor: pointer;
+  position: relative;
+
+  .img-sec {
+    padding: 5px;
+    width: 40px;
+
+    img {
+      pointer-events: none;
+    }
+  }
+
+  .drops {
+    position: absolute;
+    background: white;
+    z-index: 10;
+    right: 0;
+    opacity: 0;
+    top: 0px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(black, 0.2);
+    padding: 10px 20px;
+    visibility: hidden;
+    transition: 0.3s ease;
+
+    &.op-dp_2x {
+      top: 40px;
+      visibility: visible;
+      opacity: 1;
+    }
+
+    li {
+      margin-bottom: 10px;
+      padding: 5px 10px;
+      &:hover {
+        background: #f8fafd;
+      }
+    }
+  }
+}

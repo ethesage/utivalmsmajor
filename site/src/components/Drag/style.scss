@@ -1,0 +1,19 @@
+@import '../../media';
+
+.drag_container {
+  padding: 20px;
+  width: 100%;
+  border-radius: 10px;
+
+  > div {
+    width: 90%;
+    font-weight: bold;
+    color: color(theme);
+    padding: 10px 0;
+
+    img {
+      width: 25px;
+      margin-right: 20px;
+    }
+  }
+}

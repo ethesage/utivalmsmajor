@@ -1,4 +1,4 @@
-@import "../../media";
+@import '../../media';
 
 .dashboard {
   height: 100%;
@@ -36,7 +36,7 @@
   .dh-main {
     flex-grow: 1;
     // height: 100vh;
-    min-height: 100vh;
+    min-height: calc(100vh - 100px);
     overflow: hidden;
     margin-top: 100px;
 
@@ -44,22 +44,41 @@
       padding: 3% 5%;
       height: 100%;
       width: 100%;
+      flex-grow: 1;
 
       .dash-con {
         flex-grow: 1;
         width: 100%;
-        min-height: calc(100vh - 200px);
+        // min-height: calc(100vh - 200px);
       }
+    }
 
-      @include for-size(tablet-landscape-up) {
-        width: calc(100vw - 8px);
-      }
+    .dash-footer {
+      width: 100%;
+      text-align: center;
+      padding: 30px;
+      // margin-top: 5%;
+    }
 
-      .dash-footer {
-        width: 100%;
-        text-align: center;
-        margin-top: 5%;
-      }
+    @include for-size(tablet-landscape-up) {
+      width: calc(100vw - 8px);
+    }
+  }
+}
+
+.search_file {
+  white-space: nowrap;
+  margin-bottom: 30px;
+  width: 100%;
+
+  .input-div {
+    margin-bottom: 0;
+    max-width: 300px;
+    margin-left: 30px;
+
+    .input-type {
+      background: white;
+      box-shadow: 10px 5px 20px rgba(0, 0, 0, 0.1);
     }
   }
 }

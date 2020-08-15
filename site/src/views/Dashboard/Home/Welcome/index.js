@@ -1,8 +1,8 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import Button from "../../../../components/Button";
-import wel from "../../../../assets/wel.png";
-import "./style.scss";
+import React from 'react';
+import { useSelector } from 'react-redux';
+// import Button from '../../../../components/Button';
+import wel from '../../../../assets/wel.png';
+import './style.scss';
 
 const Welcome = () => {
   const user = useSelector((state) => state.auth.user);
@@ -24,13 +24,13 @@ const Welcome = () => {
       />
 
       <div className="text-sec">
-        <div className="reg_text">
+        <div className="_text">
           <p>
-            Thanking you for registering. This is your learning environment.{" "}
+            Thanking you for registering. This is your learning environment.{' '}
           </p>
         </div>
 
-        <div className="reg_text">
+        <div className="_text">
           <h2>About Utiva</h2>
           <p>
             Utiva develops the best talents for global businesses! We help you
@@ -38,7 +38,7 @@ const Welcome = () => {
           </p>
         </div>
 
-        <div className="reg_text">
+        <div className="_text">
           <h2>Our Learning Programmes</h2>
           <p>
             Utiva runs 6 digital skill training schools and invests in
@@ -49,7 +49,7 @@ const Welcome = () => {
           </p>
         </div>
 
-        <div className="reg_text">
+        <div className="_text">
           <h2>Why we are the best</h2>
           <h3>World-class instructors</h3>
           <p>
@@ -78,7 +78,7 @@ const Welcome = () => {
         <a
           className="btn p_btn flex-row"
           href="http://utiva.io/courses"
-          target={"_"}
+          target={'_'}
         >
           Start Learning
         </a>
