@@ -6,6 +6,10 @@
     .cat-sec {
       padding-bottom: 10px;
 
+      @include for-size(tablet-landscape-up) {
+        overflow-x: scroll;
+      }
+
       &:hover {
         overflow-x: auto;
       }

@@ -10,17 +10,19 @@ import chalk from 'chalk';
 import cors from 'cors';
 import os from 'os';
 import { config } from 'dotenv';
+import path from 'path';
 import roles from './helpers/roles';
 import usession from './middlewares/user_session';
-import Routes from './routes';
+import Routes from './routes/v1';
 import db from './database/models';
 
 config();
 const log = debug('dev');
 const app = express();
 
-const isProd = process.env.NODE_ENV === 'production';
-// express.
+// express.\
+// const isProd = process.env.NODE_ENV === 'production';
+
 // Options for media upload to backend for cloudinary
 const options = {
   uploadDir: os.tmpdir(),
@@ -36,7 +38,7 @@ app.use(formData.union());
 
 const Pgstore = connectPg(session);
 
-const whitelist = ['http://localhost:3000'];
+const whitelist = process.env.whiteList.split(',');
 const corsOptions = {
   origin(origin, callback) {
     if (whitelist.indexOf(origin) !== -1 || !origin) {
@@ -59,29 +61,38 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use(express.static(path.join(__dirname, '../site/build')));
+
 app.use(
   session({
-    store: true ? new Pgstore() : null, // Persisting your sessions change isProd to true if you want constant persistence
+    store: new Pgstore(),
     name: 'utiva',
+    // Persisting your sessions change isProd to true if you want constant persistence
     saveUninitialized: false,
     resave: false,
     secret: process.env.APP_SECRET,
     cookie: {
       maxAge: 172800 * 1000, // maximum cookie duration is 2 days
-      sameSite: isProd,
-      secure: isProd,
+      sameSite: true,
+      secure: false,
     },
   })
 );
 
 app.use(usession.main(session, roles));
 
-app.get('/', (req, res) =>
+app.get('/api/v1', (req, res) =>
   res.status(200).json({
-    message: 'Welcome to utival',
+    message: 'Welcome to utiva',
   })
 );
-Routes(app);
+
+// Routes(app);
+app.use('/api/v1', Routes);
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../site/build', 'index.html'));
+});
 
 // to catch a 404 and send to error handler
 app.use((req, res) =>

@@ -1,5 +1,5 @@
-@import "./media";
-@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap");
+@import './media';
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap');
 
 *,
 *::before,
@@ -9,15 +9,15 @@
   box-sizing: border-box;
   outline: none;
   -webkit-tap-highlight-color: transparent;
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
 }
 
 body,
 html {
-  scroll-behavior: smooth;
+  // scroll-behavior: smooth;
   width: 100%;
   min-height: 100vh;
-  overflow-x: hidden;
+  // overflow-x: hidden;
   color: color(text);
 }
 
@@ -93,8 +93,7 @@ button {
   background: none;
 }
 
-.img,
-svg {
+.img {
   width: 100%;
   height: 100%;
 }
@@ -258,6 +257,26 @@ li {
   }
 }
 
+.s_hd {
+  font-size: 2em;
+
+  @include for-size(tablet-landscape-up) {
+    font-size: 1.5em;
+  }
+
+  @include for-size(tablet-portrait-up) {
+    font-size: 1em;
+  }
+
+  @include for-size(phone-only) {
+    font-size: 0.85em;
+  }
+
+  &.middle {
+    text-align: center;
+  }
+}
+
 .reg_text {
   h2 {
     color: color(theme);
@@ -269,8 +288,18 @@ li {
     }
   }
 
+  h3 {
+    color: color(text);
+    margin-bottom: 5px;
+    font-size: 1.4em;
+
+    @include for-size(smaller-desktop) {
+      font-size: 1.2em;
+    }
+  }
+
   p {
-    color: color(text_fade);
+    color: color(text);
     font-size: 1.2em;
 
     @include for-size(smaller-desktop) {
@@ -282,12 +311,52 @@ li {
   }
 }
 
+._text {
+  h2 {
+    color: color(theme);
+    margin-bottom: 10px;
+    font-size: 1.3em;
+
+    @include for-size(smaller-desktop) {
+      font-size: 1.1em;
+    }
+  }
+
+  h3 {
+    color: color(text);
+    margin-bottom: 5px;
+    font-size: 1.1em;
+
+    @include for-size(smaller-desktop) {
+      font-size: 1em;
+    }
+  }
+
+  p {
+    color: color(text);
+    font-size: 1em;
+
+    @include for-size(smaller-desktop) {
+      font-size: 0.8em;
+    }
+  }
+}
+
 .btn {
   box-shadow: 0px 12px 35px rgba(160, 121, 0, 0.2);
   padding: 10px 20px;
   color: white;
   background: color(secondary);
-  border-radius: 10px;
+  border-radius: 5px;
+
+  p {
+    pointer-events: none;
+  }
+
+  &.theme {
+    background: color(theme);
+    box-shadow: 0px 12px 35px rgba(color(theme), 0.2);
+  }
 
   a {
     color: white;
@@ -314,4 +383,38 @@ li {
 
 ::-webkit-scrollbar-button {
   background: rgba(color(theme), 0.1);
+}
+
+@keyframes load {
+  0% {
+    opacity: 0.08;
+    /*         font-size: 10px; */
+    /* 				font-weight: 400; */
+    filter: blur(5px);
+    letter-spacing: 3px;
+  }
+  100% {
+    /*         opacity: 1; */
+    /*         font-size: 12px; */
+    /* 				font-weight:600; */
+    /* 				filter: blur(0); */
+  }
+}
+
+.loader {
+  p {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    margin: auto;
+    animation: load 1.2s infinite 0s ease-in-out;
+    animation-direction: alternate;
+    text-shadow: 0 0 1px white;
+  }
+}
+
+.box-shade {
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
 }

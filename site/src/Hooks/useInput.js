@@ -8,16 +8,25 @@ export default function Input({
   cb,
   validateForm = true,
   error,
+  btnText,
 }) {
   const [validateSelf, setValidateSelf] = useState(false);
-  const [inputTypes, setInputTypes] = useState(inputs);
+  const [inputTypes, setInputTypes] = useState(
+    inputs && inputs.reduce((acc, input) => ({ ...acc, [input.name]: "" }), {})
+  );
   const { addToast } = useToasts();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    let keys = Object.keys(inputTypes);
-    const values = Object.values(inputTypes);
+    let requiredKeys = inputs.reduce((acc, input) => {
+      if (input.required || inputTypes[input.name])
+        return { ...acc, [input.name]: inputTypes[input.name] };
+      else return acc;
+    }, {});
+
+    let keys = Object.keys(requiredKeys);
+    const values = Object.values(requiredKeys);
 
     const shouldSubmit = keys.some((key, i) => {
       return !validate(values[i], keys[i]);
@@ -32,7 +41,8 @@ export default function Input({
       return;
     }
 
-    submitButton.current.classList.add("spinner1");
+    submitButton.current.children[0].innerHTML = btnText.loading;
+    submitButton.current.classList.add("loader");
 
     let response;
 
@@ -50,7 +60,9 @@ export default function Input({
         appearance: "error",
         autoDismiss: true,
       });
-      submitButton.current.classList.remove("spinner1");
+
+      submitButton.current.children[0].innerHTML = btnText.reg;
+      submitButton.current.classList.remove("loader");
       return;
     }
 

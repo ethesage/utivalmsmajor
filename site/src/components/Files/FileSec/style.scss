@@ -1,0 +1,47 @@
+@import '../../../media';
+
+.file_card {
+  width: 100%;
+  margin-bottom: 20px;
+  @include for-size(phone-only) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .dots {
+    .img-sec {
+      padding: 5px;
+      width: 40px;
+
+      img {
+        pointer-events: none;
+      }
+    }
+  }
+
+  .left {
+    width: 80%;
+    @include for-size(phone-only) {
+      width: 100%;
+    }
+
+    img {
+      width: 30px;
+      margin-right: 5px;
+    }
+
+    .txt-sec {
+      h2 {
+        font-size: 0.9em;
+      }
+    }
+  }
+
+  .grade {
+    white-space: nowrap;
+  }
+
+  .img_grade {
+    width: 20px;
+  }
+}

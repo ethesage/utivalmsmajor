@@ -7,29 +7,35 @@ const Select = ({
   inputs,
   currentText = "",
   handleSelect,
+  required,
 }) => {
   const [openDrop, setOpenDrop] = useState(false);
   const [presentValue, setPresentValue] = useState("");
 
   const selectRef = React.createRef();
+  const parent = React.createRef();
 
   useEffect(() => {
-    setPresentValue(currentText);
+    setPresentValue(`${currentText}${required ? " *" : ""}`);
 
     return () => {};
-  }, [currentText]);
+  }, [currentText, required]);
 
   const handleClick = (name, value, current_name) => {
     setPresentValue(current_name);
     setOpenDrop(false);
-    // handleSelect(name, value);
+    let target = { name, value };
+    handleSelect({ target });
   };
 
   const revileDropDown = () => {
     setOpenDrop(!openDrop);
   };
 
-  const close = () => {
+  const close = (e) => {
+    if (!e.target) setOpenDrop(false);
+    if (e.target.classList.contains("currentValue")) return;
+
     setOpenDrop(false);
   };
 
@@ -48,7 +54,7 @@ const Select = ({
   });
 
   return (
-    <div className="input-div" onBlur={close} tabIndex={-1}>
+    <div className="input-div" onBlur={close} tabIndex={-1} ref={parent}>
       <div className="input-type">
         <div
           className={`select ${openDrop ? "open-drop" : ""}`}

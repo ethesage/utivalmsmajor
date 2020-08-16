@@ -1,0 +1,57 @@
+@import "../../media";
+
+.rcx_btn {
+  //   width: 200px;
+  display: inline-flex;
+  height: 45px;
+  border-radius: 10px;
+  overflow: hidden;
+
+  &.theme {
+    background: rgba(color(theme), 0.2);
+
+    .rcx_img {
+      background: color(theme);
+    }
+  }
+
+  &.secondary {
+    background: rgba(color(secondary), 0.2);
+
+    .rcx_img {
+      background: color(secondary);
+    }
+  }
+
+  &.off {
+    background: rgba(color(off), 0.2);
+
+    .rcx_img {
+      background: color(off);
+    }
+  }
+
+  &.approved {
+    background: rgba(color(approved), 0.2);
+
+    .rcx_img {
+      background: color(approved);
+    }
+  }
+
+  .rcx_img {
+    width: 50px;
+    height: 100%;
+
+    img {
+      width: 20px;
+    }
+  }
+
+  .txt {
+    padding: 0 20px;
+    p {
+      font-size: 0.8em;
+    }
+  }
+}

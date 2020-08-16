@@ -1,0 +1,55 @@
+@import '../../../../media';
+
+.dash-home .welcome {
+  padding: 10px;
+  margin-top: 30px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+
+  nav {
+    padding: 20px;
+
+    @include for-size(phone-only) {
+    }
+
+    button {
+      font-size: 1.2em;
+      color: color(theme);
+      font-weight: bold;
+
+      @include for-size(phone-only) {
+        font-size: 0.8em;
+      }
+    }
+    .seperator {
+      height: 0.3px;
+      background: color(fade);
+      width: 100%;
+      display: block;
+      margin-top: 10px;
+    }
+  }
+
+  .wel_img {
+    text-align: center;
+    height: 100%;
+    object-position: center;
+    max-height: 500px;
+  }
+
+  .text-sec {
+    padding: 5% 5% 3%;
+
+    ._text {
+      margin-bottom: 4%;
+
+      h3 {
+        margin-top: 30px;
+      }
+    }
+    a {
+      margin: 100px auto 0;
+      width: 60%;
+    }
+  }
+}

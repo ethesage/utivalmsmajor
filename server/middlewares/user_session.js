@@ -1,7 +1,12 @@
 import RBAC from 'easy-rbac';
 import debug from 'debug';
+import { config } from 'dotenv';
 import chalk from 'chalk';
 import helpers from '../helpers';
+
+config();
+// const isProd = process.env.NODE_ENV === "production";
+const isProd = true;
 
 const log = debug('dev');
 const { errorStat, generateToken, verifyToken } = helpers;
@@ -55,14 +60,17 @@ module.exports.main = function easySessionMain(connect, opts) {
         const split = token.split('.');
         const clientToken = [split[0], split[1]].join('.');
         const [, , signature] = split;
-        res.cookie('uti_va', clientToken, { maxAge: role === 'user' ? userTimeout : freshTimeout });
+        res.cookie('uti_va', clientToken, {
+          maxAge: role === 'student' ? userTimeout : freshTimeout,
+          sameSite: true,
+          secure: false,
+        });
 
         // set the signature of the token in the secure token
         req.session.accessload = signature;
         req.session.loggedInAt = Date.now();
         req.session.lastRequestAt = Date.now();
         req.session.setRole(role);
-
 
         if (uaCheck) {
           req.session.ua = req.headers['user-agent'];
@@ -87,7 +95,11 @@ module.exports.main = function easySessionMain(connect, opts) {
    */
   Session.prototype.logout = async function logout(res, cb) {
     this.regenerate((err) => (err ? new Error(err) : cb));
-    res.cookie('uti_va', '', { maxAge: 0 });
+    res.cookie('uti_va', '', {
+      maxAge: 0,
+      sameSite: true,
+      secure: false,
+    });
   };
 
   /**
@@ -140,7 +152,11 @@ module.exports.main = function easySessionMain(connect, opts) {
       }
     });
 
-    res.cookie('uti_va', uti_va, { maxAge: this.getRole() === 'user' ? userTimeout : freshTimeout });
+    res.cookie('uti_va', uti_va, {
+      maxAge: this.getRole() === 'student' ? userTimeout : freshTimeout,
+      sameSite: true,
+      secure: false,
+    });
     return true;
   };
 
@@ -303,7 +319,8 @@ module.exports.can = function can(operation, params, errorCallback) {
       return errorStat(res, 401, err.message);
     }
 
-    const param_result = typeof params === 'function' ? params(req, res) : params;
+    const param_result =
+      typeof params === 'function' ? params(req, res) : params;
 
     try {
       const accessGranted = await req.session.can(operation, param_result);

@@ -1,0 +1,45 @@
+@import '../../media';
+
+.faq {
+  @include for-size(phone-only) {
+    flex-direction: column;
+  }
+
+  .faq_sec {
+    border: 0.5px solid rgba(29, 61, 121, 0.17);
+    border-radius: 20px;
+    overflow: hidden;
+
+    .rx_hd {
+      padding: 20px;
+      margin: 0;
+      border-bottom: 0.5px solid rgba(29, 61, 121, 0.17);
+      font-weight: normal;
+      background: #f8fafd;
+
+      h2 {
+        &:after {
+          content: '';
+        }
+      }
+
+      span {
+        color: color(text);
+      }
+    }
+
+    .rx_con {
+      margin: 0;
+
+      .inf_x {
+        p + p {
+          margin-top: 20px;
+        }
+      }
+
+      &.show {
+        padding: 20px;
+      }
+    }
+  }
+}

@@ -1,0 +1,92 @@
+@import "../../../media";
+
+.payment {
+  .payment_con {
+    width: 100%;
+    max-width: 700px;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+    padding: 30px 7%;
+
+    .nav-sec {
+      margin-bottom: 30px;
+
+      @include for-size(phone-only) {
+        margin: 0;
+        .nav-item img {
+          width: 80px;
+        }
+      }
+
+      @include for-size(mid-phone) {
+        .nav-item img {
+          width: 60px;
+        }
+      }
+    }
+
+    .card-sec {
+      width: 100%;
+    }
+
+    .pay-card {
+      width: 80%;
+      margin-top: 50px;
+
+      @include for-size(phone-only) {
+        width: 100%;
+      }
+    }
+
+    .back {
+      margin-top: 50px;
+      color: color(theme);
+      font-weight: bold;
+      text-align: center;
+      width: 100%;
+    }
+  }
+
+  .d_s_c {
+    border: 0;
+    position: fixed;
+    width: 60%;
+    max-width: 500px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 5px;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+
+    @include for-size(phone-only) {
+      width: 90%;
+    }
+
+    &::backdrop {
+      background: rgba(white, 0.8);
+    }
+
+    .content {
+      padding: 30px;
+      position: relative;
+
+      img {
+        width: 100%;
+      }
+
+      .reg_text {
+        margin-bottom: 30px;
+        text-align: center;
+
+        h2 {
+          color: #09ac23;
+          margin: 30px 0 10px;
+        }
+      }
+
+      .btn {
+        width: 80%;
+      }
+    }
+  }
+}
