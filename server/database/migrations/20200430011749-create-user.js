@@ -1,4 +1,4 @@
-const { sequelize } = require('../models');
+// const { sequelize } = require('../models');
 
 module.exports = {
   up: (queryInterface, Sequelize) =>
