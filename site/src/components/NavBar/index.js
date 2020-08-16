@@ -1,14 +1,14 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
-import { NavLink, Link } from "react-router-dom";
-import logo from "../../assets/logo.png";
-import Hambuger from "../../assets/icons/Hambuger";
-import { useSelector } from "react-redux";
-import "./style.scss";
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { NavLink, Link } from 'react-router-dom';
+import logo from '../../assets/logo.png';
+import Hambuger from '../../assets/icons/Hambuger';
+import { useSelector } from 'react-redux';
+import './style.scss';
 
 const links = [
-  { title: "Login", link: "/signin" },
-  { title: "Get Started", link: "/signup", classname: " nav_btn" },
-  { title: "Dashboard", link: "/dashboard", classname: " nav_btn" },
+  { title: 'Login', link: '/auth/signin' },
+  { title: 'Get Started', link: '/auth/signup', classname: ' nav_btn' },
+  { title: 'Dashboard', link: '/dashboard', classname: ' nav_btn' },
 ];
 
 const NavBar = () => {
@@ -23,7 +23,7 @@ const NavBar = () => {
   }, []);
 
   useEffect(() => {
-    window.addEventListener("scroll", close);
+    window.addEventListener('scroll', close);
 
     let reqId;
 
@@ -38,9 +38,9 @@ const NavBar = () => {
         currentScroll.current = window.scrollY;
 
         if (currentScroll.current > 50) {
-          navRef.current.classList.add("slide-down");
+          navRef.current.classList.add('slide-down');
         } else {
-          navRef.current.classList.remove("slide-down");
+          navRef.current.classList.remove('slide-down');
         }
       }
 
@@ -49,7 +49,7 @@ const NavBar = () => {
     loop();
     return () => {
       window.cancelAnimationFrame(reqId);
-      window.removeEventListener("scroll", close);
+      window.removeEventListener('scroll', close);
     };
   }, [currentScroll, navRef, close]);
 
@@ -71,13 +71,13 @@ const NavBar = () => {
             onChange={() => setChecked(!checked)}
           />
 
-          <div className={`contents flex-row j-end${checked ? " open" : ""}`}>
+          <div className={`contents flex-row j-end${checked ? ' open' : ''}`}>
             <div className="l_s">
               {!!user ? (
                 <div className="lin_con flex-row">
                   <NavLink
                     to={links[2].link}
-                    className={`links${links[2].classname || ""}`}
+                    className={`links${links[2].classname || ''}`}
                     activeClassName="link_active"
                     as="div"
                   >
@@ -90,7 +90,7 @@ const NavBar = () => {
                     <div className="lin_con" key={`sublink_${i}`}>
                       <NavLink
                         to={link.link}
-                        className={`links${link.classname || ""}`}
+                        className={`links${link.classname || ''}`}
                         activeClassName="link_active"
                         as="div"
                       >

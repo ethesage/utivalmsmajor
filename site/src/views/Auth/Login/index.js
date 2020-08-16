@@ -1,15 +1,15 @@
-import React, { useRef, useState } from "react";
-import { useToasts } from "react-toast-notifications";
-import { Link, useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import useInput from "../../../Hooks/useInput";
-import Input from "../../../components/Input";
-import Button from "../../../components/Button";
-import data from "../../../data/signIn";
-import { axiosInstance } from "../../../helpers";
-import { login } from "../../../g_actions/user";
-import Social from "../SocialSec";
-import "../style.scss";
+import React, { useRef, useState } from 'react';
+import { useToasts } from 'react-toast-notifications';
+import { Link, useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import useInput from '../../../Hooks/useInput';
+import Input from '../../../components/Input';
+import Button from '../../../components/Button';
+import data from '../../../data/signIn';
+import { axiosInstance } from '../../../helpers';
+import { login } from '../../../g_actions/user';
+import Social from '../SocialSec';
+import '../style.scss';
 
 function Login() {
   const submitButton = useRef();
@@ -22,18 +22,18 @@ function Login() {
     inputs: data,
     submitButton,
     cb: async (inputs) => {
-      const response = await axiosInstance.post("/user/login", inputs);
+      const response = await axiosInstance.post('/user/login', inputs);
       addToast(`Welcome back ${response.data.user.firstName}`, {
-        appearance: "success",
+        appearance: 'success',
         autoDismiss: true,
       });
 
       dispatch(login());
-      history.push("/dashboard");
+      history.push('/dashboard');
     },
     btnText: {
-      loading: "Logging on...",
-      reg: "Login",
+      loading: 'Logging on...',
+      reg: 'Login',
     },
   });
 
@@ -46,7 +46,7 @@ function Login() {
       <div className="reg_text">
         <h2>Sign In</h2>
         <p>
-          To use another email address,{" "}
+          To use another email address,{' '}
           <Link to="/signin">
             <strong className="theme-color">click here</strong>
           </Link>
@@ -62,7 +62,7 @@ function Login() {
             value={inputTypes[form.name]}
             errorMsg={form.errorMsg}
             required={form.required}
-            reviel={form.type === "password" ? reviel : false}
+            reviel={form.type === 'password' ? reviel : false}
             revielPassword={revielPassword}
             handleChange={handleChange}
             validateSelf={validateSelf}
@@ -78,14 +78,14 @@ function Login() {
       </form>
       <div className="externs flex-row j-space">
         <small>
-          Forgot password?{" "}
-          <Link to="/forgot">
+          Forgot password?{' '}
+          <Link to="/auth/forgot">
             <strong className="theme-color">Click here</strong>
           </Link>
         </small>
         <small>
-          Don't have an account?{" "}
-          <Link to="/signup">
+          Don't have an account?{' '}
+          <Link to="/auth/signup">
             <strong className="theme-color">Sign up</strong>
           </Link>
         </small>

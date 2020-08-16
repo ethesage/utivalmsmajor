@@ -1,6 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { NavLink, useParams } from 'react-router-dom';
-import Button from '../../components/Button';
+import React from 'react';
+import {
+  NavLink,
+  Route,
+  Switch,
+  useRouteMatch,
+  // useParams,
+} from 'react-router-dom';
+// import Button from '../../components/Button';
 import Files from '../../components/Files';
 import Folder from '../../components/Files/Folder';
 import Select from '../../components/Select';
@@ -25,15 +31,7 @@ const links = [
 ];
 
 const File_Page = () => {
-  const { option } = useParams();
-  const [currentSection, setCurrentection] = useState(
-    option === '' || !option ? 'allfiles' : option
-  );
-
-  useEffect(() => {
-    setCurrentection(option === '' || !option ? 'allfiles' : option);
-    return () => {};
-  }, [option]);
+  let { path } = useRouteMatch();
 
   const AllFile = () => {
     return (
@@ -59,12 +57,6 @@ const File_Page = () => {
     );
   };
 
-  const newdata = {
-    allfiles: <AllFile />,
-    // upload: data[1],
-    folders: <Folders />,
-  };
-
   return (
     <>
       <div className="search_file flex-row j-start">
@@ -87,7 +79,10 @@ const File_Page = () => {
             </li>
           ))}
         >
-          {newdata[currentSection]}
+          <Switch>
+            <Route exact path={`${path}`} component={AllFile} />
+            <Route exact path={`${path}/folders`} component={Folders} />
+          </Switch>
         </Layout>
       </div>
     </>

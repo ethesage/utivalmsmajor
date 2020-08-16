@@ -7,6 +7,7 @@ import Courses from './Courses';
 import FAQ from '../FAQ';
 import Home from './Home';
 import Files from '../Files';
+import Settings from '../Settings';
 import './style.scss';
 
 const Dashboard = () => {
@@ -57,8 +58,11 @@ const Dashboard = () => {
             <Route path={`${path}/faqs/:info?`}>
               <FAQ />
             </Route>
-            <Route path={`${path}/files/:option?`}>
+            <Route path={`${path}/files`}>
               <Files />
+            </Route>
+            <Route path={`${path}/settings/:option?`}>
+              <Settings />
             </Route>
           </Switch>
         </div>

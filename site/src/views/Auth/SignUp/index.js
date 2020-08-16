@@ -1,18 +1,18 @@
-import React, { useRef, useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { useToasts } from "react-toast-notifications";
-import { Link, useHistory } from "react-router-dom";
-import Input from "../../../components/InputType";
-import useInput from "../../../Hooks/useInput";
-import data from "../../../data/signup";
-import { axiosInstance } from "../../../helpers";
-import Social from "../SocialSec";
-import { gender } from "../../../data/filters";
-import Button from "../../../components/Button";
-import { login } from "../../../g_actions/user";
-import axois from "axios";
-import "../style.scss";
-import "./style.scss";
+import React, { useRef, useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { useToasts } from 'react-toast-notifications';
+import { Link, useHistory } from 'react-router-dom';
+import Input from '../../../components/InputType';
+import useInput from '../../../Hooks/useInput';
+import data from '../../../data/signup';
+import { axiosInstance } from '../../../helpers';
+import Social from '../SocialSec';
+import { gender } from '../../../data/filters';
+import Button from '../../../components/Button';
+import { login } from '../../../g_actions/user';
+import axois from 'axios';
+import '../style.scss';
+import './style.scss';
 
 function Signup() {
   const submitButton = useRef();
@@ -27,41 +27,41 @@ function Signup() {
     cb: async (inputs) => {
       if (inputs.password !== inputs.cpassword) {
         addToast(`Please make sure that the passwords are the same`, {
-          appearance: "error",
+          appearance: 'error',
           autoDismiss: true,
         });
 
-        submitButton.current.classList.remove("spinner1");
+        submitButton.current.classList.remove('spinner1');
         return;
       }
 
       const data = Object.keys(inputs).reduce((acc, input) => {
-        if (input !== "cpassword") {
+        if (input !== 'cpassword') {
           return { ...acc, [input]: inputs[input] };
         }
         return { ...acc };
       }, {});
 
-      const response = await axiosInstance.post("/user/signup", data);
+      const response = await axiosInstance.post('/user/signup', data);
 
       addToast(
         `Hey ${response.data.user.firstName} Welcome to The Utiva Learning Platform`,
         {
-          appearance: "success",
+          appearance: 'success',
           autoDismiss: true,
         }
       );
 
       dispatch(login());
-      history.push("/dashboard");
+      history.push('/dashboard');
     },
     btnText: {
-      loading: "Creating...",
-      reg: "Create Account",
+      loading: 'Creating...',
+      reg: 'Create Account',
     },
   });
 
-  const [apiToken, setApiToken] = useState("");
+  const [apiToken, setApiToken] = useState('');
 
   const [selects, setSelects] = useState({
     gender,
@@ -76,13 +76,13 @@ function Signup() {
   useEffect(() => {
     const get_countries = async () => {
       let apiToken = await axois.get(
-        "https://www.universal-tutorial.com/api/getaccesstoken",
+        'https://www.universal-tutorial.com/api/getaccesstoken',
         {
           headers: {
-            "api-token":
-              "OiMssnB9spvedi7rVY4e8_4FMaC-2COodQKIDgyOPyIdiQXwiP7oUnOZALFK4ntQ2LE",
-            "content-type": "application/json",
-            "user-email": "jude.chinoso@theagromall.com",
+            'api-token':
+              'OiMssnB9spvedi7rVY4e8_4FMaC-2COodQKIDgyOPyIdiQXwiP7oUnOZALFK4ntQ2LE',
+            'content-type': 'application/json',
+            'user-email': 'jude.chinoso@theagromall.com',
           },
         }
       );
@@ -90,11 +90,11 @@ function Signup() {
       setApiToken(apiToken.data.auth_token);
 
       let countries = await axois.get(
-        "https://www.universal-tutorial.com/api/countries/",
+        'https://www.universal-tutorial.com/api/countries/',
         {
           headers: {
             Authorization: `Bearer ${apiToken.data.auth_token}`,
-            "content-type": "application/json",
+            'content-type': 'application/json',
           },
         }
       );
@@ -124,7 +124,7 @@ function Signup() {
         {
           headers: {
             Authorization: `Bearer ${apiToken}`,
-            "content-type": "application/json",
+            'content-type': 'application/json',
           },
         }
       );
@@ -158,11 +158,11 @@ function Signup() {
             name={form.name}
             type={form.type}
             itype={form.itype}
-            placeHolder={form.itype ? "" : form.placeHolder}
+            placeHolder={form.itype ? '' : form.placeHolder}
             value={inputTypes[form.name]}
             errorMsg={form.errorMsg}
             required={form.required}
-            reviel={form.type === "password" ? reviel : false}
+            reviel={form.type === 'password' ? reviel : false}
             revielPassword={revielPassword}
             handleChange={handleChange}
             validateSelf={validateSelf}
@@ -181,8 +181,8 @@ function Signup() {
       </form>
       <div className="externs flex-row j-space">
         <small>
-          Already have an account?{" "}
-          <Link to="/signin">
+          Already have an account?{' '}
+          <Link to="/auth/signin">
             <strong className="theme-color">Login</strong>
           </Link>
         </small>
