@@ -7,7 +7,7 @@ import {
   changePassword,
   updateUser,
   quickCheckOut,
-  adminCreate
+  adminCreate,
 } from '../../controllers/user';
 import middlewares from '../../middlewares';
 
@@ -21,31 +21,38 @@ const {
   checkInvitation,
   quickCheckOutSchema,
   adminCreateSchema,
-  usession
+  usession,
 } = middlewares;
 
 const userRoutes = express();
 
-userRoutes.post('/reset_password_link', validate(resetPasswordSchema), resetPassword);
+userRoutes.post(
+  '/reset_password_link',
+  validate(resetPasswordSchema),
+  resetPassword
+);
 userRoutes.post(
   '/change_password/',
-  validate(changePasswordSchema, 
-    (req) => (req.body.emailToken = req.query.emailToken)), 
-  changePassword);
+  validate(
+    changePasswordSchema,
+    (req) => (req.body.emailToken = req.query.emailToken)
+  ),
+  changePassword
+);
 userRoutes.post('/login', validate(loginSchema), checkInvitation, login);
 userRoutes.post('/signup', validate(signUpSchema), checkInvitation, signup);
 userRoutes.post('/quickcheckout', validate(quickCheckOutSchema), quickCheckOut);
 userRoutes.patch(
   '/update',
-  usession.can(''), 
+  usession.can(''),
   validate(updateUserSchema),
   updateUser
-  );
+);
 userRoutes.post(
   '/admin/create',
   usession.can('admin:create'),
   validate(adminCreateSchema),
   adminCreate
-  );
+);
 
 export default userRoutes;
