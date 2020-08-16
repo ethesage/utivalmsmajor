@@ -1,5 +1,5 @@
 import { hashPassword, comparePassword } from './passwordHash';
-import { errorStat, successStat, validateJoi, uploadLogo, generatePassword } from './Utilities';
+import { errorStat, successStat, validateJoi, uploadImage, generatePassword } from './Utilities';
 import { generateToken, verifyToken } from './auth';
 
 export default {
@@ -10,6 +10,6 @@ export default {
   validateJoi,
   generateToken,
   verifyToken,
-  uploadLogo,
+  uploadImage,
   generatePassword
 };

@@ -1,9 +1,15 @@
 import express from 'express';
 import 'express-async-errors';
 import user from './user';
+import course from './course';
+import trainer from './trainer';
+import student from './student';
+import classRoom from './class';
+import file from './file';
+import cohort from './cohort';
 import helpers from '../../helpers';
 
-const { successStat, errorStat } = helpers;
+const { errorStat, successStat } = helpers;
 
 const router = express.Router();
 
@@ -22,5 +28,11 @@ router.get('/logged-in', async (req, res) => {
 });
 
 router.use('/user', user);
+router.use('/course', course);
+router.use('/trainer', trainer);
+router.use('/student', student);
+router.use('/class', classRoom);
+router.use('/file', file);
+router.use('/cohort', cohort);
 
 export default router;

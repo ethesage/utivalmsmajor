@@ -20,6 +20,7 @@ config();
 const log = debug('dev');
 const app = express();
 
+// express.\
 // const isProd = process.env.NODE_ENV === 'production';
 
 // Options for media upload to backend for cloudinary
@@ -32,6 +33,8 @@ app.use(formData.parse(options));
 app.use(formData.format());
 app.use(formData.stream());
 app.use(formData.union());
+// app.use(express.urlencoded({ extended: true }));
+// app.use(express.json());
 
 const Pgstore = connectPg(session);
 

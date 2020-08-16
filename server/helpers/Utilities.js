@@ -75,6 +75,13 @@ export function validateJoi(object, schema, req, res, next, name) {
   return next();
 }
 
+export const uploadImage = (image, id) =>
+  new Promise((resolve, reject) => {
+    cloudinary.uploader.upload(image.path, { public_id: id }, (err, res) =>
+      (err ? reject(err) : resolve(res.url))
+    );
+  });
+
 export const encryptQuery = (string) => {
   try {
     const cryptr = new Cryptr(ENCRYPTION_SECRET);
@@ -93,7 +100,6 @@ export const decrypt = (string) => {
   }
 };
 
-
 const shuffleArray = (array) => {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -102,21 +108,20 @@ const shuffleArray = (array) => {
     array[j] = temp;
   }
   return array;
-}
-
+};
 
 export const generatePassword = (passwordLength) => {
-    const numberChars = "0123456789";
-    const upperChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const lowerChars = "abcdefghijklmnopqrstuvwxyz";
-    const symbols = "!@#$%&*";
+  const numberChars = "0123456789";
+  const upperChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const lowerChars = "abcdefghijklmnopqrstuvwxyz";
+  const symbols = "!@#$%&*";
 
-    const allChars = numberChars + upperChars + lowerChars + symbols;
-    let randPasswordArray = Array(passwordLength);
-    randPasswordArray[0] = numberChars;
-    randPasswordArray[1] = upperChars;
-    randPasswordArray[2] = lowerChars
-    randPasswordArray[3] = symbols;
-    randPasswordArray = randPasswordArray.fill(allChars, 4);
-    return shuffleArray(randPasswordArray.map((x) => { return x[Math.floor(Math.random() * x.length)] })).join('');  
-}
+  const allChars = numberChars + upperChars + lowerChars + symbols;
+  let randPasswordArray = Array(passwordLength);
+  randPasswordArray[0] = numberChars;
+  randPasswordArray[1] = upperChars;
+  randPasswordArray[2] = lowerChars;
+  randPasswordArray[3] = symbols;
+  randPasswordArray = randPasswordArray.fill(allChars, 4);
+  return shuffleArray(randPasswordArray.map((x) => x[Math.floor(Math.random() * x.length)])).join('');
+};
