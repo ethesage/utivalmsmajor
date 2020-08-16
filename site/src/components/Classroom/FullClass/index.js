@@ -1,36 +1,37 @@
-import React, { useState, useEffect } from "react";
-import { NavLink, useParams } from "react-router-dom";
-import Classes from "../Classes";
-import ResourceBtn from "../../ResourceButton";
-import NavBar from "../../../components/CourseNav";
-import assignment from "../../../assets/icons/course/assignment.png";
-import "./style.scss";
+import React, { useState, useEffect } from 'react';
+import { NavLink, useParams } from 'react-router-dom';
+import Classes from '../Classes';
+import ResourceBtn from '../../ResourceButton';
+import NavBar from '../../CourseNav';
+import assignment from '../../../assets/icons/course/assignment.png';
+import Layout from '../../SideNavListLayout';
+import './style.scss';
 
 const _data = [
   {
-    title: "Jude",
-    name: "Week one - SQL For Data",
+    title: 'Jude',
+    name: 'Week one - SQL For Data',
   },
   {
-    title: "Jude violet",
-    name: "Week Two - SQL For Data",
+    title: 'Jude violet',
+    name: 'Week Two - SQL For Data',
   },
   {
-    title: "Jude chinoso",
-    name: "Week Three - SQL For Data",
+    title: 'Jude chinoso',
+    name: 'Week Three - SQL For Data',
   },
   {
-    title: "Jude okuwanyi",
-    name: "Week Four - SQL For Data",
+    title: 'Jude okuwanyi',
+    name: 'Week Four - SQL For Data',
   },
 ];
 
 function FullClass({ data = _data }) {
   const { courseId, index } = useParams();
-  const [currentCourse, setCurrentCourse] = useState(index.split("_")[1]);
+  const [currentCourse, setCurrentCourse] = useState(index.split('_')[1]);
 
   useEffect(() => {
-    setCurrentCourse(index.split("_")[1]);
+    setCurrentCourse(index.split('_')[1]);
 
     return () => {};
   }, [index]);
@@ -38,24 +39,21 @@ function FullClass({ data = _data }) {
   return (
     <>
       <NavBar />
-      <div className="cx_listnx_full flex-row j-start al-start">
-        <div className="side_list">
-          <ul>
-            {data.map((unused, i) => (
-              <li>
-                <NavLink
-                  className="side_link"
-                  to={`/dashboard/courses/classroom/full/${courseId}/week_${i}`}
-                  key={`side_link_courses_${i}`}
-                >
-                  Week {i + 1}
-                </NavLink>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <Classes data={data[currentCourse]} />
+      <div className="cx_listnx_full">
+        <Layout
+          links={data.map((unused, i) => (
+            <li>
+              <NavLink
+                className="side_link"
+                to={`/dashboard/courses/classroom/full/${courseId}/week_${i}`}
+                key={`side_link_courses_${i}`}
+              >
+                Week {i + 1}
+              </NavLink>
+            </li>
+          ))}
+        >
+          <Classes data={data[currentCourse]} open={true} showArrow={false} />
           <div className="btns">
             <div className="reg_text">
               <h4>Activities</h4>
@@ -71,9 +69,8 @@ function FullClass({ data = _data }) {
               </div>
             </div>
           </div>
-
           <div className="prev_courses"></div>
-        </div>
+        </Layout>
       </div>
     </>
   );

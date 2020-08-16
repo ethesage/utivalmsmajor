@@ -1,28 +1,20 @@
-import React from "react";
-import { useParams } from "react-router-dom";
-import ResourceBtn from "../ResourceButton";
-import assignment from "../../assets/icons/course/assignment.png";
-import FileSec from "../Files/FileSec";
-import Button from "../Button";
-import "../Classroom/Classes/style.scss";
-import "./style.scss";
+import React from 'react';
+import { useParams } from 'react-router-dom';
+import ResourceBtn from '../ResourceButton';
+import assignment from '../../assets/icons/course/assignment.png';
+import FileSec from '../Files/FileSec';
+import Button from '../Button';
+import DropDown from '../DropDown';
+import '../Classroom/Classes/style.scss';
+import './style.scss';
 
 const Assignment = () => {
   const { courseId, index } = useParams();
 
-  const onClick = (e) => {
-    e.target.nextElementSibling.classList.toggle("op-dp_2xy");
-  };
-
-  const close = (e) => {
-    const opened = document.querySelectorAll(".op-dp_2xy");
-    opened.forEach((e) => e.classList.remove("op-dp_2xy"));
-  };
-
   return (
     <div className="asx cx_listnx_con flex-row j-start al-start">
       <div className="info_sec">
-        <div className={`h_con ${!courseId ? " full" : ""} full`}>
+        <div className={`h_con ${!courseId ? ' full' : ''} full`}>
           <h2 className="cx_lis-header flex-row j-start">
             <span>Week one - SQL For Data</span>
           </h2>
@@ -53,7 +45,7 @@ const Assignment = () => {
               link=""
               handleClick={(e) => {
                 e.preventDefault();
-                console.log("clicked");
+                console.log('clicked');
               }}
             />
           </div>
@@ -67,19 +59,20 @@ const Assignment = () => {
             <FileSec personal={true} />
           </div>
 
-          <div className="drop-sec" onBlur={close}>
-            <Button
-              className="u_btn flex-row mx-auto"
-              text="Submit"
-              onClick={onClick}
-            />
-            <div className="drops">
+          <div className="drop-sec">
+            <DropDown
+              header={
+                <div className="img-sec flex-row">
+                  <Button className="u_btn flex-row mx-auto" text="Submit" />
+                </div>
+              }
+            >
               <ul>
                 <li>View</li>
                 <li>Download</li>
                 <li>Delete</li>
               </ul>
-            </div>
+            </DropDown>
           </div>
         </div>
       </div>

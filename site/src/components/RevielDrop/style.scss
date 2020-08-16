@@ -1,0 +1,60 @@
+@import '../../media';
+
+.rx_drop {
+  width: 100%;
+  height: auto;
+  // overflow: hidden;
+  max-width: 900px;
+
+  .rx_hd {
+    cursor: pointer;
+
+    > * {
+      pointer-events: none;
+    }
+
+    .rx_header {
+      width: 100%;
+      border: none;
+      outline: none;
+      transition: 0.4s;
+      position: relative;
+      font-size: 1em;
+
+      &.showArrow {
+        > * {
+          &:after {
+            content: '\25BC';
+            font-size: 0.8em;
+            color: color(theme);
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+          }
+
+          &.active {
+            border: none;
+            &:after {
+              content: '\25B2';
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .rx_con {
+    max-height: 0;
+    transition: 0.4s ease-in-out;
+    opacity: 0;
+    max-width: 800px;
+    // height: 0;
+
+    &.show,
+    &.open {
+      opacity: 1;
+      max-height: 1000px;
+    }
+  }
+}

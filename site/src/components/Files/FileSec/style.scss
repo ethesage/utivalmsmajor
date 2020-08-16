@@ -8,6 +8,17 @@
     align-items: flex-start;
   }
 
+  .dots {
+    .img-sec {
+      padding: 5px;
+      width: 40px;
+
+      img {
+        pointer-events: none;
+      }
+    }
+  }
+
   .left {
     width: 80%;
     @include for-size(phone-only) {

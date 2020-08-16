@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
-import data from '../../data/faqs';
+import Button from '../../components/Button';
 import Files from '../../components/Files';
 import Folder from '../../components/Files/Folder';
 import Select from '../../components/Select';
+import Layout from '../../components/SideNavListLayout';
 import Input from '../../components/Input';
 import Drag from '../../components/Drag';
-import '../../components/Classroom/FullClass/style.scss';
 import './style.scss';
 
 const links = [
@@ -48,17 +48,13 @@ const File_Page = () => {
     );
   };
 
-  console.log(currentSection, option);
-
   const Folders = () => {
     return (
       <div className="upload_sec flex-row j-start al-start">
         <div className="file_con">
           <Folder />
         </div>
-        {/* <div className="drag_upload flex-row">
-          <Drag />
-        </div> */}
+        {/* <Button /> */}
       </div>
     );
   };
@@ -77,22 +73,22 @@ const File_Page = () => {
         <Input placeHolder="Search File" />
       </div>
       <div className="dash-con files_ cx_listnx_full flex-row j-start al-start">
-        <div className="side_list">
-          <ul>
-            {links.map((info, i) => (
-              <li key={`side_link_courses_${i}`}>
-                <NavLink
-                  exact
-                  className="side_link"
-                  to={`/dashboard/files${info.link}`}
-                >
-                  {info.title}
-                </NavLink>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="file_sec">{newdata[currentSection]}</div>
+        <Layout
+          subClassName="file_sec"
+          links={links.map((info, i) => (
+            <li key={`side_link_courses_${i}`}>
+              <NavLink
+                exact
+                className="side_link"
+                to={`/dashboard/files${info.link}`}
+              >
+                {info.title}
+              </NavLink>
+            </li>
+          ))}
+        >
+          {newdata[currentSection]}
+        </Layout>
       </div>
     </>
   );

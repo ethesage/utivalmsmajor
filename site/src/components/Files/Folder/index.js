@@ -1,56 +1,88 @@
 import React from 'react';
 // import no_file from "../../assets/dashboard/no_file.png";
 import dots from '../../../assets/dashboard/dots.png';
+import folder from '../../../assets/icons/folder.png';
 import FilesSec from '../FileSec';
-import '../../Classes/style.scss';
+import DropDown from '../../DropDown';
+import RevielDrop from '../../RevielDrop';
 import './style.scss';
 
 const Files = () => {
-  const onClick = (e) => {
-    e.target.nextElementSibling.classList.toggle('op-dp_2x');
-  };
-
-  const close = (e) => {
-    const opened = document.querySelectorAll('.op-dp_2x');
-    opened.forEach((e) => e.classList.remove('op-dp_2x'));
-  };
-
-  function handleClick(e) {
-    const elements = document.querySelectorAll('.h_con');
-
-    elements.forEach((element) => {
-      if (e.target === element) return;
-      element.classList.remove('active');
-      element.nextElementSibling.classList.remove('show');
-    });
-
-    e.target.classList.toggle('active');
-    e.target.nextElementSibling.classList.toggle('show');
-  }
-
   return (
     <div className="file_folders info_con scrolled flex-col al-start j-space">
       <div className="file_sec">
-        <div className="">
-          <div className="dots flex-row j-space" onBlur={close}>
-            <h2>Jude</h2>
-            <div className="img-sec" onClick={onClick}>
-              <img src={dots} alt="dots" className="img contain" />
-            </div>
-            <div className="drops">
-              <ul>
-                <li>View</li>
-                <li>Download</li>
-                <li>Delete</li>
-              </ul>
-            </div>
-          </div>
+        <div className="sx_flder">
+          <RevielDrop
+            showArrow={false}
+            className=" folder-head flex-row j-space"
+            header={
+              <div>
+                <h2 className="flex-row">
+                  <img src={folder} alt="folder" />
+                  <p className="clipped-text" style={{ '--number': 1 }}>
+                    Data Analytics Folder
+                  </p>
+                </h2>
 
-          <div>
-            <FilesSec />
-            <FilesSec />
-            <FilesSec />
-          </div>
+                <DropDown
+                  header={
+                    <div className="img-sec flex-row">
+                      <img src={dots} alt="dots" className="img contain" />
+                    </div>
+                  }
+                >
+                  <ul>
+                    <li>View</li>
+                    <li>Download</li>
+                    <li>Delete</li>
+                  </ul>
+                </DropDown>
+              </div>
+            }
+          >
+            <div className="files_con">
+              <FilesSec />
+              <FilesSec />
+              <FilesSec />
+            </div>
+          </RevielDrop>
+        </div>
+
+        <div className="sx_flder">
+          <RevielDrop
+            showArrow={false}
+            className=" folder-head flex-row j-space"
+            header={
+              <div>
+                <h2 className="flex-row">
+                  <img src={folder} alt="folder" />
+                  <p className="clipped-text" style={{ '--number': 1 }}>
+                    Data Analytics Folder
+                  </p>
+                </h2>
+
+                <DropDown
+                  header={
+                    <div className="img-sec flex-row">
+                      <img src={dots} alt="dots" className="img contain" />
+                    </div>
+                  }
+                >
+                  <ul>
+                    <li>View</li>
+                    <li>Download</li>
+                    <li>Delete</li>
+                  </ul>
+                </DropDown>
+              </div>
+            }
+          >
+            <div className="files_con">
+              <FilesSec />
+              <FilesSec />
+              <FilesSec />
+            </div>
+          </RevielDrop>
         </div>
       </div>
     </div>

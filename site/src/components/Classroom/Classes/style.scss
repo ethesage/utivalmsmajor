@@ -1,4 +1,4 @@
-@import "../../../media";
+@import '../../../media';
 
 .cx_listnx_con {
   width: 100%;
@@ -6,32 +6,27 @@
   overflow: hidden;
   max-width: 900px;
 
-  .h_con {
+  .rx_header {
     padding-bottom: 20px;
     border-bottom: 0.5px solid #979797;
     margin-bottom: 10px;
     cursor: pointer;
-
-    > * {
-      pointer-events: none;
-    }
 
     &.full {
       border-bottom: none;
 
       h2 {
         &:after {
-          content: "";
+          content: '';
         }
       }
     }
   }
 
-  .cx_lis-header {
+  .h_con {
     color: color(theme);
     width: 100%;
     text-align: left;
-    border: none;
     outline: none;
     transition: 0.4s;
     position: relative;
@@ -52,40 +47,14 @@
         margin-right: 10px;
       }
     }
-
-    &:after {
-      content: "\25BC";
-      font-size: inherit;
-      color: color(theme);
-      position: absolute;
-      right: 18px;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-
-    &.active {
-      border: none;
-      &:after {
-        content: "\25B2";
-      }
-    }
   }
 
   .cx_lis-content {
     padding-left: 60px;
     background-color: white;
-    max-height: 0;
-    overflow: hidden;
     transition: 0.4s ease-in-out;
-    opacity: 0;
-    margin-bottom: 10px;
+    margin-bottom: 30px;
     max-width: 800px;
-
-    &.show {
-      opacity: 1;
-      max-height: 1000px;
-      margin-bottom: 50px;
-    }
 
     &.full {
       padding: 0;

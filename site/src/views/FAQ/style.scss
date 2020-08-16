@@ -1,4 +1,4 @@
-@import "../../media";
+@import '../../media';
 
 .faq {
   @include for-size(phone-only) {
@@ -10,7 +10,7 @@
     border-radius: 20px;
     overflow: hidden;
 
-    .h_con {
+    .rx_hd {
       padding: 20px;
       margin: 0;
       border-bottom: 0.5px solid rgba(29, 61, 121, 0.17);
@@ -19,7 +19,7 @@
 
       h2 {
         &:after {
-          content: "";
+          content: '';
         }
       }
 
@@ -28,7 +28,7 @@
       }
     }
 
-    .cx_lis-content {
+    .rx_con {
       margin: 0;
 
       .inf_x {

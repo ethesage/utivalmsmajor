@@ -6,18 +6,10 @@ import delete_icon from '../../../assets/icons/delete.png';
 // import excel from "../../../assets/dashboard/excel.png";
 // import video from "../../../assets/dashboard/video.png";
 import dots from '../../../assets/dashboard/dots.png';
+import DropDown from '../../DropDown';
 import './style.scss';
 
 const FileSec = ({ personal = false }) => {
-  const onClick = (e) => {
-    e.target.nextElementSibling.classList.toggle('op-dp_2x');
-  };
-
-  const close = (e) => {
-    const opened = document.querySelectorAll('.op-dp_2x');
-    opened.forEach((e) => e.classList.remove('op-dp_2x'));
-  };
-
   return (
     <div className="file_card flex-row j-space">
       <div className="left flex-row j-start">
@@ -48,18 +40,19 @@ const FileSec = ({ personal = false }) => {
           )}
         </div>
       ) : (
-        <div className="dots" onBlur={close} tabIndex="-1">
-          <div className="img-sec" onClick={onClick}>
-            <img src={dots} alt="dots" className="img contain" />
-          </div>
-          <div className="drops">
-            <ul>
-              <li>View</li>
-              <li>Download</li>
-              <li>Delete</li>
-            </ul>
-          </div>
-        </div>
+        <DropDown
+          header={
+            <div className="img-sec flex-row">
+              <img src={dots} alt="dots" className="img contain" />
+            </div>
+          }
+        >
+          <ul>
+            <li>View</li>
+            <li>Download</li>
+            <li>Delete</li>
+          </ul>
+        </DropDown>
       )}
     </div>
   );

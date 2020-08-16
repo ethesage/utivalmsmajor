@@ -1,39 +1,6 @@
 @import '../../../media';
 
 .cx_listnx_full {
-  .side_list {
-    margin-right: 50px;
-    @include for-size(phone-only) {
-      margin-right: 20px;
-    }
-
-    ul {
-      li {
-        margin: 0px 0 15px;
-        .side_link {
-          color: color(text);
-          white-space: nowrap;
-          font-size: 0.9em;
-          padding: 5px 20px;
-
-          @include for-size(smaller-desktop) {
-            // margin-right: 20px;
-
-            font-size: 0.8em;
-            padding: 5px 10px;
-          }
-
-          &.active {
-            background: color(secondary);
-            color: white;
-            box-shadow: 10px 5px 20px rgba(0, 0, 0, 0.1);
-            border-radius: 5px;
-          }
-        }
-      }
-    }
-  }
-
   .btns {
     margin: 20px 0 30px;
     h4 {
