@@ -1,6 +1,7 @@
 import React from 'react';
-import { NavLink, Switch, useRouteMatch } from 'react-router-dom';
+import { NavLink, Switch, useRouteMatch, Route } from 'react-router-dom';
 import Layout from '../../components/SideNavListLayout';
+import Profile from '../Profile';
 import './style.scss';
 
 const links = [
@@ -23,21 +24,26 @@ const File_Page = () => {
 
   return (
     <>
-      <div className="dash-con files_ flex-col al-start j-start">
+      <div className="dash-con settings flex-col al-start j-start">
         <h2 style={{ marginBottom: '20px' }}>Settings</h2>
         <Layout
-          subClassName="file_sec"
+          subClassName="setting_sec"
           links={links.map((info, i) => (
             <li key={`side_link_courses_${i}`}>
-              <NavLink exact className="side_link" to={`/${path}/${info.link}`}>
+              <NavLink
+                exact
+                className="side_link"
+                to={`/dashboard/settings${info.link}`}
+              >
                 {info.title}
               </NavLink>
             </li>
           ))}
         >
           <Switch>
-            {/* <Route exact path={`${path}`} component={AllFile} /> */}
-            {/* <Route exact path={`${path}/folders`} component={Folders} /> */}
+            <Route exact path={`${path}`} component={Profile} />
+            {/* <Route exact path={`${path}/reset-password`} component={Folders} /> */}
+            {/* <Route exact path={`${path}/notifications`} component={Folders} /> */}
           </Switch>
         </Layout>
       </div>
