@@ -1,3 +1,4 @@
+/* eslint-disable no-return-assign */
 import express from 'express';
 import 'express-async-errors';
 import {

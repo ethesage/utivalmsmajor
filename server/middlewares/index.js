@@ -10,6 +10,43 @@ import {
   adminCreateSchema
 } from './validators/schemas/user';
 
+import {
+  createCourse,
+  getCourseSchema,
+  getAllCourseSchema,
+  getCourseDescriptionSchema
+} from './validators/schemas/course';
+
+import {
+  createTrainerSchema,
+  getTrainerSchema,
+  courseTrainerSchema,
+  trainerSchema,
+  updateTrainerSchema
+} from './validators/schemas/trainer';
+
+import {
+  addStudentSchema,
+  getStudentSchema
+} from './validators/schemas/student';
+
+import {
+  createClassroom
+} from './validators/schemas/class';
+
+import {
+  createFileSchema,
+  getFileSchema,
+  updateFileSchema
+} from './validators/schemas/files';
+
+import {
+  createCohort,
+  addcourse,
+  updateCohortSchema,
+  updateCohorCoursetSchema
+} from './validators/schemas/cohort';
+
 import { isLoggedIn } from './auth';
 import { checkInvitation } from './checker';
 
@@ -24,5 +61,24 @@ export default {
   isLoggedIn,
   checkInvitation,
   quickCheckOutSchema,
-  adminCreateSchema
+  adminCreateSchema,
+  createCourse,
+  getCourseSchema,
+  getAllCourseSchema,
+  createTrainerSchema,
+  getTrainerSchema,
+  courseTrainerSchema,
+  trainerSchema,
+  updateTrainerSchema,
+  addStudentSchema,
+  getStudentSchema,
+  createClassroom,
+  createFileSchema,
+  getFileSchema,
+  updateFileSchema,
+  createCohort,
+  getCourseDescriptionSchema,
+  addcourse,
+  updateCohortSchema,
+  updateCohorCoursetSchema
 };

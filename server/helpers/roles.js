@@ -16,7 +16,7 @@ export default {
       inherits: ['student'],
     },
     admin: {
-      can: ['admin:create'],
+      can: ['course:crud'],
       inherits: ['trainer'],
     },
     tech: {
