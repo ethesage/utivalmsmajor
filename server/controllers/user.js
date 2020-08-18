@@ -5,7 +5,7 @@ import Mail from '../services/mail/email';
 import { generateToken, verifyToken } from '../helpers/auth';
 
 // const userRepository = new dbRepository(models.User);
-const { successStat, errorStat, comparePassword, generatePassword } = helpers;
+const { successStat, errorStat, comparePassword, generatePassword, uploadImage } = helpers;
 const { Op } = Sequelize;
 
 /**
@@ -29,7 +29,7 @@ export const login = async (req, res) => {
   }
 
   await req.session.login(user.role, { user: user.dataValues }, res);
-  let message = 'Login successful';
+  const message = 'Login successful';
 
   return successStat(res, 200, 'user', { ...user.userResponse(), message });
 };
@@ -70,16 +70,15 @@ export const signup = async (req, res) => {
   });
   mail.InitButton({
     text: 'Verify Email',
-    link: link,
+    link,
   });
   mail.sendMail();
 
   await req.session.login(user.role, { user: user.dataValues }, res);
-  let message = 'Registration is successful';
+  const message = 'Registration is successful';
 
   return successStat(res, 201, 'user', { ...user.userResponse(), message });
 };
-
 
 /**
  * / @static
@@ -115,7 +114,7 @@ export const quickCheckOut = async (req, res) => {
     to: email,
     subject: 'Welcome to Utiva',
     messageHeader: `Hi, ${user.firstName}!`,
-    messageBody:`
+    messageBody: `
       'We are exicted to get you started. Below are your login details' 
       email: ${email},
       password: ${password}
@@ -125,13 +124,13 @@ export const quickCheckOut = async (req, res) => {
   });
   mail.InitButton({
     text: 'Login',
-    link: link,
+    link,
   });
 
   mail.sendMail();
 
   await req.session.login(user.role, { user: user.dataValues }, res);
-  let message = 'Registration is successful';
+  const message = 'Registration is successful';
 
   return successStat(res, 201, 'user', { ...user.userResponse(), message });
 };
@@ -151,7 +150,11 @@ export const updateUser = async (req, res) => {
     where: { id },
   });
 
-  await user.update({ ...req.body.user });
+  const profilePic = req.files.profilePic
+    ? await uploadImage(req.files.profilePic, `${Date.now()}-profileImg`)
+    : req.session.user.profilePic;
+
+  await user.update({ ...req.body.user, profilePic });
 
   return successStat(res, 200, 'user', { ...user.userResponse() });
 };
@@ -165,7 +168,7 @@ export const updateUser = async (req, res) => {
  */
 
 export const resetPassword = async (req, res) => {
-  let { email } = req.body.user;
+  const { email } = req.body.user;
 
   const findUser = await models.User.findOne({ where: { email } });
 
@@ -187,7 +190,7 @@ export const resetPassword = async (req, res) => {
   });
   mail.InitButton({
     text: 'Reset password',
-    link: link,
+    link,
   });
   mail.sendMail();
 
@@ -274,7 +277,6 @@ export const confirmEmail = async (req, res) => {
   }
 };
 
-
 export const adminCreate = async (req, res) => {
   const { email } = req.body.user;
 
@@ -282,7 +284,7 @@ export const adminCreate = async (req, res) => {
     const isExist = await models.User.findOne({ where: { email } });
 
     if (isExist) return errorStat(res, 409, 'User Already Exist');
-  
+
     const password = await generatePassword(10);
 
     const user = await models.User.create({
@@ -295,7 +297,7 @@ export const adminCreate = async (req, res) => {
 
     return successStat(res, 201, 'user', { ...user.userResponse(), message: 'User Created' });
   } catch (e) {
-    console.log(e)
+    console.log(e);
     return errorStat(res, 409, 'Operation Failed, Please try again later');
   }
-}
+};
