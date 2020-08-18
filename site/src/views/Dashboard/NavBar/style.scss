@@ -31,7 +31,7 @@
     background: white;
 
     @include for-size(tablet-landscape-up) {
-      display: none;
+      // display: none;
     }
   }
 

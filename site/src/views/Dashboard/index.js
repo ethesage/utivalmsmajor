@@ -61,7 +61,7 @@ const Dashboard = () => {
             <Route path={`${path}/files`}>
               <Files />
             </Route>
-            <Route exact path={`${path}/settings`}>
+            <Route path={`${path}/settings`}>
               <Settings />
             </Route>
           </Switch>

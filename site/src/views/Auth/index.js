@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import {
-  NavLink,
-  useParams,
   Route,
   Switch,
   useRouteMatch,
@@ -17,13 +15,7 @@ import Reset from './Reset';
 import logo from '../../assets/logo.png';
 import './style.scss';
 
-const pages = {
-  quickcheckout: <QuickCheckout />,
-  signin: <SignIn />,
-  signup: <SignUp />,
-  forgot: <Forgot />,
-  'reset-password': <Reset />,
-};
+// const pages = ['quickcheckout', 'signin', 'signup', 'forgot', 'reset-password'];
 
 const Auth = () => {
   const location = useLocation();
@@ -35,6 +27,7 @@ const Auth = () => {
   useEffect(() => {
     const pathname = location.pathname.split('/')[1];
     setPage(pathname);
+
     return () => {};
   }, [location]);
 
@@ -60,6 +53,7 @@ const Auth = () => {
             />
             <Route exact path={`${path}/forgot`} component={Forgot} />
             <Route exact path={`${path}/reset-password`} component={Reset} />
+            <Route component={SignUp} />
           </Switch>
           {/* {pages[page]} */}
         </div>

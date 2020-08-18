@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import Input from '../../../components/Input';
+import Button from '../../../components/Button';
 import useInput from '../../../Hooks/useInput';
 import data from '../../../data/reset';
 import { useToasts } from 'react-toast-notifications';
@@ -7,16 +8,13 @@ import { Link } from 'react-router-dom';
 import { axiosInstance } from '../../../helpers';
 import '../style.scss';
 
-function QuickCheckout() {
+function Reset() {
   const submitButton = useRef();
   const [reviel, setReviel] = useState(false);
   const { addToast } = useToasts();
 
   const [handleSubmit, handleChange, inputTypes, validateSelf] = useInput({
-    inputs: {
-      email: '',
-      password: '',
-    },
+    inputs: data,
     submitButton,
     cb: async (inputs) => {
       const response = await axiosInstance.post('/user/login', inputs);
@@ -54,13 +52,12 @@ function QuickCheckout() {
           />
         ))}
 
-        <button
-          ref={submitButton}
+        <Button
+          btnRef={submitButton}
           onClick={handleSubmit}
           className="s_btn flex-row input-div"
-        >
-          <p>Reset</p>
-        </button>
+          text="Reset"
+        />
       </form>
       <div className="externs flex-row j-space">
         <small>
@@ -74,4 +71,4 @@ function QuickCheckout() {
   );
 }
 
-export default QuickCheckout;
+export default Reset;

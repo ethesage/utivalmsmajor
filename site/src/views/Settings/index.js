@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink, Switch, useRouteMatch, Route } from 'react-router-dom';
 import Layout from '../../components/SideNavListLayout';
 import Profile from '../Profile';
+import Reset from '../Profile/PasswordReset';
 import './style.scss';
 
 const links = [
@@ -42,7 +43,7 @@ const File_Page = () => {
         >
           <Switch>
             <Route exact path={`${path}`} component={Profile} />
-            {/* <Route exact path={`${path}/reset-password`} component={Folders} /> */}
+            <Route exact path={`${path}/reset-password`} component={Reset} />
             {/* <Route exact path={`${path}/notifications`} component={Folders} /> */}
           </Switch>
         </Layout>

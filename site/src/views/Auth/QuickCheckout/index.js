@@ -1,12 +1,13 @@
-import React, { useRef, useState } from "react";
-import Input from "../../../components/Input";
-import useInput from "../../../Hooks/useInput";
-import data from "../../../data/quickCheckout";
-import { useToasts } from "react-toast-notifications";
-import { Link } from "react-router-dom";
-import { axiosInstance } from "../../../helpers";
-import Social from "../SocialSec";
-import "../style.scss";
+import React, { useRef, useState } from 'react';
+import Input from '../../../components/Input';
+import useInput from '../../../Hooks/useInput';
+import Button from '../../../components/Button';
+import data from '../../../data/quickCheckout';
+import { useToasts } from 'react-toast-notifications';
+import { Link } from 'react-router-dom';
+import { axiosInstance } from '../../../helpers';
+import Social from '../SocialSec';
+import '../style.scss';
 
 function QuickCheckout() {
   const submitButton = useRef();
@@ -14,15 +15,12 @@ function QuickCheckout() {
   const { addToast } = useToasts();
 
   const [handleSubmit, handleChange, inputTypes, validateSelf] = useInput({
-    inputs: {
-      email: "",
-      fullName: "",
-    },
+    inputs: data,
     submitButton,
     cb: async (inputs) => {
-      const response = await axiosInstance.post("/user/login", inputs);
+      const response = await axiosInstance.post('/user/login', inputs);
       addToast(`Welcome back ${response.data.user.firstName}`, {
-        appearance: "success",
+        appearance: 'success',
         autoDismiss: true,
       });
     },
@@ -37,7 +35,7 @@ function QuickCheckout() {
       <div className="reg_text">
         <h2>Quick Check Out</h2>
         <p>
-          Already have an account?{" "}
+          Already have an account?{' '}
           <Link to="/signin">
             <strong className="theme-color">Sign in</strong>
           </Link>
@@ -53,20 +51,19 @@ function QuickCheckout() {
             value={inputTypes[form.name]}
             errorMsg={form.errorMsg}
             required={form.required}
-            reviel={form.type === "password" ? reviel : false}
+            reviel={form.type === 'password' ? reviel : false}
             revielPassword={revielPassword}
             handleChange={handleChange}
             validateSelf={validateSelf}
           />
         ))}
 
-        <button
-          ref={submitButton}
+        <Button
+          btnRef={submitButton}
           onClick={handleSubmit}
           className="s_btn flex-row input-div"
-        >
-          <p>Submit</p>
-        </button>
+          text="Submit"
+        />
       </form>
       <Social />
     </div>

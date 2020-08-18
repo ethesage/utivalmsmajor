@@ -64,6 +64,7 @@
         height: 150px;
         border-radius: 100%;
         overflow: hidden;
+        margin-bottom: 5px;
 
         img {
           display: block;
@@ -79,6 +80,15 @@
         width: 100%;
         margin-bottom: 20px;
         font-weight: bold;
+
+        small {
+          cursor: pointer;
+        }
+      }
+
+      .c_img {
+        width: 100%;
+        flex-grow: 1;
       }
 
       p {
@@ -98,6 +108,61 @@
           width: 50%;
           margin-bottom: 10px;
         }
+      }
+    }
+  }
+
+  &.bio {
+    background: white;
+    width: 90vw;
+    max-width: 500px;
+
+    .form_sec {
+      @include for-size(phone-only) {
+        margin-top: 0 !important;
+      }
+    }
+
+    .form {
+      display: block !important;
+      @include for-size(phone-only) {
+        padding: 10px 10px 30px !important;
+      }
+
+      h3 {
+        color: color(text);
+        margin-bottom: 30px;
+      }
+
+      .input-div {
+        margin-bottom: 0;
+      }
+
+      small {
+        margin-bottom: 20px;
+        display: block;
+        color: color(text);
+      }
+
+      input[type='textarea'] {
+        height: 300px;
+      }
+
+      button {
+        margin-top: 20px;
+      }
+    }
+  }
+
+  &.password {
+    max-width: 500px;
+    width: auto;
+
+    .form {
+      display: block;
+
+      .title {
+        margin-bottom: 30px;
       }
     }
   }
