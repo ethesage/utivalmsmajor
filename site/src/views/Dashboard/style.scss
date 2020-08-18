@@ -46,10 +46,13 @@
       width: 100%;
       flex-grow: 1;
 
+      @include for-size(tablet-landscape-up) {
+        width: calc(100vw - 8px);
+      }
+
       .dash-con {
         flex-grow: 1;
         width: 100%;
-        // min-height: calc(100vh - 200px);
       }
     }
 
@@ -62,6 +65,8 @@
 
     @include for-size(tablet-landscape-up) {
       width: calc(100vw - 8px);
+      align-items: flex-start;
+      justify-content: flex-start;
     }
   }
 }

@@ -57,9 +57,11 @@
       position: absolute;
       top: 0;
       width: 100%;
+      cursor: pointer;
 
       .img-sec {
         width: 150px;
+        height: 150px;
         border-radius: 100%;
         overflow: hidden;
 
@@ -81,11 +83,21 @@
 
       p {
         font-size: 0.85em;
+
+        &.edit_update {
+          text-decoration: underline;
+          cursor: pointer;
+        }
       }
 
       img {
         margin-top: 25px;
         width: 30px;
+
+        &.p_sum {
+          width: 50%;
+          margin-bottom: 10px;
+        }
       }
     }
   }

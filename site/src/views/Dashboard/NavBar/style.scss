@@ -1,4 +1,4 @@
-@import "../../../media";
+@import '../../../media';
 
 .header {
   width: 100%;
@@ -29,6 +29,10 @@
     width: 100%;
     flex-grow: 1;
     background: white;
+
+    @include for-size(tablet-landscape-up) {
+      display: none;
+    }
   }
 
   .nav-contents {

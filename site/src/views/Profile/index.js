@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useToasts } from 'react-toast-notifications';
 import axois from 'axios';
-import { axiosInstance } from '../../helpers';
+import { axiosInstance, toBase64 } from '../../helpers';
 import useInput from '../../Hooks/useInput';
 import Button from '../../components/Button';
 import Input from '../../components/InputType';
@@ -11,7 +11,7 @@ import data from '../../data/profile';
 import { gender } from '../../data/filters';
 import user_icon from '../../assets/user_icon.png';
 import linkedin from '../../assets/icons/linkedin.png';
-import p_sum from '../../assets/p_sum.png'
+import p_sum from '../../assets/p_sum.png';
 import './style.scss';
 
 const Profile = () => {
@@ -38,13 +38,6 @@ const Profile = () => {
       reg: 'Update',
     },
     cb: async (inputs) => {
-      // const data = Object.keys(inputs).reduce((acc, input) => {
-      //   if (input !== "cpassword") {
-      //     return { ...acc, [input]: inputs[input] };
-      //   }
-      //   return { ...acc };
-      // }, {});
-
       await axiosInstance.patch('/user/update', inputs);
 
       addToast(`Successfully Updated`, {
@@ -139,6 +132,13 @@ const Profile = () => {
     return () => {};
   }, [inputTypes.country, apiToken]);
 
+  const image_handler = async (e) => {
+    const { files } = e.target;
+    const _value = await toBase64(files[0]);
+    setImgSrc(_value);
+    // await axiosInstance.patch('/user/update', {profilePic: files[0]});
+  };
+
   return (
     <section className="profile dash-con flex-row al-start j-space">
       <div className="form_sec">
@@ -183,7 +183,7 @@ const Profile = () => {
           name="profilePic"
           accept="image/png, image/jpeg"
           style={{ display: 'none' }}
-          //   onChange={image_handler}
+          onChange={image_handler}
         />
         <div className="text-sec box-shade flex-col j-start">
           <div className="e_sec flex-row j-space">
@@ -207,8 +207,8 @@ const Profile = () => {
             </>
           ) : (
             <>
-              <img src={linkedin} alt="linkedin" />
-              <p className="clipped-text" style={{ '--number': 7 }}></p>
+              <img src={p_sum} alt="Update" className="p_sum" />
+              <p className="edit_update theme-color">Add profile summary</p>
             </>
           )}
         </div>

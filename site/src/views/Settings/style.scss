@@ -4,6 +4,11 @@
   .side_list_layout {
     @include for-size(tablet-portrait-up) {
       flex-direction: column;
+
+      .side_list ul {
+        display: flex;
+        margin-bottom: 30px;
+      }
     }
   }
 
