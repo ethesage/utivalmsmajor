@@ -39,6 +39,8 @@ export const updateUserSchema = Joi.object().keys({
   lastName: Joi.string()
     .regex(/^[A-Za-z]{3,}$/)
     .trim(),
+  email: Joi.string().email().lowercase()
+    .trim(),
   emailNotify: Joi.boolean(),
   inAppNotify: Joi.boolean(),
   country: Joi.string().lowercase(),
@@ -49,6 +51,7 @@ export const updateUserSchema = Joi.object().keys({
   phoneNumber: Joi.number(),
   linkedin: Joi.string().lowercase(),
   profilePic: Joi.object(),
+  occupation: Joi.string().lowercase(),
 });
 
 export const resetPasswordSchema = Joi.object({
