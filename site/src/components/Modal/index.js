@@ -19,10 +19,12 @@ const Modal = forwardRef(({ children }, ref) => {
 
   return (
     <dialog ref={disRef} className="apx_mod">
-      <button className="apx_close" onClick={close}>
-        <Close fill="black" width="30px" height="30px" />
-      </button>
-      {children}
+      <div className='apx_in'>
+        <button className="apx_close" onClick={close}>
+          <Close fill="black" width="30px" height="30px" />
+        </button>
+        {children}
+      </div>
     </dialog>
   );
 });

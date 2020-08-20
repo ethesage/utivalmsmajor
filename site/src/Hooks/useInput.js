@@ -55,7 +55,7 @@ export default function Input({
     let response;
 
     try {
-      response = await cb(inputTypes);
+      response = await cb(inputTypes, setInputTypes);
     } catch (error) {
       // error.message = "Incorrect login details";
       console.log(error.response, error);

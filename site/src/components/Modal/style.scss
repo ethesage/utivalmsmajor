@@ -16,6 +16,10 @@
   display: flex;
   align-items: center;
 
+  .apx_in {
+    position: relative;
+  }
+
   &:not([open]) {
     transform: translate(-50%, 0%) scale(0);
     display: flex;
@@ -29,15 +33,17 @@
 
   .apx_close {
     position: absolute;
-    top: -5%;
-    right: -5%;
+    top: -50px;
+    right: -50px;
 
     @include for-size(phone-only) {
+      top: -50px;
       right: 0;
     }
 
     svg {
       width: 25px;
+      height: 25px;
       fill: white;
     }
   }

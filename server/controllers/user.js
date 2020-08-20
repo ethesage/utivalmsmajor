@@ -5,7 +5,13 @@ import Mail from '../services/mail/email';
 import { generateToken, verifyToken } from '../helpers/auth';
 
 // const userRepository = new dbRepository(models.User);
-const { successStat, errorStat, comparePassword, generatePassword, uploadImage } = helpers;
+const {
+  successStat,
+  errorStat,
+  comparePassword,
+  generatePassword,
+  uploadImage,
+} = helpers;
 const { Op } = Sequelize;
 
 /**
@@ -50,7 +56,7 @@ export const signup = async (req, res) => {
 
   const user = await models.User.create({
     role: 'student',
-    ...req.body.user
+    ...req.body.user,
   });
 
   const token = generateToken(
@@ -105,7 +111,7 @@ export const quickCheckOut = async (req, res) => {
     email,
     password,
     firstName: userProfile[0],
-    lastName: userProfile[1]
+    lastName: userProfile[1],
   });
 
   const link = `${process.env.FRONTEND_URL}/login`;
@@ -154,9 +160,38 @@ export const updateUser = async (req, res) => {
     ? await uploadImage(req.files.profilePic, `${Date.now()}-profileImg`)
     : req.session.user.profilePic;
 
-  await user.update({ ...req.body.user, profilePic });
+  const updatedUser = { id, ...req.body.user, profilePic };
+
+  await user.update(updatedUser);
+  await req.session.login(user.role, { user: user.userResponse() }, res);
 
   return successStat(res, 200, 'user', { ...user.userResponse() });
+};
+
+/**
+ * / @static
+ * @description Allows a user to sign in
+ * @param {Object} req - Request object
+ * @param {Object} res - Response object
+ * @returns {Object} object containing user data and access Token
+ * @memberof UserController
+ */
+export const reset = async (req, res) => {
+  const { password, oldPassword } = req.body.user;
+  const { id } = req.session.user;
+
+  const exixtingUser = await models.User.findOne({
+    where: { id },
+  });
+  const matchPasswords = comparePassword(oldPassword, exixtingUser.password);
+
+  if (!matchPasswords) {
+    return errorStat(res, 401, 'Password is Incorrect please try again');
+  }
+
+  await exixtingUser.update({ password });
+
+  return successStat(res, 200, 'message', 'reset Successful');
 };
 
 /**
@@ -292,10 +327,13 @@ export const adminCreate = async (req, res) => {
       password,
       byadmin: true,
       updated: false,
-      firstentry: true
+      firstentry: true,
     });
 
-    return successStat(res, 201, 'user', { ...user.userResponse(), message: 'User Created' });
+    return successStat(res, 201, 'user', {
+      ...user.userResponse(),
+      message: 'User Created',
+    });
   } catch (e) {
     console.log(e);
     return errorStat(res, 409, 'Operation Failed, Please try again later');

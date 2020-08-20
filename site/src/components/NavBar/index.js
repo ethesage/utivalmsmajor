@@ -3,6 +3,7 @@ import { NavLink, Link } from 'react-router-dom';
 import logo from '../../assets/logo.png';
 import Hambuger from '../../assets/icons/Hambuger';
 import { useSelector } from 'react-redux';
+import Button from '../Button';
 import './style.scss';
 
 const links = [
@@ -72,21 +73,16 @@ const NavBar = () => {
           />
 
           <div className={`contents flex-row j-end${checked ? ' open' : ''}`}>
-            <div className="l_s">
+            <div className="l_s flex-row j-start">
               {!!user ? (
-                <div className="lin_con flex-row">
-                  <NavLink
-                    to={links[2].link}
-                    className={`links${links[2].classname || ''}`}
-                    activeClassName="link_active"
-                    as="div"
-                  >
-                    {links[2].title}
-                  </NavLink>
-                </div>
+                <Button
+                  link={links[2].link}
+                  text={links[2].title}
+                  className="mx_auto flex-row"
+                />
               ) : (
                 <>
-                  {links.slice(0, 2).map((link, i) => (
+                  {links.slice(0, 1).map((link, i) => (
                     <div className="lin_con" key={`sublink_${i}`}>
                       <NavLink
                         to={link.link}
@@ -98,6 +94,11 @@ const NavBar = () => {
                       </NavLink>
                     </div>
                   ))}
+                  <Button
+                    link={links[1].link}
+                    text={links[1].title}
+                    className="mx_auto flex-row"
+                  />
                 </>
               )}
             </div>

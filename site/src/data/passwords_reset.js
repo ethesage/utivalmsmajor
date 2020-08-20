@@ -1,7 +1,7 @@
 export default [
   {
     placeHolder: 'Old password',
-    name: 'opassword',
+    name: 'oldPassword',
     type: 'password',
     errorMsg: '',
     required: true,

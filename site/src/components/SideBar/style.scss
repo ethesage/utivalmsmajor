@@ -1,4 +1,4 @@
-@import "../../media";
+@import '../../media';
 
 .side_nav {
   background: color(theme);
@@ -7,6 +7,10 @@
 
   .contents {
     padding: 80px 0 0;
+
+    @include for-size(desktop-up) {
+      padding: 60px 0 0;
+    }
 
     @include for-size(phone-only) {
       padding: 20px 0 0;
@@ -39,7 +43,7 @@
       .link-item {
         padding: 10px 40px;
         border-radius: 0px 10px 10px 0px;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
 
         @include for-size(phone-only) {
           margin-bottom: 10px;

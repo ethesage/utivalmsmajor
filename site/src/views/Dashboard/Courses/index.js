@@ -1,24 +1,23 @@
-import React from "react";
+import React from 'react';
 import {
   Route,
   Switch,
   useRouteMatch,
   // useParams,
   Link,
-} from "react-router-dom";
-import Overview from "../../../components/OverView";
-import CourseList from "./CoursesList";
-import Classroom from "../../../components/Classroom";
-import FullClass from "../../../components/Classroom/FullClass";
-import Assignment from "../../../components/Assignment";
-import ViewGrade from "../../../components/Assignment/ViewGrade";
-import StudyPlan from "../../StudyPlan";
-import Members from "../../Members";
-import "./style.scss";
+} from 'react-router-dom';
+import Overview from '../../../components/OverView';
+import CourseList from './CoursesList';
+import Classroom from '../../../components/Classroom';
+import FullClass from '../../../components/Classroom/FullClass';
+import Assignment from '../../../components/Assignment';
+import ViewGrade from '../../../components/Assignment/ViewGrade';
+import StudyPlan from '../../StudyPlan';
+import Members from '../../Members';
+import './style.scss';
 
 const Courses = () => {
   let { path } = useRouteMatch();
-  // const { courseId } = useParams();
 
   return (
     <section className="dash-con mx_courx">
@@ -27,7 +26,7 @@ const Courses = () => {
           <h3>My Courses</h3>
         </Link>
         <span>
-          <strong>{">"}</strong>
+          <strong>{'>'}</strong>
         </span>
         <Link to="/dashboard/courses" className="reg_text">
           <h3>Data Accelerator</h3>

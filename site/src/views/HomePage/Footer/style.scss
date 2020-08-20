@@ -1,4 +1,4 @@
-@import "../../../media";
+@import '../../../media';
 
 .ft_sx {
   min-height: 300px;
@@ -69,8 +69,7 @@
 }
 
 .buildings {
-  width: 100vw;
-  // height: 500px;
+  width: 100%;
   max-height: 500px;
   object-fit: contain;
   object-position: center 50px;

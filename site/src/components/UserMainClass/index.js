@@ -8,15 +8,18 @@ import clock from '../../assets/dashboard/clock.png';
 import './style.scss';
 
 const ClassesSec = () => (
-  <div className="next_class_staff flex-row al-start j-space">
+  <div className="next_class flex-row al-start j-space">
     <img src={img} alt="" className="main_img" />
-    <div className="text-sec">
+    <div className="text-sec flex-col j-space al-start">
       <h2>HR Analtytics</h2>
 
-      <div className="info_sec">
-        <div className="info flex-row j-start">
+      <div className="info_sec ">
+        {/* <div className="info flex-row j-start">
           <img src={week} alt="" /> <p>Week 2</p>
-        </div>
+        </div> */}
+        <strong>
+          <small>Next class</small>
+        </strong>
         <div className="info flex-row j-start">
           <img src={calender} alt="" />{' '}
           <p>
@@ -27,19 +30,15 @@ const ClassesSec = () => (
           <img src={clock} alt="" /> <p>10AM</p>
         </div>
       </div>
-
-      <Button
-        className="p_btn short flex-row"
-        link="/dashboard/courses"
-        text="Start Class"
-      />
     </div>
   </div>
 );
 
 const Classes = () => {
   return (
-    <div className="info_con scrolled flex-col al-start j-start">
+    <div className="p_sec flex-row j-space">
+      <ClassesSec />
+      <ClassesSec />
       <ClassesSec />
 
       {/* <div className="n_available flex-col">

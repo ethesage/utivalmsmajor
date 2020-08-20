@@ -5,7 +5,7 @@ const patterns = {
   email: /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:]|])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:)+)\])/,
   password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
   cpassword: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
-  opassword: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
+  oldPassword: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
   firstName: /^[a-zA-Z]{3,}$/,
   lastName: /^[a-zA-Z]{3,}$/,
   phoneNumber: /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s./0-9]*$/,
@@ -20,7 +20,6 @@ const patterns = {
 };
 
 export const validate = (field, Regex) => {
-  console.log(field);
   if (patterns[Regex].test(field)) return true;
   return false;
 };
@@ -88,12 +87,15 @@ export function get_user() {
   }
 
   const isAdmin = user && user.role === 'admin';
+  const isTrainer = user && user.role === 'trainer';
+  const isStudent = user && user.role === 'student';
 
-  return { user, isAdmin };
+  return { user, isAdmin, isTrainer, isStudent };
 }
 
 export const logout = async () => {
-  return await axiosInstance.get('/logout');
+  Cookies.remove('uti_va');
+  return axiosInstance.get('/logout');
 };
 
 export const toBase64 = (file) =>
