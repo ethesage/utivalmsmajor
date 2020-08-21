@@ -16,7 +16,10 @@
 
     ul {
       @include for-size(phone-only) {
-        width: 30%;
+        width: 100%;
+        display: flex;
+        overflow-x: auto;
+        padding: 10px 0;
       }
       li {
         margin: 0px 0 15px;

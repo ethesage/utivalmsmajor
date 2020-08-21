@@ -9,8 +9,7 @@ export const signUpSchema = Joi.object().keys({
     .regex(/^[A-Za-z]{3,}$/)
     .trim()
     .required(),
-  email: Joi.string().email().required().lowercase()
-    .trim(),
+  email: Joi.string().email().required().lowercase().trim(),
   password: Joi.string()
     .min(8)
     .required()
@@ -39,19 +38,19 @@ export const updateUserSchema = Joi.object().keys({
   lastName: Joi.string()
     .regex(/^[A-Za-z]{3,}$/)
     .trim(),
-  email: Joi.string().email().lowercase()
-    .trim(),
+  email: Joi.string().email().lowercase().trim(),
   emailNotify: Joi.boolean(),
   inAppNotify: Joi.boolean(),
-  country: Joi.string(),
-  gender: Joi.string(),
-  region: Joi.string(),
-  company: Joi.string(),
+  country: Joi.string().trim(),
+  gender: Joi.string().trim(),
+  region: Joi.string().trim(),
+  company: Joi.string().trim(),
   bio: Joi.string(),
-  phoneNumber: Joi.string(),
-  linkedin: Joi.string().lowercase(),
+  phoneNumber: Joi.number(),
+  linkedin: Joi.string().trim(),
   profilePic: Joi.object(),
-  occupation: Joi.string()
+  occupation: Joi.string().trim(),
+  firstentry: Joi.boolean(),
 });
 
 export const resetPasswordSchema = Joi.object({
@@ -63,6 +62,11 @@ export const changePasswordSchema = Joi.object({
   emailToken: Joi.string().length(128).required(),
 });
 
+export const loginPasswordSchema = Joi.object({
+  password: Joi.string().min(8).required(),
+  oldPassword: Joi.string().min(8).required(),
+});
+
 export const quickCheckOutSchema = Joi.object({
   fullName: Joi.string()
     .trim()
@@ -71,8 +75,7 @@ export const quickCheckOutSchema = Joi.object({
     .message(
       'Please enter Full Name with at least 3 characters seperated by a space example John Doe'
     ),
-  email: Joi.string().email().required().lowercase()
-    .trim(),
+  email: Joi.string().email().required().lowercase().trim(),
 });
 
 export const adminCreateSchema = Joi.object({
@@ -84,7 +87,6 @@ export const adminCreateSchema = Joi.object({
     .regex(/^[A-Za-z]{3,}$/)
     .trim()
     .required(),
-  email: Joi.string().email().required().lowercase()
-    .trim(),
+  email: Joi.string().email().required().lowercase().trim(),
   role: Joi.string().trim().required(),
 });

@@ -1,12 +1,15 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { Progress } from "react-sweet-progress";
-import img1 from "../../../../assets/homepage/img1.png";
-import medal from "../../../../assets/icons/medal.png";
-import "react-sweet-progress/lib/style.css";
-import "./style.scss";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { Progress } from 'react-sweet-progress';
+import img1 from '../../../../assets/homepage/img1.png';
+import medal from '../../../../assets/icons/medal.png';
+import 'react-sweet-progress/lib/style.css';
+import './style.scss';
 
 const CousreCard = () => {
+  const { isTrainer, isStudent } = useSelector((state) => state.auth);
+
   return (
     <div className="p_cx_cd">
       <Link className="img-sec" to={`/dashboard/courses/overview/23356`}>
@@ -15,39 +18,52 @@ const CousreCard = () => {
       <div className="txt-sec">
         <div className="title_sec flex-row j-space">
           <h3 className="theme-color">Data Accelerator</h3>
-          <img src={medal} alt="" />
+          {isStudent ? <img src={medal} alt="" /> : ''}
         </div>
 
-        <div>
-          <small>Completion level</small>
-          <Progress
-            className="slim"
-            percent={40}
-            status="error"
-            theme={{
-              success: {
-                symbol: "‍",
-                color: "rgb(223, 105, 180)",
-              },
-              error: {
-                symbol: "40%",
-                color: "red",
-              },
-              default: {
-                symbol: "😱",
-                color: "#fbc630",
-              },
-            }}
-          />
-        </div>
-        <div className="grade flex-row j-space">
-          <small>
-            <strong>Grade:</strong> 100
-          </small>
-          <button>
-            <small>View Details</small>
-          </button>
-        </div>
+        {isStudent ? (
+          <>
+            <div>
+              <small>Completion level</small>
+              <Progress
+                className="slim"
+                percent={40}
+                status="error"
+                theme={{
+                  success: {
+                    symbol: '‍',
+                    color: 'rgb(223, 105, 180)',
+                  },
+                  error: {
+                    symbol: '40%',
+                    color: 'red',
+                  },
+                  default: {
+                    symbol: '😱',
+                    color: '#fbc630',
+                  },
+                }}
+              />
+            </div>
+            <div className="grade flex-row j-space">
+              <small>
+                <strong>Grade:</strong> 100
+              </small>
+              <button>
+                <small>View Details</small>
+              </button>
+            </div>
+          </>
+        ) : null}
+
+        {isTrainer ? (
+          <div className="chx flex-row j-space">
+            <strong>
+              <p>June Cohort</p>
+            </strong>
+            <small>June 4th - July 4th, 2020</small>
+          </div>
+        ) : null}
       </div>
     </div>
   );

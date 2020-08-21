@@ -1,12 +1,12 @@
-import React from "react";
-import { Helmet } from "react-helmet";
-import Banner from "./Banner";
-import Navbar from "../../components/NavBar";
-import Course from "./CourseSection";
-import Started from "./GetStarted";
-import Testimonial from "./Testimonial";
-import Footer from "./Footer";
-import "./style.scss";
+import React from 'react';
+import { Helmet } from 'react-helmet';
+import Banner from './Banner';
+import Navbar from '../../components/NavBar';
+import Course from './CourseSection';
+import Started from './GetStarted';
+import Testimonial from './Testimonial';
+import Footer from './Footer';
+import './style.scss';
 
 const HomePage = () => {
   return (

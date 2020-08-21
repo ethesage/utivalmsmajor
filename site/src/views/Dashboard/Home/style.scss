@@ -5,6 +5,7 @@
     padding: 10px 20px;
     background: color(light);
     border-radius: 5px;
+    margin-bottom: 30px;
 
     @include for-size(phone-only) {
       flex-direction: column;
@@ -16,14 +17,68 @@
   }
 
   .p_sec {
-    // display: grid;
-    // grid-template-columns: repeat(3, 1fr);
-    margin-top: 150px;
+    margin-bottom: 100px;
     flex-wrap: wrap;
   }
 
+  .adv {
+    height: 350px;
+    background: rgba(color(approved), 0.1);
+    border-radius: 10px;
+    margin-bottom: 100px;
+
+    @include for-size(smaller-desktop) {
+      height: 300px;
+    }
+
+    @include for-size(tablet-portrait-up) {
+      height: 250px;
+    }
+
+    @include for-size(phone-only) {
+      height: auto;
+      flex-direction: column;
+    }
+
+    .text_sec {
+      width: 50%;
+      min-width: 300px;
+      height: 100%;
+      padding: 4%;
+
+      @include for-size(phone-only) {
+        width: 100%;
+        margin: 20px 0 30px;
+
+        .info {
+          margin-bottom: 50px;
+        }
+      }
+
+      a {
+        font-weight: bold;
+        font-size: 0.8em;
+      }
+    }
+
+    .img_sec {
+      height: 100%;
+      padding-top: 1%;
+      padding-right: 1%;
+
+      @include for-size(phone-only) {
+        padding: 2% 2% 0;
+        // height: 200px;
+      }
+
+      img {
+        object-position: bottom;
+        display: block;
+      }
+    }
+  }
+
   .course-section {
-    margin: 150px 0 0;
     max-width: 900px;
 
     .cs_nav {

@@ -1,0 +1,50 @@
+@import '../../media';
+
+.apx_mod {
+  border: 0;
+  position: fixed;
+  //   width: 80%;
+  //   max-width: 400px;
+  //   min-width: 300px;
+  height: 100vh;
+  top: 0%;
+  left: 50%;
+  transform: translate(-50%, 0%) scale(1);
+  transition: 0.3s cubic-bezier(0.5, 0.05, 0.28, 1.45);
+  // border-radius: 20px;
+  background: transparent;
+  display: flex;
+  align-items: center;
+
+  .apx_in {
+    position: relative;
+  }
+
+  &:not([open]) {
+    transform: translate(-50%, 0%) scale(0);
+    display: flex;
+  }
+
+  &::backdrop {
+    background: rgba(black, 0.2);
+
+    z-index: 1;
+  }
+
+  .apx_close {
+    position: absolute;
+    top: -50px;
+    right: -50px;
+
+    @include for-size(phone-only) {
+      top: -50px;
+      right: 0;
+    }
+
+    svg {
+      width: 25px;
+      height: 25px;
+      fill: white;
+    }
+  }
+}

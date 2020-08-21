@@ -1,49 +1,49 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import logo from "../../../assets/logo_white.png";
-import fb from "../../../assets/icons/facebook.png";
-import tw from "../../../assets/icons/twitter.png";
-import yt from "../../../assets/icons/youtube.png";
-import ig from "../../../assets/icons/instagram.png";
-import md from "../../../assets/icons/medium.png";
-import phone from "../../../assets/icons/phone.png";
-import message from "../../../assets/icons/message.png";
-import buildings from "../../../assets/layout/uildings.png";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import logo from '../../../assets/logo_white.png';
+import fb from '../../../assets/icons/facebook.png';
+import tw from '../../../assets/icons/twitter.png';
+import yt from '../../../assets/icons/youtube.png';
+import ig from '../../../assets/icons/instagram.png';
+import md from '../../../assets/icons/medium.png';
+import phone from '../../../assets/icons/phone.png';
+import message from '../../../assets/icons/message.png';
+import buildings from '../../../assets/layout/uildings.png';
 
-import "./style.scss";
+import './style.scss';
 
 const sc_links = [
   {
     img: tw,
-    link: "",
+    link: '',
   },
   {
     img: fb,
-    link: "",
+    link: '',
   },
   {
     img: ig,
-    link: "",
+    link: '',
   },
   {
     img: yt,
-    link: "",
+    link: '',
   },
   {
     img: md,
-    link: "",
+    link: '',
   },
 ];
 
 const links = [
-  { title: "About Us", link: "/about" },
-  { title: "Why", link: "/whyus" },
-  { title: "Blog", link: "#" },
+  { title: 'About Us', link: '/about' },
+  { title: 'Why', link: '/whyus' },
+  { title: 'Blog', link: '#' },
 ];
 
 const extras = [
-  { title: "info@utiva.io", img: message },
-  { title: "+1 (202) 931-9842", img: phone },
+  { title: 'info@utiva.io', img: message },
+  { title: '+1 (202) 931-9842', img: phone },
 ];
 
 const Footer = () => {

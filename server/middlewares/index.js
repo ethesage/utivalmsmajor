@@ -7,14 +7,15 @@ import {
   changePasswordSchema,
   updateUserSchema,
   quickCheckOutSchema,
-  adminCreateSchema
+  adminCreateSchema,
+  loginPasswordSchema,
 } from './validators/schemas/user';
 
 import {
   createCourse,
   getCourseSchema,
   getAllCourseSchema,
-  getCourseDescriptionSchema
+  getCourseDescriptionSchema,
 } from './validators/schemas/course';
 
 import {
@@ -22,29 +23,27 @@ import {
   getTrainerSchema,
   courseTrainerSchema,
   trainerSchema,
-  updateTrainerSchema
+  updateTrainerSchema,
 } from './validators/schemas/trainer';
 
 import {
   addStudentSchema,
-  getStudentSchema
+  getStudentSchema,
 } from './validators/schemas/student';
 
-import {
-  createClassroom
-} from './validators/schemas/class';
+import { createClassroom } from './validators/schemas/class';
 
 import {
   createFileSchema,
   getFileSchema,
-  updateFileSchema
+  updateFileSchema,
 } from './validators/schemas/files';
 
 import {
   createCohort,
   addcourse,
   updateCohortSchema,
-  updateCohorCoursetSchema
+  updateCohorCoursetSchema,
 } from './validators/schemas/cohort';
 
 import { isLoggedIn } from './auth';
@@ -58,6 +57,7 @@ export default {
   updateUserSchema,
   resetPasswordSchema,
   changePasswordSchema,
+  loginPasswordSchema,
   isLoggedIn,
   checkInvitation,
   quickCheckOutSchema,
@@ -80,5 +80,5 @@ export default {
   getCourseDescriptionSchema,
   addcourse,
   updateCohortSchema,
-  updateCohorCoursetSchema
+  updateCohorCoursetSchema,
 };

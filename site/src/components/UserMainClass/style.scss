@@ -1,0 +1,97 @@
+@import '../../media';
+
+.p_sec {
+  margin-bottom: 100px;
+  @include for-size(tablet-portrait-up) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .next_class {
+    height: 180px;
+    width: 32%;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    overflow: hidden;
+
+    @include for-size(desktop-up) {
+      width: 48%;
+      margin-bottom: 4%;
+    }
+
+    @include for-size(smaller-desktop) {
+      height: 150px;
+    }
+
+    @include for-size(tablet-portrait-up) {
+      width: 100%;
+      max-width: 550px;
+      margin-bottom: 4%;
+      height: 200px;
+    }
+
+    @include for-size(phone-only) {
+      height: 150px;
+      box-shadow: 0px 25px 30px -25px rgba(0, 0, 0, 0.1);
+    }
+
+    .main_img {
+      width: 50%;
+      height: 100%;
+      border-radius: 5px;
+
+      @include for-size(phone-only) {
+        height: unset;
+        max-height: 100%;
+        width: 40%;
+      }
+    }
+
+    .text-sec {
+      width: 70%;
+      padding: 4%;
+      height: 100%;
+
+      @include for-size(phone-only) {
+        padding-left: 10px;
+      }
+
+      h2 {
+        color: color(theme);
+        font-size: 1.1em;
+
+        @include for-size(smaller-desktop) {
+          font-size: 0.9em;
+        }
+      }
+    }
+
+    .info_sec {
+      // margin: 10px 0;
+
+      .info {
+        margin-bottom: 2px;
+        img {
+          width: 15px;
+          margin-right: 10px;
+        }
+
+        p {
+          font-size: 0.9em;
+
+          @include for-size(smaller-desktop) {
+            font-size: 0.8em;
+          }
+        }
+      }
+    }
+  }
+
+  .p_btn {
+    font-size: 0.75em;
+    padding: 5px 20px;
+    // max-width: 100px;
+    min-width: auto;
+    min-height: auto;
+  }
+}

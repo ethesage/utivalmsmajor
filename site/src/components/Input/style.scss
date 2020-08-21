@@ -1,4 +1,4 @@
-@import "../../media";
+@import '../../media';
 
 $distance: 0px;
 %selected {
@@ -21,15 +21,15 @@ $distance: 0px;
   //   }
   // }
 
-  input[type="date"]::before {
+  input[type='date']::before {
     // color: #999;
     position: absolute;
     background: inherit;
     width: 60%;
     content: attr(placeholder);
   }
-  input[type="date"]:focus::before {
-    content: "" !important;
+  input[type='date']:focus::before {
+    content: '' !important;
     background: none;
   }
 
@@ -45,7 +45,7 @@ $distance: 0px;
     position: relative;
 
     &::-webkit-input-placeholder {
-      color: color(text);
+      color: rgba(color(text), 0.8);
     }
 
     .select {
@@ -61,7 +61,7 @@ $distance: 0px;
         position: relative;
 
         &::after {
-          content: "\25BC";
+          content: '\25BC';
           font-size: 0.9em;
           color: color(theme);
         }

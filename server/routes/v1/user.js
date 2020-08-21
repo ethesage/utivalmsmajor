@@ -9,6 +9,7 @@ import {
   updateUser,
   quickCheckOut,
   adminCreate,
+  reset,
 } from '../../controllers/user';
 import middlewares from '../../middlewares';
 
@@ -23,6 +24,7 @@ const {
   quickCheckOutSchema,
   adminCreateSchema,
   usession,
+  loginPasswordSchema,
 } = middlewares;
 
 const userRoutes = express();
@@ -48,6 +50,12 @@ userRoutes.patch(
   usession.can(''),
   validate(updateUserSchema),
   updateUser
+);
+userRoutes.patch(
+  '/login_reset',
+  usession.can(''),
+  validate(loginPasswordSchema),
+  reset
 );
 userRoutes.post(
   '/admin/create',

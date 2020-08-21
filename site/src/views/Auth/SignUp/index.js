@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useToasts } from 'react-toast-notifications';
 import { Link, useHistory } from 'react-router-dom';
+import axois from 'axios';
 import Input from '../../../components/InputType';
 import useInput from '../../../Hooks/useInput';
 import data from '../../../data/signup';
@@ -10,7 +11,6 @@ import Social from '../SocialSec';
 import { gender } from '../../../data/filters';
 import Button from '../../../components/Button';
 import { login } from '../../../g_actions/user';
-import axois from 'axios';
 import '../style.scss';
 import './style.scss';
 

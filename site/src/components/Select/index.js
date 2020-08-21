@@ -1,25 +1,32 @@
-import React, { useState, useEffect } from "react";
-import "../Input/style.scss";
+import React, { useState, useEffect } from 'react';
+import '../Input/style.scss';
 
 const Select = ({
   name,
-  placeHolder = "",
+  placeHolder = '',
   inputs,
-  currentText = "",
+  currentText = '',
   handleSelect,
   required,
+  value,
 }) => {
   const [openDrop, setOpenDrop] = useState(false);
-  const [presentValue, setPresentValue] = useState("");
+  const [presentValue, setPresentValue] = useState('');
 
   const selectRef = React.createRef();
   const parent = React.createRef();
 
   useEffect(() => {
-    setPresentValue(`${currentText}${required ? " *" : ""}`);
+    const val = inputs.find(
+      (input) => input.value.toUpperCase() === value.toUpperCase()
+    );
+
+    setPresentValue(
+      `${val ? val.name : `${currentText}${required ? ' *' : ''}`}`
+    );
 
     return () => {};
-  }, [currentText, required]);
+  }, [currentText, required, inputs, value]);
 
   const handleClick = (name, value, current_name) => {
     setPresentValue(current_name);
@@ -34,7 +41,7 @@ const Select = ({
 
   const close = (e) => {
     if (!e.target) setOpenDrop(false);
-    if (e.target.classList.contains("currentValue")) return;
+    if (e.target.classList.contains('currentValue')) return;
 
     setOpenDrop(false);
   };
@@ -42,7 +49,7 @@ const Select = ({
   const options = inputs.map((input, index) => {
     return (
       <button
-        className={`options ${input.value === presentValue ? "selected" : ""}`}
+        className={`options ${input.value === presentValue ? 'selected' : ''}`}
         type="button"
         key={index}
         value={input.value}
@@ -57,11 +64,11 @@ const Select = ({
     <div className="input-div" onBlur={close} tabIndex={-1} ref={parent}>
       <div className="input-type">
         <div
-          className={`select ${openDrop ? "open-drop" : ""}`}
+          className={`select ${openDrop ? 'open-drop' : ''}`}
           ref={selectRef}
         >
           <button
-            className={`currentValue ${openDrop ? "open-drop" : ""}`}
+            className={`currentValue ${openDrop ? 'open-drop' : ''}`}
             type="button"
             onClick={revileDropDown}
           >
@@ -69,7 +76,7 @@ const Select = ({
             {/* <img src={rdown} alt='' /> */}
           </button>
           <div
-            className={`dropDownButtons ${openDrop ? "open-drop" : "close"}`}
+            className={`dropDownButtons ${openDrop ? 'open-drop' : 'close'}`}
           >
             {options}
           </div>
