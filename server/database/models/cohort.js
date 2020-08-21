@@ -16,10 +16,10 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Cohort.associate = (models) => {
     // associations can be defined here
-    // Cohort.belongsTo(models.Course, {
-    //   foreignKey: 'courseId',
-    //   onDelete: 'CASCADE'
-    // });
+    Cohort.hasMany(models.StudentCourse, {
+      foreignKey: 'cohortId',
+      onDelete: 'CASCADE'
+    });
         Cohort.hasMany(models.CourseCohort, {
       foreignKey: 'cohortId',
       onDelete: 'CASCADE'

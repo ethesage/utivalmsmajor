@@ -18,12 +18,12 @@ export const signUpSchema = Joi.object().keys({
     .message(
       'password must contain at least 1 uppercase, 1 lowercase, 1 number and 1 special character'
     ),
-  country: Joi.string().lowercase(),
-  gender: Joi.string().lowercase(),
-  region: Joi.string().lowercase(),
-  company: Joi.string().lowercase(),
-  occupation: Joi.string().lowercase(),
-  phoneNumber: Joi.number(),
+  country: Joi.string(),
+  gender: Joi.string(),
+  region: Joi.string(),
+  company: Joi.string(),
+  occupation: Joi.string(),
+  phoneNumber: Joi.string(),
 });
 
 export const loginSchema = Joi.object({
@@ -43,15 +43,15 @@ export const updateUserSchema = Joi.object().keys({
     .trim(),
   emailNotify: Joi.boolean(),
   inAppNotify: Joi.boolean(),
-  country: Joi.string().lowercase(),
-  gender: Joi.string().lowercase(),
-  region: Joi.string().lowercase(),
-  company: Joi.string().lowercase(),
+  country: Joi.string(),
+  gender: Joi.string(),
+  region: Joi.string(),
+  company: Joi.string(),
   bio: Joi.string(),
-  phoneNumber: Joi.number(),
+  phoneNumber: Joi.string(),
   linkedin: Joi.string().lowercase(),
   profilePic: Joi.object(),
-  occupation: Joi.string().lowercase(),
+  occupation: Joi.string()
 });
 
 export const resetPasswordSchema = Joi.object({

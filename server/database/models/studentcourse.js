@@ -8,10 +8,10 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true
     },
     studentId: DataTypes.UUID,
-    courseId: DataTypes.UUID,
+    courseCohortId: DataTypes.UUID,
     expiresAt: DataTypes.DATE,
     isCompleted: DataTypes.BOOLEAN,
-    cohort: DataTypes.STRING,
+    cohortId: DataTypes.UUID,
     status: {
       type: DataTypes.STRING,
       values: ['ongoing', 'finished']
@@ -19,8 +19,13 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   StudentCourse.associate = (models) => {
     // associations can be defined here
-    StudentCourse.belongsTo(models.Course, {
-      foreignKey: 'courseId',
+    StudentCourse.belongsTo(models.CourseCohort, {
+      foreignKey: 'courseCohortId',
+      onDelete: 'CASCADE'
+    });
+
+    StudentCourse.belongsTo(models.Cohort, {
+      foreignKey: 'cohortId',
       onDelete: 'CASCADE'
     });
   };

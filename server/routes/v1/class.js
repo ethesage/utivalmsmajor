@@ -26,12 +26,12 @@ classRoutes.post(
   createClass
 );
 
-// classRoutes.get(
-//   '/view',
-//   // usession.can('admin:create'),
-//   validate(getAllclassRoomSchema),
-//   viewAll
-// );
+classRoutes.get(
+  '/view/:classId',
+  usession.can(''),
+  // validate(getAllclassRoomSchema),
+  getClass
+);
 
 // classRoutes.get(
 //   '/view/:classRoomId',

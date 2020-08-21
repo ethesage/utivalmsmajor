@@ -11,8 +11,12 @@ module.exports = (sequelize, DataTypes) => {
     type: DataTypes.STRING,
     link: DataTypes.STRING
   }, {});
-  ClassResouces.associate = () => {
+  ClassResouces.associate = (models) => {
     // associations can be defined here
+    ClassResouces.belongsTo(models.Classes, {
+      foreignKey: 'classId',
+      onDelete: 'CASCADE'
+    });
   };
   return ClassResouces;
 };
