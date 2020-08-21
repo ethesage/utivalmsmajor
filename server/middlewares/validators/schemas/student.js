@@ -3,7 +3,7 @@ import Joi from '@hapi/joi';
 
 export const addStudentSchema = Joi.object().keys({
   studentId: Joi.string().uuid().trim().required(),
-  courseId: Joi.string().uuid().trim().required(),
+  courseCohortId: Joi.string().uuid().trim().required(),
 });
 
 export const getStudentSchema = Joi.object().keys({

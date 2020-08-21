@@ -21,11 +21,13 @@ const { successStat, errorStat } = helpers;
 
 export const cohort = async (req, res) => {
   try {
-    const course = await models.Cohort.findAll({
+    const isCohort = await models.Cohort.findOne({
       where: { ...req.body.cohort }
     });
 
-    if (course) return errorStat(res, 404, 'Cohort already exist');
+    console.log(isCohort)
+
+    if (isCohort) return errorStat(res, 404, 'Cohort already exist');
 
     const createCohort = await models.Cohort.create({
       ...req.body.cohort,
@@ -67,6 +69,10 @@ export const addCohortCourse = async (req, res) => {
     const createCohortCourse = await models.CourseCohort.create({
       ...req.body.cohort,
       status: 'ongoing',
+    });
+
+    await cohortGet.update({
+      totalCourse: cohortGet.totalCourse + 1
     });
 
     return successStat(res, 201, 'data', createCohortCourse);

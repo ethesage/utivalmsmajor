@@ -12,8 +12,12 @@ module.exports = (sequelize, DataTypes) => {
     courseId: DataTypes.UUID,
     time: DataTypes.TIME
   }, {});
-  ClassDays.associate = () => {
+  ClassDays.associate = (models) => {
     // associations can be defined here
+    ClassDays.belongsTo(models.Classes, {
+      foreignKey: 'classId',
+      onDelete: 'CASCADE'
+    });
   };
   return ClassDays;
 };

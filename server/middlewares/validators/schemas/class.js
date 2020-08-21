@@ -3,8 +3,8 @@ import Joi from '@hapi/joi';
 
 export const createClassroom = Joi.object().keys({
 //   studentId: Joi.string().uuid().trim().required(),
-  courseId: Joi.string().uuid().trim().required(),
-  cohortId: Joi.string().uuid().trim().required(),
+  courseCohortId: Joi.string().uuid().trim().required(),
+  // cohortId: Joi.string().uuid().trim().required(),
   trainerId: Joi.string().uuid().trim().required(),
   title: Joi.string().trim().required(),
   description: Joi.string().required(),

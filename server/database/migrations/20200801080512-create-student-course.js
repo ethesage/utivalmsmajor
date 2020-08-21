@@ -12,7 +12,7 @@ module.exports = {
     studentId: {
       type: Sequelize.UUID
     },
-    courseId: {
+    courseCohortId: {
       type: Sequelize.UUID
     },
     expiresAt: {
@@ -21,8 +21,8 @@ module.exports = {
     isCompleted: {
       type: Sequelize.BOOLEAN
     },
-    cohort: {
-      type: Sequelize.STRING
+    cohortId: {
+      type: Sequelize.UUID
     },
     status: {
       type: Sequelize.ENUM,

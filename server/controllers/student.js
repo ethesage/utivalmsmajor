@@ -13,7 +13,7 @@ const { successStat, errorStat } = helpers;
  */
 
 export const addStudentCourse = async (req, res) => {
-  const { studentId, courseId } = req.body.student;
+  const { studentId, courseCohortId } = req.body.student;
 
   try {
     const student = await models.User.findOne({
@@ -24,8 +24,8 @@ export const addStudentCourse = async (req, res) => {
       return errorStat(res, 404, 'Student does not exist');
     }
 
-    const cour = await models.Course.findOne({
-      where: { id: courseId },
+    const cour = await models.CourseCohort.findOne({
+      where: { id: courseCohortId },
     });
 
     if (!student) {
@@ -33,7 +33,7 @@ export const addStudentCourse = async (req, res) => {
     }
 
     const resource = await models.StudentCourse.findOne({
-      where: { studentId, courseId },
+      where: { studentId, courseCohortId },
     });
 
     if (resource) {
@@ -43,13 +43,18 @@ export const addStudentCourse = async (req, res) => {
     const studC = await models.StudentCourse.create({
       ...req.body.student,
       isCompleted: false,
-      expiresAt: new Date(),
-      cohort: cour.cohort,
+      expiresAt: cour.expiresAt,
+      cohortId: cour.cohortId,
       status: 'ongoing'
     });
 
+    await cour.update({
+      totalStudent: cour.totalStudent + 1
+    })
+
     return successStat(res, 200, 'data', { ...studC.dataValues, message: 'Student added Successfully' });
   } catch (e) {
+    console.log(e)
     errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
@@ -60,6 +65,19 @@ export const getAllStudentCourse = async (req, res) => {
   try {
     const resource = await models.StudentCourse.findAll({
       where: { studentId: id },
+      include: [
+        {
+          model: models.Cohort
+        },
+        {
+          model: models.CourseCohort,
+          include: [
+            {
+              model: models.Classes
+            }
+          ]
+        }
+      ]
     });
 
     if (!resource[0]) {
@@ -68,6 +86,7 @@ export const getAllStudentCourse = async (req, res) => {
 
     return successStat(res, 200, 'data', resource);
   } catch (e) {
+    console.log(e)
     errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
@@ -81,6 +100,19 @@ export const getSingleStudentCourse = async (req, res) => {
   try {
     resource = await models.StudentCourse.findOne({
       where: { id: studentCourseId, studentId: id },
+      include: [
+        {
+          model: models.Cohort
+        },
+        {
+          model: models.CourseCohort,
+          include: [
+            {
+              model: models.Classes
+            }
+          ]
+        }
+      ]
     });
 
     if (!resource) {

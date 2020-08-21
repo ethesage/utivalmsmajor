@@ -35,7 +35,7 @@ studentRoutes.get(
 );
 
 studentRoutes.get(
-  '/dashboard',
+  '/all/dashboard',
   usession.can(''),
   getStudentDashboard
 );
