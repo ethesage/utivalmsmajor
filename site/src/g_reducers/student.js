@@ -1,20 +1,13 @@
 export const initialState = {
-  categories: null,
-  currentCourse: null,
   enrolledcourses: null,
 };
 
 const course = (state = initialState, action) => {
   switch (action.type) {
-    case 'GET_CATEGORIES':
+    case 'GET_ENROLLED_COURSES':
       return {
         ...state,
-        categories: (state.categories = action.payload),
-      };
-    case 'GET_CURRENT_COURSE':
-      return {
-        ...state,
-        currentCourse: action.payload,
+        enrolledcourses: action.payload,
       };
     default:
       return state;

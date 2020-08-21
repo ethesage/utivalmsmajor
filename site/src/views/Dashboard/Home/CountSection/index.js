@@ -20,54 +20,36 @@ const CountCard = ({ data: { title, num, img } }) => (
 );
 
 const CountSection = () => {
-  const gapi = useGoogle();
-
-  useEffect(() => {
-    (async () => {
-      console.log(gapi);
-
-      // console.log(await axios.get('https://apis.google.com/js/client.js'));
-      // const response = await axiosInstance.get('/student/dashboard');
-      // console.log(response);
-      gapi &&
-        gapi.client.drive.files
-          .list({
-            pageSize: 10,
-            fields: 'nextPageToken, files(id, name)',
-          })
-          .then(function (response) {
-            // appendPre('Files:');
-            // var files = response.result.files;
-            // if (files && files.length > 0) {
-            //   for (var i = 0; i < files.length; i++) {
-            //     var file = files[i];
-            //     appendPre(file.name + ' (' + file.id + ')');
-            //   }
-            // } else {
-            //   appendPre('No files found.');
-            // }
-            console.log(response);
-          });
-    })();
-  }, [gapi]);
-
   const [data, setData] = useState([
     {
       title: 'Total Courses',
-      num: 1,
+      link: 'course',
+      num: 0,
       img: course,
     },
     {
       title: 'Ongoing Courses',
-      num: 1,
+      num: 0,
+      link: 'ongoing',
       img: ongoing,
     },
     {
       title: 'Completed Courses',
-      num: 1,
+      num: 0,
+      link: 'completed',
       img: completed,
     },
   ]);
+
+  useEffect(() => {
+    (async () => {
+      const response = await axiosInstance.get('/student/all/dashboard');
+
+      setData((prev) =>
+        prev.map((pre) => ({ ...pre, num: response.data.data[pre.link] }))
+      );
+    })();
+  }, []);
 
   return (
     <>

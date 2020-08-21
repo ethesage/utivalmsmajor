@@ -20,7 +20,7 @@ const Courses = () => {
   let { path } = useRouteMatch();
 
   return (
-    <section className="dash-con mx_courx">
+    <section className="dash-con mx_courx flex-col al-start j-start">
       <nav className="nav_cux flex-row j-start">
         <Link to="/dashboard/courses" className="reg_text">
           <h3>My Courses</h3>

@@ -1,10 +1,23 @@
 @import '../../../../media';
 
+.cx_list_con {
+  height: 100%;
+  flex-grow: 1;
+  width: 100%;
+
+  .loader_con_main {
+    flex-grow: 1;
+  }
+}
+
 .course_list {
   width: auto;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-gap: 30px;
+  height: 100%;
+  width: 100%;
+  position: relative;
 
   @include for-size(desktop-up) {
     grid-template-columns: repeat(3, 1fr);
