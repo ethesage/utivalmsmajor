@@ -9,18 +9,22 @@ import './style.scss';
 
 const _data = [
   {
+    id: 1,
     title: 'Jude',
     name: 'Week one - SQL For Data',
   },
   {
+    id: 2,
     title: 'Jude violet',
     name: 'Week Two - SQL For Data',
   },
   {
+    id: 3,
     title: 'Jude chinoso',
     name: 'Week Three - SQL For Data',
   },
   {
+    id: 4,
     title: 'Jude okuwanyi',
     name: 'Week Four - SQL For Data',
   },
@@ -45,7 +49,7 @@ function FullClass({ data = _data }) {
             <li>
               <NavLink
                 className="side_link"
-                to={`/dashboard/courses/classroom/full/${courseId}/week_${i}`}
+                to={`/dashboard/courses/classroom/${courseId}/week_${i}`}
                 key={`side_link_courses_${i}`}
               >
                 Week {i + 1}
@@ -53,7 +57,12 @@ function FullClass({ data = _data }) {
             </li>
           ))}
         >
-          <Classes data={data[currentCourse]} open={true} showArrow={false} />
+          <Classes
+            data={data[currentCourse]}
+            open={true}
+            showArrow={false}
+            full={true}
+          />
           <div className="btns">
             <div className="reg_text">
               <h4>Activities</h4>

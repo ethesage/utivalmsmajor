@@ -1,30 +1,34 @@
-import React from "react";
-import { useParams } from "react-router-dom";
+import React from 'react';
+import { useParams } from 'react-router-dom';
 // import Loader from "../../../components/Loader";
-import Classes from "./Classes";
-import NavBar from "../../components/CourseNav";
-import "./style.scss";
+import Classes from './Classes';
+import NavBar from '../../components/CourseNav';
+import './style.scss';
 
 const _data = [
   {
-    title: "Jude",
-    name: "Week one - SQL For Data",
+    id: 1,
+    title: 'Jude',
+    name: 'Week one - SQL For Data',
   },
   {
-    title: "Jude violet",
-    name: "Week Two - SQL For Data",
+    id: 2,
+    title: 'Jude violet',
+    name: 'Week Two - SQL For Data',
   },
   {
-    title: "Jude chinoso",
-    name: "Week Three - SQL For Data",
+    id: 3,
+    title: 'Jude chinoso',
+    name: 'Week Three - SQL For Data',
   },
   {
-    title: "Jude okuwanyi",
-    name: "Week Four - SQL For Data",
+    id: 4,
+    title: 'Jude okuwanyi',
+    name: 'Week Four - SQL For Data',
   },
 ];
 
-const Classroom = ({ data }) => {
+const Classroom = ({ data, full = false }) => {
   const { courseId, section } = useParams();
 
   return (
@@ -40,9 +44,9 @@ const Classroom = ({ data }) => {
               <Classes
                 key={`cx_listnx_${i}`}
                 data={class_room}
-                i={i}
                 courseId={courseId}
                 section={section}
+                full={full}
               />
             ))}
           </div>

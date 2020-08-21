@@ -33,6 +33,10 @@ const links = [
 const File_Page = () => {
   let { path } = useRouteMatch();
 
+  const getImage = (img) => {
+    console.log(img);
+  };
+
   const AllFile = () => {
     return (
       <div className="upload_sec flex-row j-start al-start">
@@ -40,7 +44,7 @@ const File_Page = () => {
           <Files />
         </div>
         <div className="drag_upload flex-row">
-          <Drag />
+          <Drag handleImage={getImage} />
         </div>
       </div>
     );

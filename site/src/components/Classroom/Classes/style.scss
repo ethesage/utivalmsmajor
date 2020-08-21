@@ -32,6 +32,10 @@
     position: relative;
     font-size: 1em;
 
+    .edit {
+      pointer-events: all !important;
+    }
+
     span {
       width: 80%;
       @include for-size(phone-only) {
@@ -80,7 +84,7 @@
         h4 {
           margin-bottom: 20px;
         }
-
+ 
         .btn_sec_con {
           @include for-size(phone-only) {
             flex-direction: column;

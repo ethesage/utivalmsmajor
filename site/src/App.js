@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { hot } from 'react-hot-loader';
 import Loader from './components/Loading';
 import Protected from './components/Protected';
+// import Drive from './components/Drive';
 import './App.css';
 
 const HomePage = lazy(() => import('./views/HomePage'));
@@ -21,6 +22,7 @@ function App() {
             <Route path="/auth" component={Auth} />
             <Route path="/purchase" component={Purchase} />
             <Protected path="/dashboard" component={Dashboard} />
+            {/* <Route path="/drive" component={Drive} /> */}
           </Switch>
         </Suspense>
       </Router>

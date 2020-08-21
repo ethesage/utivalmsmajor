@@ -42,7 +42,7 @@ const Courses = () => {
         />
         <Route
           exact
-          path={`${path}/classroom/full/:courseId/:index`}
+          path={`${path}/classroom/:courseId/:index`}
           component={FullClass}
         />
         <Route
