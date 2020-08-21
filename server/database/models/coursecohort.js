@@ -18,8 +18,17 @@ module.exports = (sequelize, DataTypes) => {
     totalStudent: DataTypes.INTEGER,
     totalClasses: DataTypes.INTEGER
   }, {});
-  CourseCohort.associate = () => {
+  CourseCohort.associate = (models) => {
     // associations can be defined here
+    CourseCohort.hasMany(models.StudentCourse, {
+      foreignKey: 'courseCohortId',
+      onDelete: 'CASCADE'
+    });
+
+    CourseCohort.hasMany(models.Classes, {
+      foreignKey: 'courseCohortId',
+      onDelete: 'CASCADE'
+    });
   };
   return CourseCohort;
 };

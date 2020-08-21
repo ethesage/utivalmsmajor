@@ -2,19 +2,19 @@
 import Joi from '@hapi/joi';
 
 export const createCourse = Joi.object().keys({
-  name: Joi.string().lowercase().required(),
-  description: Joi.string().lowercase().required(),
+  name: Joi.string().required(),
+  description: Joi.string().required(),
   duration: Joi.string().required(),
   //   link: Joi.string().required(),
   coupon: Joi.string(),
   learnMore: Joi.string().required(),
   trainerId: Joi.string().uuid().trim(),
-  cohort: Joi.string().lowercase(),
+  cohort: Joi.string(),
   cost: Joi.number().required(),
-  dateRange: Joi.string().lowercase(),
-  level: Joi.string().lowercase(),
-  //   status: Joi.string().lowercase(),
-  extLink: Joi.string().lowercase().required(),
+  dateRange: Joi.string(),
+  level: Joi.string(),
+  //   status: Joi.string(),
+  extLink: Joi.string().required(),
   totalClasses: Joi.number().required(),
   courseDescription: Joi.array().items(Joi.object({
     title: Joi.string().required(),
@@ -25,19 +25,19 @@ export const createCourse = Joi.object().keys({
 
 export const getCourseSchema = Joi.object().keys({
   courseId: Joi.string().uuid().trim().required(),
-  name: Joi.string().lowercase(),
-  description: Joi.string().lowercase(),
+  name: Joi.string(),
+  description: Joi.string(),
   duration: Joi.string(),
   //   link: Joi.string(),
   coupon: Joi.string(),
   learnMore: Joi.string(),
   trainerId: Joi.string().uuid().trim(),
-  cohort: Joi.string().lowercase(),
+  cohort: Joi.string(),
   cost: Joi.number(),
-  dateRange: Joi.string().lowercase(),
-  level: Joi.string().lowercase(),
-  //   status: Joi.string().lowercase(),
-  extLink: Joi.string().lowercase(),
+  dateRange: Joi.string(),
+  level: Joi.string(),
+  //   status: Joi.string(),
+  extLink: Joi.string(),
   thumbnail: Joi.object()
 });
 

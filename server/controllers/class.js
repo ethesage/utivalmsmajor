@@ -19,22 +19,22 @@ const { successStat, errorStat } = helpers;
  */
 
 export const createClass = async (req, res) => {
-  const { resourceLink, courseId, trainerId, courseCohortId } = req.body.class;
+  const { resourceLink, trainerId, courseCohortId } = req.body.class;
 
   try {
-    const course = await models.Course.findOne({
-      where: { id: courseId }
-    });
+    // const course = await models.Course.findOne({
+    //   where: { id: courseId }
+    // });
 
-    if (!course) return errorStat(res, 404, 'Course does not exist');
+    // if (!course) return errorStat(res, 404, 'Course does not exist');
 
-    const courseCohort = await models.Cohort.findOne({
+    const courseCohort = await models.CourseCohort.findOne({
       where: { id: courseCohortId }
     });
 
     if (!courseCohort) return errorStat(res, 404, 'Course Cohort does not exist');
 
-    const trainer = await models.User.findOne({
+    const trainer = await models.Trainer.findOne({
       where: { id: trainerId }
     });
 
@@ -54,9 +54,13 @@ export const createClass = async (req, res) => {
     const day = await models.ClassDays.create({
       ...req.body.class,
       classId: classCreate.id,
-      time: '16:17:03.084+01:00'
+      // time: '16:17:03.084+01:00'
     }
     );
+
+    await courseCohort.update({
+      totalClasses: courseCohort.totalClasses + 1
+    });
 
     return successStat(res, 201, 'data', { classCreate, classResource: resource, classDays: day });
   } catch (e) {
@@ -66,24 +70,24 @@ export const createClass = async (req, res) => {
 };
 
 export const getClass = async (req, res) => {
-  const { classId } = req.body.class;
+  const { classId } = req.params;
 
   try {
-    const allClass = await models.Class.findOne({
-      where: { classId },
+    const allClass = await models.Classes.findOne({
+      where: { id: classId },
       include: [
         {
-          model: models.CourseDays
+          model: models.ClassDays
         },
         {
-          model: models.CourseResourse
+          model: models.ClassResouces
         }
       ]
     });
 
     if (!allClass) return errorStat(res, 404, 'Class Not Found');
 
-    return successStat(res, 201, 'data', allClass);
+    return successStat(res, 200, 'data', allClass);
   } catch (e) {
     console.log(e);
     errorStat(res, 500, 'Operation Failed, Please Try Again');
@@ -91,24 +95,24 @@ export const getClass = async (req, res) => {
 };
 
 export const getAllClass = async (req, res) => {
-  const { courseId } = req.body.class;
+  const { courseCohortId } = req.params;
 
   try {
-    const allClass = await models.Class.findAll({
-      where: { courseId },
+    const allClass = await models.Classes.findAll({
+      where: { courseCohortId },
       include: [
         {
           model: models.CourseDays
         },
         {
-          model: models.CourseResourse
+          model: models.CourseResouces
         }
       ]
     });
 
     if (!allClass[0]) return errorStat(res, 404, 'No class Found for this course');
 
-    return successStat(res, 201, 'data', allClass);
+    return successStat(res, 200, 'data', allClass);
   } catch (e) {
     console.log(e);
     errorStat(res, 500, 'Operation Failed, Please Try Again');
@@ -116,11 +120,11 @@ export const getAllClass = async (req, res) => {
 };
 
 export const updateClass = async (req, res) => {
-  const { classId } = req.body.course;
+  const { classId } = req.body.class;
 
   try {
     const foundClass = await models.Class.findOne({
-      where: { classId },
+      where: { id: classId },
       include: [
         {
           model: models.CourseDays
@@ -131,7 +135,11 @@ export const updateClass = async (req, res) => {
       ]
     });
 
-    return successStat(res, 201, 'data', foundClass);
+    await foundClass.update({
+      ...req.body.class
+    })
+
+    return successStat(res, 200, 'data', foundClass);
   } catch (e) {
     console.log(e);
     errorStat(res, 500, 'Operation Failed, Please Try Again');
@@ -143,7 +151,7 @@ export const deleteClass = async (req, res) => {
 
   try {
     const foundClass = await models.Class.findOne({
-      where: { classId },
+      where: { id: classId },
       include: [
         {
           model: models.CourseDays

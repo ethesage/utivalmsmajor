@@ -48,6 +48,7 @@ export const create = async (req, res) => {
 
     return successStat(res, 201, 'data', { course, courseDescription: resource });
   } catch (e) {
+    console.log(e)
     errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };

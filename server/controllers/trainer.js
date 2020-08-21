@@ -16,7 +16,7 @@ export const createTrainer = async (req, res) => {
 
   try {
     const isUser = await models.User.findOne({
-      wher: { id: userId }
+      where: { id: userId }
     });
 
     if (!isUser) {
