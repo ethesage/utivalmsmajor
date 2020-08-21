@@ -119,6 +119,68 @@ export const getAllClass = async (req, res) => {
   }
 };
 
+export const getAllStudentClass = async (req, res) => {
+  const { id } = req.session.user;
+
+  try {
+    const resource = await models.StudentCourse.findAll({
+      limit: 1,
+      where: { studentId: id },
+      include: [
+        {
+          model: models.CourseCohort,
+          include: [
+            {
+              model: models.Classes
+            }
+          ]
+        }
+      ],
+      order: [
+        ['createdAt', 'DESC']
+      ]
+    });
+
+    if (!resource[0]) {
+      return errorStat(res, 404, 'No Course Found');
+    }
+
+    return successStat(res, 200, 'data', resource);
+  } catch (e) {
+    console.log(e);
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
+  }
+};
+
+export const getAllTrainerClass = async (req, res) => {
+  const { id } = req.session.user;
+
+  try {
+    const resource = await models.CourseCohort.findAll({
+      limit: 1,
+      include: [
+        {
+          model: models.Classes,
+          where: { userId: id }
+        }
+
+      ],
+      order: [
+        ['createdAt', 'DESC']
+      ]
+    });
+
+    if (!resource[0]) {
+      return errorStat(res, 404, 'No Course Found');
+    }
+
+    return successStat(res, 200, 'data', resource);
+  } catch (e) {
+    console.log(e);
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
+  }
+};
+
 export const updateClass = async (req, res) => {
   const { classId } = req.body.class;
 
@@ -137,7 +199,7 @@ export const updateClass = async (req, res) => {
 
     await foundClass.update({
       ...req.body.class
-    })
+    });
 
     return successStat(res, 200, 'data', foundClass);
   } catch (e) {

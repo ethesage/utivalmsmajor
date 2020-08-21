@@ -70,6 +70,18 @@ export const getAllStudentCourse = async (req, res) => {
           model: models.Cohort
         },
         {
+          model: models.Course,
+          include: [
+            {
+              model: models.CourseDescription
+            },
+            {
+              model: models.CourseProgress,
+              where: { userId: id }
+            }
+          ]
+        },
+        {
           model: models.CourseCohort,
           include: [
             {

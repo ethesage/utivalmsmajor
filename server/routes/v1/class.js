@@ -5,7 +5,8 @@ import {
   getAllClass,
   getClass,
   updateClass,
-  deleteClass
+  deleteClass,
+  getAllStudentClass
 } from '../../controllers/class';
 import middlewares from '../../middlewares';
 
@@ -33,25 +34,33 @@ classRoutes.get(
   getClass
 );
 
-// classRoutes.get(
-//   '/view/:classRoomId',
-//   // usession.can('admin:create'),
-//   validate(getclassRoomSchema),
-//   view
-// );
+classRoutes.get(
+  '/coursecohort/:coursecohortId',
+  usession.can(''),
+  // validate(getclassRoomSchema),
+  getClass
+);
 
-// classRoutes.patch(
-//   '/update/:classRoomId',
-//   usession.can('classRoom:crud'),
-//   validate(getclassRoomSchema),
-//   update
-// );
+classRoutes.get(
+  '/student',
+  usession.can(''),
+  // validate(getclassRoomSchema),
+  getAllStudentClass
+);
 
-// classRoutes.delete(
-//   '/:classRoomId',
-//   usession.can('classRoom:crud'),
-//   validate(getclassRoomSchema),
-//   deleteclassRoom
-// );
+
+classRoutes.patch(
+  '/update/:classId',
+  usession.can('classRoom:crud'),
+  // validate(getclassRoomSchema),
+  updateClass
+);
+
+classRoutes.delete(
+  '/:classId',
+  usession.can('classRoom:crud'),
+  // validate(getclassRoomSchema),
+  deleteClass
+);
 
 export default classRoutes;
