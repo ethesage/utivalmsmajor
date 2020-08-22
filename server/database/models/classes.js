@@ -25,6 +25,10 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'classId',
       onDelete: 'CASCADE'
     });
+    Classes.belongsTo(models.Trainer, {
+      foreignKey: 'trainerId',
+      onDelete: 'CASCADE'
+    });
   };
   return Classes;
 };
