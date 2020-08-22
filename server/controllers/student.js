@@ -85,7 +85,18 @@ export const getAllStudentCourse = async (req, res) => {
           model: models.CourseCohort,
           include: [
             {
-              model: models.Classes
+              model: models.Classes,
+              include: [
+                {
+                  model: models.Trainer,
+                  include: {
+                    model: models.User,
+                    attributes: [
+                      'firstName', 'lastName', 'profilePic', 'occupation', 'bio'
+                    ]
+                  }
+                }
+              ]
             }
           ]
         }
