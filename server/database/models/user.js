@@ -50,7 +50,12 @@ module.exports = (sequelize, DataTypes) => {
     user.id = uuid();
   });
 
-  User.associate = (models) => {};
+  User.associate = (models) => {
+    User.hasMany(models.Trainer, {
+      foreignKey: 'userId',
+      onDelete: 'CASCADE'
+    });
+  };
 
   User.prototype.userResponse = function userResponse() {
     const userData = {
