@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import moment from "moment";
-import Select from "../Select";
-import "./style.scss";
+import React, { useState } from 'react';
+import moment from 'moment';
+import Select from '../Select';
+import './style.scss';
 
 const weekdayshort = moment.weekdaysShort();
 
@@ -10,7 +10,7 @@ const Calender = () => {
   const [allmonths] = useState(moment.months());
 
   const firstDayOfMonth = () => {
-    return moment(dateObject).startOf("month").format("d");
+    return moment(dateObject).startOf('month').format('d');
   };
 
   let weekdayshortname = weekdayshort.map((day) => {
@@ -26,19 +26,19 @@ const Calender = () => {
     blanks.push(
       <td className="calendar-day empty" key={`calender_empty_${i}`}>
         <span className="flex-row mx-auto">
-          <p>{""}</p>
+          <p>{''}</p>
         </span>
       </td>
     );
   }
 
   let today = () => {
-    return dateObject.format("D");
+    return dateObject.format('D');
   };
 
   let daysInMonth = [];
   for (let d = 1; d <= dateObject.daysInMonth(); d++) {
-    let currentDay = d === Number(today()) ? "today" : "";
+    let currentDay = d === Number(today()) ? 'today' : '';
     daysInMonth.push(
       <td key={d} className={`calendar-day ${currentDay}`}>
         <span className="flex-row mx-auto">
@@ -71,7 +71,7 @@ const Calender = () => {
   });
 
   let month = () => {
-    return dateObject.format("MMMM");
+    return dateObject.format('MMMM');
   };
 
   const MonthList = (props) => {
@@ -112,12 +112,12 @@ const Calender = () => {
   function setMonth(month) {
     let monthNo = allmonths.indexOf(month); // get month number
     let newdateObject = Object.assign({}, dateObject);
-    newdateObject = moment(newdateObject).set("month", monthNo); // change month value
+    newdateObject = moment(newdateObject).set('month', monthNo); // change month value
     setDateObj(newdateObject);
   }
 
   const year = () => {
-    return dateObject.format("Y");
+    return dateObject.format('Y');
   };
 
   function getDates(startDate, stopDate) {
@@ -125,8 +125,8 @@ const Calender = () => {
     let currentDate = moment(startDate);
     stopDate = moment(stopDate);
     while (currentDate <= stopDate) {
-      dateArray.push(moment(currentDate).format("YYYY"));
-      currentDate = moment(currentDate).add(1, "year");
+      dateArray.push(moment(currentDate).format('YYYY'));
+      currentDate = moment(currentDate).add(1, 'year');
     }
 
     return dateArray.map((date) => ({
@@ -138,7 +138,7 @@ const Calender = () => {
   const setYear = (e) => {
     const year = e.target.value;
     let newdateObject = Object.assign({}, dateObject);
-    newdateObject = moment(newdateObject).set("year", year);
+    newdateObject = moment(newdateObject).set('year', year);
     setDateObj(newdateObject);
   };
 
@@ -146,8 +146,9 @@ const Calender = () => {
     <div className="r_calenx">
       <Select
         currentText={year()}
-        inputs={getDates("1965", "2020")}
+        inputs={getDates('1965', '2020')}
         handleSelect={setYear}
+        value={new Date().getFullYear().toString()}
       />
       <div className="calendar flex-row">
         <div className="calendar-date">

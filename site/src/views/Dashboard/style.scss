@@ -7,6 +7,42 @@
   background: color(shade);
   // overflow: auto;
 
+  .g_signup {
+    background: white;
+    width: 90vw;
+    width: 400px;
+    height: 300px;
+    padding: 30px;
+
+    .intro {
+      font-size: 0.9em;
+      color: color(text);
+      margin-bottom: 20px;
+    }
+
+    button {
+      background: color(light);
+      width: 100%;
+      padding: 10px 20px;
+      border-radius: 5px;
+
+      p {
+        color: color(text);
+        @include for-size(phone-only) {
+          font-size: 0.8em;
+        }
+      }
+      img {
+        width: 25px;
+        margin-right: 20px;
+
+        @include for-size(phone-only) {
+          margin-right: 10px;
+        }
+      }
+    }
+  }
+
   .dh-aside {
     max-width: 300px;
     min-width: 250px;

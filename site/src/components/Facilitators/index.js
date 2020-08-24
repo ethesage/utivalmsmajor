@@ -1,31 +1,12 @@
-import React, { useState } from "react";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
-import user_icon from "../../assets/user_icon.png";
-import "./style.scss";
+import React, { useState } from 'react';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import user_icon from '../../assets/user_icon.png';
+import './style.scss';
 
-const users = [
-  {
-    profilePic: "",
-    firstName: "Eyityo",
-    lastName: "Ogunmola",
-    occupation: "Data Analyst",
-  },
-  {
-    profilePic: "",
-    firstName: "Rex",
-    lastName: "Ogunmola",
-    occupation: "Data positionist",
-  },
-  {
-    profilePic: "",
-    firstName: "Amos",
-    lastName: "Oruaroghene",
-    occupation: "Data Analyst",
-  },
-];
-
-const Facilitators = ({ user }) => {
+const Facilitators = ({ trainers }) => {
   const [currentUser, setCurrentUser] = useState(0);
+
+  console.log('trainer =>', trainers);
 
   return (
     <div className="fac_xc">
@@ -38,21 +19,21 @@ const Facilitators = ({ user }) => {
           <div className="fac_xc_sec flex-row j-start">
             <div className="img-sec">
               <img
-                src={users[currentUser].profilePic || user_icon}
+                src={trainers[currentUser].Trainer.User.profilePic || user_icon}
                 alt=""
                 className="img cover"
               />
             </div>
             <div className="text_sec">
               <p>Instructors</p>
-              <h2>{`${users[currentUser].firstName} ${users[currentUser].lastName}`}</h2>
-              <h3>Data Analyst</h3>
+              <h2>{`${trainers[currentUser].Trainer.User.firstName} ${trainers[currentUser].Trainer.User.lastName}`}</h2>
+              <h3>{trainers[currentUser].Trainer.User.occupation}</h3>
             </div>
           </div>
         </CSSTransition>
       </TransitionGroup>
       <div className="dots_con flex-row">
-        {users.map((index, i) => (
+        {trainers.map((trainer, i) => (
           <button
             className="dot_button flex-row"
             key={i}
@@ -60,7 +41,7 @@ const Facilitators = ({ user }) => {
           >
             <span
               className="dot"
-              data-active={i === currentUser ? "active" : null}
+              data-active={i === currentUser ? 'active' : null}
             ></span>
           </button>
         ))}

@@ -3,29 +3,34 @@ import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { getEnrolledCourses } from '../../../../g_actions/student';
 import { Progress } from 'react-sweet-progress';
-import img1 from '../../../../assets/homepage/img1.png';
+import Image from '../../../../components/Image';
 import Loader from '../../../../components/Loading';
 import medal from '../../../../assets/icons/medal.png';
 import 'react-sweet-progress/lib/style.css';
 import './style.scss';
 
 const CousreCard = ({ data }) => {
-  const { isTrainer, isStudent } = useSelector((state) => state.auth);
-  console.log(data);
+  const { isStudent } = useSelector((state) => state.auth);
   const {
     isCompleted,
     CourseCohort: { dateRange },
     Cohort: { cohort },
+    Course: {
+      id,
+      name,
+      thumbnail,
+      CourseProgresses: [{ progress }],
+    },
   } = data;
 
   return (
     <div className="p_cx_cd">
-      <Link className="img-sec" to={`/dashboard/courses/overview/23356`}>
-        <img src={img1} alt="" className="img cover" />
+      <Link className="img-sec" to={`/dashboard/courses/overview/${id}`}>
+        <Image image={thumbnail} imgClass="img cover" lazyLoad={true} />
       </Link>
       <div className="txt-sec">
         <div className="title_sec flex-row j-space">
-          <h3 className="theme-color">Data Accelerator</h3>
+          <h3 className="theme-color">{name}</h3>
           {isStudent && isCompleted ? <img src={medal} alt="" /> : ''}
         </div>
 
@@ -35,7 +40,7 @@ const CousreCard = ({ data }) => {
               <small>Completion level</small>
               <Progress
                 className="slim"
-                percent={40}
+                percent={progress}
                 status="error"
                 theme={{
                   success: {

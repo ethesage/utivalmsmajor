@@ -1,52 +1,57 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-// import Loader from "../../../components/Loader";
+import { getEnrolledCourses } from '../../g_actions/student';
+import Loader from '../../components/Loading';
 import Classes from './Classes';
 import NavBar from '../../components/CourseNav';
 import './style.scss';
 
-const _data = [
-  {
-    id: 1,
-    title: 'Jude',
-    name: 'Week one - SQL For Data',
-  },
-  {
-    id: 2,
-    title: 'Jude violet',
-    name: 'Week Two - SQL For Data',
-  },
-  {
-    id: 3,
-    title: 'Jude chinoso',
-    name: 'Week Three - SQL For Data',
-  },
-  {
-    id: 4,
-    title: 'Jude okuwanyi',
-    name: 'Week Four - SQL For Data',
-  },
-];
+const Classroom = ({ full = false }) => {
+  const { courseId } = useParams();
 
-const Classroom = ({ data, full = false }) => {
-  const { courseId, section } = useParams();
+  const dispatch = useDispatch();
+  const enrolledcourses = useSelector((state) => state.student.enrolledcourses);
+  const [data, setData] = useState(
+    enrolledcourses &&
+      enrolledcourses.find((course) => course.Course.id === courseId)
+        .CourseCohort.Classes
+  );
+
+  useEffect(() => {
+    if (!enrolledcourses)
+      (async () => {
+        await dispatch(getEnrolledCourses());
+      })();
+
+    return () => {};
+  }, [dispatch, enrolledcourses]);
+
+  useEffect(() => {
+    setData(
+      enrolledcourses &&
+        enrolledcourses.find((course) => course.Course.id === courseId)
+          .CourseCohort.Classes
+    );
+
+    return () => {};
+  }, [enrolledcourses, courseId]);
 
   return (
     <>
       <NavBar />
-      <section className="cx_listnx">
-        {_data.length === 0 ? (
-          // <Loader tempLoad={true} height="100%" load={true} />
-          <div>...loading</div>
+      <section className="cx_listnx img">
+        {!data ? (
+          <Loader tempLoad={true} full={false} />
         ) : (
           <div>
-            {_data.map((class_room, i) => (
+            {data.map((class_room, i) => (
               <Classes
                 key={`cx_listnx_${i}`}
                 data={class_room}
                 courseId={courseId}
-                section={section}
                 full={full}
+                index={i}
               />
             ))}
           </div>

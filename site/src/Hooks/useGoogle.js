@@ -2,16 +2,15 @@ import { useEffect, useState } from 'react';
 import cred from './credentials.json';
 import axios from 'axios';
 
-const Google = () => {
+const Google = ({ updateSignInStatus = () => {} }) => {
   const [g_api, setG_api] = useState();
 
   useEffect(() => {
     (async () => {
-      // console.log(await axios.get('https://apis.google.com/js/client.js'));
       const gapi_str = await axios.get('https://apis.google.com/js/api.js');
       const gapi = new Function(`${gapi_str.data} return gapi`)();
 
-      gapi.load('client', () => {
+      gapi.load('client:auth2', () => {
         gapi.client
           .init({
             // apiKey: API_KEY,
@@ -19,27 +18,26 @@ const Google = () => {
             discoveryDocs: [
               'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest',
             ],
-            scope: 'https://www.googleapis.com/auth/drive.metadata.readonly',
+            scope: 'https://www.googleapis.com/auth/drive',
           })
           .then(function () {
             setG_api(gapi);
-            // Listen for sign-in state changes.
-            // gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
-            // Handle the initial sign-in state.
-            //   updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-            //   authorizeButton.onclick = handleAuthClick;
-            //   signoutButton.onclick = handleSignoutClick;
-            // }, function(error) {
-            // appendPre(JSON.stringify(error, null, 2));
+            gapi.auth2.getAuthInstance().isSignedIn.listen(updateSignInStatus);
+            updateSignInStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
           });
-
-        // const response = await axiosInstance.get('/student/dashboard');
-        // console.log(response);
       });
     })();
-  }, []);
+  }, [updateSignInStatus]);
 
-  return g_api;
+  const signIn = async () => {
+    const response = await g_api.auth2.getAuthInstance().signIn();
+    return !!response.rt;
+  };
+
+  return {
+    g_api,
+    signIn,
+  };
 };
 
 export default Google;

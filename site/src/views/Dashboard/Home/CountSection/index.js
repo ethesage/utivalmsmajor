@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { axiosInstance } from '../../../../helpers';
-import useGoogle from '../../../../Hooks/useGoogle';
 // import drive from '../../../../helpers/drive';
 import course from '../../../../assets/icons/dasboard/course.png';
 import completed from '../../../../assets/icons/dasboard/completed.png';
@@ -19,7 +17,7 @@ const CountCard = ({ data: { title, num, img } }) => (
   </div>
 );
 
-const CountSection = () => {
+const CountSection = ({ gapi: { g_api, signedIn } }) => {
   const [data, setData] = useState([
     {
       title: 'Total Courses',
@@ -40,6 +38,40 @@ const CountSection = () => {
       img: completed,
     },
   ]);
+
+  console.log('gapi from count_sec', g_api);
+
+  useEffect(() => {
+    if (!g_api) return;
+    if (!signedIn) return;
+    g_api &&
+      g_api.client.drive.files
+        .list({
+          pageSize: 10,
+          id: '1F0r-bTgMLTkUhBf2o-ZTwtCPB3dWfnXp',
+          fields: 'nextPageToken, files(id, name, mimeType)',
+        })
+        .then(function (response) {
+          // appendPre('Files:');
+          // var files = response.result.files;
+          // if (files && files.length > 0) {
+          //   for (var i = 0; i < files.length; i++) {
+          //     var file = files[i];
+          //     appendPre(file.name + ' (' + file.id + ')');
+          //   }
+          // } else {
+          //   appendPre('No files found.');
+          // }
+          console.log(response);
+        });
+
+    g_api &&
+      g_api.client.drive.files
+        .get({ fileId: '1Zk11q28vPwgyZsDIFsClftco8wma1dEJOQX0n9EdUAk' })
+        .then((res) => console.log(res));
+
+    return () => {};
+  }, [g_api, signedIn]);
 
   useEffect(() => {
     (async () => {

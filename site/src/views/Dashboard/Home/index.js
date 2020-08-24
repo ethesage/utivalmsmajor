@@ -21,7 +21,7 @@ const InfoSec = ({ txt, children }) => (
   </div>
 );
 
-const Home = () => {
+const Home = ({ gapi }) => {
   const { user, isStudent } = useSelector((state) => state.auth);
 
   return (
@@ -41,7 +41,7 @@ const Home = () => {
       <Welcome user={user} />
 
       <div className="p_sec flex-row j-space">
-        <CountSection />
+        <CountSection gapi={gapi} />
       </div>
 
       {isStudent ? (
