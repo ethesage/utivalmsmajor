@@ -5,6 +5,9 @@ import {
   getAllStudentCourse,
   getSingleStudentCourse,
   getStudentDashboard,
+  allCourseStudents,
+  getStudentNextClass,
+  getStudentClassDays
 } from '../../controllers/student';
 import middlewares from '../../middlewares';
 
@@ -12,6 +15,7 @@ const {
   validate,
   addStudentSchema,
   getStudentSchema,
+  getStudentCourseSchema,
   //   coursestudentSchema,
   //   studentSchema,
   //   updatestudentSchema,
@@ -46,12 +50,25 @@ studentRoutes.get(
   getAllStudentCourse
 );
 
-// studentRoutes.patch(
-//   '/:studentId',
-//   usession.can('course:crud'),
-//   validate(updatestudentSchema),
-//   updatestudent
-// );
+studentRoutes.get(
+  '/allstudents/:coursecohortId',
+  usession.can(''),
+  validate(getStudentCourseSchema),
+  allCourseStudents
+);
+
+studentRoutes.get(
+  '/all/nextclass',
+  usession.can(''),
+  getStudentNextClass
+);
+
+studentRoutes.get(
+  '/classdays/:courseCohortId',
+  usession.can(''),
+  validate(getStudentCourseSchema),
+  getStudentClassDays
+);
 
 // studentRoutes.delete(
 //   '/:studentId',
