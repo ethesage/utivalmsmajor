@@ -34,6 +34,17 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'cohortId',
       onDelete: 'CASCADE'
     });
+
+    StudentCourse.belongsTo(models.User, {
+      // as: 'userId',
+      foreignKey: 'studentId',
+      // onDelete: 'CASCADE'
+    });
+    // StudentCourse.belongsTo(models.Classes, {
+    //   // as: 'userId',
+    //   foreignKey: 'courseCohortId',
+    //   // onDelete: 'CASCADE'
+    // });
   };
   return StudentCourse;
 };

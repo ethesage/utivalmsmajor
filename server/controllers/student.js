@@ -1,7 +1,10 @@
+import sequelize from "sequelize";
 import models from "../database/models";
 import helpers from "../helpers";
 
 const { successStat, errorStat } = helpers;
+
+const { Op } = sequelize;
 
 /**
  * / @static
@@ -50,11 +53,11 @@ export const addStudentCourse = async (req, res) => {
 
     await cour.update({
       totalStudent: cour.totalStudent + 1
-    })
+    });
 
     return successStat(res, 200, 'data', { ...studC.dataValues, message: 'Student added Successfully' });
   } catch (e) {
-    console.log(e)
+    console.log(e);
     errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
@@ -109,7 +112,7 @@ export const getAllStudentCourse = async (req, res) => {
 
     return successStat(res, 200, 'data', resource);
   } catch (e) {
-    console.log(e)
+    console.log(e);
     errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
@@ -174,5 +177,111 @@ export const getStudentDashboard = async (req, res) => {
     return successStat(res, 200, 'data', { course, ongoing, completed });
   } catch (e) {
     errorStat(res, 500, 'Operation Failed, Please Try Again');
+  }
+};
+
+export const allCourseStudents = async (req, res) => {
+  const { courseCohortId } = req.body.student;
+
+  try {
+    const courseStudent = await models.StudentCourse.findAll({
+      where: { courseCohortId },
+      include: [
+        {
+          model: models.User,
+          attributes: ['firstName', 'lastName', 'linkedin', 'profilePic']
+        }
+      ],
+      attributes: ['courseCohortId']
+    });
+
+    return successStat(res, 200, 'data', courseStudent);
+  } catch (e) {
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
+  }
+};
+
+export const getStudentNextClass = async (req, res) => {
+  const { id } = req.session.user;
+
+  try {
+    const getClasses = await models.StudentCourse.findAll({
+      where: { studentId: id, isCompleted: false, status: 'ongoing' },
+      attributes: ['studentId'],
+      include: [
+        {
+          model: models.Course,
+          attributes: ['thumbnail', 'name', 'extLink'],
+        },
+        {
+          model: models.CourseCohort,
+          attributes: ['courseId'],
+          include: [
+            {
+              model: models.Classes,
+              attributes: ['link'],
+              include: [
+                {
+                  model: models.ClassDays,
+                  where: { date: { [Op.gte]: new Date() } },
+                  attributes: ['date', 'time']
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    });
+
+    const getAll = getClasses.reduce((acc, item, index) => {
+      if (item.dataValues) {
+        const course = item.dataValues.Course.dataValues;
+        const link = { link: item.dataValues.CourseCohort.Classes[0].dataValues.link };
+        const classDays = item.dataValues.CourseCohort.Classes[0].dataValues.ClassDays[0].dataValues;
+        const all = { ...course, ...link, ...classDays };
+        acc[index] = all;
+      }
+      return acc;
+    }, []);
+
+    return successStat(res, 200, 'data', getAll);
+  } catch (e) {
+    errorStat(res, 500, 'Operation Failed Please Try Again');
+  }
+};
+
+export const getStudentClassDays = async (req, res) => {
+  const { courseCohortId } = req.body.student;
+  const { id } = req.session.user;
+
+  try {
+    const checkStudent = await models.StudentCourse.findAll({
+      where: { studentId: id, courseCohortId },
+    });
+
+    if (!checkStudent) return errorStat(res, 400, 'Not Allowed');
+
+    const getClassDays = await models.Classes.findAll({
+      where: { courseCohortId },
+      attributes: [],
+      include: [
+        {
+          model: models.ClassDays,
+          attributes: ['date', 'time']
+        }
+      ]
+    });
+
+    const getAll = getClassDays.reduce((acc, item, index) => {
+      if (item.ClassDays[0]) {
+        const all = item.ClassDays[0].dataValues;
+        acc[index] = all;
+      }
+      return acc;
+    }, []);
+
+    return successStat(res, 200, 'data', getAll);
+  } catch (e) {
+    errorStat(res, 500, 'Operation Failed Please Try Again');
   }
 };
