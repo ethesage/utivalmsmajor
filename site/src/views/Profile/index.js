@@ -147,10 +147,19 @@ const Profile = () => {
     const _value = await toBase64(files[0]);
     setImgSrc(_value);
 
+    const config = {
+      onUploadProgress: function (progressEvent) {
+        var percentCompleted = Math.round(
+          (progressEvent.loaded * 100) / progressEvent.total
+        );
+        console.log(percentCompleted);
+      },
+    };
+
     let formData = new FormData();
     formData.append('profilePic', files[0]);
 
-    await axiosInstance.patch('/user/update', formData);
+    await axiosInstance.patch('/user/update', formData, config);
     dispatch(login());
   };
 
@@ -188,8 +197,13 @@ const Profile = () => {
         </div>
         <div className="pic_sec ">
           <label className="edit flex-col" htmlFor="image_profile">
-            <div className="img-sec box-shade">
-              <img src={imgSrc} alt="" ref={image} className="img cover" />
+            <div className="img-sec">
+              <img
+                src={imgSrc}
+                alt=""
+                ref={image}
+                className="img cover box-shade"
+              />
             </div>
             <small>Change Picture</small>
           </label>

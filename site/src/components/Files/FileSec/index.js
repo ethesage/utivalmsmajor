@@ -1,27 +1,25 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import pdf from '../../../assets/dashboard/pdf.png';
 import delete_icon from '../../../assets/icons/delete.png';
-// import word from "../../../assets/dashboard/word.png";
-// import excel from "../../../assets/dashboard/excel.png";
-// import video from "../../../assets/dashboard/video.png";
+import numeral from 'numeral';
 import dots from '../../../assets/dashboard/dots.png';
 import DropDown from '../../DropDown';
 import './style.scss';
 
-const FileSec = ({ personal = false }) => {
+
+const FileSec = ({ file, personal = false, view, download }) => {
   return (
     <div className="file_card flex-row j-space">
-      <div className="left flex-row j-start">
-        <img src={pdf} alt="pdf" />
+      <div className="left flex-row j-start al-start">
+        <img src={file.iconLink} alt="pdf" />
         <div className="txt-sec">
           <h2 className="clipped-text" style={{ '--number': 1 }}>
-            HR Analytics Fundamentals
+            {file.name}
           </h2>
           {personal ? (
             <small className="theme-color">Graded</small>
           ) : (
-            <small>10MB</small>
+            <small>{numeral(file.size).format('0b')}</small>
           )}
         </div>
       </div>
@@ -48,8 +46,8 @@ const FileSec = ({ personal = false }) => {
           }
         >
           <ul>
-            <li>View</li>
-            <li>Download</li>
+            <li onClick={() => view(file.webViewLink)}>View</li>
+            <li onClick={() => download(file.webContentLink)}>Download</li>
             <li>Delete</li>
           </ul>
         </DropDown>

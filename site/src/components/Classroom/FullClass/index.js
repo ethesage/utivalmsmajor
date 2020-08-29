@@ -38,42 +38,41 @@ function FullClass() {
 
   const dispatch = useDispatch();
   const enrolledcourses = useSelector((state) => state.student.enrolledcourses);
-  const [data, setData] = useState(
-    enrolledcourses &&
-      enrolledcourses.find((course) => course.Course.id === courseId)
-        .CourseCohort.Classes
-  );
+  const currentCourse = useSelector((state) => state.student.currentCourse);
 
   useEffect(() => {
-    if (!enrolledcourses)
+    if (!enrolledcourses && !currentCourse)
       (async () => {
-        await dispatch(getEnrolledCourses());
+        await dispatch(getEnrolledCourses(courseId));
       })();
 
     return () => {};
   }, [dispatch, enrolledcourses]);
 
   useEffect(() => {
-    setData(
-      enrolledcourses &&
-        enrolledcourses.find((course) => course.Course.id === courseId)
-          .CourseCohort.Classes
+    if (!enrolledcourses) return;
+    if (currentCourse) return;
+
+    dispatch(
+      getEnrolledCourses(
+        courseId,
+        enrolledcourses &&
+          enrolledcourses.find((course) => course.id === courseId)
+      )
     );
 
     return () => {};
   }, [enrolledcourses, courseId]);
 
-  console.log(enrolledcourses);
-
   return (
     <>
       <NavBar />
       <div className="cx_listnx_full">
-        {!data ? (
+        {!currentCourse ? (
           <Loader tempLoad={true} full={false} />
         ) : (
           <Layout
-            links={data.map((classroom, i) => (
+            links={currentCourse.CourseCohort.Classes.map((classroom, i) => (
               <li>
                 <NavLink
                   className="side_link"
@@ -86,7 +85,9 @@ function FullClass() {
             ))}
           >
             <Classes
-              data={data.find((classrum) => classrum.id === classroom)}
+              data={currentCourse.CourseCohort.Classes.find(
+                (classrum) => classrum.id === classroom
+              )}
               open={true}
               showArrow={false}
               full={true}

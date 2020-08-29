@@ -34,8 +34,59 @@ const Google = ({ updateSignInStatus = () => {} }) => {
     return !!response.rt;
   };
 
+  async function upload(file) {
+    const fileSize = file.size;
+
+    const response = await g_api.client.drive.files.create(
+      {
+        request: {
+          name: file.name,
+          mimeType: file.type,
+          // parents: ['1RExy32fq9fIAx--lKTlOcEVrTjyHm5WJ'],
+        },
+        media: {
+          body: file,
+          mimeType: file.type,
+        },
+      },
+      {
+        // Use the `onUploadProgress` event from Axios to track the
+        // number of bytes uploaded to this point.
+        onUploadProgress: (evt) => {
+          const progress = (evt.bytesRead / fileSize) * 100;
+          console.log(progress);
+        },
+      }
+    );
+    // log the result
+    console.log(response.data);
+    console.log(
+      `\nstatus: ${response.status}, text status: ${response.statusText}`
+    );
+  }
+
+  const deleteFile = () => {};
+
+  const get = async (id, folderId) => {
+    let res;
+
+    if (!id) {
+      res = await g_api.client.drive.files.list({
+        q: "parents = '1F0r-bTgMLTkUhBf2o-ZTwtCPB3dWfnXp'",
+        pageSize: 20,
+        folderId: '1F0r-bTgMLTkUhBf2o-ZTwtCPB3dWfnXp',
+        // files: '*',
+        fields:
+          'nextPageToken, files(name, iconLink, webContentLink, size, webViewLink, parents)',
+      });
+    } else {
+      res = await g_api.client.drive.files.get({ fileId: id });
+    }
+    return res.result;
+  };
+
   return {
-    g_api,
+    gapi: { api: g_api, deleteFile, get, upload },
     signIn,
   };
 };

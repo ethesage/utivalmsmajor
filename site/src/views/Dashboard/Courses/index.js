@@ -1,11 +1,6 @@
-import React from 'react';
-import {
-  Route,
-  Switch,
-  useRouteMatch,
-  // useParams,
-  Link,
-} from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Route, Switch, useRouteMatch, Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import Overview from '../../../components/OverView';
 import CourseList from './CoursesList';
 import Classroom from '../../../components/Classroom';
@@ -18,6 +13,7 @@ import './style.scss';
 
 const Courses = () => {
   let { path } = useRouteMatch();
+  const currentCourse = useSelector((state) => state.student.currentCourse);
 
   return (
     <section className="dash-con mx_courx flex-col al-start j-start">
@@ -25,12 +21,19 @@ const Courses = () => {
         <Link to="/dashboard/courses" className="reg_text">
           <h3>My Courses</h3>
         </Link>
-        <span>
-          <strong>{'>'}</strong>
-        </span>
-        <Link to="/dashboard/courses" className="reg_text">
-          <h3>Data Accelerator</h3>
-        </Link>
+        {currentCourse ? (
+          <>
+            <span>{' > '}</span>
+            <Link
+              to={`/dashboard/classroom/${currentCourse.id}`}
+              className="reg_text"
+            >
+              <h3> {`${currentCourse.Course.name}`}</h3>
+            </Link>
+          </>
+        ) : (
+          ''
+        )}
       </nav>
       <Switch>
         <Route exact path={`${path}/overview/:courseId`} component={Overview} />

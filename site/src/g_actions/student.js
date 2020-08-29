@@ -1,15 +1,18 @@
 import { axiosInstance } from '../helpers';
 
-export const getEnrolledCourses = () => async (dispatch) => {
+export const getEnrolledCourses = (id, data) => async (dispatch) => {
   let courses;
   try {
-    courses = await axiosInstance.get(`/student`);
+    courses = data
+      ? data
+      : await axiosInstance.get(`/student${id ? `/${id}` : ''}`);
   } catch (error) {
     return error;
+    courses = [];
   }
 
   dispatch({
-    type: 'GET_ENROLLED_COURSES',
-    payload: courses.data.data,
+    type: id ? 'GET_CURRENT_COURSE' : 'GET_ENROLLED_COURSES',
+    payload: data ? courses : courses.data.data,
   });
 };

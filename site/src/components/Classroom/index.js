@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { getEnrolledCourses } from '../../g_actions/student';
@@ -12,26 +12,27 @@ const Classroom = ({ full = false }) => {
 
   const dispatch = useDispatch();
   const enrolledcourses = useSelector((state) => state.student.enrolledcourses);
-  const [data, setData] = useState(
-    enrolledcourses &&
-      enrolledcourses.find((course) => course.Course.id === courseId)
-        .CourseCohort.Classes
-  );
+  const currentCourse = useSelector((state) => state.student.currentCourse);
 
   useEffect(() => {
-    if (!enrolledcourses)
+    if (!enrolledcourses && !currentCourse)
       (async () => {
-        await dispatch(getEnrolledCourses());
+        await dispatch(getEnrolledCourses(courseId));
       })();
 
     return () => {};
   }, [dispatch, enrolledcourses]);
 
   useEffect(() => {
-    setData(
-      enrolledcourses &&
-        enrolledcourses.find((course) => course.Course.id === courseId)
-          .CourseCohort.Classes
+    if (!enrolledcourses) return;
+    if (currentCourse) return;
+
+    dispatch(
+      getEnrolledCourses(
+        courseId,
+        enrolledcourses &&
+          enrolledcourses.find((course) => course.id === courseId)
+      )
     );
 
     return () => {};
@@ -41,11 +42,11 @@ const Classroom = ({ full = false }) => {
     <>
       <NavBar />
       <section className="cx_listnx img">
-        {!data ? (
+        {!currentCourse ? (
           <Loader tempLoad={true} full={false} />
         ) : (
           <div>
-            {data.map((class_room, i) => (
+            {currentCourse.CourseCohort.Classes.map((class_room, i) => (
               <Classes
                 key={`cx_listnx_${i}`}
                 data={class_room}

@@ -5,6 +5,22 @@
   flex-grow: 1;
   width: 100%;
 
+  .nt_found {
+    flex-grow: 1;
+
+    img {
+      width: 200px;
+    }
+
+    .text {
+      margin: 10px 0 40px;
+    }
+
+    button {
+      max-width: 400px;
+    }
+  }
+
   .loader_con_main {
     flex-grow: 1;
   }

@@ -6,8 +6,6 @@ import './style.scss';
 const Facilitators = ({ trainers }) => {
   const [currentUser, setCurrentUser] = useState(0);
 
-  console.log('trainer =>', trainers);
-
   return (
     <div className="fac_xc">
       <TransitionGroup className="fac_xc_con flex-row j-start">

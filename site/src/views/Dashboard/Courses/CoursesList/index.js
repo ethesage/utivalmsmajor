@@ -6,6 +6,8 @@ import { Progress } from 'react-sweet-progress';
 import Image from '../../../../components/Image';
 import Loader from '../../../../components/Loading';
 import medal from '../../../../assets/icons/medal.png';
+import not_found from '../../../../assets/not_found.png';
+import Button from '../../../../components/Button';
 import 'react-sweet-progress/lib/style.css';
 import './style.scss';
 
@@ -13,10 +15,10 @@ const CousreCard = ({ data }) => {
   const { isStudent } = useSelector((state) => state.auth);
   const {
     isCompleted,
+    id,
     CourseCohort: { dateRange },
     Cohort: { cohort },
     Course: {
-      id,
       name,
       thumbnail,
       CourseProgresses: [{ progress }],
@@ -95,24 +97,23 @@ const CourseList = () => {
     return () => {};
   }, [dispatch, enrolledcourses]);
 
+  console.log(enrolledcourses);
+
   return (
     <div className="main flex-col cx_list_con j-start al-start">
-      <nav className="nav_cux">
-        <Link to="/dashboard/courses" className="reg_text">
-          <h3>My Courses</h3>
-        </Link>
-      </nav>
       {!enrolledcourses ? (
         <Loader tempLoad={true} full={false} />
+      ) : enrolledcourses.length === 0 ? (
+        <div className="nt_found img flex-col">
+          <img src={not_found} alt="Not found" />
+          <p className="text">You are yet to enrol for any course</p>
+          <Button link="utiva.io" text="Start Learning" className="flex-row" />
+        </div>
       ) : (
         <section className="course_list">
-          {enrolledcourses.length === 0 ? (
-            <div>Not found</div>
-          ) : (
-            enrolledcourses.map((course, i) => (
-              <CousreCard data={course} key={`enrolled_c_${i}`} />
-            ))
-          )}
+          {enrolledcourses.map((course, i) => (
+            <CousreCard data={course} key={`enrolled_c_${i}`} />
+          ))}
         </section>
       )}
     </div>

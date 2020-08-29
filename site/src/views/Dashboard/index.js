@@ -26,7 +26,7 @@ const Dashboard = () => {
     setOpen(false);
   };
 
-  const { g_api, signIn } = useGoogle({ updateSignInStatus });
+  const { gapi, signIn } = useGoogle({ updateSignInStatus });
 
   function updateSignInStatus(isSignedIn) {
     if (!isSignedIn) modalRef.current.open();
@@ -79,7 +79,7 @@ const Dashboard = () => {
           <NavBar open={openBar} grow={open} />
           <Switch>
             <Route exact path={path}>
-              <Home gapi={{ g_api, signedIn }} />
+              <Home gapi={{ gapi, signedIn }} />
             </Route>
             <Route path={`${path}/courses`}>
               <Courses />
@@ -88,7 +88,7 @@ const Dashboard = () => {
               <FAQ />
             </Route>
             <Route path={`${path}/files`}>
-              <Files />
+              <Files gapi={{ gapi, signedIn }} signedIn={signedIn} />
             </Route>
             <Route path={`${path}/settings`}>
               <Settings />

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import upload from '../../assets/icons/upload.png';
 import './style.scss';
 
-const Files = ({ className, children, handleImage }) => {
+const Drag = ({ className, children, handleImage }) => {
   let dragCounter;
   const [drag, setDrag] = useState(false);
 
@@ -31,15 +31,14 @@ const Files = ({ className, children, handleImage }) => {
     e.stopPropagation();
     setDrag(false);
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      console.log(e.dataTransfer.files);
-      handleImage(e.dataTransfer.files[0])
+      handleImage(e.dataTransfer.files[0]);
       e.dataTransfer.clearData();
       dragCounter = 0;
     }
   };
 
   const handleChange = (e) => {
-    handleImage(e.target.files[0])
+    handleImage(e.target.files[0]);
   };
 
   return (
@@ -66,4 +65,4 @@ const Files = ({ className, children, handleImage }) => {
   );
 };
 
-export default Files;
+export default Drag;

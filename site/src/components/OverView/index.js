@@ -12,24 +12,26 @@ const Overview = () => {
   const { courseId } = useParams();
   const dispatch = useDispatch();
   const enrolledcourses = useSelector((state) => state.student.enrolledcourses);
-  const [data, setData] = useState(
-    enrolledcourses &&
-      enrolledcourses.find((course) => course.Course.id === courseId)
-  );
+  const currentCourse = useSelector((state) => state.student.currentCourse);
 
   useEffect(() => {
-    if (!enrolledcourses)
+    if (!enrolledcourses && !currentCourse)
       (async () => {
-        await dispatch(getEnrolledCourses());
+        await dispatch(getEnrolledCourses(courseId));
       })();
 
     return () => {};
   }, [dispatch, enrolledcourses]);
 
   useEffect(() => {
-    setData(
-      enrolledcourses &&
-        enrolledcourses.find((course) => course.Course.id === courseId)
+    if (!enrolledcourses) return;
+
+    dispatch(
+      getEnrolledCourses(
+        courseId,
+        enrolledcourses &&
+          enrolledcourses.find((course) => course.id === courseId)
+      )
     );
 
     return () => {};
@@ -39,26 +41,26 @@ const Overview = () => {
     <>
       <NavBar />
       <section className="cx_ovx">
-        {!data ? (
+        {!currentCourse ? (
           <Loader tempLoad={true} full={false} />
-        ) : enrolledcourses.length === 0 ? (
+        ) : currentCourse.length === 0 ? (
           <div>Not found</div>
         ) : (
           <>
             <div className="ac_crd">
-              <CourseCard course={data.Course} />
-              <Facilitators trainers={data.CourseCohort.Classes} />
+              <CourseCard course={currentCourse.Course} />
+              <Facilitators trainers={currentCourse.CourseCohort.Classes} />
             </div>
 
             <div className="info_sec _text">
               <div className="info">
-                <h2>{data.Course.name}</h2>
-                <p>{data.Course.description}</p>
+                <h2>{currentCourse.Course.name}</h2>
+                <p>{currentCourse.Course.description}</p>
               </div>
 
               <div className="list_info">
                 <h2>What you will learn</h2>
-                {data.CourseCohort.Classes.map((classr, i) => (
+                {currentCourse.CourseCohort.Classes.map((classr, i) => (
                   <div className="list" key={`descriptors_${i}`}>
                     <span className="flex-row">
                       <p>{i + 1}</p>

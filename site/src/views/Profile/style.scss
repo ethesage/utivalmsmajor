@@ -60,14 +60,14 @@
       cursor: pointer;
 
       .img-sec {
-        width: 150px;
-        height: 150px;
-        border-radius: 100%;
-        overflow: hidden;
         margin-bottom: 5px;
 
         img {
           display: block;
+          width: 150px;
+          height: 150px;
+          border-radius: 100%;
+          overflow: hidden;
         }
       }
     }
