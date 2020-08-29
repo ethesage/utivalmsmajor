@@ -35,7 +35,7 @@ userRoutes.post(
   resetPassword
 );
 userRoutes.post(
-  '/change_password/',
+  '/change_password',
   validate(
     changePasswordSchema,
     (req) => (req.body.emailToken = req.query.emailToken)

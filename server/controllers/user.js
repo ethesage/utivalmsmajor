@@ -209,17 +209,17 @@ export const resetPassword = async (req, res) => {
 
   if (!findUser) return errorStat(res, 404, 'User does not exist');
 
-  const token = generateToken(
+  const token = await generateToken(
     { id: findUser.id, email },
     { expiresIn: 60 * 15 }
   );
 
-  const link = `${req.protocol}://${req.headers.host}/api/v1/user/change_password?emailToken=${token}&id=${findUser.id}`;
+  const link = `${req.protocol}://${req.headers.host}/auth/reset-password?emailToken=${token}&id=${findUser.id}`;
 
   const mail = new Mail({
     to: email,
     subject: 'Reset Password',
-    messageHeader: `Hi, ${user.firstname}!`,
+    messageHeader: `Hi!`,
     messageBody: 'Please Click on the link below to reset your password',
     iButton: true,
   });
@@ -247,7 +247,7 @@ export const resetPassword = async (req, res) => {
  */
 
 export const changePassword = async (req, res) => {
-  const { emailToken, id, resend } = req.query;
+  const { emailToken, id } = req.query;
 
   const { password } = req.body;
 
