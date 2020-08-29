@@ -233,6 +233,8 @@ export const getStudentNextClass = async (req, res) => {
       ]
     });
 
+    if (!getClasses[0]) return errorStat(res, 400, 'No Available Class');
+
     const getAll = getClasses.reduce((acc, item, index) => {
       if (item.dataValues) {
         const course = item.dataValues.Course.dataValues;
@@ -271,6 +273,8 @@ export const getStudentClassDays = async (req, res) => {
         }
       ]
     });
+
+    if (!getClassDays[0]) return errorStat(res, 400, 'No Available Class Day');
 
     const getAll = getClassDays.reduce((acc, item, index) => {
       if (item.ClassDays[0]) {
