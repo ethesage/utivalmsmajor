@@ -57,7 +57,6 @@ export const addStudentCourse = async (req, res) => {
 
     return successStat(res, 200, 'data', { ...studC.dataValues, message: 'Student added Successfully' });
   } catch (e) {
-    console.log(e);
     errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
@@ -107,12 +106,11 @@ export const getAllStudentCourse = async (req, res) => {
     });
 
     if (!resource[0]) {
-      return errorStat(res, 404, 'No Course Found');
+      return successStat(res, 200, 'data', []);
     }
 
     return successStat(res, 200, 'data', resource);
   } catch (e) {
-    console.log(e);
     errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
@@ -131,10 +129,33 @@ export const getSingleStudentCourse = async (req, res) => {
           model: models.Cohort
         },
         {
+          model: models.Course,
+          include: [
+            {
+              model: models.CourseDescription
+            },
+            {
+              model: models.CourseProgress,
+              where: { userId: id }
+            }
+          ]
+        },
+        {
           model: models.CourseCohort,
           include: [
             {
-              model: models.Classes
+              model: models.Classes,
+              include: [
+                {
+                  model: models.Trainer,
+                  include: {
+                    model: models.User,
+                    attributes: [
+                      'firstName', 'lastName', 'profilePic', 'occupation', 'bio'
+                    ]
+                  }
+                }
+              ]
             }
           ]
         }

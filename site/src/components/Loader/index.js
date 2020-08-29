@@ -9,7 +9,7 @@ const Loader = ({ tempLoad }) => {
     <>
       {loading || tempLoad ? (
         <main
-          className='full-center'
+          className="full-center"
           style={{
             width: '100%',
             height: '100vh',
@@ -21,7 +21,7 @@ const Loader = ({ tempLoad }) => {
             justifyContent: 'center',
           }}
         >
-          <video className='img contain' autoPlay loop>
+          <video className="img contain" autoPlay loop>
             {/* <source src={loadvid} type='video/mp4' /> */}
           </video>
         </main>

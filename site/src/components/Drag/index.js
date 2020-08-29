@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import upload from '../../assets/icons/upload.png';
 import './style.scss';
 
-const Files = ({ className }) => {
+const Drag = ({ className, children, handleImage }) => {
   let dragCounter;
   const [drag, setDrag] = useState(false);
 
@@ -31,25 +31,38 @@ const Files = ({ className }) => {
     e.stopPropagation();
     setDrag(false);
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      // props.handleDrop(e.dataTransfer.files);
+      handleImage(e.dataTransfer.files[0]);
       e.dataTransfer.clearData();
       dragCounter = 0;
     }
   };
 
+  const handleChange = (e) => {
+    handleImage(e.target.files[0]);
+  };
+
   return (
-    <button
-      className={`${className} drag_container`}
-      onDragEnter={handleDragIn}
-      onDragLeave={handleDragOut}
-      onDragOver={handleDrag}
-      onDrop={handleDrop}
-    >
-      <div className="flex-row mx-auto">
-        <img src={upload} alt="upload" /> Drag file Here
-      </div>
-    </button>
+    <>
+      <label
+        htmlFor="file_upload"
+        className={`${className} drag_container`}
+        onDragEnter={handleDragIn}
+        onDragLeave={handleDragOut}
+        onDragOver={handleDrag}
+        onDrop={handleDrop}
+      >
+        <div className="flex-row mx-auto">
+          <img src={upload} alt="upload" /> Drag file Here
+        </div>
+      </label>
+      <input
+        type="file"
+        id="file_upload"
+        style={{ display: 'none' }}
+        onChange={handleChange}
+      />
+    </>
   );
 };
 
-export default Files;
+export default Drag;

@@ -17,7 +17,7 @@ const ViewGrade = ({ data }) => {
   const { addToast } = useToasts();
   const { user } = useSelector((state) => state.auth);
 
-  console.log(user);
+  // console.log(user);
 
   const createComment = async () => {
     setLoading(true);
@@ -39,7 +39,7 @@ const ViewGrade = ({ data }) => {
       user: user,
     };
 
-    console.log(_comment);
+    // console.log(_comment);
 
     try {
       // await axiosInstance.post("/article/comment-create", _comment);

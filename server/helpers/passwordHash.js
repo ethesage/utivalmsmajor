@@ -20,5 +20,5 @@ export function hashPassword(password) {
  * @memberof Helper
  */
 export function comparePassword(password, hashed) {
-  return bcrypt.compareSync(password, hashed);
+  return bcrypt.compare(password, hashed);
 }

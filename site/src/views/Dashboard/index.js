@@ -1,17 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import NavBar from './NavBar';
-// import Footer from './Footer'
+import useGoogle from '../../Hooks/useGoogle';
 import SideBar from '../../components/SideBar';
 import Courses from './Courses';
 import FAQ from '../FAQ';
 import Home from './Home';
 import Files from '../Files';
 import Settings from '../Settings';
+import Modal from '../../components/Modal';
+import google from '../../assets/icons/google.png';
 import './style.scss';
 
 const Dashboard = () => {
   const [open, setOpen] = useState(false);
+  const [signedIn, setSignedIn] = useState(false);
+  const modalRef = useRef();
   let { path, url } = useRouteMatch();
 
   const openBar = () => {
@@ -20,6 +24,19 @@ const Dashboard = () => {
 
   const close = () => {
     setOpen(false);
+  };
+
+  const { gapi, signIn } = useGoogle({ updateSignInStatus });
+
+  function updateSignInStatus(isSignedIn) {
+    if (!isSignedIn) modalRef.current.open();
+    setSignedIn(isSignedIn);
+  }
+
+  const signin = async () => {
+    const res = await signIn();
+    modalRef.current.close();
+    setSignedIn(res);
   };
 
   useEffect(() => {
@@ -42,6 +59,18 @@ const Dashboard = () => {
 
   return (
     <main className="dashboard flex-row al-start">
+      <Modal ref={modalRef}>
+        <section className="g_signup flex-col box-shade">
+          <p className="intro">
+            To better participate in this course please signin to access google
+            drive materials for this course
+          </p>
+          <button className="flex-row" onClick={signin}>
+            <img src={google} alt="google" />
+            <p>Google</p>
+          </button>
+        </section>
+      </Modal>
       <aside className={`dh-aside ${open ? ' open' : ''}`}>
         <SideBar url={url} close={close} />
       </aside>
@@ -50,7 +79,7 @@ const Dashboard = () => {
           <NavBar open={openBar} grow={open} />
           <Switch>
             <Route exact path={path}>
-              <Home />
+              <Home gapi={{ gapi, signedIn }} />
             </Route>
             <Route path={`${path}/courses`}>
               <Courses />
@@ -59,7 +88,7 @@ const Dashboard = () => {
               <FAQ />
             </Route>
             <Route path={`${path}/files`}>
-              <Files />
+              <Files gapi={{ gapi, signedIn }} signedIn={signedIn} />
             </Route>
             <Route path={`${path}/settings`}>
               <Settings />

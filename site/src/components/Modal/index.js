@@ -7,8 +7,13 @@ const Modal = forwardRef(({ children }, ref) => {
 
   useImperativeHandle(ref, () => ({
     open: () => {
+      if (disRef.current.open) return;
       disRef.current.showModal();
       document.querySelector('body').classList.add('no-scroll');
+    },
+
+    close: () => {
+      close();
     },
   }));
 
@@ -19,7 +24,7 @@ const Modal = forwardRef(({ children }, ref) => {
 
   return (
     <dialog ref={disRef} className="apx_mod">
-      <div className='apx_in'>
+      <div className="apx_in">
         <button className="apx_close" onClick={close}>
           <Close fill="black" width="30px" height="30px" />
         </button>

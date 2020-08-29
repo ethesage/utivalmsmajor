@@ -71,7 +71,7 @@ export default function Input({
 
       submitButton.current.children[0].innerHTML = btnText.reg;
       submitButton.current.classList.remove('loader');
-      return;
+      return error;
     }
 
     return { msg: 'success', response };

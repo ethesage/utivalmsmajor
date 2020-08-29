@@ -17,11 +17,18 @@ function QuickCheckout() {
     inputs: data,
     submitButton,
     cb: async (inputs) => {
-      const response = await axiosInstance.post('/user/login', inputs);
-      addToast(`Welcome back ${response.data.user.firstName}`, {
-        appearance: 'success',
-        autoDismiss: true,
-      });
+      const response = await axiosInstance.post(
+        '/user/reset_password_link',
+        inputs
+      );
+      if (response) {
+        addToast(`A password reset link has been sent to your email`, {
+          appearance: 'success',
+          autoDismiss: true,
+        });
+        submitButton.current.children[0].innerHTML = 'Resend';
+        submitButton.current.classList.remove('loader');
+      }
     },
     btnText: {
       loading: 'Sending...',

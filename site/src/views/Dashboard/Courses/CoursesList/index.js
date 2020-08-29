@@ -1,24 +1,39 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { getEnrolledCourses } from '../../../../g_actions/student';
 import { Progress } from 'react-sweet-progress';
-import img1 from '../../../../assets/homepage/img1.png';
+import Image from '../../../../components/Image';
+import Loader from '../../../../components/Loading';
 import medal from '../../../../assets/icons/medal.png';
+import not_found from '../../../../assets/not_found.png';
+import Button from '../../../../components/Button';
 import 'react-sweet-progress/lib/style.css';
 import './style.scss';
 
-const CousreCard = () => {
-  const { isTrainer, isStudent } = useSelector((state) => state.auth);
+const CousreCard = ({ data }) => {
+  const { isStudent } = useSelector((state) => state.auth);
+  const {
+    isCompleted,
+    id,
+    CourseCohort: { dateRange },
+    Cohort: { cohort },
+    Course: {
+      name,
+      thumbnail,
+      CourseProgresses: [{ progress }],
+    },
+  } = data;
 
   return (
     <div className="p_cx_cd">
-      <Link className="img-sec" to={`/dashboard/courses/overview/23356`}>
-        <img src={img1} alt="" className="img cover" />
+      <Link className="img-sec" to={`/dashboard/courses/overview/${id}`}>
+        <Image image={thumbnail} imgClass="img cover" lazyLoad={true} />
       </Link>
       <div className="txt-sec">
         <div className="title_sec flex-row j-space">
-          <h3 className="theme-color">Data Accelerator</h3>
-          {isStudent ? <img src={medal} alt="" /> : ''}
+          <h3 className="theme-color">{name}</h3>
+          {isStudent && isCompleted ? <img src={medal} alt="" /> : ''}
         </div>
 
         {isStudent ? (
@@ -27,7 +42,7 @@ const CousreCard = () => {
               <small>Completion level</small>
               <Progress
                 className="slim"
-                percent={40}
+                percent={progress}
                 status="error"
                 theme={{
                   success: {
@@ -56,12 +71,12 @@ const CousreCard = () => {
           </>
         ) : null}
 
-        {isTrainer ? (
+        {isCompleted ? (
           <div className="chx flex-row j-space">
             <strong>
-              <p>June Cohort</p>
+              <p>{cohort} Cohort</p>
             </strong>
-            <small>June 4th - July 4th, 2020</small>
+            <small>{dateRange}</small>
           </div>
         ) : null}
       </div>
@@ -70,17 +85,38 @@ const CousreCard = () => {
 };
 
 const CourseList = () => {
+  const dispatch = useDispatch();
+  const enrolledcourses = useSelector((state) => state.student.enrolledcourses);
+
+  useEffect(() => {
+    if (!enrolledcourses)
+      (async () => {
+        await dispatch(getEnrolledCourses());
+      })();
+
+    return () => {};
+  }, [dispatch, enrolledcourses]);
+
+  console.log(enrolledcourses);
+
   return (
-    <>
-      <nav className="nav_cux">
-        <Link to="/dashboard/courses" className="reg_text">
-          <h3>My Courses</h3>
-        </Link>
-      </nav>
-      <section className="course_list">
-        <CousreCard />
-      </section>
-    </>
+    <div className="main flex-col cx_list_con j-start al-start">
+      {!enrolledcourses ? (
+        <Loader tempLoad={true} full={false} />
+      ) : enrolledcourses.length === 0 ? (
+        <div className="nt_found img flex-col">
+          <img src={not_found} alt="Not found" />
+          <p className="text">You are yet to enrol for any course</p>
+          <Button link="utiva.io" text="Start Learning" className="flex-row" />
+        </div>
+      ) : (
+        <section className="course_list">
+          {enrolledcourses.map((course, i) => (
+            <CousreCard data={course} key={`enrolled_c_${i}`} />
+          ))}
+        </section>
+      )}
+    </div>
   );
 };
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   NavLink,
   Route,
@@ -6,6 +6,7 @@ import {
   useRouteMatch,
   // useParams,
 } from 'react-router-dom';
+import axios from 'axios';
 // import Button from '../../components/Button';
 import Files from '../../components/Files';
 import Folder from '../../components/Files/Folder';
@@ -20,27 +21,91 @@ const links = [
     title: 'All File',
     link: '',
   },
-  // {
-  //   title: 'UPload',
-  //   link: '/upload',
-  // },
   {
     title: 'Folders',
     link: '/folders',
   },
 ];
 
-const File_Page = () => {
+const File_Page = ({ gapi: { signedIn, gapi } }) => {
   let { path } = useRouteMatch();
+  let [files, setFiles] = useState();
+
+  const getImage = (img) => {
+    console.log(img);
+  };
+
+  useEffect(() => {
+    if (!signedIn) return;
+
+    const getFiles = async () => {
+      const new_files = await gapi.get();
+      setFiles(new_files);
+    };
+
+    getFiles();
+
+    return () => {};
+  }, [signedIn, gapi]);
+
+  const viewFile = async (contentLink) => {
+    window.open(contentLink, '_blank');
+  };
+
+  const download = async (contentLink) => {
+    window.open(contentLink);
+  };
+
+  const upload = async (files) => {
+    gapi.upload(files);
+    // const access = await gapi.api.auth.getToken();
+
+    // if (access) {
+    //   const config = {
+    //     onUploadProgress: function (progressEvent) {
+    //       var percentCompleted = Math.round(
+    //         (progressEvent.loaded * 100) / progressEvent.total
+    //       );
+    //       console.log(percentCompleted);
+    //     },
+    //     headers: {
+    //       'Content-Type': 'application/json; charset=UTF-8',
+    //     },
+    //   };
+
+    //   let data = new FormData();
+    //   data.append('media', files[0]);
+
+    //   axios
+    //     .post(
+    //       `https://www.googleapis.com/upload/drive/v3/files?uploadType=media&scope=${access.scope}&access_token=${access.access_token}`,
+    //       data,
+    //       config
+    //     )
+    //     .then((res) => console.log(res))
+    //     .catch((err) => console.log(err));
+    // }
+  };
+
+  const deleteFile = () => {
+    gapi.deleteFile();
+  };
 
   const AllFile = () => {
     return (
       <div className="upload_sec flex-row j-start al-start">
         <div className="file_con">
-          <Files />
+          {files && (
+            <Files
+              files={files}
+              view={viewFile}
+              download={download}
+              handleImage={upload}
+            />
+          )}
         </div>
         <div className="drag_upload flex-row">
-          <Drag />
+          <Drag handleImage={upload} />
         </div>
       </div>
     );

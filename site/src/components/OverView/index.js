@@ -1,79 +1,78 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { getEnrolledCourses } from '../../g_actions/student';
+import Loader from '../../components/Loading';
 import CourseCard from '../ActiveCourseCard';
 import Facilitators from '../Facilitators';
 import NavBar from '../CourseNav';
 import './style.scss';
 
 const Overview = () => {
+  const { courseId } = useParams();
+  const dispatch = useDispatch();
+  const enrolledcourses = useSelector((state) => state.student.enrolledcourses);
+  const currentCourse = useSelector((state) => state.student.currentCourse);
+
+  useEffect(() => {
+    if (!enrolledcourses && !currentCourse)
+      (async () => {
+        await dispatch(getEnrolledCourses(courseId));
+      })();
+
+    return () => {};
+  }, [dispatch, enrolledcourses]);
+
+  useEffect(() => {
+    if (!enrolledcourses) return;
+
+    dispatch(
+      getEnrolledCourses(
+        courseId,
+        enrolledcourses &&
+          enrolledcourses.find((course) => course.id === courseId)
+      )
+    );
+
+    return () => {};
+  }, [enrolledcourses, courseId]);
+
   return (
     <>
       <NavBar />
       <section className="cx_ovx">
-        <div className="ac_crd">
-          <CourseCard />
-          <Facilitators />
-        </div>
+        {!currentCourse ? (
+          <Loader tempLoad={true} full={false} />
+        ) : currentCourse.length === 0 ? (
+          <div>Not found</div>
+        ) : (
+          <>
+            <div className="ac_crd">
+              <CourseCard course={currentCourse.Course} />
+              <Facilitators trainers={currentCourse.CourseCohort.Classes} />
+            </div>
 
-        <div className="info_sec _text">
-          <div className="info">
-            <h2>Data Accelerator</h2>
-            <p>
-              Join and collaborate with other students in our Instructor-led
-              virtual classes for an optimized learning experience. Work on
-              real-life design-related projects by applying what you learn to
-              solve related business problems. Understand how to develop an
-              effective Analytics strategy within the overall framework of the
-              business.
-            </p>
-          </div>
+            <div className="info_sec _text">
+              <div className="info">
+                <h2>{currentCourse.Course.name}</h2>
+                <p>{currentCourse.Course.description}</p>
+              </div>
 
-          <div className="list_info">
-            <h2>What you will learn</h2>
-            <div className="list">
-              <span className="flex-row">
-                <p>1</p>
-              </span>
-              <h3>How to Query Data</h3>
-              <p>
-                The SQL class helps you learn how to use Structured Query
-                Language (SQL) to extract and analyze data stored in databases.
-                You’ll first learn to extractdata, join tables together, and
-                perform aggregations. Then you’ll learn to do more complex
-                analysis and manipulations using subqueries, temp tables, and
-                window functions. By the end of the course, you’ll be able to
-                write efficient SQL queries to successfullyhandle a variety of
-                data analysis task
-              </p>
+              <div className="list_info">
+                <h2>What you will learn</h2>
+                {currentCourse.CourseCohort.Classes.map((classr, i) => (
+                  <div className="list" key={`descriptors_${i}`}>
+                    <span className="flex-row">
+                      <p>{i + 1}</p>
+                    </span>
+                    <h3>{classr.title}</h3>
+                    <p>{classr.description}</p>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="list">
-              <span className="flex-row">
-                <p>2</p>
-              </span>
-              <h3>How to Visualize Data</h3>
-              <p>
-                Our Microsoft Business Intelligence or Power BI for Data
-                Analytics class has been designed to provide you with the
-                capability to analyze big data and share insights across
-                different functional groups. Through a series of highly
-                experiential and engaging classroom sessions, you'd learn to
-                monitor business data and get answers quickly with rich
-                dashboards that can be shared on every device.
-              </p>
-            </div>
-            <div className="list">
-              <span className="flex-row">
-                <p>3</p>
-              </span>
-              <h3>How to develop Data Strategy</h3>
-              <p>
-                torrents of data that are critical to your company’s success and
-                develop sustainable competitive advantage given the volume,
-                depth and accessibility of digital data. Lastly, you learn how
-                to drive innovation and establish a data culture.
-              </p>
-            </div>
-          </div>
-        </div>
+          </>
+        )}
       </section>
     </>
   );

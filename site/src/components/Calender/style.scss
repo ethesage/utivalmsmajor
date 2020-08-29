@@ -1,6 +1,7 @@
-@import "../../media";
+@import '../../media';
 
 .r_calenx {
+  // width: 100%;
   .input-div {
     max-width: 200px;
   }
@@ -51,7 +52,7 @@
           color: color(theme);
           font-weight: 500;
 
-          &[data-active="true"] {
+          &[data-active='true'] {
             background: rgba(color(theme), 0.1);
           }
         }

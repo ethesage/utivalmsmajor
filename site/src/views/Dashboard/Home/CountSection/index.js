@@ -1,7 +1,9 @@
-import React, { useState } from "react";
-import course from "../../../../assets/icons/dasboard/course.png";
-import completed from "../../../../assets/icons/dasboard/completed.png";
-import ongoing from "../../../../assets/icons/dasboard/ongoing.png";
+import React, { useState, useEffect } from 'react';
+import { axiosInstance } from '../../../../helpers';
+// import drive from '../../../../helpers/drive';
+import course from '../../../../assets/icons/dasboard/course.png';
+import completed from '../../../../assets/icons/dasboard/completed.png';
+import ongoing from '../../../../assets/icons/dasboard/ongoing.png';
 
 const CountCard = ({ data: { title, num, img } }) => (
   <div className="c_card count flex-col al-start j-start">
@@ -18,21 +20,34 @@ const CountCard = ({ data: { title, num, img } }) => (
 const CountSection = () => {
   const [data, setData] = useState([
     {
-      title: "Total Courses",
-      num: 1,
+      title: 'Total Courses',
+      link: 'course',
+      num: 0,
       img: course,
     },
     {
-      title: "Ongoing Courses",
-      num: 1,
+      title: 'Ongoing Courses',
+      num: 0,
+      link: 'ongoing',
       img: ongoing,
     },
     {
-      title: "Completed Courses",
-      num: 1,
+      title: 'Completed Courses',
+      num: 0,
+      link: 'completed',
       img: completed,
     },
   ]);
+
+  useEffect(() => {
+    (async () => {
+      const response = await axiosInstance.get('/student/all/dashboard');
+
+      setData((prev) =>
+        prev.map((pre) => ({ ...pre, num: response.data.data[pre.link] }))
+      );
+    })();
+  }, []);
 
   return (
     <>
