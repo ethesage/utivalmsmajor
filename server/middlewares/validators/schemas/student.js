@@ -10,6 +10,10 @@ export const getStudentSchema = Joi.object().keys({
   studentCourseId: Joi.string().uuid().trim().required(),
 });
 
+export const getStudentCourseSchema = Joi.object().keys({
+  courseCohortId: Joi.string().uuid().trim().required(),
+});
+
 // export const courseTrainerSchema = Joi.object().keys({
 //   courseId: Joi.string().uuid().trim().required(),
 // });

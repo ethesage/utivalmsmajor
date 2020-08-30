@@ -29,6 +29,7 @@ import {
 import {
   addStudentSchema,
   getStudentSchema,
+  getStudentCourseSchema
 } from './validators/schemas/student';
 
 import { createClassroom } from './validators/schemas/class';
@@ -81,4 +82,5 @@ export default {
   addcourse,
   updateCohortSchema,
   updateCohorCoursetSchema,
+  getStudentCourseSchema
 };
