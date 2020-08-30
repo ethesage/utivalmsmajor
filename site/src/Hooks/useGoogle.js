@@ -35,35 +35,74 @@ const Google = ({ updateSignInStatus = () => {} }) => {
   };
 
   async function upload(file) {
-    const fileSize = file.size;
+    const access = await g_api.auth.getToken();
 
-    const response = await g_api.client.drive.files.create(
-      {
-        request: {
-          name: file.name,
-          mimeType: file.type,
-          // parents: ['1RExy32fq9fIAx--lKTlOcEVrTjyHm5WJ'],
+    if (access) {
+      const config = {
+        onUploadProgress: function (progressEvent) {
+          var percentCompleted = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
+          console.log(percentCompleted);
         },
-        media: {
-          body: file,
-          mimeType: file.type,
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
         },
-      },
-      {
-        // Use the `onUploadProgress` event from Axios to track the
-        // number of bytes uploaded to this point.
-        onUploadProgress: (evt) => {
-          const progress = (evt.bytesRead / fileSize) * 100;
-          console.log(progress);
-        },
-      }
-    );
-    // log the result
-    console.log(response.data);
-    console.log(
-      `\nstatus: ${response.status}, text status: ${response.statusText}`
-    );
+      };
+
+      let data = new FormData();
+
+      data.append(
+        'metadata',
+        new Blob([JSON.stringify({ name: file.name, mimeType: file.type })], {
+          type: 'application/json',
+        })
+      );
+      data.append('file', file);
+
+      axios
+        .post(
+          `https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&scope=${access.scope}&access_token=${access.access_token}`,
+          data,
+          config
+        )
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
+    }
   }
+
+  // async function upload(file) {
+  //   const fileSize = file.size;
+
+  //   console.log(file.name, file.type)
+
+  //   const response = await g_api.client.drive.files.create(
+  //     {
+  //       resource: {
+  //         name: file.name,
+  //         mimeType: file.type,
+  //         // parents: ['1RExy32fq9fIAx--lKTlOcEVrTjyHm5WJ'],
+  //       },
+  //       media: {
+  //         body: file,
+  //         mimeType: file.type,
+  //       },
+  //     },
+  //     {
+  //       // Use the `onUploadProgress` event from Axios to track the
+  //       // number of bytes uploaded to this point.
+  //       onUploadProgress: (evt) => {
+  //         const progress = (evt.bytesRead / fileSize) * 100;
+  //         console.log(progress);
+  //       },
+  //     }
+  //   );
+  //   // log the result
+  //   console.log(response.data);
+  //   console.log(
+  //     `\nstatus: ${response.status}, text status: ${response.statusText}`
+  //   );
+  // }
 
   const deleteFile = () => {};
 

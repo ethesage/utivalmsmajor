@@ -1,10 +1,12 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useToasts } from 'react-toast-notifications';
+import { Progress } from 'react-sweet-progress';
 import axois from 'axios';
 import { axiosInstance, toBase64 } from '../../helpers';
 import useInput from '../../Hooks/useInput';
 import Button from '../../components/Button';
+import ProgressBar from '../../components/ProgressBar';
 import Input from '../../components/InputType';
 import { login } from '../../g_actions/user';
 import data from '../../data/profile';
@@ -14,6 +16,7 @@ import linkedin from '../../assets/icons/linkedin.png';
 import p_sum from '../../assets/p_sum.png';
 import Modal from '../../components/Modal';
 import ProfileBio from './bio';
+import 'react-sweet-progress/lib/style.css';
 import './style.scss';
 
 const Profile = () => {
@@ -22,6 +25,8 @@ const Profile = () => {
   const { addToast } = useToasts();
   const dispatch = useDispatch();
   const [apiToken, setApiToken] = useState(null);
+  const [progress, setProgress] = useState(0);
+  const [openModal, setModal] = useState(false);
   const [imgSrc, setImgSrc] = useState((user && user.profilePic) || user_icon);
   const image = useRef();
   const modalRef = useRef();
@@ -142,10 +147,17 @@ const Profile = () => {
     return () => {};
   }, [inputTypes.country, apiToken]);
 
+  useEffect(() => {
+    if (openModal) {
+      open();
+    }
+  }, [openModal]);
+
   const image_handler = async (e) => {
     const { files } = e.target;
     const _value = await toBase64(files[0]);
     setImgSrc(_value);
+    setModal(true);
 
     const config = {
       onUploadProgress: function (progressEvent) {
@@ -153,6 +165,7 @@ const Profile = () => {
           (progressEvent.loaded * 100) / progressEvent.total
         );
         console.log(percentCompleted);
+        setProgress(percentCompleted);
       },
     };
 
@@ -161,6 +174,7 @@ const Profile = () => {
 
     await axiosInstance.patch('/user/update', formData, config);
     dispatch(login());
+    modalRef.current.close();
   };
 
   return (
@@ -246,7 +260,7 @@ const Profile = () => {
         </div>
       </section>
       <Modal ref={modalRef}>
-        <ProfileBio />
+        {!openModal ? <ProfileBio /> : <ProgressBar progress={progress} />}
       </Modal>
     </>
   );
