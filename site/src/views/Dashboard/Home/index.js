@@ -41,7 +41,7 @@ const Home = ({ gapi }) => {
       <Welcome user={user} />
 
       <div className="p_sec flex-row j-space">
-        <CountSection gapi={gapi} />
+        <CountSection />
       </div>
 
       {isStudent ? (

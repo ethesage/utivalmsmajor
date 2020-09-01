@@ -1,6 +1,6 @@
-import sequelize from "sequelize";
-import models from "../database/models";
-import helpers from "../helpers";
+import sequelize from 'sequelize';
+import models from '../database/models';
+import helpers from '../helpers';
 
 const { successStat, errorStat } = helpers;
 
@@ -48,14 +48,17 @@ export const addStudentCourse = async (req, res) => {
       isCompleted: false,
       expiresAt: cour.expiresAt,
       cohortId: cour.cohortId,
-      status: 'ongoing'
+      status: 'ongoing',
     });
 
     await cour.update({
-      totalStudent: cour.totalStudent + 1
+      totalStudent: cour.totalStudent + 1,
     });
 
-    return successStat(res, 200, 'data', { ...studC.dataValues, message: 'Student added Successfully' });
+    return successStat(res, 200, 'data', {
+      ...studC.dataValues,
+      message: 'Student added Successfully',
+    });
   } catch (e) {
     errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
@@ -69,19 +72,19 @@ export const getAllStudentCourse = async (req, res) => {
       where: { studentId: id },
       include: [
         {
-          model: models.Cohort
+          model: models.Cohort,
         },
         {
           model: models.Course,
           include: [
             {
-              model: models.CourseDescription
+              model: models.CourseDescription,
             },
             {
               model: models.CourseProgress,
-              where: { userId: id }
-            }
-          ]
+              where: { userId: id },
+            },
+          ],
         },
         {
           model: models.CourseCohort,
@@ -94,15 +97,19 @@ export const getAllStudentCourse = async (req, res) => {
                   include: {
                     model: models.User,
                     attributes: [
-                      'firstName', 'lastName', 'profilePic', 'occupation', 'bio'
-                    ]
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ]
+                      'firstName',
+                      'lastName',
+                      'profilePic',
+                      'occupation',
+                      'bio',
+                    ],
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      ],
     });
 
     if (!resource[0]) {
@@ -126,19 +133,19 @@ export const getSingleStudentCourse = async (req, res) => {
       where: { id: studentCourseId, studentId: id },
       include: [
         {
-          model: models.Cohort
+          model: models.Cohort,
         },
         {
           model: models.Course,
           include: [
             {
-              model: models.CourseDescription
+              model: models.CourseDescription,
             },
             {
               model: models.CourseProgress,
-              where: { userId: id }
-            }
-          ]
+              where: { userId: id },
+            },
+          ],
         },
         {
           model: models.CourseCohort,
@@ -151,15 +158,19 @@ export const getSingleStudentCourse = async (req, res) => {
                   include: {
                     model: models.User,
                     attributes: [
-                      'firstName', 'lastName', 'profilePic', 'occupation', 'bio'
-                    ]
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ]
+                      'firstName',
+                      'lastName',
+                      'profilePic',
+                      'occupation',
+                      'bio',
+                    ],
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      ],
     });
 
     if (!resource) {
@@ -169,7 +180,7 @@ export const getSingleStudentCourse = async (req, res) => {
     if (!resource.isCompleted && new Date() > resource.duration) {
       resource.update({
         isCompleted: true,
-        status: 'finished'
+        status: 'finished',
       });
     }
 
@@ -202,7 +213,11 @@ export const getStudentDashboard = async (req, res) => {
 };
 
 export const allCourseStudents = async (req, res) => {
-  const { courseCohortId } = req.body.student;
+  const { studentCourseId } = req.body.student;
+
+  const { courseCohortId } = await models.StudentCourse.findOne({
+    where: { id: studentCourseId },
+  });
 
   try {
     const courseStudent = await models.StudentCourse.findAll({
@@ -210,10 +225,16 @@ export const allCourseStudents = async (req, res) => {
       include: [
         {
           model: models.User,
-          attributes: ['firstName', 'lastName', 'linkedin', 'profilePic']
-        }
+          attributes: [
+            'firstName',
+            'lastName',
+            'linkedin',
+            'profilePic',
+            'occupation',
+          ],
+        },
       ],
-      attributes: ['courseCohortId']
+      attributes: ['courseCohortId'],
     });
 
     return successStat(res, 200, 'data', courseStudent);
@@ -245,13 +266,13 @@ export const getStudentNextClass = async (req, res) => {
                 {
                   model: models.ClassDays,
                   where: { date: { [Op.gte]: new Date() } },
-                  attributes: ['date', 'time']
-                }
-              ]
-            }
-          ]
-        }
-      ]
+                  attributes: ['date', 'time'],
+                },
+              ],
+            },
+          ],
+        },
+      ],
     });
 
     if (!getClasses[0]) return errorStat(res, 400, 'No Available Class');
@@ -259,8 +280,12 @@ export const getStudentNextClass = async (req, res) => {
     const getAll = getClasses.reduce((acc, item, index) => {
       if (item.dataValues) {
         const course = item.dataValues.Course.dataValues;
-        const link = { link: item.dataValues.CourseCohort.Classes[0].dataValues.link };
-        const classDays = item.dataValues.CourseCohort.Classes[0].dataValues.ClassDays[0].dataValues;
+        const link = {
+          link: item.dataValues.CourseCohort.Classes[0].dataValues.link,
+        };
+        const classDays =
+          item.dataValues.CourseCohort.Classes[0].dataValues.ClassDays[0]
+            .dataValues;
         const all = { ...course, ...link, ...classDays };
         acc[index] = all;
       }
@@ -274,7 +299,12 @@ export const getStudentNextClass = async (req, res) => {
 };
 
 export const getStudentClassDays = async (req, res) => {
-  const { courseCohortId } = req.body.student;
+  const { studentCourseId } = req.body.student;
+
+  const { courseCohortId } = await models.StudentCourse.findOne({
+    where: { id: studentCourseId },
+  });
+
   const { id } = req.session.user;
 
   try {
@@ -290,9 +320,9 @@ export const getStudentClassDays = async (req, res) => {
       include: [
         {
           model: models.ClassDays,
-          attributes: ['date', 'time']
-        }
-      ]
+          attributes: ['date', 'time'],
+        },
+      ],
     });
 
     if (!getClassDays[0]) return errorStat(res, 400, 'No Available Class Day');

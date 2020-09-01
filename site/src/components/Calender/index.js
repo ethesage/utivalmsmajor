@@ -5,7 +5,7 @@ import './style.scss';
 
 const weekdayshort = moment.weekdaysShort();
 
-const Calender = () => {
+const Calender = ({ data }) => {
   const [dateObject, setDateObj] = useState(moment());
   const [allmonths] = useState(moment.months());
 
@@ -36,9 +36,33 @@ const Calender = () => {
     return dateObject.format('D');
   };
 
+  const accessableData =
+    data &&
+    data.filter((date) => {
+      const year = new Date(date.date).getFullYear().toString();
+      const month = allmonths[new Date(date.date).getMonth()];
+      const day = new Date(date.date).getDay();
+
+      console.log(
+        year === dateObject.format('Y') && month === dateObject.format('MMMM'),
+        year,
+        month,
+        dateObject.format('Y'),
+        dateObject.format('MMMM')
+      );
+
+      return (
+        year === dateObject.format('Y') && month === dateObject.format('MMMM')
+      );
+    });
+
+  console.log(accessableData);
+
   let daysInMonth = [];
   for (let d = 1; d <= dateObject.daysInMonth(); d++) {
-    let currentDay = d === Number(today()) ? 'today' : '';
+    const currentDay = d === Number(today()) ? 'today' : '';
+    // const year = new Date()
+
     daysInMonth.push(
       <td key={d} className={`calendar-day ${currentDay}`}>
         <span className="flex-row mx-auto">
@@ -70,9 +94,9 @@ const Calender = () => {
     return <tr key={`days_in_months_${i}`}>{d}</tr>;
   });
 
-  let month = () => {
+  function month() {
     return dateObject.format('MMMM');
-  };
+  }
 
   const MonthList = (props) => {
     let months = [];
@@ -116,9 +140,9 @@ const Calender = () => {
     setDateObj(newdateObject);
   }
 
-  const year = () => {
+  function year() {
     return dateObject.format('Y');
-  };
+  }
 
   function getDates(startDate, stopDate) {
     let dateArray = [];

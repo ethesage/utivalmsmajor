@@ -7,7 +7,7 @@ import {
   getStudentDashboard,
   allCourseStudents,
   getStudentNextClass,
-  getStudentClassDays
+  getStudentClassDays,
 } from '../../controllers/student';
 import middlewares from '../../middlewares';
 
@@ -15,11 +15,11 @@ const {
   validate,
   addStudentSchema,
   getStudentSchema,
-  getStudentCourseSchema,
+  // getStudentCourseSchema,
   //   coursestudentSchema,
   //   studentSchema,
   //   updatestudentSchema,
-  usession
+  usession,
 } = middlewares;
 
 const studentRoutes = express();
@@ -38,35 +38,23 @@ studentRoutes.get(
   getSingleStudentCourse
 );
 
-studentRoutes.get(
-  '/all/dashboard',
-  usession.can(''),
-  getStudentDashboard
-);
+studentRoutes.get('/all/dashboard', usession.can(''), getStudentDashboard);
+
+studentRoutes.get('/', usession.can(''), getAllStudentCourse);
 
 studentRoutes.get(
-  '/',
+  '/allstudents/:studentCourseId',
   usession.can(''),
-  getAllStudentCourse
-);
-
-studentRoutes.get(
-  '/allstudents/:coursecohortId',
-  usession.can(''),
-  validate(getStudentCourseSchema),
+  validate(getStudentSchema),
   allCourseStudents
 );
 
-studentRoutes.get(
-  '/all/nextclass',
-  usession.can(''),
-  getStudentNextClass
-);
+studentRoutes.get('/all/nextclass', usession.can(''), getStudentNextClass);
 
 studentRoutes.get(
-  '/classdays/:courseCohortId',
+  '/classdays/:studentCourseId',
   usession.can(''),
-  validate(getStudentCourseSchema),
+  validate(getStudentSchema),
   getStudentClassDays
 );
 

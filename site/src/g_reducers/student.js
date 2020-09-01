@@ -1,6 +1,8 @@
 export const initialState = {
   enrolledcourses: null,
   currentCourse: null,
+  enrolledStudents: null,
+  classdays: null,
 };
 
 const course = (state = initialState, action) => {
@@ -15,7 +17,16 @@ const course = (state = initialState, action) => {
         ...state,
         currentCourse: action.payload,
       };
-
+    case 'GET_ALL_ENROLLED_STUDENTS':
+      return {
+        ...state,
+        enrolledStudents: action.payload,
+      };
+    case 'GET_ALL_CLASS_DAYS':
+      return {
+        ...state,
+        classdays: action.payload,
+      };
     default:
       return state;
   }

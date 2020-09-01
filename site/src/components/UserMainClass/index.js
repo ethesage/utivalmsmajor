@@ -1,17 +1,20 @@
-import React from 'react';
-import Button from '../Button';
+import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import Sekeleton from 'react-skeleton-loader';
+import Moment from 'react-moment';
+import { useDispatch, useSelector } from 'react-redux';
+import { getNextClasses } from '../../views/Dashboard/Home/action';
 import img from '../../assets/homepage/img1.png';
-import week from '../../assets/dashboard/week.png';
 import calender from '../../assets/dashboard/calendar.png';
 import clock from '../../assets/dashboard/clock.png';
-// import no_course from "../../assets/dashboard/no_course.png";
+import no_course from '../../assets/dashboard/no_course.png';
 import './style.scss';
 
-const ClassesSec = () => (
-  <div className="next_class flex-row al-start j-space">
-    <img src={img} alt="" className="main_img" />
+const ClassesSec = ({ data: { thumbnail, link, name, time, date } }) => (
+  <Link to={link} className="next_class flex-row al-start j-space">
+    <img src={thumbnail} alt="" className="main_img" />
     <div className="text-sec flex-col j-space al-start">
-      <h2>HR Analtytics</h2>
+      <h2>{name}</h2>
 
       <div className="info_sec ">
         {/* <div className="info flex-row j-start">
@@ -23,28 +26,59 @@ const ClassesSec = () => (
         <div className="info flex-row j-start">
           <img src={calender} alt="" />{' '}
           <p>
-            Sunday, <strong>June 10,</strong> 2010
+            <Moment format="DD-MM-YYYY">{date}</Moment>
           </p>
         </div>
         <div className="info flex-row j-start">
-          <img src={clock} alt="" /> <p>10AM</p>
+          <img src={clock} alt="" />{' '}
+          <p>
+            <time>{time}</time>
+          </p>
         </div>
       </div>
+    </div>
+  </Link>
+);
+
+const Loader = () => (
+  <div className="next_class">
+    <Sekeleton width="120%" height="100%" />
+  </div>
+);
+
+const NoClass = () => (
+  <div className="next_class flex-row ">
+    <img src={no_course} alt="" className="" />
+    <div className="text-sec flex-col">
+      <h2>You have no new classes</h2>
     </div>
   </div>
 );
 
 const Classes = () => {
+  const dispatch = useDispatch();
+  const nextclasses = useSelector((state) => state.home.nextclasses);
+
+  useEffect(() => {
+    if (!nextclasses) {
+      (async () => {
+        await dispatch(getNextClasses());
+      })();
+    }
+    return () => {};
+  }, [nextclasses, dispatch]);
+
   return (
     <div className="p_sec flex-row j-space">
-      <ClassesSec />
-      <ClassesSec />
-      <ClassesSec />
-
-      {/* <div className="n_available flex-col">
-        <img src={no_course} alt="no classes" />
-        <p className="txts">No classes yet</p>
-      </div> */}
+      {!nextclasses ? (
+        [1, 2, 3].map((i) => <Loader key={`load_${i}`} />)
+      ) : nextclasses.length === 0 ? (
+        <NoClass />
+      ) : (
+        nextclasses.map((nextclass, i) => (
+          <ClassesSec key={`next_classes_${i}`} data={nextclass} />
+        ))
+      )}
     </div>
   );
 };

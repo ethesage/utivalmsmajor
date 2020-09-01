@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import user_icon from '../../assets/user_icon.png';
 import './style.scss';
 
 const Facilitators = ({ trainers }) => {
   const [currentUser, setCurrentUser] = useState(0);
+  const trainerMap = useRef({});
 
   return (
     <div className="fac_xc">
@@ -31,18 +32,25 @@ const Facilitators = ({ trainers }) => {
         </CSSTransition>
       </TransitionGroup>
       <div className="dots_con flex-row">
-        {trainers.map((trainer, i) => (
-          <button
-            className="dot_button flex-row"
-            key={i}
-            onClick={() => setCurrentUser(i)}
-          >
-            <span
-              className="dot"
-              data-active={i === currentUser ? 'active' : null}
-            ></span>
-          </button>
-        ))}
+        {trainers.map((trainer, i) => {
+          let name =
+            trainer.Trainer.User.firstName + trainer.Trainer.User.lastName;
+
+          if (trainerMap.current.hasOwnProperty(name)) return;
+          trainerMap.current[name] = i;
+          return (
+            <button
+              className="dot_button flex-row"
+              key={i}
+              onClick={() => setCurrentUser(trainerMap.current[name])}
+            >
+              <span
+                className="dot"
+                data-active={i === currentUser ? 'active' : null}
+              ></span>
+            </button>
+          );
+        })}
       </div>
     </div>
   );

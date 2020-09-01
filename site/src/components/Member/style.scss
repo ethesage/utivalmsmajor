@@ -1,4 +1,4 @@
-@import "../../media";
+@import '../../media';
 
 .snx_mem {
   width: 100%;
@@ -26,6 +26,7 @@
     small {
       margin-bottom: 10px;
       display: block;
+      min-height: 20px;
     }
 
     a {
