@@ -2,7 +2,7 @@
 
 $distance: 0px;
 %selected {
-  color: white;
+  color: white !important;
   background: color(theme);
 }
 
@@ -10,16 +10,6 @@ $distance: 0px;
   width: 100%;
   position: relative;
   margin-bottom: 20px;
-
-  // &.required {
-  //   &::before {
-  //     content: "*";
-  //     color: red;
-  //     position: absolute;
-  //     left: -10px;
-  //     top: -5px;
-  //   }
-  // }
 
   input[type='date']::before {
     // color: #999;
