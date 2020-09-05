@@ -19,6 +19,7 @@ Notification.start();
 
 server.listen(port, () => {
   log(`Server is running on port ${chalk.yellow(port)}`);
+  console.log(`Server is running on port ${chalk.yellow(port)}`)
 });
 
 export default { app, Notification };
