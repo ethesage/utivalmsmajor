@@ -275,7 +275,7 @@ export const getStudentNextClass = async (req, res) => {
       ],
     });
 
-    if (!getClasses[0]) return errorStat(res, 400, 'No Available Class');
+    // if (!getClasses[0]) return errorStat(res, 400, 'No Available Class');
 
     const getAll = getClasses.reduce((acc, item, index) => {
       if (item.dataValues) {
