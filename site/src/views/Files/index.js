@@ -28,7 +28,9 @@ const links = [
   },
 ];
 
-const File_Page = ({ gapi: { signedIn, gapi } }) => {
+const File_Page = ({ gapi }) => {
+  // const { signedIn, gapi } = gapi;
+
   let { path } = useRouteMatch();
   let [files, setFiles] = useState();
   const [progress, setProgress] = useState(0);
@@ -38,17 +40,19 @@ const File_Page = ({ gapi: { signedIn, gapi } }) => {
   };
 
   useEffect(() => {
-    if (!signedIn) return;
+    console.log(gapi);
+    if (!gapi) return;
+    if (!gapi.signedIn) return;
 
     const getFiles = async () => {
-      const new_files = await gapi.get();
+      const new_files = await gapi.gapi.get();
       setFiles(new_files);
     };
 
     getFiles();
 
     return () => {};
-  }, [signedIn, gapi]);
+  }, [gapi]);
 
   const viewFile = async (contentLink) => {
     window.open(contentLink, '_blank');
@@ -59,11 +63,11 @@ const File_Page = ({ gapi: { signedIn, gapi } }) => {
   };
 
   const upload = async (files) => {
-    gapi.upload(files);
+    gapi.gapi.upload(files);
   };
 
   const deleteFile = () => {
-    gapi.deleteFile();
+    gapi.gapi.deleteFile();
   };
 
   const AllFile = () => {
@@ -109,11 +113,7 @@ const File_Page = ({ gapi: { signedIn, gapi } }) => {
           subClassName="file_sec"
           links={links.map((info, i) => (
             <li key={`side_link_courses_${i}`}>
-              <NavLink
-                exact
-                className="side_link"
-                to={`/dashboard/files${info.link}`}
-              >
+              <NavLink exact className="side_link" to={`/files${info.link}`}>
                 {info.title}
               </NavLink>
             </li>

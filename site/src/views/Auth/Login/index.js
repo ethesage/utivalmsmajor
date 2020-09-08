@@ -29,7 +29,9 @@ function Login() {
       });
 
       dispatch(login());
-      history.push('/dashboard');
+      response.data.user.role === 'admin'
+        ? history.push('/admin')
+        : history.push('/');
     },
     btnText: {
       loading: 'Logging on...',

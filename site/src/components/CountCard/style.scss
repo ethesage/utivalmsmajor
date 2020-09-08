@@ -1,0 +1,50 @@
+@import '../../media';
+
+.count_card {
+  height: 200px;
+  border-radius: 10px;
+  width: 100%;
+  padding: 30px 40px;
+  &:nth-child(1) {
+    background: rgba(18, 12, 100, 0.05);
+  }
+
+  &:nth-child(2) {
+    background: rgba(251, 175, 27, 0.05);
+  }
+
+  &:nth-child(3) {
+    background: rgba(9, 172, 35, 0.05);
+  }
+
+  .c_img-sec {
+    width: 100%;
+    flex-grow: 1;
+
+    p {
+      font-size: 3em;
+      font-weight: bold;
+
+      @include for-size(phone-only) {
+        font-size: 2em;
+      }
+    }
+
+    .img_con {
+      background: white;
+      border-radius: 100%;
+      width: 70px;
+      height: 70px;
+
+      img {
+        width: 40%;
+        height: 40%;
+      }
+
+      @include for-size(phone-only) {
+        width: 60px;
+        height: 60px;
+      }
+    }
+  }
+}

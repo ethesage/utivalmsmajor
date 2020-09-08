@@ -6,22 +6,25 @@ import './style.scss';
 
 const Files = ({ files, view, download, handleImage }) => {
   return (
-    <div className="info_con scrolled flex-col al-start j-space">
-      <div className="file_sec">
-        {files.files.map((file, i) => (
+    <div className="info_con">
+      <div className="info_con_sec scrolled flex-col al-start j-space">
+        <div className="file_sec">
+          {/* {files.files.map((file, i) => (
           <FilesSec
             file={file}
             key={`d_files_${i}`}
             view={view}
             download={download}
           />
-        ))}
-      </div>
+        ))} */}
+        </div>
 
-      {/* <div className="n_available flex-col"
+        {/* <div className="n_available flex-col"
         <img src={no_file} alt="no classes" />
         <p className="txts">You have no files yet</p>
       </div> */}
+      </div>
+
       <Drag className="add_file" handleImage={handleImage} />
     </div>
   );

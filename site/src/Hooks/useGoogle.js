@@ -106,20 +106,18 @@ const Google = ({ updateSignInStatus = () => {} }) => {
 
   const deleteFile = () => {};
 
-  const get = async (id, folderId) => {
+  const get = async (folferId, id, returns = '*') => {
     let res;
 
     if (!id) {
       res = await g_api.client.drive.files.list({
         q: "parents = '1F0r-bTgMLTkUhBf2o-ZTwtCPB3dWfnXp'",
         pageSize: 20,
-        folderId: '1F0r-bTgMLTkUhBf2o-ZTwtCPB3dWfnXp',
-        // files: '*',
         fields:
           'nextPageToken, files(name, iconLink, webContentLink, size, webViewLink, parents)',
       });
     } else {
-      res = await g_api.client.drive.files.get({ fileId: id });
+      res = await g_api.client.drive.files.get({ fileId: id, fields: returns });
     }
     return res.result;
   };

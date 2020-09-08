@@ -5,8 +5,9 @@
   width: 100%;
   border-radius: 10px;
   cursor: pointer;
+  display: block;
 
-  > div {
+  .fx_up_sec {
     width: 90%;
     font-weight: bold;
     color: color(theme);

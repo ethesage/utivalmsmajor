@@ -53,7 +53,7 @@ function Signup() {
       );
 
       dispatch(login());
-      history.push('/dashboard');
+      history.push('/');
     },
     btnText: {
       loading: 'Creating...',

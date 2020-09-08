@@ -78,7 +78,10 @@ const Calender = ({ data }) => {
         </span>
         {classDay ? (
           <div className="toolTip flex-row">
-            <p>You have a class Today by {classDay.time}</p>
+            <p>
+              You have the class <strong>"{classDay.title}"</strong> Today by{' '}
+              {moment(classDay.time, 'HH:mm').format('hh:mm A')}
+            </p>
           </div>
         ) : (
           ''
@@ -122,7 +125,7 @@ const Calender = ({ data }) => {
 
   const MonthList = (props) => {
     let months = [];
-    props.data.map((data, i) => {
+    props.data.map((data, i) =>
       months.push(
         <td
           key={`clander_moths_${i}`}
@@ -133,8 +136,8 @@ const Calender = ({ data }) => {
         >
           {data}
         </td>
-      );
-    });
+      )
+    );
 
     let rows = [];
 

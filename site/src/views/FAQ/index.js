@@ -28,11 +28,7 @@ const FAQ = () => {
         subClassName="faq_sec"
         links={data.map((info, i) => (
           <li key={`side_link_courses_${i}`}>
-            <NavLink
-              exact
-              className="side_link"
-              to={`/dashboard/faqs${info.link}`}
-            >
+            <NavLink exact className="side_link" to={`/faqs${info.link}`}>
               {info.title}
             </NavLink>
           </li>

@@ -4,6 +4,7 @@ import Button from '../../../components/Button';
 import Classes from '../../../components/Classes';
 import Files from '../../../components/Files';
 import CountSection from './CountSection';
+import Layout from '../../../Layouts/HomeGrid';
 import Welcome from './Welcome';
 import CourseCard from '../../../components/CourseCard';
 import categories from '../../../data/categories';
@@ -12,7 +13,7 @@ import UserClases from '../../../components/UserMainClass';
 import './style.scss';
 
 const InfoSec = ({ txt, children }) => (
-  <div className="c_card large flex-col">
+  <div className="info_fx flex-col">
     <nav className="c_card_nav flex-row j-space _text">
       <h2>{txt}</h2>
       <p>{txt && `View All ${txt}`}</p>
@@ -32,7 +33,7 @@ const Home = ({ gapi }) => {
 
           <Button
             className="p_btn short flex-row"
-            link="/dashboard/settings"
+            link="/settings"
             text="Update Profile"
           />
         </div>
@@ -40,14 +41,14 @@ const Home = ({ gapi }) => {
 
       <Welcome user={user} />
 
-      <div className="p_sec flex-row j-space">
+      <Layout>
         <CountSection />
-      </div>
+      </Layout>
 
-      {isStudent ? (
+      {false ? (
         <UserClases />
       ) : (
-        <div className="p_sec flex-row j-space">
+        <Layout>
           <InfoSec txt="Classes">
             <Classes />
           </InfoSec>
@@ -56,8 +57,8 @@ const Home = ({ gapi }) => {
             <Files />
           </InfoSec>
 
-          <InfoSec txt="">{/* <Activities /> */}</InfoSec>
-        </div>
+          <InfoSec txt=""></InfoSec>
+        </Layout>
       )}
 
       {isStudent ? (

@@ -2,16 +2,21 @@
 
 .info_con {
   position: relative;
-  height: 100%;
+  overflow: hidden !important;
 
-  .file_sec {
-    width: 100%;
+  .info_con_sec {
+    overflow-y: auto;
+    height: 400px;
+
+    .file_sec {
+      width: 100%;
+    }
   }
 
   .add_file {
-    position: sticky;
-    bottom: -10px;
-    left: 0;
+    // position: absolute;
+    // bottom: 0;
+    // left: 0;
     background: white;
 
     > div {
@@ -20,4 +25,3 @@
     }
   }
 }
-

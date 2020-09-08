@@ -1,0 +1,18 @@
+@import '../../../media';
+
+.mx_courx {
+  .nav_cux {
+    margin-bottom: 30px;
+
+    h3 {
+      font-weight: normal;
+      @include for-size(phone-only) {
+        font-size: 1em;
+      }
+    }
+
+    span {
+      margin: 0 10px;
+    }
+  }
+}
