@@ -1,0 +1,9 @@
+/* @import '../../media'; */
+
+.hmx_gd {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(400px, 100%), 1fr));
+
+  grid-gap: 30px;
+  margin-bottom: 100px;
+}

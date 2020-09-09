@@ -3,7 +3,6 @@ import { axiosInstance } from 'helpers';
 // import drive from '../../../../helpers/drive';
 import course from 'assets/icons/dashboard/course.png';
 import CountCard from 'components/CountCard';
-import completed from 'assets/icons/dashboard/completed.png';
 import student from 'assets/icons/dashboard/students.png';
 import admin from 'assets/icons/dashboard/admin.png';
 import trainer from 'assets/icons/dashboard/trainer.png';

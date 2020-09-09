@@ -17,7 +17,7 @@ function App() {
     <main className="App">
       <Router>
         <Loader />
-        <Suspense fallback={<Loader tempLoad={true} />}>
+        <Suspense fallback={<Loader tempLoad={true} full={true} />}>
           <Switch>
             <Route path="/home" component={HomePage} />
             <Route path="/auth" component={Auth} />
