@@ -6,18 +6,18 @@ import './style.scss';
 const ProgressBar = ({ progress }) => {
   return (
     <div className="px_sec box-shade flex-col">
-      <p>{progress} %</p>
+      <p>File Uploading...</p>
       <Progress
         className="slim"
         percent={progress}
-        status="error"
+        status="success"
         theme={{
           success: {
             symbol: '‍',
             color: 'rgb(223, 105, 180)',
           },
           error: {
-            symbol: progress,
+            symbol: '',
             color: 'rgb(223, 105, 180)',
           },
           default: {

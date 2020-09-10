@@ -3,10 +3,12 @@
 .info_con {
   position: relative;
   overflow: hidden !important;
+  width: 100%;
 
   .info_con_sec {
     overflow-y: auto;
     height: 400px;
+    padding: 20px;
 
     .file_sec {
       width: 100%;

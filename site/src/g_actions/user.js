@@ -25,8 +25,8 @@ export const login = () => async (dispatch) => {
 
     dispatch({
       type: 'Login',
-      payload: !!isloggedIn && get_user(),
-      // payload: get_user(),
+      // payload: !!isloggedIn && get_user(),
+      payload: get_user(),
     });
 
     dispatch(doneloading());

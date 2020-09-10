@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  forwardRef,
-  useImperativeHandle,
-} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import NavBar from '../../components/DashNav';
 import useGoogle from '../../Hooks/useGoogle';
 import SideBar from '../../components/SideBar';
@@ -12,23 +6,11 @@ import Modal from '../../components/Modal';
 import google from '../../assets/icons/google.png';
 import './style.scss';
 
-const MainView = forwardRef(({ children, type }, ref) => {
+const MainView = ({ children, type }) => {
   const [open, setOpen] = useState(false);
   const [signedIn, setSignedIn] = useState(false);
   const modalRef = useRef();
   const { gapi, signIn } = useGoogle({ updateSignInStatus });
-
-  useImperativeHandle(ref, () => ({
-    open: () => {
-      openBar();
-    },
-
-    close: () => {
-      close();
-    },
-
-    gapi: { gapi, signedIn },
-  }));
 
   const openBar = () => {
     setOpen(!open);
@@ -87,12 +69,12 @@ const MainView = forwardRef(({ children, type }, ref) => {
       <section className="dh-main flex-col">
         <div className="contents flex-col">
           <NavBar open={openBar} grow={open} />
-          {children}
+          {React.cloneElement(children, { gapi: { gapi, signedIn } })}
         </div>
         <div className="dash-footer">(c) 2020 Utiva All Rights Reserved</div>
       </section>
     </main>
   );
-});
+};
 
 export default MainView;

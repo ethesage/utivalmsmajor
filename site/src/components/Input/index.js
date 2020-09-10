@@ -16,6 +16,7 @@ const Input = ({
   reviel,
   revielPassword,
   method,
+  label,
 }) => {
   const [error, setError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -48,6 +49,7 @@ const Input = ({
 
   return (
     <div className="input-div">
+      {label && <label className="t_label">{label}</label>}
       {type === 'textarea' ? (
         <textarea
           className="input-type"
