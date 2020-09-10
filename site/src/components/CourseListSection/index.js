@@ -1,18 +1,14 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { getEnrolledCourses } from 'g_actions/student';
 import { Progress } from 'react-sweet-progress';
-import Image from 'components/Image';
-import Loader from 'components/Loading';
+import Image from '../Image';
 import medal from 'assets/icons/medal.png';
-import not_found from 'assets/not_found.png';
-import Button from 'components/Button';
 import 'react-sweet-progress/lib/style.css';
 import './style.scss';
 
-const CousreCard = ({ data }) => {
-  const { isStudent } = useSelector((state) => state.auth);
+const CourseListCard = ({ data }) => {
+  const { isStudent, isAdmin } = useSelector((state) => state.auth);
   const {
     isCompleted,
     id,
@@ -84,40 +80,14 @@ const CousreCard = ({ data }) => {
   );
 };
 
-const CourseList = () => {
-  const dispatch = useDispatch();
-  const enrolledcourses = useSelector((state) => state.student.enrolledcourses);
-
-  useEffect(() => {
-    if (!enrolledcourses)
-      (async () => {
-        await dispatch(getEnrolledCourses());
-      })();
-
-    return () => {};
-  }, [dispatch, enrolledcourses]);
-
-  console.log(enrolledcourses);
-
+const courseListSection = (courses) => {
   return (
-    <div className="main flex-col cx_list_con j-start al-start">
-      {!enrolledcourses ? (
-        <Loader tempLoad={true} full={false} />
-      ) : enrolledcourses.length === 0 ? (
-        <div className="nt_found img flex-col">
-          <img src={not_found} alt="Not found" />
-          <p className="text">You are yet to enrol for any course</p>
-          <Button link="utiva.io" text="Start Learning" className="flex-row" />
-        </div>
-      ) : (
-        <section className="course_list">
-          {enrolledcourses.map((course, i) => (
-            <CousreCard data={course} key={`enrolled_c_${i}`} />
-          ))}
-        </section>
-      )}
-    </div>
+    <section className="course_list">
+      {courses.map((course, i) => (
+        <CourseListCard data={course} key={`enrolled_c_${i}`} />
+      ))}
+    </section>
   );
 };
 
-export default CourseList;
+export default courseListSection;
