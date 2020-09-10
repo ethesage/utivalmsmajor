@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 import { get_user, logout } from '../helpers';
 import { axiosInstance } from '../helpers';
 
@@ -25,6 +26,7 @@ export const login = () => async (dispatch) => {
     dispatch({
       type: 'Login',
       payload: !!isloggedIn && get_user(),
+      // payload: get_user(),
     });
 
     dispatch(doneloading());

@@ -1,12 +1,12 @@
 import React, { useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useToasts } from 'react-toast-notifications';
-import { axiosInstance } from '../../helpers';
-import useInput from '../../Hooks/useInput';
-import Button from '../../components/Button';
-import Input from '../../components/InputType';
-import { login } from '../../g_actions/user';
-import data from '../../data/profile_bio';
+import { axiosInstance } from 'helpers';
+import useInput from 'Hooks/useInput';
+import Button from 'components/Button';
+import Input from 'components/InputType';
+import { login } from 'g_actions/user';
+import data from 'data/profile_bio';
 import './style.scss';
 
 const ProfileBio = () => {

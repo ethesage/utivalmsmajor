@@ -1,7 +1,7 @@
 export const initialState = {
   categories: null,
   currentCourse: null,
-  enrolledcourses: null,
+  courses: null,
 };
 
 const course = (state = initialState, action) => {
@@ -15,6 +15,11 @@ const course = (state = initialState, action) => {
       return {
         ...state,
         currentCourse: action.payload,
+      };
+    case 'GET_ALL_COURSES':
+      return {
+        ...state,
+        courses: action.payload,
       };
     default:
       return state;
