@@ -12,7 +12,7 @@ export default {
       inherits: ['guest'],
     },
     trainer: {
-      can: [''],
+      can: ['trainer'],
       inherits: ['student'],
     },
     admin: {

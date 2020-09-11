@@ -16,6 +16,22 @@ export const createClassroom = Joi.object().keys({
   time: Joi.string().required(),
 });
 
+export const getClassAssignmentSchema = Joi.object().keys({
+    classId: Joi.string().uuid().trim().required(),
+    link: Joi.string().trim().required(),
+  });
+
+  export const editClassAssignmentSchema = Joi.object().keys({
+    classResourceId: Joi.string().uuid().trim().required(),
+    link: Joi.string().trim(),
+    deadline: Joi.string().trim()
+  });
+
+  export const deleteClassAssignmentSchema = Joi.object().keys({
+    classResourcesId: Joi.string().uuid().trim().required(),
+  });
+
+
 // export const getStudentSchema = Joi.object().keys({
 //   studentCourseId: Joi.string().uuid().trim().required(),
 // });

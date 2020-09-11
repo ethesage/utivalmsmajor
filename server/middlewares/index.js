@@ -29,10 +29,15 @@ import {
 import {
   addStudentSchema,
   getStudentSchema,
-  getStudentCourseSchema
+  getStudentCourseSchema,
 } from './validators/schemas/student';
 
-import { createClassroom } from './validators/schemas/class';
+import { 
+  createClassroom,
+  getClassAssignmentSchema,
+  deleteClassAssignmentSchema,
+  editClassAssignmentSchema
+} from './validators/schemas/class';
 
 import {
   createFileSchema,
@@ -46,6 +51,13 @@ import {
   updateCohortSchema,
   updateCohorCoursetSchema,
 } from './validators/schemas/cohort';
+
+import {
+  submitAssignmentSchema,
+  gradeAssignmentSchema,
+  deleteAssignmentSchema,
+  editAssignmentSchema
+} from './validators/schemas/assignment';
 
 import { isLoggedIn } from './auth';
 import { checkInvitation } from './checker';
@@ -82,5 +94,12 @@ export default {
   addcourse,
   updateCohortSchema,
   updateCohorCoursetSchema,
-  getStudentCourseSchema
+  getStudentCourseSchema,
+  getClassAssignmentSchema,
+  submitAssignmentSchema,
+  gradeAssignmentSchema,
+  deleteClassAssignmentSchema,
+  editClassAssignmentSchema,
+  deleteAssignmentSchema,
+  editAssignmentSchema
 };

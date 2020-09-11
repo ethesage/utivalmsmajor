@@ -6,12 +6,18 @@ import {
   getClass,
   updateClass,
   deleteClass,
-  getAllStudentClass
+  getAllStudentClass,
+  classAssignment,
+  editClassAssignment,
+  deleteClassAssignment
 } from '../../controllers/class';
 import middlewares from '../../middlewares';
 
 const {
   validate,
+  getClassAssignmentSchema,
+  deleteClassAssignmentSchema,
+  editClassAssignmentSchema,
   //   getclassRoomSchema,
   //   getAllclassRoomSchema,
   createClassroom,
@@ -61,6 +67,27 @@ classRoutes.delete(
   usession.can('classRoom:crud'),
   // validate(getclassRoomSchema),
   deleteClass
+);
+
+classRoutes.post(
+  '/assignment/:classId',
+  usession.can(''),
+  validate(getClassAssignmentSchema),
+  classAssignment
+);
+
+classRoutes.patch(
+  '/assignment/edit/:classResourceId',
+  usession.can('trainer'),
+  validate(editClassAssignmentSchema),
+  editClassAssignment
+);
+
+classRoutes.delete(
+  '/assignment/:classResourcesId',
+  usession.can(''),
+  validate(deleteClassAssignmentSchema),
+  deleteClassAssignment
 );
 
 export default classRoutes;

@@ -28,7 +28,9 @@ export const login = async (req, res) => {
 
   if (!user) return errorStat(res, 401, 'Incorrect Login information');
 
-  const matchPasswords = comparePassword(password, user.password);
+  const matchPasswords = await comparePassword(password, user.password);
+
+  console.log(matchPasswords, '[[login]]')
 
   if (!matchPasswords) {
     return errorStat(res, 401, 'Incorrect Login information');

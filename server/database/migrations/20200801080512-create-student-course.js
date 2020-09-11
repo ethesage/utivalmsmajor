@@ -15,6 +15,9 @@ module.exports = {
     courseCohortId: {
       type: Sequelize.UUID
     },
+    courseId: {
+      type: Sequelize.UUID
+    },
     expiresAt: {
       type: Sequelize.DATE
     },
