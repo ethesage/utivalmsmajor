@@ -11,7 +11,11 @@ $distance: 0px;
   position: relative;
   margin-bottom: 20px;
 
-  
+  .t_label {
+    margin-bottom: 10px;
+    display: inline-block;
+    font-weight: bold;
+  }
 
   input[type='date']::before {
     // color: #999;
@@ -23,6 +27,20 @@ $distance: 0px;
   input[type='date']:focus::before {
     content: '' !important;
     background: none;
+  }
+
+  &.check {
+    width: auto;
+  }
+
+  input[type='checkbox'] {
+    display: block;
+    width: auto;
+    margin-right: 10px;
+  }
+
+  input[type='checkbox'] + label {
+    font-size: 0.8em;
   }
 
   .input-type {

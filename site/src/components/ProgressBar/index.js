@@ -14,7 +14,7 @@ const ProgressBar = ({ progress }) => {
         theme={{
           success: {
             symbol: '‍',
-            color: 'rgb(223, 105, 180)',
+            color: '#09AC23',
           },
           error: {
             symbol: '',

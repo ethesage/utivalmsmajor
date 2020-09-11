@@ -17,6 +17,7 @@ const Input = ({
   revielPassword,
   method,
   label,
+  showAsterix = true,
 }) => {
   const [error, setError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -48,7 +49,11 @@ const Input = ({
   };
 
   return (
-    <div className="input-div">
+    <div
+      className={`input-div ${
+        type === 'checkbox' ? 'flex-row j-start check' : ''
+      }`}
+    >
       {label && <label className="t_label">{label}</label>}
       {type === 'textarea' ? (
         <textarea
@@ -58,25 +63,32 @@ const Input = ({
           name={name}
           onChange={validateOne}
           value={value}
-          placeholder={`${placeHolder} ${required ? '*' : ''}`}
+          placeholder={`${placeHolder} ${
+            required ? (showAsterix ? '*' : '') : ''
+          }`}
           rows={10}
         />
       ) : (
-        <input
-          className="input-type"
-          ref={inputRef}
-          type={reviel ? 'text' : type}
-          required={required}
-          name={name}
-          onChange={validateOne}
-          value={value}
-          placeholder={`${placeHolder} ${required ? '*' : ''}`}
-          autoComplete={
-            type === 'password' && method === 'sign-in'
-              ? 'current-password'
-              : 'new-password'
-          }
-        />
+        <>
+          <input
+            className="input-type"
+            ref={inputRef}
+            type={reviel ? 'text' : type}
+            required={required}
+            name={name}
+            onChange={validateOne}
+            value={value}
+            placeholder={`${placeHolder} ${
+              required ? (showAsterix ? '*' : '') : ''
+            }`}
+            autoComplete={
+              type === 'password' && method === 'sign-in'
+                ? 'current-password'
+                : 'new-password'
+            }
+          />
+          {type === 'checkbox' ? <label>{placeHolder}</label> : ''}
+        </>
       )}
       {value && type === 'password' ? (
         <span

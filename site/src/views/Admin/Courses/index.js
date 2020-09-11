@@ -10,14 +10,30 @@ import ViewGrade from 'components/Assignment/ViewGrade';
 import StudyPlan from 'views/StudyPlan';
 import Members from 'views/Members';
 import CreateCourse from 'views/CreateCourse';
+import Nav from 'components/InnerHeader';
 import './style.scss';
 
 const Courses = ({ gapi }) => {
   let { path } = useRouteMatch();
+  const currentCourse = useSelector((state) => state.courses.currentCourse);
 
   return (
     <section className="dash-con mx_courx flex-col al-start j-start">
-    
+      <Nav>
+        {currentCourse ? (
+          <>
+            <span>{' > '}</span>
+            <Link
+              to={`/courses/overview/${currentCourse.id}`}
+              className="reg_text"
+            >
+              <h3> {`${currentCourse.Course.name}`}</h3>
+            </Link>
+          </>
+        ) : (
+          ''
+        )}
+      </Nav>
       <Switch>
         <Route exact path={`${path}/overview/:courseId`} component={Overview} />
         <Route exact path={`${path}/create`} component={CreateCourse} />

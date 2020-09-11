@@ -9,6 +9,8 @@ const Select = ({
   handleSelect,
   required,
   value = '',
+  label,
+  showAsterix = true,
 }) => {
   const [openDrop, setOpenDrop] = useState(false);
   const [presentValue, setPresentValue] = useState('');
@@ -23,11 +25,15 @@ const Select = ({
     );
 
     setPresentValue(
-      `${val ? val.name : `${currentText}${required ? ' *' : ''}`}`
+      `${
+        val
+          ? val.name
+          : `${currentText}${required ? (showAsterix ? ' *' : '') : ''}`
+      }`
     );
 
     return () => {};
-  }, [currentText, required, inputs, value, presentValue]);
+  }, [currentText, required, inputs, value, presentValue, showAsterix]);
 
   const handleClick = (name, value, current_name) => {
     setPresentValue(current_name);
@@ -64,6 +70,7 @@ const Select = ({
 
   return (
     <div className="input-div" onBlur={close} tabIndex={-1} ref={parent}>
+      {label && <label className="t_label">{label}</label>}
       <div className="input-type">
         <div
           className={`select ${openDrop ? 'open-drop' : ''}`}

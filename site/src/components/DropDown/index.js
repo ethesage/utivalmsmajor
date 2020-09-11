@@ -1,4 +1,5 @@
 import React from 'react';
+import dots from 'assets/dashboard/dots.png';
 import './style.scss';
 
 const DropDown = ({ children, header }) => {
@@ -14,7 +15,13 @@ const DropDown = ({ children, header }) => {
   return (
     <div className="dots" onBlur={close} tabIndex="-1">
       <div className="hd-sec" onClick={onClick}>
-        {header}
+        {header ? (
+          header
+        ) : (
+          <div className="img-sec flex-row">
+            <img src={dots} alt="dots" className="img contain" />
+          </div>
+        )}
       </div>
       <div className="drops">{children}</div>
     </div>

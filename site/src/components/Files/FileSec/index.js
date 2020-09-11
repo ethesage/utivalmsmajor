@@ -2,12 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import delete_icon from '../../../assets/icons/delete.png';
 import numeral from 'numeral';
-import dots from '../../../assets/dashboard/dots.png';
 import DropDown from '../../DropDown';
 import './style.scss';
 
-
-const FileSec = ({ file, personal = false, view, download }) => {
+const FileSec = ({ file, personal = false, view, download, deleteFile }) => {
   return (
     <div className="file_card flex-row j-space">
       <div className="left flex-row j-start al-start">
@@ -38,17 +36,11 @@ const FileSec = ({ file, personal = false, view, download }) => {
           )}
         </div>
       ) : (
-        <DropDown
-          header={
-            <div className="img-sec flex-row">
-              <img src={dots} alt="dots" className="img contain" />
-            </div>
-          }
-        >
+        <DropDown>
           <ul>
             <li onClick={() => view(file.webViewLink)}>View</li>
             <li onClick={() => download(file.webContentLink)}>Download</li>
-            <li>Delete</li>
+            <li onClick={() => deleteFile(file.id)}>Delete</li>
           </ul>
         </DropDown>
       )}

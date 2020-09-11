@@ -1,6 +1,10 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
+let text = /^[a-zA-Z\d\s\w. -/'’“”"",:;?._{}()|/\\]{2,}$/;
+let shortText = /^[a-zA-Z]{3,}$/;
+let number = /^[0-9]{1,}$/;
+
 const patterns = {
   email: /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:]|])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:)+)\])/,
   password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
@@ -16,10 +20,19 @@ const patterns = {
   gender: /^(?!none)([\w. -])+$/,
   comment: /^[\w\s]{2,}$/,
   linkedin: /(ftp|http|https):\/\/?((www|\w\w)\.)?linkedin.com(\w+:{0,1}\w*@)?(\S+)(:([0-9])+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/,
-  bio: /\b((?!=|,|\.).)+(.){2,300}\b/,
+  bio: text,
+  name: text,
+  description: text,
+  duration: number,
+  level: shortText,
+  degree: shortText,
+  price: number,
+  cprice: number,
+  course_type: shortText,
 };
 
 export const validate = (field, Regex) => {
+  console.log(field, Regex);
   if (patterns[Regex].test(field)) return true;
   return false;
 };
@@ -123,4 +136,3 @@ export const weeks = {
   14: 'fourtheen',
   15: 'fifteen',
 };
-

@@ -2,9 +2,10 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Layout from '../../Layouts/MainView';
 import Courses from './Courses';
-import FAQ from '../FAQ';
 import Home from './Home';
-import Files from '../Files';
+import Students from '../Students';
+import Trainers from '../Trainers';
+import Admins from '../Admins';
 import Settings from '../Settings';
 import './style.scss';
 
@@ -17,12 +18,19 @@ const Dashboard = () => {
       <Route path="/admin/courses">
         <Courses gapi={gapi} />
       </Route>
-      <Route exact path="/admin/faqs/:info?">
-        <FAQ />
+
+      <Route path="/admin/students">
+        <Students />
       </Route>
-      {/* <Route exact path="/files">
-          <Files gapi={gapi} />
-        </Route> */}
+
+      <Route path="/admin/trainers">
+        <Trainers />
+      </Route>
+
+      <Route path="/admin/admins">
+        <Admins />
+      </Route>
+
       <Route exact path="/admin/settings">
         <Settings />
       </Route>

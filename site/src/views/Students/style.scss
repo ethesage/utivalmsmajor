@@ -1,0 +1,22 @@
+.students {
+}
+
+.user_filter {
+  max-width: 1100px;
+  margin-bottom: 50px;
+  display: grid;
+  grid-template-columns: 28% 28% 36%;
+  column-gap: 4%;
+
+  .in_sec {
+    .input-div {
+      margin-bottom: 0;
+      margin-left: 20px;
+
+      .input-type {
+        background: white;
+        box-shadow: 10px 5px 20px rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
+}

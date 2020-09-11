@@ -54,12 +54,20 @@ const Google = ({ updateSignInStatus = () => {} }) => {
 
       data.append(
         'metadata',
-        new Blob([JSON.stringify({ name: file.name, mimeType: file.type })], {
-          type: 'application/json',
-        })
+        new Blob(
+          [
+            JSON.stringify({
+              name: file.name,
+              mimeType: file.type,
+              parents: [folderId],
+            }),
+          ],
+          {
+            type: 'application/json',
+          }
+        )
       );
       data.append('file', file);
-      data.append('parents', folderId);
 
       try {
         const response = await axios.post(
@@ -69,15 +77,25 @@ const Google = ({ updateSignInStatus = () => {} }) => {
           data,
           config
         );
-        console.log(response);
-        return response;
+
+        return response.data;
       } catch (err) {
-        return err;
+        return 'error';
       }
     }
   }
 
-  const deleteFile = () => {};
+  const deleteFile = async (id, returns) => {
+    try {
+      const res = await g_api.client.drive.files.delete({
+        fileId: id,
+        fields: returns,
+      });
+      return res.data;
+    } catch (err) {
+      return 'error';
+    }
+  };
 
   const get = async (folferId, id, returns = '*') => {
     let res;
@@ -88,7 +106,7 @@ const Google = ({ updateSignInStatus = () => {} }) => {
         // q: "parents = '0B5RT2eT5MWStfm85OWdXZURzTEJZMlowX2phU2gtNkdheXkyTFcxcVQwZXNLSEIxS0FVaEE'",
         pageSize: 10,
         fields:
-          'nextPageToken, files(name, iconLink, webContentLink, size, webViewLink, parents)',
+          'nextPageToken, files(id, name, iconLink, webContentLink, size, webViewLink, parents)',
       });
     } else {
       res = await g_api.client.drive.files.get({ fileId: id, fields: returns });

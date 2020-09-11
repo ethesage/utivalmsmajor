@@ -1,12 +1,56 @@
 @import '../../media';
 
 .cre_cx {
+  width: 100%;
+
   .cx_hdr {
     font-size: 30px;
     font-weight: normal;
 
     @include for-size(phone-only) {
       font-size: 20px;
+    }
+  }
+
+  form {
+    width: 100%;
+    max-width: 700px;
+    margin-top: 50px;
+
+    .input-div {
+      margin-bottom: 40px;
+    }
+
+    .sec_2 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(
+        auto-fill,
+        minmax(#{'min(200px, 100%)'}, 1fr)
+      );
+      column-gap: 30px;
+      align-items: flex-end;
+    }
+
+    .sec_3 {
+      display: grid;
+      grid-template-columns: repeat(
+        auto-fill,
+        minmax(#{'min(200px, 100%)'}, 1fr)
+      );
+      column-gap: 30px;
+      align-items: flex-end;
+    }
+
+    .sec_4 {
+      .cximg {
+        p {
+          color: color(theme);
+          text-decoration: underline;
+          cursor: pointer;
+          margin-bottom: 10px;
+        }
+      }
     }
   }
 }

@@ -21,7 +21,7 @@ export const login = () => async (dispatch) => {
   dispatch(loading());
 
   try {
-    isloggedIn = await axiosInstance.get('/logged-in');
+    // isloggedIn = await axiosInstance.get('/logged-in');
 
     dispatch({
       type: 'Login',

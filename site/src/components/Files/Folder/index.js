@@ -1,7 +1,6 @@
 import React from 'react';
 // import no_file from "../../assets/dashboard/no_file.png";
-import dots from '../../../assets/dashboard/dots.png';
-import folder from '../../../assets/icons/folder.png';
+import folder from 'assets/icons/folder.png';
 import FilesSec from '../FileSec';
 import DropDown from '../../DropDown';
 import RevielDrop from '../../RevielDrop';
@@ -24,13 +23,7 @@ const Files = () => {
                   </p>
                 </h2>
 
-                <DropDown
-                  header={
-                    <div className="img-sec flex-row">
-                      <img src={dots} alt="dots" className="img contain" />
-                    </div>
-                  }
-                >
+                <DropDown>
                   <ul>
                     <li>View</li>
                     <li>Download</li>
@@ -61,13 +54,7 @@ const Files = () => {
                   </p>
                 </h2>
 
-                <DropDown
-                  header={
-                    <div className="img-sec flex-row">
-                      <img src={dots} alt="dots" className="img contain" />
-                    </div>
-                  }
-                >
+                <DropDown>
                   <ul>
                     <li>View</li>
                     <li>Download</li>

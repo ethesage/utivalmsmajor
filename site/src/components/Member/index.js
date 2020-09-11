@@ -1,6 +1,6 @@
 import React from 'react';
-import user_icon from '../../assets/user_icon.png';
-import linkedinPic from '../../assets/icons/linkedin.png';
+import user_icon from 'assets/user_icon.png';
+import linkedinPic from 'assets/icons/linkedin.png';
 import './style.scss';
 
 const Member = ({

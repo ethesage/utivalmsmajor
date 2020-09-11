@@ -1,7 +1,7 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useToasts } from 'react-toast-notifications';
-import { axiosInstance } from 'helpers';
+import { axiosInstance, toBase64 } from 'helpers';
 import useInput from 'Hooks/useInput';
 import data from 'data/createCourse';
 import Button from 'components/Button';
@@ -11,7 +11,9 @@ import './style.scss';
 const CreateCourse = () => {
   const submitButton = useRef();
   const { addToast } = useToasts();
-  const dispatch = useDispatch();
+  const [imgSrc, setImgSrc] = useState();
+  const image = useRef();
+  // const dispatch = useDispatch();
 
   const [handleSubmit, handleChange, inputTypes, validateSelf] = useInput({
     inputs: data,
@@ -36,35 +38,126 @@ const CreateCourse = () => {
     },
   });
 
+  const image_handler = async (e) => {
+    const { files } = e.target;
+    const _value = await toBase64(files[0]);
+    setImgSrc(_value);
+  };
+
   return (
     <section className="cre_cx">
       <h1 className="cx_hdr">Create New Course</h1>
 
-      <form>
-        {data.map((form, i) => (
-          <Input
-            key={`login_form_${i}`}
-            name={form.name}
-            type={form.type}
-            itype={form.itype}
-            placeHolder={form.itype ? '' : form.placeHolder}
-            value={inputTypes[form.name]}
-            errorMsg={form.errorMsg}
-            required={form.required}
-            handleChange={handleChange}
-            validateSelf={validateSelf}
-            inputs={form.select}
-            currentText={form.placeHolder}
-            handleSelect={handleChange}
-            label={form.label}
-          />
-        ))}
+      <form className="">
+        <div className="sub_fm">
+          {data.slice(0, 2).map((form, i) => (
+            <Input
+              key={`login_form_${i}`}
+              name={form.name}
+              type={form.type}
+              itype={form.itype}
+              placeHolder={form.itype ? '' : form.placeHolder}
+              value={inputTypes[form.name]}
+              errorMsg={form.errorMsg}
+              required={form.required}
+              handleChange={handleChange}
+              validateSelf={validateSelf}
+              inputs={form.select}
+              currentText={form.placeHolder}
+              label={form.label}
+              showAsterix={false}
+            />
+          ))}
+        </div>
+        <div className="sub_fm sec_2">
+          {data.slice(2, 5).map((form, i) => (
+            <Input
+              key={`login_form_${i}`}
+              name={form.name}
+              type={form.type}
+              itype={form.itype}
+              placeHolder={form.itype ? '' : form.placeHolder}
+              value={inputTypes[form.name]}
+              errorMsg={form.errorMsg}
+              required={form.required}
+              handleChange={handleChange}
+              validateSelf={validateSelf}
+              inputs={form.selects}
+              currentText={form.placeHolder}
+              handleSelect={handleChange}
+              label={form.label}
+              showAsterix={false}
+            />
+          ))}
+        </div>
+        <div className="sub_fm sec_3">
+          {data.slice(5, 7).map((form, i) => (
+            <Input
+              key={`login_form_${i}`}
+              name={form.name}
+              type={form.type}
+              itype={form.itype}
+              placeHolder={form.itype ? '' : form.placeHolder}
+              value={inputTypes[form.name]}
+              errorMsg={form.errorMsg}
+              required={form.required}
+              handleChange={handleChange}
+              validateSelf={validateSelf}
+              inputs={form.select}
+              currentText={form.placeHolder}
+              label={form.label}
+              showAsterix={false}
+            />
+          ))}
+        </div>
+        <div className="sub_fm sec_4">
+          {data.slice(7).map((form, i) => (
+            <Input
+              key={`login_form_${i}`}
+              name={form.name}
+              type={form.type}
+              itype={form.itype}
+              placeHolder={form.itype ? '' : form.placeHolder}
+              value={inputTypes[form.name]}
+              errorMsg={form.errorMsg}
+              required={form.required}
+              handleChange={handleChange}
+              validateSelf={validateSelf}
+              inputs={form.select}
+              currentText={form.placeHolder}
+              handleSelect={handleChange}
+              label={form.label}
+              types={form.types}
+            />
+          ))}
+          <div className="input-div">
+            <label className="cximg flex-col al-start" htmlFor="image_profile">
+              <div className="img-sec">
+                <p>Add cover image</p>
+                <img
+                  src={imgSrc}
+                  alt=""
+                  ref={image}
+                  className="img cover box-shade"
+                />
+              </div>
+            </label>
+            <input
+              type="file"
+              id="image_profile"
+              name="profilePic"
+              accept="image/png, image/jpeg"
+              style={{ display: 'none' }}
+              onChange={image_handler}
+            />
+          </div>
+        </div>
 
         <Button
           btnRef={submitButton}
           onClick={handleSubmit}
           className="s_btn flex-row mx-auto"
-          text="Update"
+          text="Create"
         />
       </form>
     </section>

@@ -21,6 +21,10 @@ html {
   color: color(text);
 }
 
+abbr[title] {
+  text-decoration: none;
+}
+
 a {
   color: color(text);
   text-decoration: none;
@@ -124,7 +128,7 @@ button {
   display: -webkit-box;
   -webkit-line-clamp: var(--number);
   -webkit-box-orient: vertical;
-  overflow-y: hidden;
+  overflow: hidden;
   text-overflow: ellipsis;
   hyphens: auto;
   word-break: break-all;
