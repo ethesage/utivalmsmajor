@@ -297,3 +297,23 @@ export const editClassAssignment = async (req, res) => {
       errorStat(res, 500, 'Operation Failed, Please Try Again');
     }
   }
+
+  export const addClassResources = async (req, res) => {
+    const { classId } = req.body.class;
+    try {
+      const findClass = await models.Classes.findOne({
+        where: { id: classId }
+      })
+  
+      if (!findClass) return errorStat(res, 404, 'Class not found')
+  
+      const createResource = await models.ClassResouces.create({
+        ...req.body.class,
+        type: 'resource'
+      });
+      return successStat(res, 201, 'data', { ...createResource.dataValues, message: 'Class Resource created successfully' });
+    } catch (e) {
+      console.log(e);
+      errorStat(res, 500, 'Operation Failed, Please Try Again');
+    }
+  };
