@@ -1,42 +1,56 @@
 import React, { useState, useEffect } from 'react';
 import { axiosInstance } from 'helpers';
 // import drive from '../../../../helpers/drive';
+import { useSelector, useDispatch } from 'react-redux';
 import CountCard from 'components/CountCard';
 import course from 'assets/icons/dashboard/course.png';
 import completed from 'assets/icons/dashboard/completed.png';
 import ongoing from 'assets/icons/dashboard/ongoing.png';
+import { countDetails } from 'g_actions/student';
+
+const d_data = [
+  {
+    title: 'Total Courses',
+    link: 'course',
+    num: 0,
+    img: course,
+  },
+  {
+    title: 'Ongoing Courses',
+    num: 0,
+    link: 'ongoing',
+    img: ongoing,
+  },
+  {
+    title: 'Completed Courses',
+    num: 0,
+    link: 'completed',
+    img: completed,
+  },
+];
 
 const CountSection = () => {
-  const [data, setData] = useState([
-    {
-      title: 'Total Courses',
-      link: 'course',
-      num: 0,
-      img: course,
-    },
-    {
-      title: 'Ongoing Courses',
-      num: 0,
-      link: 'ongoing',
-      img: ongoing,
-    },
-    {
-      title: 'Completed Courses',
-      num: 0,
-      link: 'completed',
-      img: completed,
-    },
-  ]);
+  const counts = useSelector((state) => state.student.counts);
+  const dispatch = useDispatch();
+
+  const stateCount =
+    counts && d_data.map((pre) => ({ ...pre, num: counts[pre.link] }));
+
+  const [data, setData] = useState(stateCount || d_data);
 
   useEffect(() => {
     (async () => {
-      const response = await axiosInstance.get('/student/all/dashboard');
-
-      setData((prev) =>
-        prev.map((pre) => ({ ...pre, num: response.data.data[pre.link] }))
-      );
+      await dispatch(countDetails());
     })();
-  }, []);
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (!counts) return;
+
+    setData((prev) => prev.map((pre) => ({ ...pre, num: counts[pre.link] })));
+
+    return () => {};
+  }, [counts]);
 
   return (
     <>

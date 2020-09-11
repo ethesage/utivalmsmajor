@@ -69,8 +69,10 @@ export default function Input({
         autoDismiss: true,
       });
 
-      submitButton.current.children[0].innerHTML = btnText.reg;
-      submitButton.current.classList.remove('loader');
+      if (submitButton.current) {
+        submitButton.current.children[0].innerHTML = btnText.reg;
+        submitButton.current.classList.remove('loader');
+      }
       return error;
     }
 

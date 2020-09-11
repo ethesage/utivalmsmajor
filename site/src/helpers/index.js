@@ -32,7 +32,6 @@ const patterns = {
 };
 
 export const validate = (field, Regex) => {
-  console.log(field, Regex);
   if (patterns[Regex].test(field)) return true;
   return false;
 };
@@ -54,7 +53,7 @@ export const baseurl =
 
 export const axiosInstance = axios.create({
   baseURL: `${baseurl}/api/v1`,
-  timeout: 10000,
+  timeout: 20000,
   withCredentials: true,
   headers: {
     'Access-Control-Allow-Headers':

@@ -30,6 +30,20 @@ export const getEnrolledMembers = (id, data) => async (dispatch) => {
   });
 };
 
+export const countDetails = () => async (dispatch) => {
+  let counts;
+  try {
+    counts = await axiosInstance.get(`/student/all/dashboard`);
+  } catch (error) {
+    return error;
+  }
+
+  dispatch({
+    type: 'COUNTS',
+    payload: counts.data.data,
+  });
+};
+
 export const getClassDays = (id) => async (dispatch) => {
   let classdays;
   try {

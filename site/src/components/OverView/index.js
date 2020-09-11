@@ -37,6 +37,8 @@ const Overview = () => {
     return () => {};
   }, [enrolledcourses, courseId]);
 
+  console.log(currentCourse);
+
   return (
     <>
       <NavBar />
@@ -60,7 +62,7 @@ const Overview = () => {
 
               <div className="list_info">
                 <h2>What you will learn</h2>
-                {currentCourse.CourseCohort.Classes.map((classr, i) => (
+                {currentCourse.Course.CourseDescriptions.map((classr, i) => (
                   <div className="list" key={`descriptors_${i}`}>
                     <span className="flex-row">
                       <p>{i + 1}</p>

@@ -3,6 +3,7 @@ export const initialState = {
   currentCourse: null,
   enrolledStudents: null,
   classdays: null,
+  counts: null,
 };
 
 const course = (state = initialState, action) => {
@@ -26,6 +27,11 @@ const course = (state = initialState, action) => {
       return {
         ...state,
         classdays: action.payload,
+      };
+    case 'COUNTS':
+      return {
+        ...state,
+        counts: action.payload,
       };
     default:
       return state;
