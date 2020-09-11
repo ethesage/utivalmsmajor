@@ -85,9 +85,57 @@
         display: block;
         tr {
           td {
+            position: relative;
+
+            .toolTip {
+              background: #fcf2dc;
+              color: black;
+              padding: 10px;
+              width: 150px;
+              border-radius: 10px;
+              position: absolute;
+              top: 80%;
+              transition: 0.3s ease;
+              opacity: 0;
+              z-index: 20;
+
+              p {
+                font-size: 0.8em;
+                strong {
+                  white-space: nowrap;
+                }
+              }
+            }
+
+            &.left {
+              .toolTip {
+                left: 0;
+              }
+            }
+
+            &.right {
+              .toolTip {
+                right: 0;
+              }
+            }
+
             &.today {
               span {
                 background: color(off);
+                color: white;
+              }
+            }
+
+            &.classDay {
+              span {
+                background: color(theme);
+                color: white;
+              }
+            }
+
+            &.assignment {
+              span {
+                background: color(secondary);
                 color: white;
               }
             }
@@ -102,6 +150,11 @@
               @include for-size(phone-only) {
                 width: 30px;
                 height: 30px;
+              }
+
+              &:hover + .toolTip {
+                opacity: 1;
+                top: 110%;
               }
             }
           }

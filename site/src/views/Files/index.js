@@ -6,15 +6,16 @@ import {
   useRouteMatch,
   // useParams,
 } from 'react-router-dom';
-import ProgressBar from '../../components/ProgressBar';
-import Modal from '../../components/Modal';
-// import Button from '../../components/Button';
-import Files from '../../components/Files';
-import Folder from '../../components/Files/Folder';
-import Select from '../../components/Select';
-import Layout from '../../components/SideNavListLayout';
-import Input from '../../components/Input';
-import Drag from '../../components/Drag';
+import Skeleton from 'react-skeleton-loader';
+import ProgressBar from 'components/ProgressBar';
+import Modal from 'components/Modal';
+// import Button from 'components/Button';
+import Files from 'components/Files';
+import Folder from 'components/Files/Folder';
+import Select from 'components/Select';
+import Layout from 'components/SideNavListLayout';
+import Input from 'components/Input';
+import Drag from 'components/Drag';
 import './style.scss';
 
 const links = [
@@ -28,7 +29,12 @@ const links = [
   },
 ];
 
-const File_Page = ({ gapi: { signedIn, gapi } }) => {
+const File_Page = ({ gapi }) => {
+  // const { signedIn, gapi } = gapi;
+
+  console.log(gapi.gapi);
+  // console.log(gapi.gapi);
+
   let { path } = useRouteMatch();
   let [files, setFiles] = useState();
   const [progress, setProgress] = useState(0);
@@ -38,17 +44,18 @@ const File_Page = ({ gapi: { signedIn, gapi } }) => {
   };
 
   useEffect(() => {
-    if (!signedIn) return;
+    if (!gapi) return;
+    if (!gapi.signedIn) return;
 
     const getFiles = async () => {
-      const new_files = await gapi.get();
+      const new_files = await gapi.gapi.get();
       setFiles(new_files);
     };
 
     getFiles();
 
     return () => {};
-  }, [signedIn, gapi]);
+  }, [gapi]);
 
   const viewFile = async (contentLink) => {
     window.open(contentLink, '_blank');
@@ -59,18 +66,31 @@ const File_Page = ({ gapi: { signedIn, gapi } }) => {
   };
 
   const upload = async (files) => {
-    gapi.upload(files);
+    gapi.gapi.upload(files, setProgress, '1F0r-bTgMLTkUhBf2o-ZTwtCPB3dWfnXp');
   };
 
   const deleteFile = () => {
-    gapi.deleteFile();
+    gapi.gapi.deleteFile();
   };
 
   const AllFile = () => {
     return (
       <div className="upload_sec flex-row j-start al-start">
-        <div className="file_con">
-          {files && (
+        <div className="file_con flex-col">
+          {!files ? (
+            [1, 2, 3].map((i) => (
+              <div
+                key={`file_loader_${i}`}
+                style={{
+                  height: i === 1 ? '50px' : '10px',
+                  width: '80%',
+                  marginBottom: '5px',
+                }}
+              >
+                <Skeleton width="100%" />
+              </div>
+            ))
+          ) : (
             <Files
               files={files}
               view={viewFile}
@@ -109,11 +129,7 @@ const File_Page = ({ gapi: { signedIn, gapi } }) => {
           subClassName="file_sec"
           links={links.map((info, i) => (
             <li key={`side_link_courses_${i}`}>
-              <NavLink
-                exact
-                className="side_link"
-                to={`/dashboard/files${info.link}`}
-              >
+              <NavLink exact className="side_link" to={`/files${info.link}`}>
                 {info.title}
               </NavLink>
             </li>
@@ -126,7 +142,7 @@ const File_Page = ({ gapi: { signedIn, gapi } }) => {
         </Layout>
       </div>
       <Modal>
-        <ProgressBar progress={0} />
+        <ProgressBar progress={progress} />
       </Modal>
     </>
   );

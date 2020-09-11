@@ -8,7 +8,7 @@ const Select = ({
   currentText = '',
   handleSelect,
   required,
-  value,
+  value = '',
 }) => {
   const [openDrop, setOpenDrop] = useState(false);
   const [presentValue, setPresentValue] = useState('');
@@ -17,6 +17,7 @@ const Select = ({
   const parent = React.createRef();
 
   useEffect(() => {
+    if (presentValue) return;
     const val = inputs.find(
       (input) => input.value.toUpperCase() === value.toUpperCase()
     );
@@ -26,7 +27,7 @@ const Select = ({
     );
 
     return () => {};
-  }, [currentText, required, inputs, value]);
+  }, [currentText, required, inputs, value, presentValue]);
 
   const handleClick = (name, value, current_name) => {
     setPresentValue(current_name);
@@ -40,10 +41,11 @@ const Select = ({
   };
 
   const close = (e) => {
-    if (!e.target) setOpenDrop(false);
-    if (e.target.classList.contains('currentValue')) return;
+    const leavingParent = !parent.current.contains(e.relatedTarget);
 
-    setOpenDrop(false);
+    if (leavingParent) {
+      setOpenDrop(false);
+    }
   };
 
   const options = inputs.map((input, index) => {

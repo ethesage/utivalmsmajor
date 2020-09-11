@@ -1,15 +1,15 @@
-import React from "react";
-import { NavLink, useParams } from "react-router-dom";
-import "./style.scss";
+import React from 'react';
+import { NavLink, useParams } from 'react-router-dom';
+import './style.scss';
 
 const CourseNav = () => {
   const { courseId } = useParams();
 
   const links = [
-    { link: `overview/${courseId}`, title: "Overview" },
-    { link: `classroom/${courseId}`, title: "Classroom" },
-    { link: `study-plan/${courseId}`, title: "Study Plan" },
-    { link: `members/${courseId}`, title: "Members" },
+    { link: `overview/${courseId}`, title: 'Overview' },
+    { link: `classroom/${courseId}`, title: 'Classroom' },
+    { link: `study-plan/${courseId}`, title: 'Study Plan' },
+    { link: `members/${courseId}`, title: 'Members' },
   ];
 
   return (
@@ -17,10 +17,7 @@ const CourseNav = () => {
       <ul className="flex-row j-space">
         {links.map((link, i) => (
           <li key={`nav_cx_${i}`} className="cx_nav_item">
-            <NavLink
-              to={`/dashboard/courses/${link.link}`}
-              activeClassName="__active"
-            >
+            <NavLink to={`/courses/${link.link}`} activeClassName="__active">
               {link.title}
             </NavLink>
           </li>

@@ -1,0 +1,108 @@
+@import '../../media';
+
+.dashboard {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  background: color(shade);
+  // overflow: auto;
+
+  .g_signup {
+    background: white;
+    width: 90vw;
+    width: 400px;
+    height: 300px;
+    padding: 30px;
+
+    .intro {
+      font-size: 0.9em;
+      color: color(text);
+      margin-bottom: 20px;
+    }
+
+    button {
+      background: color(light);
+      width: 100%;
+      padding: 10px 20px;
+      border-radius: 5px;
+
+      p {
+        color: color(text);
+        @include for-size(phone-only) {
+          font-size: 0.8em;
+        }
+      }
+      img {
+        width: 25px;
+        margin-right: 20px;
+
+        @include for-size(phone-only) {
+          margin-right: 10px;
+        }
+      }
+    }
+  }
+
+  .dh-aside {
+    max-width: 300px;
+    min-width: 250px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    transition: 0.2s ease;
+
+    .contents {
+      z-index: 0;
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    @include for-size(tablet-landscape-up) {
+      width: 0;
+      min-width: 0;
+      overflow: hidden;
+
+      &.open {
+        min-width: 250px;
+      }
+    }
+  }
+
+  .dh-main {
+    flex-grow: 1;
+    // height: 100vh;
+    min-height: calc(100vh - 100px);
+    overflow: hidden;
+    margin-top: 100px;
+
+    .contents {
+      padding: 3% 5%;
+      height: 100%;
+      width: 100%;
+      flex-grow: 1;
+
+      @include for-size(tablet-landscape-up) {
+        // width: calc(100vw - 8px);
+      }
+
+      .dash-con {
+        flex-grow: 1;
+        width: 100%;
+      }
+    }
+
+    .dash-footer {
+      width: 100%;
+      text-align: center;
+      padding: 30px;
+      // margin-top: 5%;
+    }
+
+    @include for-size(tablet-landscape-up) {
+      width: calc(100vw - 8px);
+      align-items: flex-start;
+      justify-content: flex-start;
+    }
+  }
+}

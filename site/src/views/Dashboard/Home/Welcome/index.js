@@ -7,7 +7,7 @@ import './style.scss';
 
 const Welcome = ({ user }) => {
   const dispatch = useDispatch();
-  const [open, setOpen] = useState(user.firstentry);
+  const [open, setOpen] = useState(user.firstentry && user.isStudent);
 
   const setFirstUserFalse = async () => {
     await axiosInstance.patch('/user/update', {

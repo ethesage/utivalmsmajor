@@ -30,7 +30,7 @@ const ClassesSec = () => (
 
       <Button
         className="p_btn short flex-row"
-        link="/dashboard/courses"
+        link="/courses"
         text="Start Class"
       />
     </div>

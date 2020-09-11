@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Route, Switch, useRouteMatch, Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Overview from '../../../components/OverView';
 import CourseList from './CoursesList';
 import Classroom from '../../../components/Classroom';
@@ -11,21 +11,21 @@ import StudyPlan from '../../StudyPlan';
 import Members from '../../Members';
 import './style.scss';
 
-const Courses = () => {
+const Courses = ({ gapi }) => {
   let { path } = useRouteMatch();
   const currentCourse = useSelector((state) => state.student.currentCourse);
 
   return (
     <section className="dash-con mx_courx flex-col al-start j-start">
       <nav className="nav_cux flex-row j-start">
-        <Link to="/dashboard/courses" className="reg_text">
+        <Link to="/courses" className="reg_text">
           <h3>My Courses</h3>
         </Link>
         {currentCourse ? (
           <>
             <span>{' > '}</span>
             <Link
-              to={`/dashboard/classroom/${currentCourse.id}`}
+              to={`/courses/overview/${currentCourse.id}`}
               className="reg_text"
             >
               <h3> {`${currentCourse.Course.name}`}</h3>
@@ -53,11 +53,9 @@ const Courses = () => {
           path={`${path}/assignment/view_grade/:id`}
           component={ViewGrade}
         />
-        <Route
-          exact
-          path={`${path}/assignment/:courseId/:index`}
-          component={Assignment}
-        />
+        <Route exact path={`${path}/assignment/:courseId/:classroom`}>
+          <Assignment gapi={gapi} />
+        </Route>
         <Route
           exact
           path={`${path}/study-plan/:courseId`}

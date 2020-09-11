@@ -18,6 +18,7 @@ function Classes({
   full,
   index,
   link,
+  showResources = true,
 }) {
   const { title, description } = data;
   const { isTrainer } = useSelector((state) => state.auth);
@@ -35,10 +36,7 @@ function Classes({
                 Week {weeks[index + 1]} - {title}
               </span>
               {isTrainer && full ? (
-                <Link
-                  to={`/dashboard/courses/editClass/${data.id}`}
-                  className="edit"
-                >
+                <Link to={`/courses/editClass/${data.id}`} className="edit">
                   Edit
                 </Link>
               ) : null}
@@ -52,36 +50,44 @@ function Classes({
             <p>{description}</p>
           </div>
 
-          <div className="btns">
-            <div>
-              <ResourceBtn
-                img={play}
-                text="Join Class"
-                color="theme"
-                link={link}
-              />
-            </div>
-            <div className="reg_text">
-              <h4>Resources</h4>
-              <div className="btn_sec_con flex-row j-start">
-                <div className="btn_sec">
-                  <ResourceBtn
-                    img={material}
-                    text="Download Materials"
-                    color="secondary"
-                  />
-                </div>
-                <div className="btn_sec">
-                  <ResourceBtn img={assignment} text="Assignment" color="off" />
+          {showResources ? (
+            <div className="btns">
+              <div>
+                <ResourceBtn
+                  img={play}
+                  text="Join Class"
+                  color="theme"
+                  link={link}
+                />
+              </div>
+              <div className="reg_text">
+                <h4>Resources</h4>
+                <div className="btn_sec_con flex-row j-start">
+                  <div className="btn_sec">
+                    <ResourceBtn
+                      img={material}
+                      text="Download Materials"
+                      color="secondary"
+                    />
+                  </div>
+                  <div className="btn_sec">
+                    <ResourceBtn
+                      img={assignment}
+                      text="Assignment"
+                      color="off"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          ) : (
+            ''
+          )}
 
           {!full ? (
             <Link
               className="view"
-              to={`/dashboard/courses/classroom/${courseId}/${data.id}`}
+              to={`/courses/classroom/${courseId}/${data.id}`}
             >
               View full outline
             </Link>

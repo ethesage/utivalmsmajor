@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useParams } from 'react-router-dom';
 import { getEnrolledCourses } from '../../../g_actions/student';
@@ -9,29 +9,6 @@ import NavBar from '../../CourseNav';
 import assignment from '../../../assets/icons/course/assignment.png';
 import Layout from '../../SideNavListLayout';
 import './style.scss';
-
-// const _data = [
-//   {
-//     id: 1,
-//     title: 'Jude',
-//     name: 'Week one - SQL For Data',
-//   },
-//   {
-//     id: 2,
-//     title: 'Jude violet',
-//     name: 'Week Two - SQL For Data',
-//   },
-//   {
-//     id: 3,
-//     title: 'Jude chinoso',
-//     name: 'Week Three - SQL For Data',
-//   },
-//   {
-//     id: 4,
-//     title: 'Jude okuwanyi',
-//     name: 'Week Four - SQL For Data',
-//   },
-// ];
 
 function FullClass() {
   const { courseId, classroom } = useParams();
@@ -47,7 +24,7 @@ function FullClass() {
       })();
 
     return () => {};
-  }, [dispatch, enrolledcourses]);
+  }, [dispatch, enrolledcourses, courseId, currentCourse]);
 
   useEffect(() => {
     if (!enrolledcourses) return;
@@ -62,7 +39,7 @@ function FullClass() {
     );
 
     return () => {};
-  }, [enrolledcourses, courseId]);
+  }, [enrolledcourses, courseId, currentCourse, dispatch]);
 
   return (
     <>
@@ -76,7 +53,7 @@ function FullClass() {
               <li>
                 <NavLink
                   className="side_link"
-                  to={`/dashboard/courses/classroom/${courseId}/${classroom.id}`}
+                  to={`/courses/classroom/${courseId}/${classroom.id}`}
                   key={`side_link_courses_${i}`}
                 >
                   Week {i + 1}
@@ -101,7 +78,7 @@ function FullClass() {
                       img={assignment}
                       text="Submit Assignment"
                       color="approved"
-                      // link={`/dashboard/courses/assignment/${courseId}/${data.id}`}
+                      link={`/courses/assignment/${courseId}/${classroom}`}
                     />
                   </div>
                 </div>

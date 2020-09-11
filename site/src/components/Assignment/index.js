@@ -1,81 +1,126 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import ResourceBtn from '../ResourceButton';
-import assignment from '../../assets/icons/course/assignment.png';
+import Classes from '../Classroom/Classes';
+import assignment from 'assets/icons/course/assignment.png';
+import { getEnrolledCourses } from 'g_actions/student';
+import Loader from '../Loading';
 import FileSec from '../Files/FileSec';
 import Button from '../Button';
 import DropDown from '../DropDown';
 import '../Classroom/Classes/style.scss';
 import './style.scss';
 
-const Assignment = () => {
-  const { courseId, index } = useParams();
+const Assignment = ({ gapi: { gapi, signedIn } }) => {
+  const { courseId, classroom } = useParams();
+  const [assLink, setAssLink] = useState();
+
+  const dispatch = useDispatch();
+  const enrolledcourses = useSelector((state) => state.student.enrolledcourses);
+  const currentCourse = useSelector((state) => state.student.currentCourse);
+
+  useEffect(() => {
+    if (!enrolledcourses && !currentCourse)
+      (async () => {
+        await dispatch(getEnrolledCourses(courseId));
+      })();
+
+    return () => {};
+  }, [dispatch, enrolledcourses, courseId, currentCourse]);
+
+  useEffect(() => {
+    if (!enrolledcourses) return;
+    if (currentCourse) return;
+
+    dispatch(
+      getEnrolledCourses(
+        courseId,
+        enrolledcourses &&
+          enrolledcourses.find((course) => course.id === courseId)
+      )
+    );
+
+    return () => {};
+  }, [enrolledcourses, courseId, currentCourse, dispatch]);
+
+  useEffect(() => {
+    if (assLink) return;
+    (async () => {
+      if (!signedIn) return;
+      const link = await gapi.get(
+        '',
+        '15mktW3ZOICxNOqrMSYIwzx8tD8TF2RQH',
+        'webContentLink'
+      );
+
+      setAssLink(link);
+    })();
+  }, [gapi, signedIn, assLink]);
+
+  const download = async () => {
+    if (!assLink) return;
+    window.open(assLink.webContentLink);
+  };
 
   return (
-    <div className="asx cx_listnx_con flex-row j-start al-start">
-      <div className="info_sec">
-        <div className={`h_con ${!courseId ? ' full' : ''} full`}>
-          <h2 className="cx_lis-header flex-row j-start">
-            <span>Week one - SQL For Data</span>
-          </h2>
-        </div>
-        <div className="cx_lis-content show full">
-          <div className="inf_x">
-            <h3>How to Query Data</h3>
-            <p>
-              The SQL class helps you learn how to use Structured Query Language
-              (SQL) to extract and analyze data stored in databases. You’ll
-              first learn to extractdata, join tables together, and perform
-              aggregations. Then you’ll learn to do more complex analysis and
-              manipulations using subqueries, temp tables, and window functions.
-              By the end of the course, you’ll be able to write efficient SQL
-              queries to successfullyhandle a variety of data analysis tasks.
-              The Utiva trianing programmes works hard to help you transition to
-              your dream jobs with the right skills from experience
-              professionals
-            </p>
-          </div>
-        </div>
-        <div className="btn_sec_con flex-row j-start">
-          <div className="btn_sec">
-            <ResourceBtn
-              img={assignment}
-              text="Download Assignment"
-              color="off"
-              link=""
-              handleClick={(e) => {
-                e.preventDefault();
-                console.log('clicked');
-              }}
+    <div className="asx flex-row j-start al-start">
+      {currentCourse ? (
+        <>
+          <div className="asx_sec">
+            <Classes
+              data={currentCourse.CourseCohort.Classes.find(
+                (classrum) => classrum.id === classroom
+              )}
+              open={true}
+              showArrow={false}
+              full={true}
+              showResources={false}
             />
+            <div className="btn_sec_con flex-row j-start">
+              <div className="btn_sec">
+                <ResourceBtn
+                  img={assignment}
+                  text="Download Assignment"
+                  color="off"
+                  link=""
+                  handleClick={download}
+                />
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
 
-      <div className="upload">
-        <h3>Your Assignments</h3>
-        <div className="file_sec flex-col j-space al-start">
-          <div className="files">
-            <FileSec personal={true} />
-          </div>
+          <div className="upload">
+            <h3>Your Assignments</h3>
+            <div className="file_sec flex-col j-space al-start">
+              <div className="files">{/* <FileSec personal={true} /> */}</div>
 
-          <div className="drop-sec">
-            <DropDown
-              header={
-                <div className="img-sec flex-row">
-                  <Button className="u_btn flex-row mx-auto" text="Submit" />
-                </div>
-              }
-            >
-              <ul>
-                <li>View</li>
-                <li>Download</li>
-                <li>Delete</li>
-              </ul>
-            </DropDown>
+              <div className="drop-sec">
+                <DropDown
+                  header={
+                    <div className="img-sec flex-row">
+                      <Button
+                        className="u_btn flex-row mx-auto"
+                        text="Submit"
+                      />
+                    </div>
+                  }
+                >
+                  <ul>
+                    <li>View</li>
+                    <li>Download</li>
+                    <li>Delete</li>
+                  </ul>
+                </DropDown>
+              </div>
+            </div>
           </div>
+        </>
+      ) : (
+        <div className="flex-row img">
+          <Loader tempLoad={true} full={false} />
         </div>
-      </div>
+      )}
     </div>
   );
 };

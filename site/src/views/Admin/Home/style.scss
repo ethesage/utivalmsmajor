@@ -1,0 +1,47 @@
+@import '../../../media';
+
+.dash-home {
+  .pie_sec {
+    max-width: 1300px;
+    flex-wrap: wrap;
+    margin-bottom: 100px;
+  }
+
+  .anal_con {
+    min-height: 600px;
+    width: 47%;
+    min-width: 300px;
+    max-width: 700px;
+    box-shadow: 0px 20px 100px rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+
+    @include for-size(tablet-portrait-up) {
+      width: 100%;
+      margin-bottom: 30px;
+    }
+
+    .nav-sec {
+      width: 100%;
+      padding: 30px 30px;
+      border-bottom: 1px solid #eef0f7;
+    }
+
+    .chart_con {
+      flex-grow: 1;
+      width: 100%;
+      padding: 20px;
+    }
+  }
+
+  .bar_sec {
+    overflow-x: auto;
+    width: 100%;
+    box-shadow: 0px 20px 100px rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+    .anal_con {
+      width: 100%;
+      min-width: 600px;
+      max-width: unset;
+    }
+  }
+}

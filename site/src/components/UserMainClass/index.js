@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Sekeleton from 'react-skeleton-loader';
 import Moment from 'react-moment';
+import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { getNextClasses } from '../../views/Dashboard/Home/action';
 import img from '../../assets/homepage/img1.png';
@@ -17,9 +18,6 @@ const ClassesSec = ({ data: { thumbnail, link, name, time, date } }) => (
       <h2>{name}</h2>
 
       <div className="info_sec ">
-        {/* <div className="info flex-row j-start">
-          <img src={week} alt="" /> <p>Week 2</p>
-        </div> */}
         <strong>
           <small>Next class</small>
         </strong>
@@ -32,7 +30,7 @@ const ClassesSec = ({ data: { thumbnail, link, name, time, date } }) => (
         <div className="info flex-row j-start">
           <img src={clock} alt="" />{' '}
           <p>
-            <time>{time}</time>
+            <time>{moment(time, 'HH:mm').format('hh:mm A')}</time>
           </p>
         </div>
       </div>

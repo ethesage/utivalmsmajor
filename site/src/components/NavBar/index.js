@@ -9,7 +9,7 @@ import './style.scss';
 const links = [
   { title: 'Login', link: '/auth/signin' },
   { title: 'Get Started', link: '/auth/signup', classname: ' nav_btn' },
-  { title: 'Dashboard', link: '/dashboard', classname: ' nav_btn' },
+  { title: 'Dashboard', link: '/', classname: ' nav_btn' },
 ];
 
 const NavBar = () => {

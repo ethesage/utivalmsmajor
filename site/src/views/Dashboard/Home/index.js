@@ -1,18 +1,19 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import Button from '../../../components/Button';
-import Classes from '../../../components/Classes';
-import Files from '../../../components/Files';
+import ProfileCheck from 'components/ProfileCheck';
+import Classes from 'components/Classes';
+import Files from 'components/Files';
 import CountSection from './CountSection';
+import Layout from 'Layouts/HomeGrid';
 import Welcome from './Welcome';
-import CourseCard from '../../../components/CourseCard';
-import categories from '../../../data/categories';
-import girl from '../../../assets/utiva viretnship programme.png';
-import UserClases from '../../../components/UserMainClass';
+import CourseCard from 'components/CourseCard';
+import categories from 'data/categories';
+import girl from 'assets/utiva viretnship programme.png';
+import UserClases from 'components/UserMainClass';
 import './style.scss';
 
 const InfoSec = ({ txt, children }) => (
-  <div className="c_card large flex-col">
+  <div className="info_fx flex-col">
     <nav className="c_card_nav flex-row j-space _text">
       <h2>{txt}</h2>
       <p>{txt && `View All ${txt}`}</p>
@@ -26,28 +27,18 @@ const Home = ({ gapi }) => {
 
   return (
     <main className="dash-con dash-home">
-      {!user.profilePic || user.profilePic === '' ? (
-        <div className="com-profile flex-row j-space">
-          <p>Your profile is incomplete. Please update your profile</p>
-
-          <Button
-            className="p_btn short flex-row"
-            link="/dashboard/settings"
-            text="Update Profile"
-          />
-        </div>
-      ) : null}
+      <ProfileCheck user={user} />
 
       <Welcome user={user} />
 
-      <div className="p_sec flex-row j-space">
+      <Layout>
         <CountSection />
-      </div>
+      </Layout>
 
       {isStudent ? (
         <UserClases />
       ) : (
-        <div className="p_sec flex-row j-space">
+        <Layout>
           <InfoSec txt="Classes">
             <Classes />
           </InfoSec>
@@ -56,8 +47,8 @@ const Home = ({ gapi }) => {
             <Files />
           </InfoSec>
 
-          <InfoSec txt="">{/* <Activities /> */}</InfoSec>
-        </div>
+          <InfoSec txt=""></InfoSec>
+        </Layout>
       )}
 
       {isStudent ? (

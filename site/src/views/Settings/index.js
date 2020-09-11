@@ -31,11 +31,7 @@ const File_Page = () => {
           subClassName="setting_sec"
           links={links.map((info, i) => (
             <li key={`side_link_courses_${i}`}>
-              <NavLink
-                exact
-                className="side_link"
-                to={`/dashboard/settings${info.link}`}
-              >
+              <NavLink exact className="side_link" to={`/settings${info.link}`}>
                 {info.title}
               </NavLink>
             </li>

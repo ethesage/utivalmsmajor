@@ -1,0 +1,16 @@
+@import '../../media';
+
+.com-profile {
+  padding: 10px 20px;
+  background: color(light);
+  border-radius: 5px;
+  margin-bottom: 30px;
+
+  @include for-size(phone-only) {
+    flex-direction: column;
+    button {
+      width: auto;
+      margin-top: 30px;
+    }
+  }
+}

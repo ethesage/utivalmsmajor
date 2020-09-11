@@ -51,7 +51,7 @@ const Drag = ({ className, children, handleImage }) => {
         onDragOver={handleDrag}
         onDrop={handleDrop}
       >
-        <div className="flex-row mx-auto">
+        <div className="fx_up_sec flex-row mx-auto">
           <img src={upload} alt="upload" /> Drag file Here
         </div>
       </label>

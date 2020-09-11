@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { getEnrolledCourses } from '../../../../g_actions/student';
+import { getEnrolledCourses } from 'g_actions/student';
 import { Progress } from 'react-sweet-progress';
-import Image from '../../../../components/Image';
-import Loader from '../../../../components/Loading';
-import medal from '../../../../assets/icons/medal.png';
-import not_found from '../../../../assets/not_found.png';
-import Button from '../../../../components/Button';
+import Image from 'components/Image';
+import Loader from 'components/Loading';
+import medal from 'assets/icons/medal.png';
+import not_found from 'assets/not_found.png';
+import Button from 'components/Button';
 import 'react-sweet-progress/lib/style.css';
 import './style.scss';
 
@@ -27,7 +27,7 @@ const CousreCard = ({ data }) => {
 
   return (
     <div className="p_cx_cd">
-      <Link className="img-sec" to={`/dashboard/courses/overview/${id}`}>
+      <Link className="img-sec" to={`/courses/overview/${id}`}>
         <Image image={thumbnail} imgClass="img cover" lazyLoad={true} />
       </Link>
       <div className="txt-sec">

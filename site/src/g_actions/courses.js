@@ -41,3 +41,17 @@ export const getSingleCourse = (slug) => async (dispatch) => {
     payload: course.data.course,
   });
 };
+
+export const getAllCourses = (page) => async (dispatch) => {
+  let course;
+  try {
+    course = await axiosInstance.get(`/course/view?pageLimit=10&currentPage=${page}`);
+  } catch (error) {
+    return error;
+  }
+
+  dispatch({
+    type: 'GET_ALL_COURSES',
+    payload: course.data.course,
+  });
+};

@@ -36,38 +36,56 @@ const Calender = ({ data }) => {
     return dateObject.format('D');
   };
 
-  const accessableData =
+  function formatdata(date) {
+    if (!date) return;
+    const day = new Date(date.date).getDate();
+    return {
+      day,
+      time: date.time,
+    };
+  }
+
+  let accessableData = [];
+
+  accessableData =
     data &&
     data.filter((date) => {
       const year = new Date(date.date).getFullYear().toString();
       const month = allmonths[new Date(date.date).getMonth()];
-      const day = new Date(date.date).getDay();
-
-      console.log(
-        year === dateObject.format('Y') && month === dateObject.format('MMMM'),
-        year,
-        month,
-        dateObject.format('Y'),
-        dateObject.format('MMMM')
-      );
 
       return (
         year === dateObject.format('Y') && month === dateObject.format('MMMM')
       );
     });
 
-  console.log(accessableData);
-
   let daysInMonth = [];
+  let classes = [...blanks];
   for (let d = 1; d <= dateObject.daysInMonth(); d++) {
-    const currentDay = d === Number(today()) ? 'today' : '';
-    // const year = new Date()
+    const currentDay =
+      d === Number(today()) &&
+      allmonths[new Date().getMonth()] === dateObject.format('MMMM') &&
+      new Date().getFullYear().toString() === dateObject.format('Y')
+        ? 'today'
+        : '';
+    const classDay =
+      accessableData && accessableData.find((day) => formatdata(day).day === d);
 
+    classes.push(`calendar-day ${currentDay}${classDay ? ' classDay' : ''}`);
     daysInMonth.push(
-      <td key={d} className={`calendar-day ${currentDay}`}>
+      <td key={d}>
         <span className="flex-row mx-auto">
           <p>{d}</p>
         </span>
+        {classDay ? (
+          <div className="toolTip flex-row">
+            <p>
+              You have the class <strong>"{classDay.title}"</strong> Today by{' '}
+              {moment(classDay.time, 'HH:mm').format('hh:mm A')}
+            </p>
+          </div>
+        ) : (
+          ''
+        )}
       </td>
     );
   }
@@ -76,13 +94,20 @@ const Calender = ({ data }) => {
   let rows = [];
   let cells = [];
 
+  let el;
   totalSlots.forEach((row, i) => {
+    if ((i % 7) / 3 < 1) {
+      el = React.cloneElement(row, { className: `left ${classes[i]}` });
+    } else {
+      el = React.cloneElement(row, { className: `right ${classes[i]}` });
+    }
+
     if (i % 7 !== 0) {
-      cells.push(row); // if index not equal 7 that means not go to next week
+      cells.push(el); // if index not equal 7 that means not go to next week
     } else {
       rows.push(cells); // when reach next week we contain all td in last week to rows
       cells = []; // empty container
-      cells.push(row); // in current loop we still push current row to new container
+      cells.push(el); // in current loop we still push current row to new container
     }
     if (i === totalSlots.length - 1) {
       // when end loop we add remain date
@@ -100,7 +125,7 @@ const Calender = ({ data }) => {
 
   const MonthList = (props) => {
     let months = [];
-    props.data.map((data, i) => {
+    props.data.map((data, i) =>
       months.push(
         <td
           key={`clander_moths_${i}`}
@@ -111,8 +136,8 @@ const Calender = ({ data }) => {
         >
           {data}
         </td>
-      );
-    });
+      )
+    );
 
     let rows = [];
 
@@ -170,7 +195,7 @@ const Calender = ({ data }) => {
     <div className="r_calenx">
       <Select
         currentText={year()}
-        inputs={getDates('1965', '2020')}
+        inputs={getDates('2019', (new Date().getFullYear() + 2).toString())}
         handleSelect={setYear}
         value={new Date().getFullYear().toString()}
       />
