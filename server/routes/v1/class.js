@@ -9,7 +9,8 @@ import {
   getAllStudentClass,
   classAssignment,
   editClassAssignment,
-  deleteClassAssignment
+  deleteClassAssignment,
+  addClassResources
 } from '../../controllers/class';
 import middlewares from '../../middlewares';
 
@@ -74,6 +75,13 @@ classRoutes.post(
   usession.can(''),
   validate(getClassAssignmentSchema),
   classAssignment
+);
+
+classRoutes.post(
+  '/resource/:classId',
+  usession.can(''),
+  validate(getClassAssignmentSchema),
+  addClassResources
 );
 
 classRoutes.patch(
