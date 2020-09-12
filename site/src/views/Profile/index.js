@@ -163,7 +163,6 @@ const Profile = () => {
         var percentCompleted = Math.round(
           (progressEvent.loaded * 100) / progressEvent.total
         );
-        console.log(percentCompleted);
         setProgress(percentCompleted);
       },
     };

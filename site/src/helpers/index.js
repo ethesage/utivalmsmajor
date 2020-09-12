@@ -63,7 +63,6 @@ export const axiosInstance = axios.create({
 });
 
 export const format_comma = (x) => {
-  console.log(x);
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };
 

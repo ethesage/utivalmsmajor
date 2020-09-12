@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import ResourceBtn from '../ResourceButton';
@@ -7,18 +7,20 @@ import assignment from 'assets/icons/course/assignment.png';
 import { getEnrolledCourses } from 'g_actions/student';
 import Loader from '../Loading';
 import Files from 'components/Files';
+import { getAssignments } from 'g_actions/student';
 import Button from '../Button';
 import DropDown from '../DropDown';
 import '../Classroom/Classes/style.scss';
 import './style.scss';
 
-const Assignment = ({ gapi: { gapi, signedIn } }) => {
+const Assignment = ({ gapi }) => {
   const { courseId, classroom } = useParams();
   const [assLink, setAssLink] = useState();
 
   const dispatch = useDispatch();
   const enrolledcourses = useSelector((state) => state.student.enrolledcourses);
   const currentCourse = useSelector((state) => state.student.currentCourse);
+  const { classResources } = useSelector((state) => state.student);
 
   useEffect(() => {
     if (!enrolledcourses && !currentCourse)
@@ -44,23 +46,21 @@ const Assignment = ({ gapi: { gapi, signedIn } }) => {
     return () => {};
   }, [enrolledcourses, courseId, currentCourse, dispatch]);
 
-  useEffect(() => {
-    if (assLink) return;
-    (async () => {
-      if (!signedIn) return;
-      const link = await gapi.get(
-        '',
-        '15mktW3ZOICxNOqrMSYIwzx8tD8TF2RQH',
-        'webContentLink'
-      );
+  const currentClass =
+    currentCourse &&
+    currentCourse.CourseCohort.Classes.find(
+      (classrum) => classrum.id === classroom
+    );
 
-      setAssLink(link);
-    })();
-  }, [gapi, signedIn, assLink]);
+  const download = async (e) => {
+    e.preventDefault();
 
-  const download = async () => {
-    if (!assLink) return;
-    window.open(assLink.webContentLink);
+    if (!currentClass) return;
+    if (!classResources[currentClass.title].assignment) return;
+    window.open(
+      classResources[currentClass.title].assignment.webContentLink ||
+        classResources[currentClass.title].assignment.webViewLink
+    );
   };
 
   return (
@@ -69,13 +69,12 @@ const Assignment = ({ gapi: { gapi, signedIn } }) => {
         <>
           <div className="asx_sec">
             <Classes
-              data={currentCourse.CourseCohort.Classes.find(
-                (classrum) => classrum.id === classroom
-              )}
+              data={currentClass}
               open={true}
               showArrow={false}
               full={true}
               showResources={false}
+              gapi={gapi}
             />
             <div className="btn_sec_con flex-row j-start">
               <div className="btn_sec">

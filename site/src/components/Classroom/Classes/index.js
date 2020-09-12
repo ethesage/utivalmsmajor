@@ -49,7 +49,6 @@ function Classes({
   useEffect(() => {
     if (classResources[title].files.length === 0)
       resources.forEach(async (resource) => {
-        console.log(resource.link);
         const file = await getFiles(resource.link);
         dispatch(getResources(title, file));
       });
@@ -60,8 +59,8 @@ function Classes({
   useEffect(() => {
     if (!classResources[title].assignment)
       assignment_.forEach(async (resource) => {
-        console.log(resource.link);
         const file = await getFiles(resource.link);
+
         dispatch(getAssignments(title, file));
       });
 

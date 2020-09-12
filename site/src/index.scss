@@ -371,7 +371,7 @@ li {
 ::-webkit-scrollbar {
   width: 8px;
   height: 5px;
-  background: rgba(color(theme), 0.1);
+  background: transparent;
 }
 
 ::-webkit-scrollbar-track,
@@ -387,7 +387,7 @@ li {
 }
 
 ::-webkit-scrollbar-button {
-  background: rgba(color(theme), 0.1);
+  background: transparent;
 }
 
 @keyframes load {
