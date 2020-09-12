@@ -84,7 +84,7 @@
         h4 {
           margin-bottom: 20px;
         }
- 
+
         .btn_sec_con {
           @include for-size(phone-only) {
             flex-direction: column;
@@ -113,6 +113,18 @@
       font-weight: bold;
       border-bottom: 1px solid color(theme);
       font-size: 0.8em;
+    }
+  }
+
+  .class_file_con {
+    background: white;
+    width: 90vw;
+    max-width: 600px;
+    border-radius: 10px;
+
+    h3 {
+      text-align: center;
+      padding: 20px;
     }
   }
 }

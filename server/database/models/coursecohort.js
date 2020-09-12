@@ -16,7 +16,8 @@ module.exports = (sequelize, DataTypes) => {
       values: ['ongoing', 'finished']
     },
     totalStudent: DataTypes.INTEGER,
-    totalClasses: DataTypes.INTEGER
+    totalClasses: DataTypes.INTEGER,
+    folderId: DataTypes.STRING
   }, {});
   CourseCohort.associate = (models) => {
     // associations can be defined here

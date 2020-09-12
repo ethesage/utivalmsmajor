@@ -4,7 +4,15 @@ import FilesSec from './FileSec';
 import Drag from '../Drag';
 import './style.scss';
 
-const Files = ({ files, view, download, handleImage, deleteFile }) => {
+const Files = ({
+  files,
+  view,
+  download,
+  handleImage,
+  deleteFile,
+  showdrag = true,
+  personal = false,
+}) => {
   return (
     <div className="info_con">
       <div className="info_con_sec scrolled flex-col al-start j-start">
@@ -21,12 +29,13 @@ const Files = ({ files, view, download, handleImage, deleteFile }) => {
               view={view}
               download={download}
               deleteFile={deleteFile}
+              personal={personal}
             />
           ))
         )}
       </div>
 
-      <Drag className="add_file" handleImage={handleImage} />
+      {showdrag && <Drag className="add_file" handleImage={handleImage} />}
     </div>
   );
 };

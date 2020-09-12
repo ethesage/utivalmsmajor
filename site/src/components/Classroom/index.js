@@ -7,7 +7,7 @@ import Classes from './Classes';
 import NavBar from '../../components/CourseNav';
 import './style.scss';
 
-const Classroom = ({ full = false }) => {
+const Classroom = ({ full = false, gapi }) => {
   const { courseId } = useParams();
 
   const dispatch = useDispatch();
@@ -21,7 +21,7 @@ const Classroom = ({ full = false }) => {
       })();
 
     return () => {};
-  }, [dispatch, enrolledcourses]);
+  }, [dispatch, enrolledcourses, courseId, currentCourse]);
 
   useEffect(() => {
     if (!enrolledcourses) return;
@@ -36,7 +36,7 @@ const Classroom = ({ full = false }) => {
     );
 
     return () => {};
-  }, [enrolledcourses, courseId]);
+  }, [enrolledcourses, courseId, currentCourse, dispatch]);
 
   return (
     <>
@@ -53,6 +53,7 @@ const Classroom = ({ full = false }) => {
                 courseId={courseId}
                 full={full}
                 index={i}
+                gapi={gapi}
               />
             ))}
           </div>

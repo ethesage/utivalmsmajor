@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useRef, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { weeks } from '../../../helpers';
-import play from '../../../assets/icons/course/play.png';
-import material from '../../../assets/icons/course/material.png';
-import assignment from '../../../assets/icons/course/assignment.png';
-import class_icon from '../../../assets/icons/class_icon.png';
+import { useSelector, useDispatch } from 'react-redux';
+import { getAssignments, getResources } from 'g_actions/student';
+import { weeks } from 'helpers';
+import play from 'assets/icons/course/play.png';
+import material from 'assets/icons/course/material.png';
+import assignment from 'assets/icons/course/assignment.png';
+import class_icon from 'assets/icons/class_icon.png';
+import Modal from '../../Modal';
+import Files from 'components/Files';
 import ResourceBtn from '../../ResourceButton';
 import RevielDrop from '../../RevielDrop';
 import './style.scss';
@@ -17,11 +20,71 @@ function Classes({
   showArrow = true,
   full,
   index,
-  link,
   showResources = true,
+  gapi,
 }) {
-  const { title, description } = data;
+  const { title, description, link } = data;
   const { isTrainer } = useSelector((state) => state.auth);
+  const { classResources } = useSelector((state) => state.student);
+  const dispatch = useDispatch();
+  const modalRef = useRef();
+
+  const resources = data.ClassResouces.filter((res) => res.type === 'resource');
+  const assignment_ = data.ClassResouces.filter(
+    (res) => res.type === 'assignment'
+  );
+
+  const getFiles = useCallback(
+    async (id) => {
+      if (!gapi) return;
+      return await gapi.gapi.get(
+        null,
+        id,
+        'id, name, iconLink, webContentLink, size, webViewLink, parents'
+      );
+    },
+    [gapi]
+  );
+
+  useEffect(() => {
+    if (classResources[title].files.length === 0)
+      resources.forEach(async (resource) => {
+        console.log(resource.link);
+        const file = await getFiles(resource.link);
+        dispatch(getResources(title, file));
+      });
+
+    return () => {};
+  }, []);
+
+  useEffect(() => {
+    if (!classResources[title].assignment)
+      assignment_.forEach(async (resource) => {
+        console.log(resource.link);
+        const file = await getFiles(resource.link);
+        dispatch(getAssignments(title, file));
+      });
+
+    return () => {};
+  }, []);
+
+  const viewResources = (e) => {
+    e.preventDefault();
+    modalRef.current.open();
+  };
+
+  const viewFile = async (contentLink) => {
+    window.open(contentLink, '_blank');
+  };
+
+  const download = async (contentLink) => {
+    window.open(contentLink);
+  };
+
+  // const upload = async (files, folderId) => {
+  //   modalRef.current.open();
+  //   gapi.gapi.upload(files, setProgress, '1F0r-bTgMLTkUhBf2o-ZTwtCPB3dWfnXp');
+  // };
 
   return (
     <div className="cx_listnx_con">
@@ -68,6 +131,8 @@ function Classes({
                       img={material}
                       text="Download Materials"
                       color="secondary"
+                      link=""
+                      handleClick={viewResources}
                     />
                   </div>
                   <div className="btn_sec">
@@ -75,6 +140,14 @@ function Classes({
                       img={assignment}
                       text="Assignment"
                       color="off"
+                      link=""
+                      handleClick={(e) => {
+                        e.preventDefault();
+                        viewFile(
+                          classResources[title].assignment &&
+                            classResources[title].assignment.webViewLink
+                        );
+                      }}
                     />
                   </div>
                 </div>
@@ -94,6 +167,18 @@ function Classes({
           ) : null}
         </div>
       </RevielDrop>
+
+      <Modal ref={modalRef}>
+        <div className="class_file_con">
+          <h3>Resource Materials</h3>
+          <Files
+            files={classResources[title].files}
+            view={viewFile}
+            download={download}
+            showdrag={false}
+          />
+        </div>
+      </Modal>
     </div>
   );
 }

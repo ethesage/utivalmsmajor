@@ -1,6 +1,8 @@
 @import '../../../media';
 
 .cx_listnx_full {
+  width: 100%;
+  flex-grow: 1;
   .btns {
     margin: 20px 0 30px;
     h4 {

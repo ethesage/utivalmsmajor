@@ -57,7 +57,7 @@ const File_Page = ({ gapi }) => {
     window.open(contentLink);
   };
 
-  const upload = async (files) => {
+  const upload = async (files, folderId) => {
     modalRef.current.open();
     gapi.gapi.upload(files, setProgress, '1F0r-bTgMLTkUhBf2o-ZTwtCPB3dWfnXp');
   };

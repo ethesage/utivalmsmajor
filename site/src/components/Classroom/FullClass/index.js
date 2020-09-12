@@ -1,16 +1,16 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useParams } from 'react-router-dom';
-import { getEnrolledCourses } from '../../../g_actions/student';
-import Loader from '../../Loader';
+import { getEnrolledCourses } from 'g_actions/student';
+import Loader from '../../Loading';
 import Classes from '../Classes';
 import ResourceBtn from '../../ResourceButton';
 import NavBar from '../../CourseNav';
-import assignment from '../../../assets/icons/course/assignment.png';
+import assignment from 'assets/icons/course/assignment.png';
 import Layout from '../../SideNavListLayout';
 import './style.scss';
 
-function FullClass() {
+function FullClass({ gapi }) {
   const { courseId, classroom } = useParams();
 
   const dispatch = useDispatch();
@@ -44,17 +44,16 @@ function FullClass() {
   return (
     <>
       <NavBar />
-      <div className="cx_listnx_full">
+      <div className="cx_listnx_full flex-row">
         {!currentCourse ? (
           <Loader tempLoad={true} full={false} />
         ) : (
           <Layout
             links={currentCourse.CourseCohort.Classes.map((classroom, i) => (
-              <li>
+              <li key={`side_link_courses_${i}`}>
                 <NavLink
                   className="side_link"
                   to={`/courses/classroom/${courseId}/${classroom.id}`}
-                  key={`side_link_courses_${i}`}
                 >
                   Week {i + 1}
                 </NavLink>
@@ -68,6 +67,7 @@ function FullClass() {
               open={true}
               showArrow={false}
               full={true}
+              gapi={gapi}
             />
             <div className="btns">
               <div className="reg_text">

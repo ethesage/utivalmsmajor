@@ -39,16 +39,12 @@ const Courses = ({ gapi }) => {
       <Switch>
         <Route exact path={`${path}/overview/:courseId`} component={Overview} />
         <Route exact path={`${path}`} component={CourseList} />
-        <Route
-          exact
-          path={`${path}/classroom/:courseId`}
-          component={Classroom}
-        />
-        <Route
-          exact
-          path={`${path}/classroom/:courseId/:classroom`}
-          component={FullClass}
-        />
+        <Route exact path={`${path}/classroom/:courseId`}>
+          <Classroom gapi={gapi} />
+        </Route>
+        <Route exact path={`${path}/classroom/:courseId/:classroom`}>
+          <FullClass gapi={gapi} />
+        </Route>
         <Route
           exact
           path={`${path}/assignment/view_grade/:id`}

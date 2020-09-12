@@ -11,13 +11,15 @@ module.exports = {
           },
           { transaction: t }
         ),
-      ])),
+      ])
+    ),
 
   down: (queryInterface) =>
     queryInterface.sequelize.transaction((t) =>
       Promise.all([
         queryInterface.removeColumn('CourseCohorts', 'folderId', {
           transaction: t,
-        })
-      ])),
+        }),
+      ])
+    ),
 };

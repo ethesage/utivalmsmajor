@@ -7,7 +7,13 @@ const Google = ({ updateSignInStatus = () => {} }) => {
 
   useEffect(() => {
     (async () => {
-      const gapi_str = await axios.get('https://apis.google.com/js/api.js');
+      let gapi_str;
+      try {
+        gapi_str = await axios.get('https://apis.google.com/js/api.js');
+      } catch (err) {
+        return err;
+      }
+
       const gapi = new Function(`${gapi_str.data} return gapi`)();
 
       gapi.load('client:auth2', () => {
@@ -30,8 +36,13 @@ const Google = ({ updateSignInStatus = () => {} }) => {
   }, [updateSignInStatus]);
 
   const signIn = async () => {
-    const response = await g_api.auth2.getAuthInstance().signIn();
-    return !!response.rt;
+    try {
+      const response = await g_api.auth2.getAuthInstance().signIn();
+
+      return !!response.rt;
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   async function upload(file, setPercentage, folderId) {
@@ -97,12 +108,12 @@ const Google = ({ updateSignInStatus = () => {} }) => {
     }
   };
 
-  const get = async (folferId, id, returns = '*') => {
+  const get = async (folderId, id, returns = '*') => {
     let res;
 
     if (!id) {
       res = await g_api.client.drive.files.list({
-        q: "parents = '1F0r-bTgMLTkUhBf2o-ZTwtCPB3dWfnXp'",
+        q: `parents = ${folderId}`,
         // q: "parents = '0B5RT2eT5MWStfm85OWdXZURzTEJZMlowX2phU2gtNkdheXkyTFcxcVQwZXNLSEIxS0FVaEE'",
         pageSize: 10,
         fields:

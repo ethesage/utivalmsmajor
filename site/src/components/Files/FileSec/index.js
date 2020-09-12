@@ -40,7 +40,7 @@ const FileSec = ({ file, personal = false, view, download, deleteFile }) => {
           <ul>
             <li onClick={() => view(file.webViewLink)}>View</li>
             <li onClick={() => download(file.webContentLink)}>Download</li>
-            <li onClick={() => deleteFile(file.id)}>Delete</li>
+            {deleteFile && <li onClick={() => deleteFile(file.id)}>Delete</li>}
           </ul>
         </DropDown>
       )}

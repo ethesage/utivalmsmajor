@@ -6,7 +6,7 @@ import Classes from '../Classroom/Classes';
 import assignment from 'assets/icons/course/assignment.png';
 import { getEnrolledCourses } from 'g_actions/student';
 import Loader from '../Loading';
-import FileSec from '../Files/FileSec';
+import Files from 'components/Files';
 import Button from '../Button';
 import DropDown from '../DropDown';
 import '../Classroom/Classes/style.scss';
@@ -92,28 +92,13 @@ const Assignment = ({ gapi: { gapi, signedIn } }) => {
 
           <div className="upload">
             <h3>Your Assignments</h3>
-            <div className="file_sec flex-col j-space al-start">
-              <div className="files">{/* <FileSec personal={true} /> */}</div>
-
-              <div className="drop-sec">
-                <DropDown
-                  header={
-                    <div className="img-sec flex-row">
-                      <Button
-                        className="u_btn flex-row mx-auto"
-                        text="Submit"
-                      />
-                    </div>
-                  }
-                >
-                  <ul>
-                    <li>View</li>
-                    <li>Download</li>
-                    <li>Delete</li>
-                  </ul>
-                </DropDown>
-              </div>
-            </div>
+            <Files
+              files={[]}
+              // view={viewFile}
+              personal={true}
+              download={download}
+              showdrag={false}
+            />
           </div>
         </>
       ) : (

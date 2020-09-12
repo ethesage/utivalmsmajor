@@ -1,7 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useToasts } from 'react-toast-notifications';
-import { Progress } from 'react-sweet-progress';
 import axois from 'axios';
 import { axiosInstance, toBase64 } from 'helpers';
 import useInput from 'Hooks/useInput';

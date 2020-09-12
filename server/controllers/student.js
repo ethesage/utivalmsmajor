@@ -105,6 +105,9 @@ export const getAllStudentCourse = async (req, res) => {
                     ],
                   },
                 },
+                {
+                  model: models.ClassResouces,
+                },
               ],
             },
           ],
@@ -165,6 +168,9 @@ export const getSingleStudentCourse = async (req, res) => {
                       'bio',
                     ],
                   },
+                },
+                {
+                  model: models.ClassResouces,
                 },
               ],
             },
@@ -320,7 +326,7 @@ export const getStudentClassDays = async (req, res) => {
       include: [
         {
           model: models.ClassDays,
-          attributes: ['date', 'time',],
+          attributes: ['date', 'time'],
         },
       ],
     });
@@ -329,8 +335,11 @@ export const getStudentClassDays = async (req, res) => {
 
     const getAll = getClassDays.reduce((acc, item, index) => {
       if (item.ClassDays[0]) {
-        console.log(item, '===> item')
-        const all = { title: item.dataValues.title, ...item.ClassDays[0].dataValues};
+        console.log(item, '===> item');
+        const all = {
+          title: item.dataValues.title,
+          ...item.ClassDays[0].dataValues,
+        };
 
         acc[index] = all;
       }
@@ -339,7 +348,7 @@ export const getStudentClassDays = async (req, res) => {
 
     return successStat(res, 200, 'data', getAll);
   } catch (e) {
-    console.log(e)
+    console.log(e);
     errorStat(res, 500, 'Operation Failed Please Try Again');
   }
 };

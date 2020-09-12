@@ -4,6 +4,7 @@ export const initialState = {
   enrolledStudents: null,
   classdays: null,
   counts: null,
+  classResources: null,
 };
 
 const course = (state = initialState, action) => {
@@ -32,6 +33,36 @@ const course = (state = initialState, action) => {
       return {
         ...state,
         counts: action.payload,
+      };
+    case 'CREATE_CLASS_RESOURCES':
+      return {
+        ...state,
+        classResources: action.payload,
+      };
+    case 'GET_RESOURCES':
+      return {
+        ...state,
+        classResources: {
+          ...state.classResources,
+          [action.payload.name]: {
+            ...state.classResources[action.payload.name],
+            files: [
+              ...state.classResources[action.payload.name].files,
+              action.payload.file,
+            ],
+          },
+        },
+      };
+    case 'GET_ASSIGNMENT':
+      return {
+        ...state,
+        classResources: {
+          ...state.classResources,
+          [action.payload.name]: {
+            ...state.classResources[action.payload.name],
+            assignment: action.payload.file,
+          },
+        },
       };
     default:
       return state;
