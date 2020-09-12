@@ -23,7 +23,7 @@ const Dashboard = () => {
       <Route exact path="/files">
         <Files gapi={gapi} />
       </Route>
-      <Route exact path="/settings">
+      <Route path="/settings">
         <Settings />
       </Route>
     </Switch>
