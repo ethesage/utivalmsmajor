@@ -61,6 +61,11 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'studentId',
       onDelete: 'CASCADE'
     });
+
+    User.hasMany(models.AssignmentComment, {
+      foreignKey: 'userId',
+      onDelete: 'CASCADE'
+    });
   };
 
   User.prototype.userResponse = function userResponse() {

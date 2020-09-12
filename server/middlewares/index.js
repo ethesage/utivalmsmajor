@@ -56,7 +56,11 @@ import {
   submitAssignmentSchema,
   gradeAssignmentSchema,
   deleteAssignmentSchema,
-  editAssignmentSchema
+  editAssignmentSchema,
+  assignmentCommentSchema,
+  getCommentSchema,
+  editCommentSchema,
+  deleteCommentSchema
 } from './validators/schemas/assignment';
 
 import { isLoggedIn } from './auth';
@@ -101,5 +105,9 @@ export default {
   deleteClassAssignmentSchema,
   editClassAssignmentSchema,
   deleteAssignmentSchema,
-  editAssignmentSchema
+  editAssignmentSchema,
+  assignmentCommentSchema,
+  getCommentSchema,
+  editCommentSchema,
+  deleteCommentSchema
 };

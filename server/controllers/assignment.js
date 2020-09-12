@@ -189,7 +189,7 @@ export const deleteAssignment = async (req, res) => {
 
 
     await findAssignment.destroy();
-    return successStat(res, 201, 'data', { message: 'Assignment deleted successfully' });
+    return successStat(res, 200, 'data', { message: 'Assignment deleted successfully' });
   } catch (e) {
     console.log(e);
     errorStat(res, 500, 'Operation Failed, Please Try Again');
@@ -197,3 +197,97 @@ export const deleteAssignment = async (req, res) => {
 };
 
 
+export const createAssignmentComment = async (req, res) => {
+  const { assignmentId } = req.body.assignment;
+  const { id } = req.session.user;
+    
+  try {
+    const findAssignment = await models.Assignment.findOne({
+      where: { id: assignmentId }
+    })
+
+    if (!findAssignment) return errorStat(res, 404, 'Assignment not found');
+
+    const createcomment = await models.AssignmentComment.create({
+      ...req.body.assignment,
+      userId: id
+    })
+
+    return successStat(res, 201, 'data', { ...createcomment.dataValues, message: 'Comment created successfully' });
+  } catch (e) {
+    console.log(e);
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
+  }
+};
+
+export const editAssignmentComment = async (req, res) => {
+  const { assignmentCommentId } = req.body.assignment;
+  const { id } = req.session.user;
+    
+  try {
+    const findComment = await models.AssignmentComment.findOne({
+      where: { id: assignmentCommentId }
+    })
+
+    if (!findComment) return errorStat(res, 404, 'Comment not found');
+    console.log(findComment.userId, id )
+
+    if (findComment.userId !== id) return errorStat(res, 400, 'Cant edit this comment');
+
+    await findComment.update({
+      ...req.body.assignment,
+    })
+
+    return successStat(res, 200, 'data', findComment);
+  } catch (e) {
+    console.log(e);
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
+  }
+};
+
+
+export const getAssignmentComment = async (req, res) => {
+  const { assignmentId } = req.body.assignment;
+    
+  try {
+    const findAssignment = await models.AssignmentComment.findAll({
+      where: { assignmentId },
+
+      order: [
+        ['createdAt']
+      ],
+      include: [
+      {
+        model: models.User,
+        attributes: ['firstName', 'lastName', 'profilePic']
+      }
+      ]
+    })
+
+    return successStat(res, 200, 'data', findAssignment);
+  } catch (e) {
+    console.log(e);
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
+  }
+};
+
+export const deleteAssignmentComment = async (req, res) => {
+  const { assignmentCommentId } = req.body.assignment;
+  const { id } = req.session.user;
+    
+  try {
+    const findComment = await models.AssignmentComment.findOne({
+      where: { id: assignmentCommentId }
+    })
+
+    if (findComment.userId !== id) return errorStat(res, 400, 'Cant Delete');
+
+
+    await findComment.destroy();
+
+    return successStat(res, 200, 'data', { message: 'Comment delete successfully' });
+  } catch (e) {
+    console.log(e);
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
+  }
+};
