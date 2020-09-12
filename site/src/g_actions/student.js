@@ -8,7 +8,9 @@ export const getEnrolledCourses = (id, data) => async (dispatch) => {
       : await axiosInstance.get(`/student${id ? `/${id}` : ''}`);
 
     if (id) {
-      const data_ = courses.data.data.CourseCohort.Classes.reduce(
+      const useObject = data ? data : courses.data.data;
+
+      const data_ = useObject.CourseCohort.Classes.reduce(
         (acc, cur) => ({
           ...acc,
           [cur.title]: { files: [], assignment: null },
@@ -26,7 +28,6 @@ export const getEnrolledCourses = (id, data) => async (dispatch) => {
   }
 
   // create a list of the class name so we can add the class resources
-
   dispatch({
     type: id ? 'GET_CURRENT_COURSE' : 'GET_ENROLLED_COURSES',
     payload: data ? courses : courses.data.data,

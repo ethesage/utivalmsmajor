@@ -21,23 +21,23 @@ const Overview = () => {
       })();
 
     return () => {};
-  }, [dispatch, enrolledcourses]);
+  }, [dispatch, enrolledcourses, currentCourse, courseId]);
 
   useEffect(() => {
     if (!enrolledcourses) return;
-
-    dispatch(
-      getEnrolledCourses(
-        courseId,
-        enrolledcourses &&
-          enrolledcourses.find((course) => course.id === courseId)
-      )
-    );
+    
+    (async () => {
+      await dispatch(
+        getEnrolledCourses(
+          courseId,
+          enrolledcourses &&
+            enrolledcourses.find((course) => course.id === courseId)
+        )
+      );
+    })();
 
     return () => {};
-  }, [enrolledcourses, courseId]);
-
-  console.log(currentCourse);
+  }, [enrolledcourses, courseId, dispatch]);
 
   return (
     <>
