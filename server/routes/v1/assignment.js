@@ -4,7 +4,11 @@ import {
     submitAssignment,
     gradeStudentAssignment,
     editSubmittedAssignment,
-    deleteAssignment
+    deleteAssignment,
+    createAssignmentComment,
+    editAssignmentComment,
+    getAssignmentComment,
+    deleteAssignmentComment
 } from '../../controllers/assignment';
 import middlewares from '../../middlewares';
 
@@ -14,6 +18,10 @@ const {
     gradeAssignmentSchema,
     deleteAssignmentSchema,
     editAssignmentSchema,
+    assignmentCommentSchema,
+    getCommentSchema,
+    editCommentSchema,
+    deleteCommentSchema,
     usession
 } = middlewares;
 
@@ -47,40 +55,29 @@ assignmentRoutes.delete(
     deleteAssignment
 );
 
-// assignmentRoutes.get(
-//   '/coursecohort/:coursecohortId',
-//   usession.can(''),
-//   // validate(getclassRoomSchema),
-//   getClass
-// );
-
-// assignmentRoutes.get(
-//   '/student',
-//   usession.can(''),
-//   // validate(getclassRoomSchema),
-//   getAllStudentClass
-// );
-
-
-// assignmentRoutes.patch(
-//   '/update/:classId',
-//   usession.can('classRoom:crud'),
-//   // validate(getclassRoomSchema),
-//   updateClass
-// );
-
-// assignmentRoutes.delete(
-//   '/:classId',
-//   usession.can('classRoom:crud'),
-//   // validate(getclassRoomSchema),
-//   deleteClass
-// );
-
-// assignmentRoutes.post(
-//   '/assignment/:classId',
-//   usession.can(''),
-//   validate(getClassAssignmentSchema),
-//   classAssignment
-// );
+assignmentRoutes.post(
+  '/comment/:assignmentId',
+  usession.can(''),
+  validate(assignmentCommentSchema),
+  createAssignmentComment
+);
+assignmentRoutes.get(
+    '/comment/:assignmentId',
+    usession.can(''),
+    validate(getCommentSchema),
+    getAssignmentComment
+  );
+  assignmentRoutes.patch(
+    '/comment/:assignmentCommentId',
+    usession.can(''),
+    validate(editCommentSchema),
+    editAssignmentComment
+  );
+  assignmentRoutes.delete(
+    '/comment/:assignmentCommentId',
+    usession.can(''),
+    validate(deleteCommentSchema),
+    deleteAssignmentComment
+  );
 
 export default assignmentRoutes;
