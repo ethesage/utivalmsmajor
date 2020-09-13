@@ -18,6 +18,10 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Assignment.associate = function(models) {
     // associations can be defined here
+    Assignment.belongsTo(models.Classes, {
+      foreignKey: 'classId',
+      onDelete: 'CASCADE'
+    });
   };
   return Assignment;
 };

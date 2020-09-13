@@ -60,7 +60,9 @@ import {
   assignmentCommentSchema,
   getCommentSchema,
   editCommentSchema,
-  deleteCommentSchema
+  deleteCommentSchema,
+  getStudentCourseCohortAssignmentSchema,
+  getStudentSubmitClassAssignmentSchema
 } from './validators/schemas/assignment';
 
 import { isLoggedIn } from './auth';
@@ -109,5 +111,7 @@ export default {
   assignmentCommentSchema,
   getCommentSchema,
   editCommentSchema,
-  deleteCommentSchema
+  deleteCommentSchema,
+  getStudentCourseCohortAssignmentSchema,
+  getStudentSubmitClassAssignmentSchema
 };

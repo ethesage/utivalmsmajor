@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-// import sequelize from "sequelize";
+import sequelize from "sequelize";
 import { paginate, calculateLimitAndOffset } from 'paginate-info';
 import models from "../database/models";
 import helpers from "../helpers";
@@ -119,6 +119,7 @@ export const getCourse = async (req, res) => {
 
     return successStat(res, 200, 'data', course);
   } catch (e) {
+    console.log(e)
     errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
@@ -141,10 +142,10 @@ export const getAllCourses = async (req, res) => {
           attributes: ['id', 'courseId', 'title', 'description', 'trainerId']
         },
         {
-          model: models.Cohort,
+          model: models.CourseCohort,
           required: false,
           order: [
-            ['createdAt', 'DESC']
+            ['createdAt']
           ],
           limit: 1,
           attributes: [
@@ -167,6 +168,7 @@ export const getAllCourses = async (req, res) => {
 
     return successStat(res, 200, 'data', { paginationMeta, rows });
   } catch (e) {
+    console.log(e)
     errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
@@ -240,6 +242,49 @@ export const deleteCourse = async (req, res) => {
 
     return successStat(res, 200, 'data', 'Delete Successful');
   } catch (e) {
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
+  }
+};
+
+
+export const getAllCoursesAdmin = async (req, res) => {
+  // const { pageLimit, currentPage } = req.body.course;
+  // const { offset, limit } = calculateLimitAndOffset(currentPage, pageLimit);
+
+  // const sqlQueryMap = {
+  //   offset,
+  //   limit,
+  // };
+
+  try {
+    // const rr = await models.Course.findAll({
+    //   // // User.findAll({
+    //   //   attributes: ['Course.*', 'CourseCohort.*', [models.sequelize.fn('COUNT', models.sequelize.col('Course.id')), 'CourseCohort']],
+    //   //   // include: [models.CourseCohort]
+    //   // // }
+    //   include: [
+    //     { 
+    //         model: models.CourseCohort, 
+    //         // attributes: [[models.sequelize.fn('COUNT', models.sequelize.col('Course.id')), 'VoteCount']]  
+    //     }
+    // ],
+    // attributes: ['Course.*', [models.sequelize.fn('COUNT', models.sequelize.col('Course.id')), 'VoteCount']],
+    // group: 'Course.id'
+    // });
+
+    const studentByCourse = await models.sequelize.query(
+      `SELECT "Courses"."name", COUNT("studentId") AS 
+  value FROM "Courses" LEFT JOIN "StudentCourses" ON "Courses"."id" = "StudentCourses"."courseId" 
+  WHERE "Courses"."id" IS NOT NULL GROUP BY "Courses"."id"`
+  )
+
+    // if (!rows[0]) return errorStat(res, 404, 'Course Not Found');
+
+    // const paginationMeta = paginate(currentPage, count, rows, pageLimit);
+
+    return successStat(res, 200, 'data', rr);
+  } catch (e) {
+    console.log(e)
     errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
