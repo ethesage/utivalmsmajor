@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, Switch, useRouteMatch, Route } from 'react-router-dom';
-import Layout from '../../components/SideNavListLayout';
+import Layout from '../../Layouts/SideNavListLayout';
 import Profile from '../Profile';
 import Reset from '../Profile/PasswordReset';
 import './style.scss';

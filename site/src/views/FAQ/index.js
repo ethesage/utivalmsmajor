@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 import data from '../../data/faqs';
 import RevielDrop from '../../components/RevielDrop';
-import Layout from '../../components/SideNavListLayout';
+import Layout from '../../Layouts/SideNavListLayout';
 import './style.scss';
 
 const FAQ = () => {

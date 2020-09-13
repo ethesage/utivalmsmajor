@@ -14,7 +14,7 @@ const CourseNav = () => {
 
   return (
     <nav className="cx_det__nav">
-      <ul className="flex-row j-space">
+      <ul className="flex-row j-space scrolled_ver">
         {links.map((link, i) => (
           <li key={`nav_cx_${i}`} className="cx_nav_item">
             <NavLink to={`/courses/${link.link}`} activeClassName="__active">

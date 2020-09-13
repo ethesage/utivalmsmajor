@@ -7,7 +7,7 @@ import Classes from '../Classes';
 import ResourceBtn from '../../ResourceButton';
 import NavBar from '../../CourseNav';
 import assignment from 'assets/icons/course/assignment.png';
-import Layout from '../../SideNavListLayout';
+import Layout from '../../../Layouts/SideNavListLayout';
 import './style.scss';
 
 function FullClass({ gapi }) {

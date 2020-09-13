@@ -113,7 +113,7 @@ const Google = ({ updateSignInStatus = () => {} }) => {
 
     if (!id) {
       res = await g_api.client.drive.files.list({
-        q: `parents = ${folderId}`,
+        q: `parents = '${folderId}'`,
         // q: "parents = '0B5RT2eT5MWStfm85OWdXZURzTEJZMlowX2phU2gtNkdheXkyTFcxcVQwZXNLSEIxS0FVaEE'",
         pageSize: 10,
         fields:

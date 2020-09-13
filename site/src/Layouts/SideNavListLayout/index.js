@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import './style.scss';
 
 const File_Page = ({
@@ -14,7 +14,7 @@ const File_Page = ({
         className={`side_list_layout flex-row j-start al-start ${className}`}
       >
         <div className="side_list">
-          <ul className={linkClass}>{links}</ul>
+          <ul className={`${linkClass} scrolled_ver`}>{links}</ul>
         </div>
         <div className={`${subClassName}`}>{children}</div>
       </div>
@@ -22,4 +22,4 @@ const File_Page = ({
   );
 };
 
-export default File_Page;
+export default memo(File_Page);

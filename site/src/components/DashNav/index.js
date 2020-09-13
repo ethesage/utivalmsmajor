@@ -24,7 +24,7 @@ const NavBar = ({ open, grow }) => {
         <div className="nav-contents flex-row j-space">
           <div className="nav-icons flex-row">
             <img className="nav" onClick={open} src={hamburger} alt="" />
-            <Link to="/">
+            <Link to="/home">
               <img className="logo" src={logo} alt="png" />
             </Link>
           </div>

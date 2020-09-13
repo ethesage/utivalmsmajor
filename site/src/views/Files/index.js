@@ -40,7 +40,10 @@ const File_Page = ({ gapi }) => {
     if (!gapi.signedIn) return;
 
     const getFiles = async () => {
-      const new_files = await gapi.gapi.get();
+      const new_files = await gapi.gapi.get(
+        '1F0r-bTgMLTkUhBf2o-ZTwtCPB3dWfnXp',
+        null
+      );
       setFiles(new_files.files);
     };
 

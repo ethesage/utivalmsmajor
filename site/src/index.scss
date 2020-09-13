@@ -372,6 +372,10 @@ li {
   width: 8px;
   height: 5px;
   background: transparent;
+
+  @include for-size(tablet-landscape-up) {
+    display: none;
+  }
 }
 
 ::-webkit-scrollbar-track,
@@ -388,6 +392,10 @@ li {
 
 ::-webkit-scrollbar-button {
   background: transparent;
+}
+
+::-webkit-scrollbar-thumb:window-inactive {
+  background: rgba(0, 0, 0, 0.05);
 }
 
 @keyframes load {
@@ -426,4 +434,53 @@ li {
 
 .no-scroll {
   overflow: hidden;
+}
+
+.scrolled {
+  background: /* Shadow covers */ linear-gradient(
+      white 30%,
+      rgba(255, 255, 255, 0)
+    ),
+    linear-gradient(rgba(255, 255, 255, 0), white 70%) 0 100%,
+    /* Shadows */
+      radial-gradient(
+        farthest-side at 50% 0,
+        rgba(0, 0, 0, 0.3),
+        rgba(0, 0, 0, 0)
+      ),
+    radial-gradient(
+        farthest-side at 50% 100%,
+        rgba(0, 0, 0, 0.3),
+        rgba(0, 0, 0, 0)
+      )
+      0 100%;
+  background-repeat: no-repeat;
+  background-color: white;
+  background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
+  background-attachment: local, local, scroll, scroll;
+}
+
+.scrolled_ver {
+  background: /* Shadow covers */ linear-gradient(
+      to right,
+      white 30%,
+      rgba(255, 255, 255, 0)
+    ),
+    linear-gradient(to right, rgba(255, 255, 255, 0), white 70%) 100% 0,
+    /* Shadows */
+      radial-gradient(
+        farthest-side at 0 50%,
+        rgba(0, 0, 0, 0.3),
+        rgba(0, 0, 0, 0)
+      ),
+    radial-gradient(
+        farthest-side at 100% 50%,
+        rgba(0, 0, 0, 0.3),
+        rgba(0, 0, 0, 0)
+      )
+      100% 0;
+  background-repeat: no-repeat;
+  background-color: white;
+  background-size: 40px 100%, 40px 100%, 14px 100%, 14px 100%;
+  background-attachment: local, local, scroll, scroll;
 }
