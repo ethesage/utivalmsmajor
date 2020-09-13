@@ -8,7 +8,9 @@ import {
     createAssignmentComment,
     editAssignmentComment,
     getAssignmentComment,
-    deleteAssignmentComment
+    deleteAssignmentComment,
+    getStudentCourseCohortAssignment,
+    getStudentSubmitClassAssignment
 } from '../../controllers/assignment';
 import middlewares from '../../middlewares';
 
@@ -22,6 +24,8 @@ const {
     getCommentSchema,
     editCommentSchema,
     deleteCommentSchema,
+    getStudentCourseCohortAssignmentSchema,
+    getStudentSubmitClassAssignmentSchema,
     usession
 } = middlewares;
 
@@ -61,18 +65,35 @@ assignmentRoutes.post(
   validate(assignmentCommentSchema),
   createAssignmentComment
 );
+
 assignmentRoutes.get(
     '/comment/:assignmentId',
     usession.can(''),
     validate(getCommentSchema),
     getAssignmentComment
   );
+
+  assignmentRoutes.get(
+    '/class/student/:classId',
+    usession.can(''),
+    validate(getStudentSubmitClassAssignmentSchema),
+    getStudentSubmitClassAssignment
+  );
+
+  assignmentRoutes.get(
+    '/cohort/student/:courseCohortId',
+    usession.can(''),
+    validate(getStudentCourseCohortAssignmentSchema),
+    getStudentCourseCohortAssignment
+  );
+
   assignmentRoutes.patch(
     '/comment/:assignmentCommentId',
     usession.can(''),
     validate(editCommentSchema),
     editAssignmentComment
   );
+
   assignmentRoutes.delete(
     '/comment/:assignmentCommentId',
     usession.can(''),

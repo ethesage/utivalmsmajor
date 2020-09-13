@@ -61,7 +61,56 @@ export const getClassAssignment = async (req, res) => {
 
     // if (!allClass[0]) return errorStat(res, 404, 'No class Found for this course');
 
-    return successStat(res, 201, 'data', allClassAssignment);
+    return successStat(res, 200, 'data', allClassAssignment);
+  } catch (e) {
+    console.log(e);
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
+  }
+};
+
+export const getStudentSubmitClassAssignment = async (req, res) => {
+  const { classId } = req.body.assignment;
+  const { id } = req.session.user;
+
+  try {
+    const submitAssignment = await models.Assignment.findAll({
+      where: { classId, studentId: id },
+    });
+
+    // if (!allClass[0]) return errorStat(res, 404, 'No class Found for this course');
+
+    return successStat(res, 200, 'data', submitAssignment);
+  } catch (e) {
+    console.log(e);
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
+  }
+};
+
+export const getStudentCourseCohortAssignment = async (req, res) => {
+  const { courseCohortId } = req.body.assignment;
+  const { id } = req.session.user;
+
+  try {
+    const submitAssignment = await models.CourseCohort.findAll({
+      where: { id: courseCohortId },
+      attributes: [],
+      include: [
+        {
+          model: models.Classes,
+          attributes: ['title'],
+          include: [
+            {
+              model: models.Assignment,
+              where: { studentId: id }
+            }
+          ]
+      }
+      ]
+    });
+
+    // if (!allClass[0]) return errorStat(res, 404, 'No class Found for this course');
+console.log('i am here')
+    return successStat(res, 200, 'data', submitAssignment);
   } catch (e) {
     console.log(e);
     errorStat(res, 500, 'Operation Failed, Please Try Again');

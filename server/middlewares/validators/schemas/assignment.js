@@ -40,3 +40,11 @@ export const editAssignmentSchema = Joi.object().keys({
     assignmentCommentId: Joi.string().uuid().trim().required()
   });
 
+  export const getStudentSubmitClassAssignmentSchema = Joi.object().keys({
+    classId: Joi.string().uuid().trim().required()
+  });
+
+  export const getStudentCourseCohortAssignmentSchema = Joi.object().keys({
+    courseCohortId: Joi.string().uuid().trim().required()
+  });
+  
