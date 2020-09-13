@@ -74,28 +74,13 @@ const File_Page = ({ gapi }) => {
     return (
       <div className="upload_sec flex-row j-start al-start">
         <div className="file_con flex-col">
-          {!files ? (
-            [1, 2, 3].map((i) => (
-              <div
-                key={`file_loader_${i}`}
-                style={{
-                  height: i === 1 ? '50px' : '10px',
-                  width: '80%',
-                  marginBottom: '5px',
-                }}
-              >
-                <Skeleton width="100%" />
-              </div>
-            ))
-          ) : (
-            <Files
-              files={files}
-              view={viewFile}
-              download={download}
-              handleImage={upload}
-              deleteFile={deleteFile}
-            />
-          )}
+          <Files
+            files={files}
+            view={viewFile}
+            download={download}
+            handleImage={upload}
+            deleteFile={deleteFile}
+          />
         </div>
       </div>
     );

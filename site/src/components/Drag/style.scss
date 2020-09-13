@@ -6,6 +6,9 @@
   border-radius: 10px;
   cursor: pointer;
   display: block;
+  > * {
+    pointer-events: none;
+  }
 
   .fx_up_sec {
     width: 90%;

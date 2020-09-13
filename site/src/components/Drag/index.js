@@ -51,9 +51,13 @@ const Drag = ({ className, children, handleImage }) => {
         onDragOver={handleDrag}
         onDrop={handleDrop}
       >
-        <div className="fx_up_sec flex-row mx-auto">
-          <img src={upload} alt="upload" /> Drag file Here
-        </div>
+        {children ? (
+          children
+        ) : (
+          <div className="fx_up_sec flex-row mx-auto">
+            <img src={upload} alt="upload" /> Drag file Here
+          </div>
+        )}
       </label>
       <input
         type="file"

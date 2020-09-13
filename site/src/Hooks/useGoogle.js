@@ -71,6 +71,8 @@ const Google = ({ updateSignInStatus = () => {} }) => {
               name: file.name,
               mimeType: file.type,
               parents: [folderId],
+              fields:
+                'id, name, iconLink, webContentLink, size, webViewLink, parents',
             }),
           ],
           {

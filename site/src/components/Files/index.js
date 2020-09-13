@@ -1,5 +1,6 @@
 import React from 'react';
-import no_file from '../../assets/dashboard/no_file.png';
+import no_file from 'assets/dashboard/no_file.png';
+import Skeleton from 'react-skeleton-loader';
 import FilesSec from './FileSec';
 import Drag from '../Drag';
 import './style.scss';
@@ -12,11 +13,27 @@ const Files = ({
   deleteFile,
   showdrag = true,
   personal = false,
+  children,
 }) => {
   return (
     <div className="info_con">
       <div className="info_con_sec scrolled flex-col al-start j-start">
-        {files.length === 0 ? (
+        {!files ? (
+          <div className="flex-col" style={{ width: '100%', height: '100%' }}>
+            {[1, 2, 3].map((i) => (
+              <div
+                key={`file_loader_${i}`}
+                style={{
+                  height: i === 1 ? '50px' : '10px',
+                  width: '80%',
+                  marginBottom: '5px',
+                }}
+              >
+                <Skeleton width="100%" />
+              </div>
+            ))}
+          </div>
+        ) : files.length === 0 ? (
           <div className="n_available flex-col img">
             <img src={no_file} alt="no classes" />
             <p className="txts">You have no files yet</p>
@@ -35,7 +52,13 @@ const Files = ({
         )}
       </div>
 
-      {showdrag && <Drag className="add_file" handleImage={handleImage} />}
+      {showdrag && (
+        <Drag
+          className="add_file"
+          children={children}
+          handleImage={handleImage}
+        />
+      )}
     </div>
   );
 };

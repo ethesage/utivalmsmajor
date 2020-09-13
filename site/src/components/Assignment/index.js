@@ -1,26 +1,38 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import ResourceBtn from '../ResourceButton';
 import Classes from '../Classroom/Classes';
 import assignment from 'assets/icons/course/assignment.png';
+import Confirm from 'components/Confirm';
 import { getEnrolledCourses } from 'g_actions/student';
 import Loader from '../Loading';
 import Files from 'components/Files';
-import { getAssignments } from 'g_actions/student';
+import Modal from 'components/Modal';
+import ProgressBar from 'components/ProgressBar';
+import {
+  getSubmittedAssignments,
+  deleteSubmittedAssignment,
+} from 'g_actions/student';
+import { useToasts } from 'react-toast-notifications';
 import Button from '../Button';
-import DropDown from '../DropDown';
 import '../Classroom/Classes/style.scss';
+import { axiosInstance } from 'helpers';
 import './style.scss';
 
 const Assignment = ({ gapi }) => {
   const { courseId, classroom } = useParams();
-  const [assLink, setAssLink] = useState();
+  const { addToast } = useToasts();
 
   const dispatch = useDispatch();
   const enrolledcourses = useSelector((state) => state.student.enrolledcourses);
   const currentCourse = useSelector((state) => state.student.currentCourse);
   const { classResources } = useSelector((state) => state.student);
+  const [deleteDialog, setDeleteDialog] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [currentFileId, setCurrentFileId] = useState();
+
+  const modalRef = useRef();
 
   useEffect(() => {
     if (!enrolledcourses && !currentCourse)
@@ -52,6 +64,18 @@ const Assignment = ({ gapi }) => {
       (classrum) => classrum.id === classroom
     );
 
+  const getFiles = useCallback(
+    async (id) => {
+      if (!gapi) return;
+      return await gapi.gapi.get(
+        null,
+        id,
+        'id, name, iconLink, webContentLink, size, webViewLink, parents'
+      );
+    },
+    [gapi]
+  );
+
   const download = async (e) => {
     e.preventDefault();
 
@@ -61,6 +85,76 @@ const Assignment = ({ gapi }) => {
       classResources[currentClass.title].assignment.webContentLink ||
         classResources[currentClass.title].assignment.webViewLink
     );
+  };
+
+  const upload = async (files) => {
+    const assignment_ = currentClass.ClassResouces.filter(
+      (res) => res.type === 'assignment'
+    )[0].id;
+
+    modalRef.current.open();
+    let file = await gapi.gapi.upload(
+      files,
+      setProgress,
+      currentCourse.CourseCohort.folderId
+    );
+
+    try {
+      const res = await axiosInstance.post('assignment/submit', {
+        classId: currentClass.id,
+        classResourcesId: assignment_,
+        resourceLink: file.id,
+      });
+      if (res) {
+        file = await getFiles(file.id);
+        file.isGraded = false;
+
+        dispatch(getSubmittedAssignments(currentClass.title, file));
+      }
+    } catch (err) {
+      addToast('Error submitting', {
+        appearance: 'error',
+        autoDismiss: true,
+      });
+
+      await gapi.gapi.deleteFile(file.id);
+    }
+  };
+
+  const open = () => {
+    modalRef.current.open();
+  };
+
+  const close = () => {
+    modalRef.current.close();
+  };
+
+  const viewFile = async (contentLink) => {
+    window.open(contentLink, '_blank');
+  };
+
+  const deleteAssignment = async () => {
+    try {
+      const res = await axiosInstance.delete(
+        `assignment/submit/${currentFileId}`
+      );
+      if (res) {
+        dispatch(deleteSubmittedAssignment(currentClass.title, currentFileId));
+      }
+    } catch (err) {
+      addToast('Error submitting', {
+        appearance: 'error',
+        autoDismiss: true,
+      });
+    }
+    await gapi.gapi.deleteFile(currentFileId);
+    setCurrentFileId(null);
+  };
+
+  const deleteFIle = (id) => {
+    setDeleteDialog(true);
+    setCurrentFileId(id);
+    open();
   };
 
   return (
@@ -91,13 +185,18 @@ const Assignment = ({ gapi }) => {
 
           <div className="upload">
             <h3>Your Assignments</h3>
-            <Files
-              files={[]}
-              // view={viewFile}
-              personal={true}
-              download={download}
-              showdrag={false}
-            />
+            <div className="box-shade">
+              <Files
+                files={classResources[currentClass.title].submittedAssignment}
+                view={viewFile}
+                personal={true}
+                download={download}
+                deleteFile={deleteFIle}
+                handleImage={upload}
+              >
+                <Button text="Submit" className="up_btn flex-row mx-auto" />
+              </Files>
+            </div>
           </div>
         </>
       ) : (
@@ -105,6 +204,13 @@ const Assignment = ({ gapi }) => {
           <Loader tempLoad={true} full={false} />
         </div>
       )}
+      <Modal ref={modalRef}>
+        {deleteDialog ? (
+          <Confirm onClick={deleteAssignment} close={close} />
+        ) : (
+          <ProgressBar progress={progress} />
+        )}
+      </Modal>
     </div>
   );
 };

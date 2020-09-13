@@ -8,14 +8,23 @@ import './style.scss';
 const FileSec = ({ file, personal = false, view, download, deleteFile }) => {
   return (
     <div className="file_card flex-row j-space">
-      <div className="left flex-row j-start al-start">
+      <div
+        className="left flex-row j-start al-start"
+        onClick={() => view(file.webViewLink)}
+      >
         <img src={file.iconLink} alt="pdf" />
         <div className="txt-sec">
           <h2 className="clipped-text" style={{ '--number': 1 }}>
             {file.name}
           </h2>
           {personal ? (
-            <small className="theme-color">Graded</small>
+            <>
+              {file.isGraded ? (
+                <small className="theme-color">Graded</small>
+              ) : (
+                <small className="theme-color">Not Graded</small>
+              )}
+            </>
           ) : (
             <small>{numeral(file.size).format('0b')}</small>
           )}
@@ -24,7 +33,7 @@ const FileSec = ({ file, personal = false, view, download, deleteFile }) => {
 
       {personal ? (
         <div>
-          {true ? (
+          {file.isGraded ? (
             <Link
               to="/dashboard/courses/assignment/view_grade/3456"
               className="theme-color grade"
@@ -32,7 +41,12 @@ const FileSec = ({ file, personal = false, view, download, deleteFile }) => {
               <small>View Grade</small>
             </Link>
           ) : (
-            <img src={delete_icon} alt="delete" className="img_grade" />
+            <img
+              src={delete_icon}
+              alt="delete"
+              className="img_grade"
+              onClick={() => deleteFile(file.id)}
+            />
           )}
         </div>
       ) : (

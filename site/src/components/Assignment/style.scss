@@ -33,43 +33,9 @@
       margin-bottom: 20px;
     }
 
-    .file_sec {
-      min-height: 400px;
-      max-width: 400px;
-      width: 100%;
-      padding: 10px;
-      border-radius: 10px;
-      box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
-      @include for-size(desktop-up) {
-        margin: 30px 10px;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-      }
-
-      @include for-size(phone-only) {
-        margin: 30px auto;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-      }
-
-      .files {
-        width: 100%;
-      }
-
-      .drop-sec {
-        position: relative;
-        width: 100%;
-
-        button {
-          width: auto;
-        }
-
-        .drops {
-          &.op-dp_2x {
-            top: -120px;
-            visibility: visible;
-            opacity: 1;
-          }
-        }
-      }
+    .up_btn {
+      max-width: 300px;
+      
     }
   }
 }

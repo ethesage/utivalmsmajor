@@ -40,16 +40,16 @@ const course = (state = initialState, action) => {
         classResources: action.payload,
       };
     case 'GET_RESOURCES':
+      const prevRes = state.classResources[action.payload.name].files;
       return {
         ...state,
         classResources: {
           ...state.classResources,
           [action.payload.name]: {
             ...state.classResources[action.payload.name],
-            files: [
-              ...state.classResources[action.payload.name].files,
-              action.payload.file,
-            ],
+            files: prevRes
+              ? [...prevRes, action.payload.file]
+              : [action.payload.file],
           },
         },
       };
@@ -61,6 +61,37 @@ const course = (state = initialState, action) => {
           [action.payload.name]: {
             ...state.classResources[action.payload.name],
             assignment: action.payload.file,
+          },
+        },
+      };
+    case 'SUBMIT_ASSIGNMENT':
+      const prevAss =
+        state.classResources[action.payload.name].submittedAssignment;
+      return {
+        ...state,
+        classResources: {
+          ...state.classResources,
+          [action.payload.name]: {
+            ...state.classResources[action.payload.name],
+            submittedAssignment: prevAss
+              ? [...prevAss, action.payload.file]
+              : [action.payload.file],
+          },
+        },
+      };
+
+    case 'DELETE_SUBMITTED_ASSIGNMENT':
+      const prevAs =
+        state.classResources[action.payload.name].submittedAssignment;
+      return {
+        ...state,
+        classResources: {
+          ...state.classResources,
+          [action.payload.name]: {
+            ...state.classResources[action.payload.name],
+            submittedAssignment: prevAs.filter(
+              (ass) => ass.id !== action.payload.id
+            ),
           },
         },
       };

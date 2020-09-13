@@ -21,7 +21,7 @@ const ProgressBar = ({ progress }) => {
             color: 'rgb(223, 105, 180)',
           },
           default: {
-            symbol: '😱',
+            symbol: '',
             color: '#fbc630',
           },
         }}

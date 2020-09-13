@@ -21,8 +21,13 @@
 
   .left {
     width: 80%;
+    cursor: pointer;
     @include for-size(phone-only) {
       width: 100%;
+    }
+
+    > * {
+      pointer-events: none;
     }
 
     img {

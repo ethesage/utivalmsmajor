@@ -47,7 +47,7 @@ function Classes({
   );
 
   useEffect(() => {
-    if (classResources[title].files.length === 0)
+    if (!classResources[title].files)
       resources.forEach(async (resource) => {
         const file = await getFiles(resource.link);
         dispatch(getResources(title, file));

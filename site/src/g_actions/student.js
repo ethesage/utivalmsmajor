@@ -13,7 +13,11 @@ export const getEnrolledCourses = (id, data) => async (dispatch) => {
       const data_ = useObject.CourseCohort.Classes.reduce(
         (acc, cur) => ({
           ...acc,
-          [cur.title]: { files: [], assignment: null },
+          [cur.title]: {
+            files: null,
+            assignment: null,
+            submittedAssignment: null,
+          },
         }),
         {}
       );
@@ -87,5 +91,19 @@ export const getAssignments = (name, file) => async (dispatch) => {
   dispatch({
     type: 'GET_ASSIGNMENT',
     payload: { name, file },
+  });
+};
+
+export const getSubmittedAssignments = (name, file) => async (dispatch) => {
+  dispatch({
+    type: 'SUBMIT_ASSIGNMENT',
+    payload: { name, file },
+  });
+};
+
+export const deleteSubmittedAssignment = (name, id) => async (dispatch) => {
+  dispatch({
+    type: 'DELETE_SUBMITTED_ASSIGNMENT',
+    payload: { name, id },
   });
 };
