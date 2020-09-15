@@ -76,6 +76,36 @@ const Assignment = ({ gapi }) => {
     [gapi]
   );
 
+  useEffect(() => {
+    if (!currentClass) return;
+    if (classResources[currentClass.title].submittedAssignment) return;
+
+    (async () => {
+      const response = await axiosInstance.get(
+        `assignment/class/student/${currentClass.id}`
+      );
+
+      const submitted = response.data.data;
+      if (typeof submitted !== Array && submitted.length === 0) {
+        dispatch(getSubmittedAssignments(currentClass.title, null));
+        return;
+      }
+
+      submitted.forEach(async (resource) => {
+        const file = await getFiles(resource.resourceLink);
+        dispatch(
+          getSubmittedAssignments(currentClass.title, {
+            ...resource,
+            resourceId: resource.id,
+            ...file,
+          })
+        );
+      });
+    })();
+
+    return () => {};
+  }, [currentClass]);
+
   const download = async (e) => {
     e.preventDefault();
 
@@ -134,12 +164,17 @@ const Assignment = ({ gapi }) => {
   };
 
   const deleteAssignment = async () => {
+    const resource = classResources[
+      currentClass.title
+    ].submittedAssignment.find((file) => file.id === currentFileId);
+
     try {
       const res = await axiosInstance.delete(
-        `assignment/submit/${currentFileId}`
+        `assignment/submit/${resource.resourceId}`
       );
       if (res) {
         dispatch(deleteSubmittedAssignment(currentClass.title, currentFileId));
+        await gapi.gapi.deleteFile(currentFileId);
       }
     } catch (err) {
       addToast('Error submitting', {
@@ -147,7 +182,6 @@ const Assignment = ({ gapi }) => {
         autoDismiss: true,
       });
     }
-    await gapi.gapi.deleteFile(currentFileId);
     setCurrentFileId(null);
   };
 
@@ -206,7 +240,11 @@ const Assignment = ({ gapi }) => {
       )}
       <Modal ref={modalRef}>
         {deleteDialog ? (
-          <Confirm onClick={deleteAssignment} close={close} />
+          <Confirm
+            text="Are you sure?"
+            onClick={deleteAssignment}
+            close={close}
+          />
         ) : (
           <ProgressBar progress={progress} />
         )}

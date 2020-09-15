@@ -1,13 +1,13 @@
 import React from 'react';
-import Button from '../Button';
+import './style.scss';
 
 const Confirm = ({ text, close, onClick }) => {
   return (
-    <div>
-      <h2>{text}</h2>
-      <div>
-        <Button text="yes" onClick={onClick} />
-        <Button text="No" onClick={close} />
+    <div className="confirm_dx">
+      <p className='mn_txt'>{text}</p>
+      <div className="flex-row">
+        <p className='clx_btn' onClick={onClick}>Yes</p>
+        <p className='clx_btn' onClick={close}>No</p>
       </div>
     </div>
   );

@@ -39,6 +39,13 @@ const Students = () => {
           r6={<strong>Action</strong>}
         />
         <UserRow />
+        <UserRow />
+        <UserRow />
+        <UserRow />
+        <UserRow />
+        <UserRow />
+        <UserRow />
+        <UserRow />
       </Layout>
     </section>
   );

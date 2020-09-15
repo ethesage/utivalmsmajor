@@ -74,8 +74,12 @@ const course = (state = initialState, action) => {
           [action.payload.name]: {
             ...state.classResources[action.payload.name],
             submittedAssignment: prevAss
-              ? [...prevAss, action.payload.file]
-              : [action.payload.file],
+              ? action.payload.file
+                ? [...prevAss, action.payload.file]
+                : prevAss
+              : action.payload.file
+              ? [action.payload.file]
+              : [],
           },
         },
       };
