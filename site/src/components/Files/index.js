@@ -14,6 +14,7 @@ const Files = ({
   showdrag = true,
   personal = false,
   children,
+  linkExt,
 }) => {
   return (
     <div className="info_con">
@@ -47,6 +48,7 @@ const Files = ({
               download={download}
               deleteFile={deleteFile}
               personal={personal}
+              linkExt={linkExt}
             />
           ))
         )}

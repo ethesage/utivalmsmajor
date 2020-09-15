@@ -1,31 +1,44 @@
-import React, { useState, useEffect } from "react";
-import ResourceBtn from "../../ResourceButton";
-import assignment from "../../../assets/icons/course/assignment.png";
-import Input from "../../Input";
-import { useToasts } from "react-toast-notifications";
-import { useSelector } from "react-redux";
-import { axiosInstance, validate } from "../../../helpers";
-import user_icon from "../../../assets/user_icon.png";
-import Moment from "react-moment";
-import "../../Classroom/Classes/style.scss";
-import "./style.scss";
+import React, { useState, useEffect } from 'react';
+import ResourceBtn from '../../ResourceButton';
+import assignment from '../../../assets/icons/course/assignment.png';
+import Input from '../../Input';
+import { useToasts } from 'react-toast-notifications';
+import { useSelector } from 'react-redux';
+import { axiosInstance, validate } from '../../../helpers';
+import user_icon from '../../../assets/user_icon.png';
+import Moment from 'react-moment';
+import '../../Classroom/Classes/style.scss';
+import './style.scss';
 
-const ViewGrade = ({ data }) => {
+const ViewGrade = ({ data, length, assignmentId }) => {
   const [loading, setLoading] = useState(false);
   const [comments, setComments] = useState(null);
-  const [newComment, setNewComment] = useState("");
+  const [newComment, setNewComment] = useState('');
   const { addToast } = useToasts();
   const { user } = useSelector((state) => state.auth);
+  const [assData, setassData] = useState();
+
+  console.log(data, length, assignmentId);
 
   // console.log(user);
 
+  useEffect(() => {
+    if (assData) return;
+
+    if (data && data.length === length) {
+      setassData(data.filter((ass) => ass.resourceId === assignmentId)[0]);
+    }
+  }, [assignmentId, data, length, assData]);
+
+  console.log(assData);
+
   const createComment = async () => {
     setLoading(true);
-    const shouldSubmit = !validate(newComment, "comment");
+    const shouldSubmit = !validate(newComment, 'comment');
 
     if (shouldSubmit) {
-      addToast("Please ensure the form is completely and Correctly filled", {
-        appearance: "error",
+      addToast('Please ensure the form is completely and Correctly filled', {
+        appearance: 'error',
         autoDismiss: true,
       });
 
@@ -46,7 +59,7 @@ const ViewGrade = ({ data }) => {
 
       setLoading(false);
 
-      setNewComment("");
+      setNewComment('');
       setComments((comments) => [...comments, { ..._comment }]);
     } catch (err) {
       if (err.response.status === 401) {
@@ -77,23 +90,23 @@ const ViewGrade = ({ data }) => {
     setComments([
       {
         desc:
-          "You need to indicate the key indices so as to ascertain the correctvalues",
+          'You need to indicate the key indices so as to ascertain the correctvalues',
         createdAt:
-          "Sat Aug 08 2020 13:34:22 GMT+0100 (West Africa Standard Time)",
+          'Sat Aug 08 2020 13:34:22 GMT+0100 (West Africa Standard Time)',
         user: {
-          firstName: "Eyitayo",
-          lastName: "Ogunmola",
-          profilePic: "",
+          firstName: 'Eyitayo',
+          lastName: 'Ogunmola',
+          profilePic: '',
         },
       },
       {
-        desc: "All noted sir",
+        desc: 'All noted sir',
         createdAt:
-          "Sat Aug 08 2020 13:34:22 GMT+0100 (West Africa Standard Time)",
+          'Sat Aug 08 2020 13:34:22 GMT+0100 (West Africa Standard Time)',
         user: {
-          firstName: "Adekanbi",
-          lastName: "Rex",
-          profilePic: "",
+          firstName: 'Adekanbi',
+          lastName: 'Rex',
+          profilePic: '',
         },
       },
     ]);
@@ -104,7 +117,7 @@ const ViewGrade = ({ data }) => {
   return (
     <section className="cx_listnx_con vx_gax">
       <div className="info_sec">
-        <div className={`h_con full`}>
+        <div className="h_con full">
           <h2 className="cx_lis-header flex-row j-start">
             <span>Week one - SQL For Data</span>
           </h2>
@@ -135,7 +148,7 @@ const ViewGrade = ({ data }) => {
               link=""
               handleClick={(e) => {
                 e.preventDefault();
-                console.log("clicked");
+                console.log('clicked');
               }}
             />
           </div>
@@ -182,7 +195,7 @@ const ViewGrade = ({ data }) => {
 
                 <div
                   className="loading"
-                  style={{ display: loading ? "block" : "none" }}
+                  style={{ display: loading ? 'block' : 'none' }}
                 >
                   Loading...
                 </div>

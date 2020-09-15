@@ -1,8 +1,8 @@
 /* eslint-disable import/prefer-default-export */
 // import sequelize from "sequelize";
 // import { paginate, calculateLimitAndOffset } from 'paginate-info';
-import models from "../database/models";
-import helpers from "../helpers";
+import models from '../database/models';
+import helpers from '../helpers';
 // import  from "../helpers"
 
 const { successStat, errorStat } = helpers;
@@ -54,9 +54,9 @@ export const getClassAssignment = async (req, res) => {
       include: [
         {
           model: models.Assignment,
-          attributes: ['fileId']
+          attributes: ['fileId'],
         },
-      ]
+      ],
     });
 
     // if (!allClass[0]) return errorStat(res, 404, 'No class Found for this course');
@@ -101,15 +101,15 @@ export const getStudentCourseCohortAssignment = async (req, res) => {
           include: [
             {
               model: models.Assignment,
-              where: { studentId: id }
-            }
-          ]
-      }
-      ]
+              where: { studentId: id },
+            },
+          ],
+        },
+      ],
     });
 
     // if (!allClass[0]) return errorStat(res, 404, 'No class Found for this course');
-console.log('i am here')
+    console.log('i am here');
     return successStat(res, 200, 'data', submitAssignment);
   } catch (e) {
     console.log(e);
@@ -117,12 +117,11 @@ console.log('i am here')
   }
 };
 
-
 export const submitAssignment = async (req, res) => {
   const { classId, classResourcesId, resourceLink } = req.body.assignment;
-  const { id } = req.session.user
+  const { id } = req.session.user;
 
-  console.log(classId, classResourcesId)
+  console.log(classId, classResourcesId);
 
   try {
     const findClassAssignment = await models.Classes.findOne({
@@ -133,25 +132,25 @@ export const submitAssignment = async (req, res) => {
           where: {
             id: classResourcesId,
             classId,
-            type: 'assignment'
-          }
-        }
-      ]
-    })
+            type: 'assignment',
+          },
+        },
+      ],
+    });
 
-    if (!findClassAssignment) return errorStat(res, 404, 'Class Assignment not found')
+    if (!findClassAssignment)
+      return errorStat(res, 404, 'Class Assignment not found');
 
-
-    await models.Assignment.create({
+    const data = await models.Assignment.create({
       studentId: id,
       resourceLink,
       submitDate: new Date(),
       classId,
       isGraded: false,
-      classResourcesId
+      classResourcesId,
     });
 
-    return successStat(res, 201, 'data', 'Assignment Submited Sussceessfully');
+    return successStat(res, 201, 'data', data.dataValues);
   } catch (e) {
     console.log(e);
     errorStat(res, 500, 'Operation Failed, Please Try Again');
@@ -165,17 +164,19 @@ export const gradeStudentAssignment = async (req, res) => {
   try {
     const checkTrainer = await models.Classes.findOne({
       where: { id: classId },
-      include: [{
-        model: models.Trainer,
-        where: { userId: id }
-      }]
-    })
+      include: [
+        {
+          model: models.Trainer,
+          where: { userId: id },
+        },
+      ],
+    });
 
-    if (!checkTrainer || role === 'student') return errorStat(res, 403, 'Cant Grade Assignment')
-
+    if (!checkTrainer || role === 'student')
+      return errorStat(res, 403, 'Cant Grade Assignment');
 
     const foundAssignment = await models.Assignment.findOne({
-      where: { id: assignmentId }
+      where: { id: assignmentId },
     });
 
     if (!foundAssignment) {
@@ -186,9 +187,8 @@ export const gradeStudentAssignment = async (req, res) => {
       ...req.body.assignment,
       isGraded: true,
       gradeDate: new Date(),
-      gradedBy: `${firstName} ${lastName}`
+      gradedBy: `${firstName} ${lastName}`,
     });
-
 
     return successStat(res, 201, 'data', updateAssignmet);
   } catch (e) {
@@ -198,71 +198,79 @@ export const gradeStudentAssignment = async (req, res) => {
 };
 
 export const editSubmittedAssignment = async (req, res) => {
-    const { assignmentId } = req.body.assignment;
-    
+  const { assignmentId } = req.body.assignment;
+
   try {
     const findAssignment = await models.Assignment.findOne({
-      where: { id: assignmentId }
-    })
+      where: { id: assignmentId },
+    });
 
     if (!findAssignment) return errorStat(res, 404, 'Assignment not found');
 
-    if (findAssignment.isGraded) return errorStat(res, 400, 'Cannot Edit Graded Assignment');
+    if (findAssignment.isGraded)
+      return errorStat(res, 400, 'Cannot Edit Graded Assignment');
 
     await findAssignment.update({
       ...req.body.assignment,
     });
 
-    return successStat(res, 200, 'data', { ...findAssignment.dataValues, message: 'Assignment updated successfully' });
+    return successStat(res, 200, 'data', {
+      ...findAssignment.dataValues,
+      message: 'Assignment updated successfully',
+    });
   } catch (e) {
     console.log(e);
     errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
-
 
 export const deleteAssignment = async (req, res) => {
   const { assignmentId } = req.body.assignment;
   const { id } = req.session.user;
-    
+
   try {
     const findAssignment = await models.Assignment.findOne({
-      where: { id: assignmentId }
-    })
+      where: { id: assignmentId },
+    });
 
     if (!findAssignment) return errorStat(res, 404, 'Assignment not found');
 
-    if (findAssignment.studentId !== id) return errorStat(res, 400, 'Forbidden Access');
+    if (findAssignment.studentId !== id)
+      return errorStat(res, 400, 'Forbidden Access');
 
-    if (findAssignment.isGraded) return errorStat(res, 400, 'Cannot Delete Graded Assignment');
-
+    if (findAssignment.isGraded)
+      return errorStat(res, 400, 'Cannot Delete Graded Assignment');
 
     await findAssignment.destroy();
-    return successStat(res, 200, 'data', { message: 'Assignment deleted successfully' });
+    return successStat(res, 200, 'data', {
+      message: 'Assignment deleted successfully',
+    });
   } catch (e) {
     console.log(e);
     errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
-
 export const createAssignmentComment = async (req, res) => {
   const { assignmentId } = req.body.assignment;
   const { id } = req.session.user;
-    
+
   try {
     const findAssignment = await models.Assignment.findOne({
-      where: { id: assignmentId }
-    })
+      where: { id: assignmentId },
+    });
 
     if (!findAssignment) return errorStat(res, 404, 'Assignment not found');
 
     const createcomment = await models.AssignmentComment.create({
       ...req.body.assignment,
-      userId: id
-    })
+      userId: id,
+    });
 
-    return successStat(res, 201, 'data', { ...createcomment.dataValues, message: 'Comment created successfully' });
+    return successStat(res, 201, 'data', {
+      ...createcomment.dataValues,
+      message: 'Comment created successfully',
+    });
   } catch (e) {
     console.log(e);
     errorStat(res, 500, 'Operation Failed, Please Try Again');
@@ -272,20 +280,21 @@ export const createAssignmentComment = async (req, res) => {
 export const editAssignmentComment = async (req, res) => {
   const { assignmentCommentId } = req.body.assignment;
   const { id } = req.session.user;
-    
+
   try {
     const findComment = await models.AssignmentComment.findOne({
-      where: { id: assignmentCommentId }
-    })
+      where: { id: assignmentCommentId },
+    });
 
     if (!findComment) return errorStat(res, 404, 'Comment not found');
-    console.log(findComment.userId, id )
+    console.log(findComment.userId, id);
 
-    if (findComment.userId !== id) return errorStat(res, 400, 'Cant edit this comment');
+    if (findComment.userId !== id)
+      return errorStat(res, 400, 'Cant edit this comment');
 
     await findComment.update({
       ...req.body.assignment,
-    })
+    });
 
     return successStat(res, 200, 'data', findComment);
   } catch (e) {
@@ -294,24 +303,21 @@ export const editAssignmentComment = async (req, res) => {
   }
 };
 
-
 export const getAssignmentComment = async (req, res) => {
   const { assignmentId } = req.body.assignment;
-    
+
   try {
     const findAssignment = await models.AssignmentComment.findAll({
       where: { assignmentId },
 
-      order: [
-        ['createdAt']
-      ],
+      order: [['createdAt']],
       include: [
-      {
-        model: models.User,
-        attributes: ['firstName', 'lastName', 'profilePic']
-      }
-      ]
-    })
+        {
+          model: models.User,
+          attributes: ['firstName', 'lastName', 'profilePic'],
+        },
+      ],
+    });
 
     return successStat(res, 200, 'data', findAssignment);
   } catch (e) {
@@ -323,18 +329,19 @@ export const getAssignmentComment = async (req, res) => {
 export const deleteAssignmentComment = async (req, res) => {
   const { assignmentCommentId } = req.body.assignment;
   const { id } = req.session.user;
-    
+
   try {
     const findComment = await models.AssignmentComment.findOne({
-      where: { id: assignmentCommentId }
-    })
+      where: { id: assignmentCommentId },
+    });
 
     if (findComment.userId !== id) return errorStat(res, 400, 'Cant Delete');
 
-
     await findComment.destroy();
 
-    return successStat(res, 200, 'data', { message: 'Comment delete successfully' });
+    return successStat(res, 200, 'data', {
+      message: 'Comment delete successfully',
+    });
   } catch (e) {
     console.log(e);
     errorStat(res, 500, 'Operation Failed, Please Try Again');

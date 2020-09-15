@@ -5,7 +5,14 @@ import numeral from 'numeral';
 import DropDown from '../../DropDown';
 import './style.scss';
 
-const FileSec = ({ file, personal = false, view, download, deleteFile }) => {
+const FileSec = ({
+  file,
+  personal = false,
+  view,
+  download,
+  deleteFile,
+  linkExt,
+}) => {
   return (
     <div className="file_card flex-row j-space">
       <div
@@ -35,7 +42,7 @@ const FileSec = ({ file, personal = false, view, download, deleteFile }) => {
         <div>
           {file.isGraded ? (
             <Link
-              to="/dashboard/courses/assignment/view_grade/3456"
+              to={`/courses/assignment/${linkExt.courseId}/${linkExt.classroom}/${file.resourceId}`}
               className="theme-color grade"
             >
               <small>View Grade</small>

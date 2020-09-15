@@ -10,6 +10,7 @@ import Loader from '../Loading';
 import Files from 'components/Files';
 import Modal from 'components/Modal';
 import ProgressBar from 'components/ProgressBar';
+import ViewGrade from 'components/Assignment/ViewGrade';
 import {
   getSubmittedAssignments,
   deleteSubmittedAssignment,
@@ -21,7 +22,7 @@ import { axiosInstance } from 'helpers';
 import './style.scss';
 
 const Assignment = ({ gapi }) => {
-  const { courseId, classroom } = useParams();
+  const { courseId, classroom, assignmentId } = useParams();
   const { addToast } = useToasts();
 
   const dispatch = useDispatch();
@@ -31,6 +32,7 @@ const Assignment = ({ gapi }) => {
   const [deleteDialog, setDeleteDialog] = useState(false);
   const [progress, setProgress] = useState(0);
   const [currentFileId, setCurrentFileId] = useState();
+  const [length, setLength] = useState();
 
   const modalRef = useRef();
 
@@ -91,6 +93,8 @@ const Assignment = ({ gapi }) => {
         return;
       }
 
+      setLength(submitted.length);
+
       submitted.forEach(async (resource) => {
         const file = await getFiles(resource.resourceLink);
         dispatch(
@@ -98,6 +102,7 @@ const Assignment = ({ gapi }) => {
             ...resource,
             resourceId: resource.id,
             ...file,
+            comments: null,
           })
         );
       });
@@ -118,6 +123,7 @@ const Assignment = ({ gapi }) => {
   };
 
   const upload = async (files) => {
+    setDeleteDialog(false);
     const assignment_ = currentClass.ClassResouces.filter(
       (res) => res.type === 'assignment'
     )[0].id;
@@ -138,6 +144,8 @@ const Assignment = ({ gapi }) => {
       if (res) {
         file = await getFiles(file.id);
         file.isGraded = false;
+        file.resourceId = res.data.data.id;
+        file.comments = null;
 
         dispatch(getSubmittedAssignments(currentClass.title, file));
       }
@@ -170,11 +178,14 @@ const Assignment = ({ gapi }) => {
 
     try {
       const res = await axiosInstance.delete(
-        `assignment/submit/${resource.resourceId}`
+        `assignment/${resource.resourceId}`
       );
       if (res) {
         dispatch(deleteSubmittedAssignment(currentClass.title, currentFileId));
         await gapi.gapi.deleteFile(currentFileId);
+        setCurrentFileId(null);
+
+        return true;
       }
     } catch (err) {
       addToast('Error submitting', {
@@ -182,7 +193,6 @@ const Assignment = ({ gapi }) => {
         autoDismiss: true,
       });
     }
-    setCurrentFileId(null);
   };
 
   const deleteFIle = (id) => {
@@ -192,64 +202,75 @@ const Assignment = ({ gapi }) => {
   };
 
   return (
-    <div className="asx flex-row j-start al-start">
+    <>
       {currentCourse ? (
-        <>
-          <div className="asx_sec">
-            <Classes
-              data={currentClass}
-              open={true}
-              showArrow={false}
-              full={true}
-              showResources={false}
-              gapi={gapi}
-            />
-            <div className="btn_sec_con flex-row j-start">
-              <div className="btn_sec">
-                <ResourceBtn
-                  img={assignment}
-                  text="Download Assignment"
-                  color="off"
-                  link=""
-                  handleClick={download}
-                />
+        !assignmentId ? (
+          <div className="asx flex-row j-start al-start">
+            <div className="asx_sec">
+              <Classes
+                data={currentClass}
+                open={true}
+                showArrow={false}
+                full={true}
+                showResources={false}
+                gapi={gapi}
+              />
+              <div className="btn_sec_con flex-row j-start">
+                <div className="btn_sec">
+                  <ResourceBtn
+                    img={assignment}
+                    text="Download Assignment"
+                    color="off"
+                    link=""
+                    handleClick={download}
+                  />
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="upload">
-            <h3>Your Assignments</h3>
-            <div className="box-shade">
-              <Files
-                files={classResources[currentClass.title].submittedAssignment}
-                view={viewFile}
-                personal={true}
-                download={download}
-                deleteFile={deleteFIle}
-                handleImage={upload}
-              >
-                <Button text="Submit" className="up_btn flex-row mx-auto" />
-              </Files>
+            <div className="upload">
+              <h3>Your Assignments</h3>
+              <div className="box-shade">
+                <Files
+                  files={classResources[currentClass.title].submittedAssignment}
+                  view={viewFile}
+                  personal={true}
+                  download={download}
+                  deleteFile={deleteFIle}
+                  handleImage={upload}
+                  linkExt={{ courseId, classroom }}
+                >
+                  <Button text="Submit" className="up_btn flex-row mx-auto" />
+                </Files>
+              </div>
             </div>
+
+            <Modal ref={modalRef}>
+              {deleteDialog ? (
+                <Confirm
+                  text="Are you sure?"
+                  onClick={deleteAssignment}
+                  close={close}
+                  closeText="Successfuly Deleted"
+                />
+              ) : (
+                <ProgressBar progress={progress} />
+              )}
+            </Modal>
           </div>
-        </>
+        ) : (
+          <ViewGrade
+            data={classResources[currentClass.title].submittedAssignment}
+            length={length}
+            assignmentId={assignmentId}
+          />
+        )
       ) : (
         <div className="flex-row img">
           <Loader tempLoad={true} full={false} />
         </div>
       )}
-      <Modal ref={modalRef}>
-        {deleteDialog ? (
-          <Confirm
-            text="Are you sure?"
-            onClick={deleteAssignment}
-            close={close}
-          />
-        ) : (
-          <ProgressBar progress={progress} />
-        )}
-      </Modal>
-    </div>
+    </>
   );
 };
 

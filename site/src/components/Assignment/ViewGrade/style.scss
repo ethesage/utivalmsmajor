@@ -1,8 +1,12 @@
-@import "../../../media";
+@import '../../../media';
 
 .vx_gax {
   .info_sec {
     margin-bottom: 100px;
+
+    .cx_lis-header {
+      margin-bottom: 20px;
+    }
 
     .cx_lis-content {
       .g_scx {

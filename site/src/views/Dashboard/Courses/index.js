@@ -6,7 +6,7 @@ import CourseList from './CoursesList';
 import Classroom from 'components/Classroom';
 import FullClass from 'components/Classroom/FullClass';
 import Assignment from 'components/Assignment';
-import ViewGrade from 'components/Assignment/ViewGrade';
+
 import Nav from 'components/InnerHeader';
 import StudyPlan from '../../StudyPlan';
 import Members from '../../Members';
@@ -47,10 +47,8 @@ const Courses = ({ gapi }) => {
         </Route>
         <Route
           exact
-          path={`${path}/assignment/view_grade/:id`}
-          component={ViewGrade}
-        />
-        <Route exact path={`${path}/assignment/:courseId/:classroom`}>
+          path={`${path}/assignment/:courseId/:classroom/:assignmentId?`}
+        >
           <Assignment gapi={gapi} />
         </Route>
         <Route
