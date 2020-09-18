@@ -122,6 +122,17 @@ const Assignment = ({ gapi }) => {
     );
   };
 
+  const viewAss = async (e) => {
+    e.preventDefault();
+
+    if (!currentClass) return;
+    if (!classResources[currentClass.title].assignment) return;
+    window.open(
+      classResources[currentClass.title].assignment.webViewLink ||
+        classResources[currentClass.title].assignment.webContentLink
+    );
+  };
+
   const upload = async (files) => {
     setDeleteDialog(false);
     const assignment_ = currentClass.ClassResouces.filter(
@@ -263,6 +274,8 @@ const Assignment = ({ gapi }) => {
             data={classResources[currentClass.title].submittedAssignment}
             length={length}
             assignmentId={assignmentId}
+            currentClass={currentClass}
+            view={viewAss}
           />
         )
       ) : (
