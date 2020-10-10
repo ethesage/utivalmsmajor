@@ -66,8 +66,9 @@ export const getAllTrainerCourse = async (req, res) => {
             {
               model: models.CourseProgress,
               where: { userId: id },
-              require: false
+              required: false
             },
+            // required: false
           ]
           },
             {
@@ -129,7 +130,7 @@ export const getSingleTrainerCourse = async (req, res) => {
             {
               model: models.CourseProgress,
               where: { userId: id },
-              require: false
+              required: false
             },
           ],
         },
