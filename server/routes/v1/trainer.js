@@ -38,7 +38,7 @@ trainerRoutes.get(
 );
 
 trainerRoutes.get(
-  '/course/:courseId',
+  '/course/:courseCohortId',
   // usession.can('admin:create'),
   validate(courseTrainerSchema),
   getSingleTrainerCourse

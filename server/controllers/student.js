@@ -128,12 +128,12 @@ export const getAllStudentCourse = async (req, res) => {
 export const getSingleStudentCourse = async (req, res) => {
   const { id } = req.session.user;
 
-  const { studentCourseId } = req.body.student;
+  const { courseCohortId } = req.body.student;
   let resource;
 
   try {
     resource = await models.StudentCourse.findOne({
-      where: { id: studentCourseId, studentId: id },
+      where: { courseCohortId, studentId: id },
       include: [
         {
           model: models.Cohort,
@@ -219,11 +219,11 @@ export const getStudentDashboard = async (req, res) => {
 };
 
 export const allCourseStudents = async (req, res) => {
-  const { studentCourseId } = req.body.student;
-
-  const { courseCohortId } = await models.StudentCourse.findOne({
-    where: { id: studentCourseId },
-  });
+  const { courseCohortId } = req.body.student;
+ const { id } = req.session.user;
+  // const { courseCohortId } = await models.StudentCourse.findOne({
+  //   where: { id: studentCourseId },
+  // });
 
   try {
     const courseStudent = await models.StudentCourse.findAll({
@@ -305,11 +305,11 @@ export const getStudentNextClass = async (req, res) => {
 };
 
 export const getStudentClassDays = async (req, res) => {
-  const { studentCourseId } = req.body.student;
+  const { courseCohortId } = req.body.student;
 
-  const { courseCohortId } = await models.StudentCourse.findOne({
-    where: { id: studentCourseId },
-  });
+  // const { courseCohortId } = await models.StudentCourse.findOne({
+  //   where: { id: studentCourseId },
+  // });
 
   const { id } = req.session.user;
 

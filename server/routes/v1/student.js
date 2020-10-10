@@ -32,7 +32,7 @@ studentRoutes.post(
 );
 
 studentRoutes.get(
-  '/:studentCourseId',
+  '/:courseCohortId',
   usession.can(''),
   validate(getStudentSchema),
   getSingleStudentCourse
@@ -43,7 +43,7 @@ studentRoutes.get('/all/dashboard', usession.can(''), getStudentDashboard);
 studentRoutes.get('/', usession.can(''), getAllStudentCourse);
 
 studentRoutes.get(
-  '/allstudents/:studentCourseId',
+  '/allstudents/:courseCohortId',
   usession.can(''),
   validate(getStudentSchema),
   allCourseStudents
@@ -52,7 +52,7 @@ studentRoutes.get(
 studentRoutes.get('/all/nextclass', usession.can(''), getStudentNextClass);
 
 studentRoutes.get(
-  '/classdays/:studentCourseId',
+  '/classdays/:courseCohortId',
   usession.can(''),
   validate(getStudentSchema),
   getStudentClassDays

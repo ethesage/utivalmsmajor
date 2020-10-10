@@ -7,7 +7,7 @@ export const addStudentSchema = Joi.object().keys({
 });
 
 export const getStudentSchema = Joi.object().keys({
-  studentCourseId: Joi.string().uuid().trim().required(),
+  courseCohortId: Joi.string().uuid().trim().required(),
 });
 
 export const getStudentCourseSchema = Joi.object().keys({
