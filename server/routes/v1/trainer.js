@@ -6,7 +6,8 @@ import {
   getAllTrainer,
   updateTrainer,
   deleteTrainer,
-  getSingleTrainer
+  getSingleTrainer,
+  getSingleTrainerCourse
 } from '../../controllers/trainer';
 import middlewares from '../../middlewares';
 
@@ -40,7 +41,7 @@ trainerRoutes.get(
   '/course/:courseId',
   // usession.can('admin:create'),
   validate(courseTrainerSchema),
-  getAllTrainer
+  getSingleTrainerCourse
 );
 
 trainerRoutes.get(

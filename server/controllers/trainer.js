@@ -108,6 +108,77 @@ export const getAllTrainerCourse = async (req, res) => {
   }
 };
 
+export const getSingleTrainerCourse = async (req, res) => {
+  const { id } = req.session.user;
+
+  const { courseId } = req.body.trainer;
+  let resource;
+
+  try {
+    resource = await models.Trainer.findOne({
+      where: { userId: id },
+      include: [
+        {
+          model: models.Course,
+          where: { id: courseId },
+          include: [
+            {
+              model: models.CourseDescription,
+            },
+            {
+              model: models.CourseProgress,
+              where: { userId: id },
+            },
+          ],
+        },
+        {
+          model: models.CourseCohort,
+          include: [
+            {
+              model: models.Classes,
+              include: [
+                {
+                  model: models.Trainer,
+                  include: {
+                    model: models.User,
+                    attributes: [
+                      'firstName',
+                      'lastName',
+                      'profilePic',
+                      'occupation',
+                      'bio',
+                    ],
+                  },
+                },
+                {
+                  model: models.ClassResouces,
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+
+    if (!resource) {
+      return errorStat(res, 404, 'Trainer Course Not Found');
+    }
+
+    // if (!resource.isCompleted && new Date() > resource.duration) {
+    //   resource.update({
+    //     isCompleted: true,
+    //     status: 'finished',
+    //   });
+    // }
+
+    return successStat(res, 200, 'data', resource);
+  } catch (e) {
+    console.log(e)
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
+  }
+}
+
+
 export const getAllTrainer = async (req, res) => {
   const { courseId } = req.body.trainer;
 
