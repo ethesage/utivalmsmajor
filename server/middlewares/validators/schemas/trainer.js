@@ -7,7 +7,7 @@ export const createTrainerSchema = Joi.object().keys({
 });
 
 export const getTrainerSchema = Joi.object().keys({
-  userId: Joi.string().uuid().trim().required(),
+  // userId: Joi.string().uuid().trim().required(),
 });
 
 export const courseTrainerSchema = Joi.object().keys({

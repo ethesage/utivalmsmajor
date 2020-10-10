@@ -275,14 +275,15 @@ export const getAllCoursesAdmin = async (req, res) => {
     const studentByCourse = await models.sequelize.query(
       `SELECT "Courses"."name", COUNT("studentId") AS 
   value FROM "Courses" LEFT JOIN "StudentCourses" ON "Courses"."id" = "StudentCourses"."courseId" 
-  WHERE "Courses"."id" IS NOT NULL GROUP BY "Courses"."id"`
+  LEFT JOIN "CourseCohorts" ON "Courses"."id" = "CourseCohorts"."courseId" 
+ WHERE "Courses"."id" IS NOT NULL GROUP BY "Courses"."id"`
   )
 
     // if (!rows[0]) return errorStat(res, 404, 'Course Not Found');
 
     // const paginationMeta = paginate(currentPage, count, rows, pageLimit);
 
-    return successStat(res, 200, 'data', rr);
+    return successStat(res, 200, 'data', studentByCourse);
   } catch (e) {
     console.log(e)
     errorStat(res, 500, 'Operation Failed, Please Try Again');

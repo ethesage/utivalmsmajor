@@ -51,11 +51,51 @@ export const createTrainer = async (req, res) => {
 };
 
 export const getAllTrainerCourse = async (req, res) => {
-  const { userId } = req.body.trainer;
+  const { id } = req.session.user;
 
   try {
     const trainerCourse = await models.Trainer.findAll({
-      where: { userId },
+      where: { userId: id },
+      include: [
+        {
+          model: models.Course,
+          include: [
+            {
+              model: models.CourseDescription,
+            },
+            // {
+            //   model: models.CourseProgress,
+            //   where: { userId: id },
+            // },
+            {
+              model: models.CourseCohort,
+              include: [
+                {
+                  model: models.Classes,
+                  include: [
+                    {
+                      model: models.Trainer,
+                      include: {
+                        model: models.User,
+                        attributes: [
+                          'firstName',
+                          'lastName',
+                          'profilePic',
+                          'occupation',
+                          'bio',
+                        ],
+                      },
+                    },
+                    {
+                      model: models.ClassResouces,
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ]
     });
 
     if (!trainerCourse[0]) {

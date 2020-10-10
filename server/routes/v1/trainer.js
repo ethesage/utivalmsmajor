@@ -30,7 +30,7 @@ trainerRoutes.post(
 );
 
 trainerRoutes.get(
-  '/user/:userId',
+  '/course',
   // usession.can('admin:create'),
   validate(getTrainerSchema),
   getAllTrainerCourse

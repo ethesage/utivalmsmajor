@@ -4,6 +4,7 @@
   "private": true,
   "description": "Online learning platform for the future",
   "dependencies": {
+    "@amcharts/amcharts4": "^4.10.4",
     "@hot-loader/react-dom": "^16.13.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
@@ -22,6 +23,7 @@
     "react-helmet": "^5.2.1",
     "react-hot-loader": "^4.12.21",
     "react-intersection-observer": "^8.26.1",
+    "react-js-pagination": "^3.0.3",
     "react-moment": "^0.9.7",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.1.2",
