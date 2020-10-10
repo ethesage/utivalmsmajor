@@ -58,6 +58,9 @@ export const getAllTrainerCourse = async (req, res) => {
       where: { userId: id },
       include: [
         {
+          model: models.Cohort,
+        },
+        {
           model: models.Course,
           include: [
             {
@@ -120,6 +123,9 @@ export const getSingleTrainerCourse = async (req, res) => {
     resource = await models.Trainer.findOne({
       where: { userId: id },
       include: [
+        {
+          model: models.Cohort,
+        },
         {
           model: models.Course,
           where: { id: courseId },
