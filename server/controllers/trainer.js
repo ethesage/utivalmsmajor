@@ -63,10 +63,12 @@ export const getAllTrainerCourse = async (req, res) => {
             {
               model: models.CourseDescription,
             },
-            // {
-            //   model: models.CourseProgress,
-            //   where: { userId: id },
-            // },
+            {
+              model: models.CourseProgress,
+              where: { userId: id },
+            },
+          ]
+          },
             {
               model: models.CourseCohort,
               include: [
@@ -92,8 +94,6 @@ export const getAllTrainerCourse = async (req, res) => {
                   ],
                 },
               ],
-            },
-          ],
         },
       ]
     });

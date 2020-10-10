@@ -8,7 +8,8 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true
     },
     courseId: DataTypes.UUID,
-    userId: DataTypes.UUID
+    userId: DataTypes.UUID,
+    courseCohortId: DataTypes.UUID
   }, {});
   Trainer.associate = (models) => {
     // associations can be defined here
@@ -26,6 +27,12 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'trainerId',
       onDelete: 'CASCADE'
     });
+
+    Trainer.belongsTo(models.CourseCohort, {
+      foreignKey: 'courseCohortId',
+      onDelete: 'CASCADE'
+    });
   };
+
   return Trainer;
 };
