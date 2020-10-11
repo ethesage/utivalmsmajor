@@ -10,7 +10,7 @@ import Loader from '../Loading';
 import Files from 'components/Files';
 import Modal from 'components/Modal';
 import ProgressBar from 'components/ProgressBar';
-import ViewGrade from 'components/Assignment/ViewGrade';
+import ViewGrade from 'views/Assignment/ViewGrade';
 import {
   getSubmittedAssignments,
   deleteSubmittedAssignment,
