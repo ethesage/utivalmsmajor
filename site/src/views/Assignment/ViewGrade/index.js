@@ -4,14 +4,14 @@ import { useSelector } from 'react-redux';
 import Skeleton from 'react-skeleton-loader';
 import Moment from 'react-moment';
 import moment from 'moment';
-import Button from '../../Button';
-import ResourceBtn from '../../ResourceButton';
+import Button from 'components/Button';
+import ResourceBtn from 'components/ResourceButton';
 import assignment from 'assets/icons/course/assignment.png';
-import Input from '../../Input';
+import Input from 'components/Input';
 import { axiosInstance, validate } from 'helpers';
 import user_icon from 'assets/user_icon.png';
 
-import '../../Classroom/Classes/style.scss';
+import 'components/Classroom/Classes/style.scss';
 import './style.scss';
 
 const ViewGrade = ({ data, length, assignmentId, currentClass, view }) => {
