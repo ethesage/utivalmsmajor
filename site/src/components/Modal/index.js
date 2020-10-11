@@ -1,9 +1,20 @@
-import React, { useRef, forwardRef, useImperativeHandle } from 'react';
+import React, {
+  useRef,
+  forwardRef,
+  useImperativeHandle,
+  useEffect,
+} from 'react';
 import Close from '../../assets/icons/close';
 import './style.scss';
 
 const Modal = forwardRef(({ children }, ref) => {
   const disRef = useRef();
+
+  useEffect(() => {
+    return () => {
+      document.querySelector('body').classList.remove('no-scroll');
+    };
+  }, []);
 
   useImperativeHandle(ref, () => ({
     open: () => {
@@ -13,13 +24,14 @@ const Modal = forwardRef(({ children }, ref) => {
     },
 
     close: () => {
+      document.querySelector('body').classList.remove('no-scroll');
       close();
     },
   }));
 
   const close = () => {
-    disRef.current.close();
     document.querySelector('body').classList.remove('no-scroll');
+    disRef.current.close();
   };
 
   return (

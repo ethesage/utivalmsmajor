@@ -5,7 +5,7 @@ import ResourceBtn from '../ResourceButton';
 import Classes from '../Classroom/Classes';
 import assignment from 'assets/icons/course/assignment.png';
 import Confirm from 'components/Confirm';
-import { getEnrolledCourses } from 'g_actions/student';
+import { getEnrolledCourses } from 'g_actions/member';
 import Loader from '../Loading';
 import Files from 'components/Files';
 import Modal from 'components/Modal';
@@ -14,7 +14,7 @@ import ViewGrade from 'components/Assignment/ViewGrade';
 import {
   getSubmittedAssignments,
   deleteSubmittedAssignment,
-} from 'g_actions/student';
+} from 'g_actions/member';
 import { useToasts } from 'react-toast-notifications';
 import Button from '../Button';
 import '../Classroom/Classes/style.scss';
@@ -26,13 +26,13 @@ const Assignment = ({ gapi }) => {
   const { addToast } = useToasts();
 
   const dispatch = useDispatch();
-  const enrolledcourses = useSelector((state) => state.student.enrolledcourses);
-  const currentCourse = useSelector((state) => state.student.currentCourse);
-  const { classResources } = useSelector((state) => state.student);
+  const enrolledcourses = useSelector((state) => state.member.enrolledcourses);
+  const currentCourse = useSelector((state) => state.member.currentCourse);
+  const { classResources } = useSelector((state) => state.member);
   const [deleteDialog, setDeleteDialog] = useState(false);
   const [progress, setProgress] = useState(0);
   const [currentFileId, setCurrentFileId] = useState();
-  const [length, setLength] = useState();
+  const length = useRef();
 
   const modalRef = useRef();
 
@@ -53,7 +53,7 @@ const Assignment = ({ gapi }) => {
       getEnrolledCourses(
         courseId,
         enrolledcourses &&
-          enrolledcourses.find((course) => course.id === courseId)
+          enrolledcourses.find((course) => course.courseCohortId === courseId)
       )
     );
 
@@ -93,7 +93,7 @@ const Assignment = ({ gapi }) => {
         return;
       }
 
-      setLength(submitted.length);
+      length.current = submitted.length;
 
       submitted.forEach(async (resource) => {
         const file = await getFiles(resource.resourceLink);
@@ -110,6 +110,8 @@ const Assignment = ({ gapi }) => {
 
     return () => {};
   }, [currentClass]);
+
+  // console.log(length.current);
 
   const download = async (e) => {
     e.preventDefault();
@@ -272,7 +274,7 @@ const Assignment = ({ gapi }) => {
         ) : (
           <ViewGrade
             data={classResources[currentClass.title].submittedAssignment}
-            length={length}
+            length={length.current}
             assignmentId={assignmentId}
             currentClass={currentClass}
             view={viewAss}

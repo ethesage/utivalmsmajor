@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { getAssignments, getResources } from 'g_actions/student';
+import { getAssignments, getResources } from 'g_actions/member';
 import { weeks } from 'helpers';
 import play from 'assets/icons/course/play.png';
 import material from 'assets/icons/course/material.png';
@@ -25,7 +25,7 @@ function Classes({
 }) {
   const { title, description, link } = data;
   const { isTrainer } = useSelector((state) => state.auth);
-  const { classResources } = useSelector((state) => state.student);
+  const { classResources } = useSelector((state) => state.member);
   const dispatch = useDispatch();
   const modalRef = useRef();
 

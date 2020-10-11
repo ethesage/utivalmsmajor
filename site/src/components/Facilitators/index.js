@@ -20,8 +20,6 @@ const Facilitators = ({ trainers }) => {
     return () => {};
   }, []);
 
-  console.log(trainerMap.current);
-
   return (
     <div className="fac_xc">
       <TransitionGroup className="fac_xc_con flex-row j-start">

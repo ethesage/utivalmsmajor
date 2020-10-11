@@ -12,6 +12,7 @@
     "test": "jest --detectOpenHandles --verbose --coverage --forceExit",
     "client": "cd site && npm run dev",
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
+    "dev_start": "concurrently --kill-others-on-fail \"npm run start\" \"npm run client\"",
     "server": "cross-env-shell NODE_ENV=development && set DEBUG=dev & nodemon --exec babel-node server/index.js",
     "migrate": "cross-env sequelize db:migrate",
     "migrate:undo": "sequelize db:migrate:undo",

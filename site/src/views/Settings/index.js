@@ -22,7 +22,6 @@ const links = [
 
 const File_Page = () => {
   let { path } = useRouteMatch();
-  console.log(path);
 
   return (
     <section className="dash-con settings flex-col al-start j-start">

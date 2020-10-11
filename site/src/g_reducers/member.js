@@ -99,6 +99,9 @@ const course = (state = initialState, action) => {
           },
         },
       };
+
+    case 'RESET':
+      return { ...initialState };
     default:
       return state;
   }

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { getEnrolledCourses } from '../../g_actions/student';
+import { getEnrolledCourses } from '../../g_actions/member';
 import Loader from '../../components/Loading';
 import Classes from './Classes';
 import NavBar from '../../components/CourseNav';
@@ -11,32 +11,32 @@ const Classroom = ({ full = false, gapi }) => {
   const { courseId } = useParams();
 
   const dispatch = useDispatch();
-  const enrolledcourses = useSelector((state) => state.student.enrolledcourses);
-  const currentCourse = useSelector((state) => state.student.currentCourse);
+  const enrolledcourses = useSelector((state) => state.member.enrolledcourses);
+  const currentCourse = useSelector((state) => state.member.currentCourse);
+  const { isStudent } = useSelector((state) => state.auth);
+  const userType = isStudent ? 'student' : 'trainer';
 
   useEffect(() => {
     if (!enrolledcourses && !currentCourse)
       (async () => {
-        await dispatch(getEnrolledCourses(courseId));
+        await dispatch(getEnrolledCourses(courseId, null, userType));
       })();
 
     return () => {};
-  }, [dispatch, enrolledcourses, courseId, currentCourse]);
+  }, [dispatch, enrolledcourses, courseId, currentCourse, userType]);
 
   useEffect(() => {
     if (!enrolledcourses) return;
     if (currentCourse) return;
 
-    dispatch(
-      getEnrolledCourses(
-        courseId,
-        enrolledcourses &&
-          enrolledcourses.find((course) => course.id === courseId)
-      )
-    );
+    const course =
+      enrolledcourses &&
+      enrolledcourses.find((course) => course.courseCohortId === courseId);
+
+    dispatch(getEnrolledCourses(courseId, course, userType));
 
     return () => {};
-  }, [enrolledcourses, courseId, currentCourse, dispatch]);
+  }, [enrolledcourses, courseId, currentCourse, dispatch, userType]);
 
   return (
     <>

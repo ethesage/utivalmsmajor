@@ -4,7 +4,7 @@ import CountCard from 'components/CountCard';
 import course from 'assets/icons/dashboard/course.png';
 import completed from 'assets/icons/dashboard/completed.png';
 import ongoing from 'assets/icons/dashboard/ongoing.png';
-import { countDetails } from 'g_actions/student';
+import { countDetails } from 'g_actions/member';
 
 const d_data = [
   {
@@ -28,7 +28,7 @@ const d_data = [
 ];
 
 const CountSection = () => {
-  const counts = useSelector((state) => state.student.counts);
+  const counts = useSelector((state) => state.member.counts);
   const dispatch = useDispatch();
 
   const stateCount =

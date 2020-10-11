@@ -1,11 +1,15 @@
 import { axiosInstance } from '../helpers';
 
-export const getEnrolledCourses = (id, data) => async (dispatch) => {
+export const getEnrolledCourses = (id, data, userType = 'student') => async (
+  dispatch
+) => {
   let courses;
+
+  const slug = userType === 'student' ? userType : 'trainer/course';
+  const courseId = id ? `/${id}` : '';
+
   try {
-    courses = data
-      ? data
-      : await axiosInstance.get(`/student${id ? `/${id}` : ''}`);
+    courses = data ? data : await axiosInstance.get(`/${slug}${courseId}`);
 
     if (id) {
       const useObject = data ? data : courses.data.data;
@@ -28,6 +32,9 @@ export const getEnrolledCourses = (id, data) => async (dispatch) => {
       });
     }
   } catch (error) {
+    if (error.response.status === 404) {
+      return 'error';
+    }
     return error;
   }
 

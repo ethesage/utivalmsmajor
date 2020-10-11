@@ -42,6 +42,10 @@ export const log_out = () => async (dispatch) => {
   await logout();
 
   dispatch({
+    type: 'RESET',
+  });
+
+  dispatch({
     type: 'Log_out',
   });
 };

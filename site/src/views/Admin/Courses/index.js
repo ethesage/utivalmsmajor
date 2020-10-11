@@ -24,7 +24,7 @@ const Courses = ({ gapi }) => {
           <>
             <span>{' > '}</span>
             <Link
-              to={`/courses/overview/${currentCourse.id}`}
+              to={`/courses/overview/${currentCourse.courseCohortId}`}
               className="reg_text"
             >
               <h3> {`${currentCourse.Course.name}`}</h3>

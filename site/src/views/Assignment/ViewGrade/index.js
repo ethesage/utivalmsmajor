@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import ResourceBtn from '../../ResourceButton';
-import assignment from '../../../assets/icons/course/assignment.png';
-import Input from '../../Input';
 import { useToasts } from 'react-toast-notifications';
 import { useSelector } from 'react-redux';
-import { axiosInstance, validate } from '../../../helpers';
-import user_icon from '../../../assets/user_icon.png';
 import Skeleton from 'react-skeleton-loader';
 import Moment from 'react-moment';
+import moment from 'moment';
+import Button from '../../Button';
+import ResourceBtn from '../../ResourceButton';
+import assignment from 'assets/icons/course/assignment.png';
+import Input from '../../Input';
+import { axiosInstance, validate } from 'helpers';
+import user_icon from 'assets/user_icon.png';
 
 import '../../Classroom/Classes/style.scss';
 import './style.scss';
@@ -27,7 +29,7 @@ const ViewGrade = ({ data, length, assignmentId, currentClass, view }) => {
   useEffect(() => {
     if (assData) return;
 
-    if (data && data.length === length) {
+    if (data) {
       setassData(data.filter((ass) => ass.resourceId === assignmentId)[0]);
     }
   }, [assignmentId, data, length, assData]);
@@ -36,14 +38,13 @@ const ViewGrade = ({ data, length, assignmentId, currentClass, view }) => {
 
   // get comment data
   useEffect(() => {
-    console.log(comments);
     if (comments) return;
     (async () => {
       const comments_ = await axiosInstance.get(
         `assignment/comment/${assignmentId}`
       );
 
-      setNewComment(comments_.data.data);
+      setComments(comments_.data.data);
     })();
 
     return () => {};
@@ -63,36 +64,38 @@ const ViewGrade = ({ data, length, assignmentId, currentClass, view }) => {
       return;
     }
 
-    const _comment = {
-      // articleId: data.id,
-      desc: newComment,
-      user: user,
-    };
-
-    // console.log(_comment);
-
     try {
-      // await axiosInstance.post("/article/comment-create", _comment);
+      const _comment = await axiosInstance.post(
+        `/assignment/comment/${assignmentId}`,
+        { comment: newComment }
+      );
 
-      setLoading(false);
+      if (_comment) setLoading(false);
 
       setNewComment('');
-      setComments((comments) => [...comments, { ..._comment }]);
+      setComments((comments) => [
+        ...comments,
+        { ..._comment.data.data, User: user },
+      ]);
     } catch (err) {
       if (err.response.status === 401) {
         // disRef.current.showModal();
       }
-      setLoading(false);
-      return;
-    }
 
-    // return addToast("Network error please try again", {
-    //   appearance: "error",
-    //   autoDismiss: true,
-    // });
+      setLoading(false);
+      return addToast('Network error please try again', {
+        appearance: 'error',
+        autoDismiss: true,
+      });
+    }
   };
 
   const handleChange = (event, error) => {
+    const { value } = event.target;
+    setNewComment(value);
+  };
+
+  const deleteComment = (event, error) => {
     const { value } = event.target;
     setNewComment(value);
   };
@@ -122,7 +125,9 @@ const ViewGrade = ({ data, length, assignmentId, currentClass, view }) => {
                 <div className="g_scx flex-row j-space">
                   <p>Date Graded:</p>
                   <p>
-                    <Moment format="DD-MM-YYYY">{assData.gradeDate}</Moment>
+                    <Moment format="DD-MM-YYYY HH:mm A">
+                      {assData.gradeDate}
+                    </Moment>
                   </p>
                 </div>
                 <div className="g_scx flex-row j-space">
@@ -148,9 +153,9 @@ const ViewGrade = ({ data, length, assignmentId, currentClass, view }) => {
             <div>
               <div className="comment_con">
                 {!comments ? (
-                  <div>Loading... </div>
+                  <div className="mb-10">Loading... </div>
                 ) : comments.length === 0 ? (
-                  <p className="loading">No comments yet</p>
+                  <p className="loading mb-10">No comments yet</p>
                 ) : (
                   <>
                     {comments.map((comment, i) => (
@@ -159,30 +164,30 @@ const ViewGrade = ({ data, length, assignmentId, currentClass, view }) => {
                         key={`article_comment_${i}`}
                       >
                         <img
-                          src={comment.user.profilePic || user_icon}
+                          src={comment.User.profilePic || user_icon}
                           alt="profilePic"
                           className="logo cover"
                         />
                         <div className="text-sec">
                           <div className="u_name flex-row j-space">
                             <small className="name">
-                              {comment.user.firstName} {comment.user.lastName}
+                              {comment.User.firstName} {comment.User.lastName}
                             </small>
                             <div>
                               <small>
-                                <Moment format="YYYY/MM/DD HH:mm">
+                                <Moment format="DD-MM-YYYY HH:mm A">
                                   {comment.createdAt}
                                 </Moment>
                               </small>
                             </div>
                           </div>
-                          <p className="desc">{comment.desc}</p>
+                          <p className="desc">{comment.comment}</p>
                         </div>
                       </div>
                     ))}
 
                     <div
-                      className="loading"
+                      className="loading mb-10"
                       style={{ display: loading ? 'block' : 'none' }}
                     >
                       Loading...
@@ -205,6 +210,8 @@ const ViewGrade = ({ data, length, assignmentId, currentClass, view }) => {
                   handleChange={handleChange}
                   error="Comment should be at least 2 characters long and not more than 255 characters"
                 />
+
+                <Button text="Submit" />
               </form>
             </div>
           </div>

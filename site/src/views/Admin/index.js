@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import Layout from '../../Layouts/MainView';
+import Layout from 'Layouts/MainView';
 import Courses from './Courses';
 import Home from './Home';
 import Students from '../Students';

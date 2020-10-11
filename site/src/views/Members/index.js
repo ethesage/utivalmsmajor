@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Sekeleton from 'react-skeleton-loader';
-import { getEnrolledMembers } from '../../g_actions/student';
+import { getEnrolledMembers } from '../../g_actions/member';
 import NavBar from '../../components/CourseNav';
 import MemberCard from '../../components/Member';
 
@@ -12,9 +12,7 @@ import './style.scss';
 const StudyPlan = () => {
   const { courseId } = useParams();
   const dispatch = useDispatch();
-  const enrolledStudents = useSelector(
-    (state) => state.student.enrolledStudents
-  );
+  const { enrolledStudents } = useSelector((state) => state.member);
 
   useEffect(() => {
     if (!enrolledStudents) {

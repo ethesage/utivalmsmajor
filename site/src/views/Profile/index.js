@@ -163,16 +163,25 @@ const Profile = () => {
         var percentCompleted = Math.round(
           (progressEvent.loaded * 100) / progressEvent.total
         );
-        setProgress(percentCompleted);
+        setProgress(percentCompleted * 0.9);
       },
     };
 
     let formData = new FormData();
     formData.append('profilePic', files[0]);
 
-    await axiosInstance.patch('/user/update', formData, config);
-    dispatch(login());
-    modalRef.current.close();
+    try {
+      const response = await axiosInstance.patch(
+        '/user/update',
+        formData,
+        config
+      );
+      if (response) {
+        setProgress(100);
+        dispatch(login());
+        modalRef.current && modalRef.current.close();
+      }
+    } catch (err) {}
   };
 
   return (

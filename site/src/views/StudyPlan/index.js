@@ -3,13 +3,13 @@ import { useParams } from 'react-router-dom';
 import NavBar from '../../components/CourseNav';
 import Calender from '../../components/Calender';
 import { useDispatch, useSelector } from 'react-redux';
-import { getClassDays } from '../../g_actions/student';
+import { getClassDays } from '../../g_actions/member';
 import './style.scss';
 
 const StudyPlan = () => {
   const { courseId } = useParams();
   const dispatch = useDispatch();
-  const classdays = useSelector((state) => state.student.classdays);
+  const classdays = useSelector((state) => state.member.classdays);
 
   useEffect(() => {
     if (!classdays) {

@@ -99,6 +99,7 @@ const Google = ({ updateSignInStatus = () => {} }) => {
   }
 
   const deleteFile = async (id, returns) => {
+    if (!g_api) return;
     try {
       const res = await g_api.client.drive.files.delete({
         fileId: id,
@@ -112,6 +113,7 @@ const Google = ({ updateSignInStatus = () => {} }) => {
 
   const get = async (folderId, id, returns = '*') => {
     let res;
+    if (!g_api) return;
 
     if (!id) {
       res = await g_api.client.drive.files.list({

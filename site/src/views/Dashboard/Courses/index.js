@@ -5,7 +5,8 @@ import Overview from 'components/OverView';
 import CourseList from './CoursesList';
 import Classroom from 'components/Classroom';
 import FullClass from 'components/Classroom/FullClass';
-import Assignment from 'components/Assignment';
+import Assignment from 'views/Assignment';
+import TrainerProtected from 'components/Protected/TrainerProtected';
 
 import Nav from 'components/InnerHeader';
 import StudyPlan from '../../StudyPlan';
@@ -14,7 +15,7 @@ import './style.scss';
 
 const Courses = ({ gapi }) => {
   let { path } = useRouteMatch();
-  const currentCourse = useSelector((state) => state.student.currentCourse);
+  const currentCourse = useSelector((state) => state.member.currentCourse);
 
   return (
     <section className="dash-con mx_courx flex-col al-start j-start">
@@ -26,7 +27,7 @@ const Courses = ({ gapi }) => {
           <>
             <span>{' > '}</span>
             <Link
-              to={`/courses/overview/${currentCourse.id}`}
+              to={`/courses/overview/${currentCourse.courseCohortId}`}
               className="reg_text"
             >
               <h3> {`${currentCourse.Course.name}`}</h3>
@@ -57,6 +58,11 @@ const Courses = ({ gapi }) => {
           component={StudyPlan}
         />
         <Route exact path={`${path}/members/:courseId`} component={Members} />
+        <TrainerProtected
+          exact
+          path={`${path}/editClass/:classroom`}
+          component={Members}
+        />
       </Switch>
     </section>
   );

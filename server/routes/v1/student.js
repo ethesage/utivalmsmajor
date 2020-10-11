@@ -26,7 +26,7 @@ const studentRoutes = express();
 
 studentRoutes.post(
   '/create',
-  usession.can('course:crud'),
+  // usession.can('course:crud'),
   validate(addStudentSchema),
   addStudentCourse
 );
