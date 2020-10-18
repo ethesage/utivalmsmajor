@@ -1,8 +1,16 @@
-import React, { useRef, useEffect, useCallback } from 'react';
+import React, { useRef, useEffect, useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { getAssignments, getResources } from 'g_actions/member';
-import { weeks } from 'helpers';
+import { useToasts } from 'react-toast-notifications';
+import {
+  getAssignments,
+  getResources,
+  deleteAssignmnet,
+  deleteResources,
+} from 'g_actions/member';
+import ProgressBar from 'components/ProgressBar';
+import { weeks, axiosInstance } from 'helpers';
+import Confirm from 'components/Confirm';
 import play from 'assets/icons/course/play.png';
 import material from 'assets/icons/course/material.png';
 import assignment from 'assets/icons/course/assignment.png';
@@ -22,12 +30,20 @@ function Classes({
   index,
   showResources = true,
   gapi,
+  folderId,
 }) {
   const { title, description, link } = data;
-  const { isTrainer } = useSelector((state) => state.auth);
+  const { isStudent, isAdmin } = useSelector((state) => state.auth);
+  const [showResourceDrop, setShowResourceDrop] = useState(false);
+  const [currentFile, setCurrentFile] = useState();
+  const [progress, setProgress] = useState(0);
+  const [dropType, setDropType] = useState();
   const { classResources } = useSelector((state) => state.member);
   const dispatch = useDispatch();
   const modalRef = useRef();
+  const deleteDialog = useRef();
+  const progressDialog = useRef();
+  const { addToast } = useToasts();
 
   const resources = data.ClassResouces.filter((res) => res.type === 'resource');
   const assignment_ = data.ClassResouces.filter(
@@ -47,29 +63,62 @@ function Classes({
   );
 
   useEffect(() => {
-    if (!classResources[title].files)
+    if (!classResources[title].files) {
+      if (resources.length === 0) {
+        dispatch(getResources(title, null));
+      }
+
       resources.forEach(async (resource) => {
         const file = await getFiles(resource.link);
-        dispatch(getResources(title, file));
+        dispatch(
+          getResources(title, {
+            ...resource,
+            resourceId: resource.id,
+            ...file,
+            comments: null,
+          })
+        );
       });
+    }
 
     return () => {};
   }, []);
 
   useEffect(() => {
-    if (!classResources[title].assignment)
+    if (!classResources[title].assignment) {
+      if (resources.length === 0) {
+        dispatch(getAssignments(title, null));
+      }
+
       assignment_.forEach(async (resource) => {
         const file = await getFiles(resource.link);
 
-        dispatch(getAssignments(title, file));
+        dispatch(
+          getAssignments(title, {
+            ...resource,
+            resourceId: resource.id,
+            ...file,
+            comments: null,
+          })
+        );
       });
+    }
 
     return () => {};
   }, []);
 
+  const dropDrop = (type) => {
+    dropType === type || !dropType
+      ? setShowResourceDrop(!showResourceDrop)
+      : setShowResourceDrop(true);
+    setDropType(type);
+  };
+
   const viewResources = (e) => {
     e.preventDefault();
-    modalRef.current.open();
+    if (!isStudent) {
+      dropDrop('resource');
+    } else modalRef.current.open();
   };
 
   const viewFile = async (contentLink) => {
@@ -80,105 +129,233 @@ function Classes({
     window.open(contentLink);
   };
 
+  const viewAssignment = (e) => {
+    e.preventDefault();
+    if (!isStudent) {
+      dropDrop('assignment');
+    } else
+      viewFile(
+        classResources[title].assignment &&
+          classResources[title].assignment.webViewLink
+      );
+  };
+
+  const delete_file = async () => {
+    const file =
+      dropType === 'resource'
+        ? classResources[title].files.find((file) => file.id === currentFile)
+        : currentFile;
+
+    const resourceId = file.resourceId;
+
+    const slug =
+      dropType === 'resource' ? `class/assignment/` : `class/assignment/`;
+
+    try {
+      const res = await axiosInstance.delete(`${slug}${resourceId}`);
+      if (res) {
+        dropType === 'resource'
+          ? dispatch(deleteResources(title, file.id))
+          : dispatch(deleteAssignmnet(title, file.id));
+        await gapi.gapi.deleteFile(file.id);
+        setCurrentFile(null);
+        return true;
+      }
+    } catch (err) {
+      console.log(err);
+      addToast('Error Deleting file', {
+        appearance: 'error',
+        autoDismiss: true,
+      });
+      return false;
+    }
+  };
+
+  const deleteFIle = (id) => {
+    setCurrentFile(id);
+    deleteDialog.current.open();
+  };
+
+  const upload = async (files) => {
+    progressDialog.current.open();
+    let file;
+
+    console.log(files);
+
+    try {
+      file = await gapi.gapi.upload(files, setProgress, folderId);
+
+      const res = await axiosInstance.post(`class/${dropType}/${data.id}`, {
+        link: file.id,
+      });
+
+      if (res) {
+        file = await getFiles(file.id);
+        file.resourceId = res.data.data.id;
+        setProgress(100);
+
+        getResources(title, file);
+
+        dispatch(getResources(title, file));
+
+        setTimeout(function () {
+          progressDialog.current.close();
+        }, 2000);
+      }
+    } catch (err) {
+      console.log(err);
+      progressDialog.current.close();
+
+      addToast('Error Uploding File', {
+        appearance: 'error',
+        autoDismiss: true,
+      });
+
+      file && (await gapi.gapi.deleteFile(file.id));
+    }
+  };
+
   // const upload = async (files, folderId) => {
   //   modalRef.current.open();
   //   gapi.gapi.upload(files, setProgress, '1F0r-bTgMLTkUhBf2o-ZTwtCPB3dWfnXp');
   // };
 
   return (
-    <div className="cx_listnx_con">
-      <RevielDrop
-        open={open}
-        showArrow={showArrow}
-        header={
-          <div className="cx_header flex-row j-space">
-            <h2 className={`h_con flex-row j-start ${full ? ' full' : ''}`}>
-              <img src={class_icon} alt="class" />{' '}
-              <span>
-                Week {weeks[index + 1]} - {title}
-              </span>
-              {isTrainer && full ? (
-                <Link to={`/courses/editClass/${data.id}`} className="edit">
-                  Edit
-                </Link>
-              ) : null}
-            </h2>
-          </div>
-        }
-      >
-        <div className={`cx_lis-content ${full ? ' full' : ''}`}>
-          <div className="inf_x">
-            <h3>{title}</h3>
-            <p>{description}</p>
-          </div>
+    <>
+      <div className="cx_listnx_con">
+        <RevielDrop
+          open={open}
+          showArrow={showArrow}
+          header={
+            <div className="cx_header flex-row j-space">
+              <h2 className={`h_con flex-row j-start ${full ? ' full' : ''}`}>
+                <img src={class_icon} alt="class" />{' '}
+                <span>
+                  {Number(index + 1) ? `Week ${weeks[index + 1]} - ` : ''}{' '}
+                  {title}
+                </span>
+                {isAdmin && full ? (
+                  <Link to={`/courses/editClass/${data.id}`} className="edit">
+                    Edit
+                  </Link>
+                ) : null}
+              </h2>
+            </div>
+          }
+        >
+          <div className={`cx_lis-content ${full ? ' full' : ''}`}>
+            <div className="inf_x">
+              {/* <h3>{title}</h3> */}
+              <p>{description}</p>
+            </div>
 
-          {showResources ? (
-            <div className="btns">
-              <div>
-                <ResourceBtn
-                  img={play}
-                  text="Join Class"
-                  color="theme"
-                  link={link}
-                />
-              </div>
-              <div className="reg_text">
-                <h4>Resources</h4>
-                <div className="btn_sec_con flex-row j-start">
-                  <div className="btn_sec">
-                    <ResourceBtn
-                      img={material}
-                      text="Download Materials"
-                      color="secondary"
-                      link=""
-                      handleClick={viewResources}
-                    />
-                  </div>
-                  <div className="btn_sec">
-                    <ResourceBtn
-                      img={assignment}
-                      text="Assignment"
-                      color="off"
-                      link=""
-                      handleClick={(e) => {
-                        e.preventDefault();
-                        viewFile(
-                          classResources[title].assignment &&
-                            classResources[title].assignment.webViewLink
-                        );
-                      }}
-                    />
+            {showResources ? (
+              <div className="btns">
+                <div>
+                  <ResourceBtn
+                    img={play}
+                    text="Join Class"
+                    color="theme"
+                    link={link}
+                  />
+                </div>
+                <div className="reg_text">
+                  <h4>Resources</h4>
+                  <div className="btn_sec_con flex-row j-start">
+                    <div className="btn_sec">
+                      <ResourceBtn
+                        img={assignment}
+                        text="Assignment"
+                        color="off"
+                        link=""
+                        handleClick={viewAssignment}
+                      />
+                    </div>
+
+                    <div className="btn_sec">
+                      <ResourceBtn
+                        img={material}
+                        text={`${isStudent ? 'Download' : 'Class'} Materials`}
+                        color="secondary"
+                        link=""
+                        handleClick={viewResources}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
+            ) : (
+              ''
+            )}
+
+            {!full ? (
+              <Link
+                className="view"
+                to={`/courses/classroom/${courseId}/${data.id}`}
+              >
+                View full outline
+              </Link>
+            ) : null}
+          </div>
+        </RevielDrop>
+
+        {!isStudent ? (
+          <RevielDrop open={showResourceDrop}>
+            <div className="class_file_con">
+              <div className="box-shade">
+                <h3>
+                  {dropType === 'resource'
+                    ? 'Resource Materials'
+                    : 'Class assignment'}
+                </h3>
+                <Files
+                  files={
+                    dropType === 'resource'
+                      ? classResources[title].files
+                      : classResources[title].assignment && [
+                          classResources[title].assignment,
+                        ]
+                  }
+                  view={viewFile}
+                  download={download}
+                  showdrag={
+                    dropType === 'resource'
+                      ? true
+                      : !!!classResources[title].files
+                  }
+                  deleteFile={deleteFIle}
+                  handleImage={upload}
+                />
+              </div>
             </div>
-          ) : (
-            ''
-          )}
-
-          {!full ? (
-            <Link
-              className="view"
-              to={`/courses/classroom/${courseId}/${data.id}`}
-            >
-              View full outline
-            </Link>
-          ) : null}
-        </div>
-      </RevielDrop>
-
-      <Modal ref={modalRef}>
-        <div className="class_file_con">
-          <h3>Resource Materials</h3>
-          <Files
-            files={classResources[title].files}
-            view={viewFile}
-            download={download}
-            showdrag={false}
-          />
-        </div>
+          </RevielDrop>
+        ) : (
+          <Modal ref={modalRef}>
+            <div className="class_file_con">
+              <h3>Resource Materials</h3>
+              <Files
+                files={classResources[title].files}
+                view={viewFile}
+                download={download}
+                showdrag={false}
+              />
+            </div>
+          </Modal>
+        )}
+      </div>
+      <Modal ref={deleteDialog}>
+        <Confirm
+          text="Are you sure?"
+          onClick={delete_file}
+          close={() => deleteDialog.current.close()}
+          closeText="Successfuly Deleted"
+        />
       </Modal>
-    </div>
+
+      <Modal ref={progressDialog}>
+        <ProgressBar progress={progress * 0.95} />
+      </Modal>
+    </>
   );
 }
 export default Classes;

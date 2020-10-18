@@ -12,7 +12,7 @@ const RevielDrop = ({
 
   useEffect(() => {
     const classes = showArrow ? ' showArrow' : '';
-    headRef.current.className = `rx_header ${classes}${className}`;
+    if (header) headRef.current.className = `rx_header ${classes}${className}`;
     return () => {};
   }, [showArrow, className]);
 
@@ -33,9 +33,11 @@ const RevielDrop = ({
 
   return (
     <div className="rx_drop">
-      <div className="rx_hd" onClick={handleClick}>
-        {React.cloneElement(header, { ref: headRef })}
-      </div>
+      {header && (
+        <div className="rx_hd" onClick={handleClick}>
+          {React.cloneElement(header, { ref: headRef })}
+        </div>
+      )}
       <div className={`rx_con ${open ? 'open' : ''}`}>{children}</div>
     </div>
   );

@@ -10,6 +10,8 @@ const Confirm = ({ text, close, onClick, closeText }) => {
     btnRef.current.classList.add('loader');
     const confirm = await onClick();
     setConfirmed(confirm);
+
+    !confirm && btnRef.current.classList.remove('loader');
   };
 
   useEffect(() => {

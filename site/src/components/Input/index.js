@@ -18,6 +18,7 @@ const Input = ({
   method,
   label,
   showAsterix = true,
+  validate = true,
 }) => {
   const [error, setError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -39,12 +40,14 @@ const Input = ({
 
   const validateOne = (event) => {
     handleChange(event, error);
-    if (!validateInput(event)) {
-      inputRef.current.classList.add('invalid');
-      setError(true);
-    } else {
-      inputRef.current.classList.remove('invalid');
-      setError(false);
+    if (validate) {
+      if (!validateInput(event)) {
+        inputRef.current.classList.add('invalid');
+        setError(true);
+      } else {
+        inputRef.current.classList.remove('invalid');
+        setError(false);
+      }
     }
   };
 

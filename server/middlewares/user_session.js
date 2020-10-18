@@ -26,7 +26,7 @@ module.exports.main = function easySessionMain(connect, opts) {
   }
 
   const uaCheck = opts.uaCheck === undefined ? true : !!opts.uaCheck;
-  const freshTimeout = opts.freshTimeout || 30 * 60 * 1000;
+  const freshTimeout = opts.freshTimeout || 100 * 60 * 1000;
   const maxFreshTimeout = opts.maxFreshTimeout || 60 * 60 * 1000;
   const userTimeout = 60 * 60 * 24 * 7 * 10000;
   let rbac;

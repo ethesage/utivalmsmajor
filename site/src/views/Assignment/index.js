@@ -163,7 +163,7 @@ const Assignment = ({ gapi }) => {
         dispatch(getSubmittedAssignments(currentClass.title, file));
       }
     } catch (err) {
-      addToast('Error submitting', {
+      addToast('Error Deleting File', {
         appearance: 'error',
         autoDismiss: true,
       });

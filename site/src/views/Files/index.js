@@ -90,9 +90,7 @@ const File_Page = ({ gapi }) => {
   const Folders = () => {
     return (
       <div className="upload_sec flex-row j-start al-start">
-        <div className="file_con">
-          {/* <Folder /> */}
-        </div>
+        <div className="file_con">{/* <Folder /> */}</div>
         {/* <Button /> */}
       </div>
     );

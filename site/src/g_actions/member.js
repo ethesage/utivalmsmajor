@@ -32,10 +32,10 @@ export const getEnrolledCourses = (id, data, userType = 'student') => async (
       });
     }
   } catch (error) {
-    if (error.response.status === 404) {
+    if (error.status && error.response.status === 404) {
       return 'error';
     }
-    return error;
+    return 'error';
   }
 
   // create a list of the class name so we can add the class resources
@@ -94,10 +94,24 @@ export const getResources = (name, file) => async (dispatch) => {
   });
 };
 
+export const deleteResources = (name, id) => async (dispatch) => {
+  dispatch({
+    type: 'DELETE_RESOURCE',
+    payload: { name, id },
+  });
+};
+
 export const getAssignments = (name, file) => async (dispatch) => {
   dispatch({
     type: 'GET_ASSIGNMENT',
     payload: { name, file },
+  });
+};
+
+export const deleteAssignmnet = (name, id) => async (dispatch) => {
+  dispatch({
+    type: 'DELETE_ASSIGNMENT',
+    payload: { name, id },
   });
 };
 

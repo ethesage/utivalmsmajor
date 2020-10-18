@@ -110,7 +110,7 @@ sequelize
     log('Sequelize connection was successful');
   })
   .catch((err) => {
-    log(chalk.orange(err.message));
+    log(chalk.yellow(err.message));
   });
 
 // app error handler, to handle sync and asyc errors

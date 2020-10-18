@@ -69,6 +69,7 @@ function FullClass({ gapi }) {
               full={true}
               gapi={gapi}
               isStudent={isStudent}
+              folderId={currentCourse && currentCourse.CourseCohort.folderId}
             />
             {isStudent && (
               <div className="btns">

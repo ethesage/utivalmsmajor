@@ -100,6 +100,37 @@ const course = (state = initialState, action) => {
         },
       };
 
+    case 'DELETE_ASSIGNMENT':
+      // const prevAss_tr = state.classResources[action.payload.name].assignment;
+      return {
+        ...state,
+        classResources: {
+          ...state.classResources,
+          [action.payload.name]: {
+            ...state.classResources[action.payload.name],
+            assignment: [],
+          },
+        },
+      };
+
+    case 'DELETE_RESOURCE':
+      const prevAss_re = state.classResources[action.payload.name].files;
+      console.log(
+        prevAss_re,
+        action.payload.id,
+        prevAss_re.filter((file) => file.id !== action.payload.id)
+      );
+      return {
+        ...state,
+        classResources: {
+          ...state.classResources,
+          [action.payload.name]: {
+            ...state.classResources[action.payload.name],
+            files: prevAss_re.filter((file) => file.id !== action.payload.id),
+          },
+        },
+      };
+
     case 'RESET':
       return { ...initialState };
     default:
