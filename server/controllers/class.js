@@ -237,16 +237,15 @@ export const deleteClass = async (req, res) => {
   }
 };
 
-
 export const classAssignment = async (req, res) => {
   const { classId } = req.body.class;
-  console.log(classId)
+  // console.log(classId);
   try {
     const findClass = await models.Classes.findOne({
       where: { id: classId }
-    })
+    });
 
-    if (!findClass) return errorStat(res, 404, 'Class not found')
+    if (!findClass) return errorStat(res, 404, 'Class not found');
 
     const createAssignment = await models.ClassResouces.create({
       ...req.body.class,
@@ -261,11 +260,11 @@ export const classAssignment = async (req, res) => {
 
 export const editClassAssignment = async (req, res) => {
   const { classResourceId } = req.body.class;
-  
+
   try {
     const findAssignment = await models.ClassResouces.findOne({
       where: { id: classResourceId }
-    })
+    });
 
     if (!findAssignment) return errorStat(res, 404, 'Class Assignment not found');
 
@@ -278,42 +277,42 @@ export const editClassAssignment = async (req, res) => {
     console.log(e);
     errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
-}
+};
 
-  export const deleteClassAssignment = async (req, res) => {
-    const { classResourcesId } = req.body.class;
-    try {
-      const findAssignment = await models.ClassResouces.findOne({
-        where: { id: classResourcesId }
-      })
-  
-      if (!findAssignment) return errorStat(res, 404, 'Class Assignment not found');
-  
-      await findAssignment.destroy();
+export const deleteClassAssignment = async (req, res) => {
+  const { classResourcesId } = req.body.class;
+  try {
+    const findAssignment = await models.ClassResouces.findOne({
+      where: { id: classResourcesId }
+    });
 
-      return successStat(res, 201, 'data', 'Class Assignment deleted successfully');
-    } catch (e) {
-      console.log(e);
-      errorStat(res, 500, 'Operation Failed, Please Try Again');
-    }
+    if (!findAssignment) return errorStat(res, 404, 'Class Assignment not found');
+
+    await findAssignment.destroy();
+
+    return successStat(res, 201, 'data', 'Class Assignment deleted successfully');
+  } catch (e) {
+    console.log(e);
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
+};
 
-  export const addClassResources = async (req, res) => {
-    const { classId } = req.body.class;
-    try {
-      const findClass = await models.Classes.findOne({
-        where: { id: classId }
-      })
-  
-      if (!findClass) return errorStat(res, 404, 'Class not found')
-  
-      const createResource = await models.ClassResouces.create({
-        ...req.body.class,
-        type: 'resource'
-      });
-      return successStat(res, 201, 'data', { ...createResource.dataValues, message: 'Class Resource created successfully' });
-    } catch (e) {
-      console.log(e);
-      errorStat(res, 500, 'Operation Failed, Please Try Again');
-    }
-  };
+export const addClassResources = async (req, res) => {
+  const { classId } = req.body.class;
+  try {
+    const findClass = await models.Classes.findOne({
+      where: { id: classId }
+    });
+
+    if (!findClass) return errorStat(res, 404, 'Class not found');
+
+    const createResource = await models.ClassResouces.create({
+      ...req.body.class,
+      type: 'resource'
+    });
+    return successStat(res, 201, 'data', { ...createResource.dataValues, message: 'Class Resource created successfully' });
+  } catch (e) {
+    console.log(e);
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
+  }
+};

@@ -1,15 +1,15 @@
-import express from 'express';
-import 'express-async-errors';
+import express from "express";
+import "express-async-errors";
 import {
   createTrainer,
   getAllTrainerCourse,
-  getAllTrainer,
+  // getAllTrainer,
   updateTrainer,
   deleteTrainer,
   getSingleTrainer,
-  getSingleTrainerCourse
-} from '../../controllers/trainer';
-import middlewares from '../../middlewares';
+  getSingleTrainerCourse,
+} from "../../controllers/trainer";
+import middlewares from "../../middlewares";
 
 const {
   validate,
@@ -18,49 +18,49 @@ const {
   courseTrainerSchema,
   trainerSchema,
   updateTrainerSchema,
-  usession
+  usession,
 } = middlewares;
 
 const trainerRoutes = express();
 
 trainerRoutes.post(
-  '/create',
-  usession.can('course:crud'),
+  "/create",
+  usession.can("course:crud"),
   validate(createTrainerSchema),
   createTrainer
 );
 
 trainerRoutes.get(
-  '/course',
+  "/course",
   // usession.can('admin:create'),
   validate(getTrainerSchema),
   getAllTrainerCourse
 );
 
 trainerRoutes.get(
-  '/course/:courseCohortId',
+  "/course/:courseCohortId",
   // usession.can('admin:create'),
   validate(courseTrainerSchema),
   getSingleTrainerCourse
 );
 
 trainerRoutes.get(
-  '/:trainerId',
+  "/:trainerId",
   // usession.can('course:crud'),
   validate(trainerSchema),
   getSingleTrainer
 );
 
 trainerRoutes.patch(
-  '/:trainerId',
-  usession.can('course:crud'),
+  "/:trainerId",
+  usession.can("course:crud"),
   validate(updateTrainerSchema),
   updateTrainer
 );
 
 trainerRoutes.delete(
-  '/:trainerId',
-  usession.can('course:crud'),
+  "/:trainerId",
+  usession.can("course:crud"),
   validate(trainerSchema),
   deleteTrainer
 );
