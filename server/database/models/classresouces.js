@@ -9,7 +9,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     classId: DataTypes.UUID,
     type: DataTypes.STRING,
-    link: DataTypes.STRING
+    link: DataTypes.STRING,
+    title: DataTypes.STRING,
+    description: DataTypes.TEXT
   }, {});
   ClassResouces.associate = (models) => {
     // associations can be defined here
