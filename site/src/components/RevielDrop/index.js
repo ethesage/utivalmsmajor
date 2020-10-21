@@ -7,12 +7,13 @@ const RevielDrop = ({
   open = false,
   showArrow = true,
   className = '',
+  runOnOpen = () => {},
 }) => {
   const headRef = useRef();
 
   useEffect(() => {
     const classes = showArrow ? ' showArrow' : '';
-    if (header) headRef.current.className = `rx_header ${classes}${className}`;
+    if (header) headRef.current.className = `rx_header ${classes} ${className}`;
     return () => {};
   }, [showArrow, className]);
 
@@ -29,6 +30,8 @@ const RevielDrop = ({
     // if (!e.target.className.includes('rx_hd')) return;
     e.target.classList.toggle('active');
     e.target.nextElementSibling.classList.toggle('show');
+
+    runOnOpen();
   }
 
   return (

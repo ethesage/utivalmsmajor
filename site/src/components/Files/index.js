@@ -16,8 +16,6 @@ const Files = ({
   children,
   linkExt,
 }) => {
-  // console.log(files.length);
-
   return (
     <div className="info_con">
       <div className="info_con_sec scrolled flex-col al-start j-start">
@@ -36,7 +34,7 @@ const Files = ({
               </div>
             ))}
           </div>
-        ) : files.length === 0 || !files[0] ? (
+        ) : files.length === 0 ? (
           <div className="n_available flex-col img">
             <img src={no_file} alt="no classes" />
             <p className="txts">You have no files yet</p>
@@ -68,3 +66,5 @@ const Files = ({
 };
 
 export default Files;
+
+//||(Array.isArray(files[0]) && files[0].length === 0)

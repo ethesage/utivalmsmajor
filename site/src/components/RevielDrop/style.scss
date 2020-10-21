@@ -50,10 +50,12 @@
     opacity: 0;
     visibility: hidden;
     max-width: 800px;
+    // position: absolute;
     // height: 0;
 
     &.show,
     &.open {
+      position: static;
       opacity: 1;
       visibility: visible;
       max-height: 1000px;

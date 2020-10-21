@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import NavBar from '../../components/CourseNav';
-import Calender from '../../components/Calender';
+import NavBar from 'components/CourseNav';
+import Calender from 'components/Calender';
 import { useDispatch, useSelector } from 'react-redux';
-import { getClassDays } from '../../g_actions/member';
+import { getClassDays } from 'g_actions/member';
 import './style.scss';
 
 const StudyPlan = () => {

@@ -41,15 +41,14 @@ const course = (state = initialState, action) => {
       };
     case 'GET_RESOURCES':
       const prevRes = state.classResources[action.payload.name].files;
+      const file = action.payload.file;
       return {
         ...state,
         classResources: {
           ...state.classResources,
           [action.payload.name]: {
             ...state.classResources[action.payload.name],
-            files: prevRes
-              ? [...prevRes, action.payload.file]
-              : [action.payload.file],
+            files: prevRes ? [...prevRes, file] : file ? [file] : [],
           },
         },
       };
@@ -60,7 +59,7 @@ const course = (state = initialState, action) => {
           ...state.classResources,
           [action.payload.name]: {
             ...state.classResources[action.payload.name],
-            assignment: action.payload.file,
+            assignment: action.payload.file ? [action.payload.file] : [],
           },
         },
       };

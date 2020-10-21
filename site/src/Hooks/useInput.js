@@ -64,9 +64,14 @@ export default function Input({
           error.message = 'Network error please try again';
         else error.message = error.response.data.error;
       } else error.message = 'Error occured';
-      addToast(error.message, {
+
+      const err = Array.isArray(error.message)
+        ? error.message.join(', ')
+        : error.message;
+
+      addToast(err, {
         appearance: 'error',
-        autoDismiss: true,
+        autoDismiss: false,
       });
 
       if (submitButton.current) {

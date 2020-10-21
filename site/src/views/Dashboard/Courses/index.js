@@ -8,6 +8,7 @@ import FullClass from 'components/Classroom/FullClass';
 import Assignment from 'views/Assignment';
 import TrainerProtected from 'components/Protected/TrainerProtected';
 
+import NavBar from 'components/CourseNav';
 import Nav from 'components/InnerHeader';
 import StudyPlan from '../../StudyPlan';
 import Members from '../../Members';
@@ -37,6 +38,7 @@ const Courses = ({ gapi }) => {
           ''
         )}
       </Nav>
+
       <Switch>
         <Route exact path={`${path}/overview/:courseId`} component={Overview} />
         <Route exact path={`${path}`} component={CourseList} />
@@ -54,13 +56,19 @@ const Courses = ({ gapi }) => {
         </Route>
         <Route
           exact
+          path={`${path}/add_assigment/:courseId/:classroom/:assignmentId?`}
+        >
+          <Assignment gapi={gapi} />
+        </Route>
+        <Route
+          exact
           path={`${path}/study-plan/:courseId`}
           component={StudyPlan}
         />
         <Route exact path={`${path}/members/:courseId`} component={Members} />
         <TrainerProtected
           exact
-          path={`${path}/editClass/:classroom`}
+          path={`${path}/editClass/:courseId`}
           component={Members}
         />
       </Switch>

@@ -18,7 +18,7 @@ const Input = ({
   method,
   label,
   showAsterix = true,
-  validate = true,
+  shouldValidate = true,
 }) => {
   const [error, setError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -40,7 +40,7 @@ const Input = ({
 
   const validateOne = (event) => {
     handleChange(event, error);
-    if (validate) {
+    if (shouldValidate) {
       if (!validateInput(event)) {
         inputRef.current.classList.add('invalid');
         setError(true);

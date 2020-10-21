@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
-import data from '../../data/faqs';
-import RevielDrop from '../../components/RevielDrop';
-import Layout from '../../Layouts/SideNavListLayout';
+import data from 'data/faqs';
+import RevielDrop from 'components/RevielDrop';
+import Layout from 'Layouts/SideNavListLayout';
 import './style.scss';
 
 const FAQ = () => {
@@ -22,14 +22,27 @@ const FAQ = () => {
     certificate: data[2],
   };
 
+  useEffect(() => {
+    const el = document.querySelector('.side_link[data-active="true"]');
+
+    el && el.scrollIntoView(false);
+
+    return () => {};
+  }, [info]);
+
   return (
     <div className="dash-con faq cx_listnx_full flex-row j-start al-start">
       <Layout
         subClassName="faq_sec"
-        links={data.map((info, i) => (
+        links={data.map((inf, i) => (
           <li key={`side_link_courses_${i}`}>
-            <NavLink exact className="side_link" to={`/faqs${info.link}`}>
-              {info.title}
+            <NavLink
+              exact
+              className="side_link"
+              to={`/faqs/${inf.link}`}
+              data-active={info === inf.link}
+            >
+              {inf.title}
             </NavLink>
           </li>
         ))}

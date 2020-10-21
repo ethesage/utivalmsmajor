@@ -3,14 +3,14 @@ import { useDispatch } from 'react-redux';
 import { useToasts } from 'react-toast-notifications';
 import { Link, useHistory } from 'react-router-dom';
 import axois from 'axios';
-import Input from '../../../components/InputType';
-import useInput from '../../../Hooks/useInput';
-import data from '../../../data/signup';
-import { axiosInstance } from '../../../helpers';
+import Input from 'components/InputType';
+import useInput from 'Hooks/useInput';
+import data from 'data/signup';
+import { axiosInstance } from 'helpers';
 import Social from '../SocialSec';
-import { gender } from '../../../data/filters';
-import Button from '../../../components/Button';
-import { login } from '../../../g_actions/user';
+import { gender } from 'data/filters';
+import Button from 'components/Button';
+import { login } from 'g_actions/user';
 import '../style.scss';
 import './style.scss';
 
@@ -25,7 +25,7 @@ function Signup() {
     inputs: data,
     submitButton,
     cb: async (inputs) => {
-      if (inputs.password !== inputs.cpassword) {
+      if (inputs.si_password !== inputs.cpassword) {
         addToast(`Please make sure that the passwords are the same`, {
           appearance: 'error',
           autoDismiss: true,
@@ -36,11 +36,14 @@ function Signup() {
       }
 
       const data = Object.keys(inputs).reduce((acc, input) => {
-        if (input !== 'cpassword') {
-          return { ...acc, [input]: inputs[input] };
-        }
-        return { ...acc };
+        if (input === 'cpassword') {
+          return { ...acc };
+        } else if (input === 'si_password') {
+          return { ...acc, password: inputs[input] };
+        } else return { ...acc, [input]: inputs[input] };
       }, {});
+
+      console.log(data);
 
       const response = await axiosInstance.post('/user/signup', data);
 

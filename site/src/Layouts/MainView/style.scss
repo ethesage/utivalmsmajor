@@ -83,7 +83,7 @@
       flex-grow: 1;
 
       @include for-size(tablet-landscape-up) {
-        // width: calc(100vw - 8px);
+        width: calc(100vw - 8px);
       }
 
       .dash-con {

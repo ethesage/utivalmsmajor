@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { getEnrolledCourses } from '../../g_actions/member';
@@ -14,6 +14,8 @@ const Classroom = ({ full = false, gapi }) => {
   const enrolledcourses = useSelector((state) => state.member.enrolledcourses);
   const currentCourse = useSelector((state) => state.member.currentCourse);
   const { isStudent } = useSelector((state) => state.auth);
+  const [openedRef, setOpenedRef] = useState();
+
   const userType = isStudent ? 'student' : 'trainer';
 
   useEffect(() => {
@@ -54,6 +56,9 @@ const Classroom = ({ full = false, gapi }) => {
                 full={full}
                 index={i}
                 gapi={gapi}
+                openedRef={openedRef}
+                setOpenedRef={setOpenedRef}
+                folderId={currentCourse.CourseCohort.folderId}
               />
             ))}
           </div>

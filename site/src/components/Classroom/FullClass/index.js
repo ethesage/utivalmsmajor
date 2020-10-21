@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useParams } from 'react-router-dom';
 import { getEnrolledCourses } from 'g_actions/member';
@@ -7,17 +7,27 @@ import Classes from '../Classes';
 import ResourceBtn from '../../ResourceButton';
 import NavBar from '../../CourseNav';
 import assignment from 'assets/icons/course/assignment.png';
-import Layout from '../../../Layouts/SideNavListLayout';
+import Layout from 'Layouts/SideNavListLayout';
 import './style.scss';
 
 function FullClass({ gapi }) {
   const { courseId, classroom } = useParams();
+  const [addAssignment, setAddassignment] = useState(false);
 
   const dispatch = useDispatch();
   const enrolledcourses = useSelector((state) => state.member.enrolledcourses);
   const currentCourse = useSelector((state) => state.member.currentCourse);
   const { isStudent } = useSelector((state) => state.auth);
   const userType = isStudent ? 'student' : 'trainer';
+
+  // scroll the appropraite button clicked into view during a rerender
+  useEffect(() => {
+    const el = document.querySelector('.side_link[data-active="true"]');
+
+    el && el.scrollIntoView(false);
+
+    return () => {};
+  }, [classroom, currentCourse]);
 
   useEffect(() => {
     if (!enrolledcourses && !currentCourse)
@@ -41,6 +51,10 @@ function FullClass({ gapi }) {
     return () => {};
   }, [enrolledcourses, courseId, currentCourse, dispatch, userType]);
 
+  const onclick = (id) => {
+    document.querySelector;
+  };
+
   return (
     <>
       <NavBar />
@@ -49,11 +63,12 @@ function FullClass({ gapi }) {
           <Loader tempLoad={true} full={false} />
         ) : (
           <Layout
-            links={currentCourse.CourseCohort.Classes.map((classroom, i) => (
+            links={currentCourse.CourseCohort.Classes.map((classrm, i) => (
               <li key={`side_link_courses_${i}`}>
                 <NavLink
                   className="side_link"
-                  to={`/courses/classroom/${courseId}/${classroom.id}`}
+                  to={`/courses/classroom/${courseId}/${classrm.id}`}
+                  data-active={classroom === classrm.id}
                 >
                   Week {i + 1}
                 </NavLink>
@@ -70,6 +85,7 @@ function FullClass({ gapi }) {
               gapi={gapi}
               isStudent={isStudent}
               folderId={currentCourse && currentCourse.CourseCohort.folderId}
+              courseId={courseId}
             />
             {isStudent && (
               <div className="btns">

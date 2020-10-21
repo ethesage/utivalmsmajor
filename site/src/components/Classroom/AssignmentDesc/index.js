@@ -19,7 +19,7 @@ import Modal from '../../Modal';
 import Files from 'components/Files';
 import ResourceBtn from '../../ResourceButton';
 import RevielDrop from '../../RevielDrop';
-import './style.scss';
+import '../Classes/style.scss';
 
 function Classes({
   data,
@@ -31,9 +31,6 @@ function Classes({
   showResources = true,
   gapi,
   folderId,
-  assData,
-  openedRef,
-  setOpenedRef,
 }) {
   const { title, description, link } = data;
   const { isStudent, isAdmin, isTrainer } = useSelector((state) => state.auth);
@@ -47,9 +44,7 @@ function Classes({
   const deleteDialog = useRef();
   const progressDialog = useRef();
   const { addToast } = useToasts();
-  const classRef = useRef();
 
-  const resources = data.ClassResouces.filter((res) => res.type === 'resource');
   const assignment_ = data.ClassResouces.filter(
     (res) => res.type === 'assignment'
   );
@@ -67,47 +62,15 @@ function Classes({
   );
 
   useEffect(() => {
-    if (!openedRef) return;
-
-    showResourceDrop &&
-      setShowResourceDrop(classRef.current === openedRef.current);
-
-    return () => {};
-  }, [openedRef]);
-
-  useEffect(() => {
     if (!classResources[title].files) {
       if (resources.length === 0) {
-        dispatch(getResources(title, null));
+        dispatch(getResources(title, []));
       }
 
       resources.forEach(async (resource) => {
         const file = await getFiles(resource.link);
         dispatch(
           getResources(title, {
-            ...resource,
-            resourceId: resource.id,
-            ...file,
-            comments: null,
-          })
-        );
-      });
-    }
-
-    return () => {};
-  }, []);
-
-  useEffect(() => {
-    if (!classResources[title].assignment) {
-      if (resources.length === 0) {
-        dispatch(getAssignments(title, null));
-      }
-
-      assignment_.forEach(async (resource) => {
-        const file = await getFiles(resource.link);
-
-        dispatch(
-          getAssignments(title, {
             ...resource,
             resourceId: resource.id,
             ...file,
@@ -127,14 +90,6 @@ function Classes({
     setDropType(type);
   };
 
-  const viewResources = (e) => {
-    e.preventDefault();
-
-    if (!isStudent) {
-      dropDrop('resource');
-    } else modalRef.current.open();
-  };
-
   const viewFile = async (contentLink) => {
     window.open(contentLink, '_blank');
   };
@@ -145,7 +100,6 @@ function Classes({
 
   const viewAssignment = (e) => {
     e.preventDefault();
-
     if (!isStudent) {
       dropDrop('assignment');
     } else
@@ -207,6 +161,8 @@ function Classes({
         file.resourceId = res.data.data.id;
         setProgress(100);
 
+        getResources(title, file);
+
         dispatch(getResources(title, file));
 
         setTimeout(function () {
@@ -233,14 +189,10 @@ function Classes({
 
   return (
     <>
-      <div className="cx_listnx_con" ref={classRef}>
+      <div className="cx_listnx_con">
         <RevielDrop
           open={open}
           showArrow={showArrow}
-          runOnOpen={() => {
-            setOpenedRef(classRef);
-          }}
-          className="hx-main"
           header={
             <div className="cx_header flex-row j-space">
               <h2 className={`h_con flex-row j-start ${full ? ' full' : ''}`}>
@@ -262,7 +214,7 @@ function Classes({
                       )}
                       {isTrainer &&
                         classResources[title].assignment &&
-                        classResources[title].assignment.length === 0 && (
+                        Array.isArray(classResources[title].assignment) && (
                           <Link
                             to={`/courses/add_assigment/${courseId}/${data.id}`}
                             className="edit"
@@ -278,16 +230,10 @@ function Classes({
           }
         >
           <div className={`cx_lis-content ${full ? ' full' : ''}`}>
-            {assData ? (
-              <div className="inf_x">
-                <h3>{assData.title}</h3>
-                <p>{assData.description}</p>
-              </div>
-            ) : (
-              <div className="inf_x">
-                <p>{description}</p>
-              </div>
-            )}
+            <div className="inf_x">
+              {/* <h3>{title}</h3> */}
+              <p>{description}</p>
+            </div>
 
             {showResources ? (
               <div className="btns">
@@ -338,23 +284,19 @@ function Classes({
             ) : null}
           </div>
         </RevielDrop>
-        {/** For  a student show the modal pop up for the class materails and assignments
-         * but for a trainer show this as a section underneat, this then helps to show the modal for uploading or deleting. Since we don't want overlapping modals
-         */}
+
         {!isStudent ? (
           <RevielDrop open={showResourceDrop}>
             <div className="class_file_con">
-              <div className="box-shade" data-open={showResourceDrop}>
-                <h3>
-                  {dropType === 'resource'
-                    ? 'Resource Materials'
-                    : 'Class assignment'}
-                </h3>
+              <div className="box-shade">
+                <h3>Class assignment</h3>
                 <Files
                   files={
                     dropType === 'resource'
                       ? classResources[title].files
-                      : classResources[title].assignment
+                      : classResources[title].assignment && [
+                          classResources[title].assignment,
+                        ]
                   }
                   view={viewFile}
                   download={download}

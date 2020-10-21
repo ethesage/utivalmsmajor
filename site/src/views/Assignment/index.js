@@ -124,6 +124,8 @@ const Assignment = ({ gapi }) => {
     );
   };
 
+  // console.log(classResources[currentClass.title].assignment);
+
   const viewAss = async (e) => {
     e.preventDefault();
 
@@ -134,6 +136,10 @@ const Assignment = ({ gapi }) => {
         classResources[currentClass.title].assignment.webContentLink
     );
   };
+
+  // const err = Array.isArray(error.message)
+  // ? error.message.join(', ')
+  // : error.message;
 
   const upload = async (files) => {
     setDeleteDialog(false);
@@ -222,6 +228,7 @@ const Assignment = ({ gapi }) => {
             <div className="asx_sec">
               <Classes
                 data={currentClass}
+                assData={classResources[currentClass.title].assignment}
                 open={true}
                 showArrow={false}
                 full={true}

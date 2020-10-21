@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Sekeleton from 'react-skeleton-loader';
-import { getEnrolledMembers } from '../../g_actions/member';
-import NavBar from '../../components/CourseNav';
-import MemberCard from '../../components/Member';
+import { getEnrolledMembers } from 'g_actions/member';
+import NavBar from 'components/CourseNav';
+import MemberCard from 'components/Member';
 
 // import
 import './style.scss';
