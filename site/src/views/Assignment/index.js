@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import ResourceBtn from 'components/ResourceButton';
-import Classes from 'components/Classroom/Classes';
+import Classes from 'components/Classes';
 import assignment from 'assets/icons/course/assignment.png';
 import Confirm from 'components/Confirm';
 import { getEnrolledCourses } from 'g_actions/member';
@@ -17,7 +17,7 @@ import {
 } from 'g_actions/member';
 import { useToasts } from 'react-toast-notifications';
 import Button from 'components/Button';
-import 'components/Classroom/Classes/style.scss';
+import 'components/Classes/style.scss';
 import { axiosInstance } from 'helpers';
 import './style.scss';
 

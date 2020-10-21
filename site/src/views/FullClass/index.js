@@ -2,17 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useParams } from 'react-router-dom';
 import { getEnrolledCourses } from 'g_actions/member';
-import Loader from '../../Loading';
-import Classes from '../Classes';
-import ResourceBtn from '../../ResourceButton';
-import NavBar from '../../CourseNav';
+import Loader from 'components/Loading';
+import Classes from 'components/Classes';
+import ResourceBtn from 'components/ResourceButton';
+import NavBar from 'components/CourseNav';
 import assignment from 'assets/icons/course/assignment.png';
 import Layout from 'Layouts/SideNavListLayout';
+import AddAssignment from '../AddAssignment';
 import './style.scss';
 
 function FullClass({ gapi }) {
   const { courseId, classroom } = useParams();
   const [addAssignment, setAddassignment] = useState(false);
+  const [editClass, setEditClass] = useState(false);
 
   const dispatch = useDispatch();
   const enrolledcourses = useSelector((state) => state.member.enrolledcourses);
@@ -51,9 +53,15 @@ function FullClass({ gapi }) {
     return () => {};
   }, [enrolledcourses, courseId, currentCourse, dispatch, userType]);
 
-  const onclick = (id) => {
-    document.querySelector;
-  };
+  console.log(addAssignment);
+
+  const onclick = (id) => {};
+
+  const data =
+    currentCourse &&
+    currentCourse.CourseCohort.Classes.find(
+      (classrum) => classrum.id === classroom
+    );
 
   return (
     <>
@@ -75,36 +83,43 @@ function FullClass({ gapi }) {
               </li>
             ))}
           >
-            <Classes
-              data={currentCourse.CourseCohort.Classes.find(
-                (classrum) => classrum.id === classroom
-              )}
-              open={true}
-              showArrow={false}
-              full={true}
-              gapi={gapi}
-              isStudent={isStudent}
-              folderId={currentCourse && currentCourse.CourseCohort.folderId}
-              courseId={courseId}
-            />
-            {isStudent && (
-              <div className="btns">
-                <div className="reg_text">
-                  <h4>Activities</h4>
-                  <div className="btn_sec_con flex-row j-start">
-                    <div className="btn_sec">
-                      <ResourceBtn
-                        img={assignment}
-                        text="Submit Assignment"
-                        color="approved"
-                        link={`/courses/assignment/${courseId}/${classroom}`}
-                      />
+            {!addAssignment && (
+              <>
+                <Classes
+                  data={data}
+                  open={true}
+                  showArrow={false}
+                  full={true}
+                  gapi={gapi}
+                  isStudent={isStudent}
+                  folderId={
+                    currentCourse && currentCourse.CourseCohort.folderId
+                  }
+                  courseId={courseId}
+                  addAssignment={() => setAddassignment(!addAssignment)}
+                  editClass={() => setEditClass(!editClass)}
+                />
+                {isStudent && (
+                  <div className="btns">
+                    <div className="reg_text">
+                      <h4>Activities</h4>
+                      <div className="btn_sec_con flex-row j-start">
+                        <div className="btn_sec">
+                          <ResourceBtn
+                            img={assignment}
+                            text="Submit Assignment"
+                            color="approved"
+                            link={`/courses/assignment/${courseId}/${classroom}`}
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
+                )}
+                <div className="prev_courses"></div>
+              </>
             )}
-            <div className="prev_courses"></div>
+            {addAssignment && <AddAssignment title={data && data.title} />}
           </Layout>
         )}
       </div>

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { getEnrolledCourses } from '../../g_actions/member';
-import Loader from '../../components/Loading';
-import Classes from './Classes';
-import NavBar from '../../components/CourseNav';
+import { getEnrolledCourses } from 'g_actions/member';
+import Loader from 'components/Loading';
+import Classes from 'components/Classes';
+import NavBar from 'components/CourseNav';
 import './style.scss';
 
 const Classroom = ({ full = false, gapi }) => {

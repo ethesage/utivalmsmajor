@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import ProfileCheck from 'components/ProfileCheck';
-import Classes from 'components/Classes';
+import Classes from 'components/NextClassTrainer';
 import Files from 'components/Files';
 import CountSection from './CountSection';
 import Layout from 'Layouts/HomeGrid';

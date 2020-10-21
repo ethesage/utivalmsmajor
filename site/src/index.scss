@@ -465,18 +465,6 @@ li {
     linear-gradient(rgba(#fff, 0), white 70%) 0 100%,
     linear-gradient(rgba(#000, 0.1), #fff 100%),
     linear-gradient(to top, rgba(#000, 0.1), #fff 100%) 0% 100%;
-  /* Shadows */
-  //   radial-gradient(
-  //     farthest-side at 50% 0,
-  //     rgba(0, 0, 0, 0.3),
-  //     rgba(0, 0, 0, 0)
-  //   ),
-  // radial-gradient(
-  //     farthest-side at 50% 100%,
-  //     rgba(0, 0, 0, 0.3),
-  //     rgba(0, 0, 0, 0)
-  //   )
-  //   0 100%;
   background-repeat: no-repeat;
   background-color: transparent;
   background-size: 100% 40px, 100% 40px, 100% 5px, 100% 5px;
@@ -487,24 +475,16 @@ li {
   background: /* Shadow covers */ linear-gradient(
       to right,
       white 30%,
-      rgba(255, 255, 255, 0)
+      rgba(#fff, 0)
     ),
-    linear-gradient(to right, rgba(255, 255, 255, 0), white 70%) 100% 0,
+    linear-gradient(to right, rgba(#fff, 0), white 70%) 100% 0,
     /* Shadows */
-      radial-gradient(
-        farthest-side at 0 50%,
-        rgba(0, 0, 0, 0.3),
-        rgba(0, 0, 0, 0)
-      ),
-    radial-gradient(
-        farthest-side at 100% 50%,
-        rgba(0, 0, 0, 0.3),
-        rgba(0, 0, 0, 0)
-      )
+      radial-gradient(farthest-side at 0 50%, rgba(#000, 0.3), rgba(#000, 0)),
+    radial-gradient(farthest-side at 100% 50%, rgba(#000, 0.3), rgba(#000, 0))
       100% 0;
   background-repeat: no-repeat;
   background-color: white;
-  background-size: 40px 100%, 40px 100%, 14px 100%, 14px 100%;
+  background-size: 40px 100%, 40px 100%, 5px 100%, 5px 100%;
   background-attachment: local, local, scroll, scroll;
 }
 

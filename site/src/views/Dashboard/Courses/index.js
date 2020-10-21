@@ -3,8 +3,8 @@ import { Route, Switch, useRouteMatch, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Overview from 'components/OverView';
 import CourseList from './CoursesList';
-import Classroom from 'components/Classroom';
-import FullClass from 'components/Classroom/FullClass';
+import Classroom from 'views/Classroom';
+import FullClass from 'views/FullClass';
 import Assignment from 'views/Assignment';
 import TrainerProtected from 'components/Protected/TrainerProtected';
 
