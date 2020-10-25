@@ -38,9 +38,11 @@ export const deleteClassAssignmentSchema = Joi.object().keys({
 
 export const createClassAssignmentSchema = Joi.object().keys({
   classId: Joi.string().uuid().trim().required(),
-  link: Joi.string().trim().required(),
-  title: Joi.string().trim().required(),
-  description: Joi.string().required(),
+  link: Joi.string().trim(),
+  title: Joi.string().trim(),
+  description: Joi.string(),
+  point: Joi.number(),
+  dueDate: Joi.date(),
 });
 
 // export const courseTrainerSchema = Joi.object().keys({
