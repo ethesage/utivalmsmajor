@@ -11,7 +11,9 @@ module.exports = (sequelize, DataTypes) => {
     type: DataTypes.STRING,
     link: DataTypes.STRING,
     title: DataTypes.STRING,
-    description: DataTypes.TEXT
+    description: DataTypes.TEXT,
+    dueDate: DataTypes.DATE,
+    point: DataTypes.INTEGER
   }, {});
   ClassResouces.associate = (models) => {
     // associations can be defined here
