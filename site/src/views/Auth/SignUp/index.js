@@ -43,8 +43,6 @@ function Signup() {
         } else return { ...acc, [input]: inputs[input] };
       }, {});
 
-      console.log(data);
-
       const response = await axiosInstance.post('/user/signup', data);
 
       addToast(

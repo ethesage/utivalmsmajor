@@ -1,6 +1,5 @@
-import Cookies from 'js-cookie';
 import { get_user, logout } from '../helpers';
-import { axiosInstance } from '../helpers';
+// import { axiosInstance } from '../helpers';
 
 export const loading = () => async (dispatch) => {
   dispatch({
@@ -17,7 +16,7 @@ export const doneloading = () => async (dispatch) => {
 };
 
 export const login = () => async (dispatch) => {
-  let isloggedIn;
+  // let isloggedIn;
   dispatch(loading());
 
   try {

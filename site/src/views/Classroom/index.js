@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { getEnrolledCourses } from 'g_actions/member';
+import useBreadcrumbs from 'Hooks/useBreadCrumbs';
 import Loader from 'components/Loading';
 import Classes from 'components/Classes';
 import NavBar from 'components/CourseNav';
@@ -16,24 +17,21 @@ const Classroom = ({ full = false, gapi }) => {
   const { isStudent } = useSelector((state) => state.auth);
   const [openedRef, setOpenedRef] = useState();
 
+  useBreadcrumbs(
+    currentCourse && {
+      name: currentCourse.Course.name,
+      link: `/courses/classroom/${courseId}`,
+    }
+  );
+
   const userType = isStudent ? 'student' : 'trainer';
 
   useEffect(() => {
-    if (!enrolledcourses && !currentCourse)
-      (async () => {
-        await dispatch(getEnrolledCourses(courseId, null, userType));
-      })();
-
-    return () => {};
-  }, [dispatch, enrolledcourses, courseId, currentCourse, userType]);
-
-  useEffect(() => {
-    if (!enrolledcourses) return;
     if (currentCourse) return;
 
-    const course =
-      enrolledcourses &&
-      enrolledcourses.find((course) => course.courseCohortId === courseId);
+    const course = enrolledcourses.find(
+      (course) => course.courseCohortId === courseId
+    );
 
     dispatch(getEnrolledCourses(courseId, course, userType));
 

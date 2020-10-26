@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { getEnrolledCourses } from 'g_actions/member';
+import useBreadcrumbs from 'Hooks/useBreadCrumbs';
 import Loader from 'components/Loading';
 import CourseCard from '../ActiveCourseCard';
 import Facilitators from '../Facilitators';
@@ -16,35 +17,20 @@ const Overview = () => {
   const dispatch = useDispatch();
   const { enrolledcourses } = useSelector((state) => state.member);
   const { currentCourse } = useSelector((state) => state.member);
-  const [errorState, setError] = useState('none');
+  const [errorState] = useState('none');
+
+  useBreadcrumbs(
+    currentCourse && {
+      name: currentCourse.Course.name,
+      link: `/courses/overview/${courseId}`,
+    }
+  );
 
   useEffect(() => {
-    if (errorState === 'error') return;
-    if (!enrolledcourses && !currentCourse)
-      (async () => {
-        const res = await dispatch(
-          getEnrolledCourses(courseId, null, userType)
-        );
 
-        setError(res);
-      })();
-
-    return () => {};
-  }, [
-    dispatch,
-    enrolledcourses,
-    currentCourse,
-    courseId,
-    userType,
-    errorState,
-  ]);
-
-  useEffect(() => {
-    if (!enrolledcourses) return;
-
-    const course =
-      enrolledcourses &&
-      enrolledcourses.find((course) => course.courseCohortId === courseId);
+    const course = enrolledcourses.find(
+      (course) => course.courseCohortId === courseId
+    );
 
     (async () => {
       await dispatch(getEnrolledCourses(courseId, course, userType));

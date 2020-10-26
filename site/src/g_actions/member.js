@@ -5,37 +5,32 @@ export const getEnrolledCourses = (id, data, userType = 'student') => async (
 ) => {
   let courses;
 
+  console.log(userType);
+
   const slug = userType === 'student' ? userType : 'trainer/course';
   const courseId = id ? `/${id}` : '';
 
-  try {
-    courses = data ? data : await axiosInstance.get(`/${slug}${courseId}`);
+  courses = data ? data : await axiosInstance.get(`/${slug}${courseId}`);
 
-    if (id) {
-      const useObject = data ? data : courses.data.data;
+  if (id) {
+    const useObject = data ? data : courses.data.data;
 
-      const data_ = useObject.CourseCohort.Classes.reduce(
-        (acc, cur) => ({
-          ...acc,
-          [cur.title]: {
-            files: null,
-            assignment: null,
-            submittedAssignment: null,
-          },
-        }),
-        {}
-      );
+    const data_ = useObject.CourseCohort.Classes.reduce(
+      (acc, cur) => ({
+        ...acc,
+        [cur.title]: {
+          files: null,
+          assignment: null,
+          submittedAssignment: null,
+        },
+      }),
+      {}
+    );
 
-      dispatch({
-        type: 'CREATE_CLASS_RESOURCES',
-        payload: data_,
-      });
-    }
-  } catch (error) {
-    if (error.status && error.response.status === 404) {
-      return 'error';
-    }
-    return 'error';
+    dispatch({
+      type: 'CREATE_CLASS_RESOURCES',
+      payload: data_,
+    });
   }
 
   // create a list of the class name so we can add the class resources

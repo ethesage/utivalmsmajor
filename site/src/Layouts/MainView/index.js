@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import NavBar from '../../components/DashNav';
-import useGoogle from '../../Hooks/useGoogle';
-import SideBar from '../../components/SideBar';
-import Modal from '../../components/Modal';
-import google from '../../assets/icons/google.png';
+import NavBar from 'components/DashNav';
+import useGoogle from 'Hooks/useGoogle';
+import SideBar from 'components/SideBar';
+import Modal from 'components/Modal';
+import google from 'assets/icons/google.png';
 import './style.scss';
 
 const MainView = ({ children, type }) => {

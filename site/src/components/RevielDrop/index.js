@@ -8,6 +8,7 @@ const RevielDrop = ({
   showArrow = true,
   className = '',
   runOnOpen = () => {},
+  runOnClose = () => {},
 }) => {
   const headRef = useRef();
 
@@ -15,7 +16,7 @@ const RevielDrop = ({
     const classes = showArrow ? ' showArrow' : '';
     if (header) headRef.current.className = `rx_header ${classes} ${className}`;
     return () => {};
-  }, [showArrow, className]);
+  }, [showArrow, className, header]);
 
   function handleClick(e) {
     if (!e.target.className.includes('rx_hd')) return;
@@ -31,7 +32,8 @@ const RevielDrop = ({
     e.target.classList.toggle('active');
     e.target.nextElementSibling.classList.toggle('show');
 
-    runOnOpen();
+    if (e.target.classList.contains('active')) runOnOpen();
+    else runOnClose();
   }
 
   return (

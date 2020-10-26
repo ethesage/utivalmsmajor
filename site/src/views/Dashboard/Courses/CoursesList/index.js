@@ -1,13 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { getEnrolledCourses } from 'g_actions/member';
+import { useSelector } from 'react-redux';
 import { Progress } from 'react-sweet-progress';
 import Image from 'components/Image';
-import Loader from 'components/Loading';
 import medal from 'assets/icons/medal.png';
-import not_found from 'assets/not_found.png';
-import Button from 'components/Button';
 import 'react-sweet-progress/lib/style.css';
 import './style.scss';
 
@@ -82,47 +78,15 @@ const CousreCard = ({ data }) => {
 };
 
 const CourseList = () => {
-  const dispatch = useDispatch();
-  const { isStudent } = useSelector((state) => state.auth);
   const enrolledcourses = useSelector((state) => state.member.enrolledcourses);
-  const userType = isStudent ? 'student' : 'trainer';
-
-  useEffect(() => {
-    if (!enrolledcourses)
-      (async () => {
-        await dispatch(getEnrolledCourses(null, null, userType));
-      })();
-
-    return () => {};
-  }, [dispatch, enrolledcourses, userType]);
 
   return (
     <div className="main flex-col cx_list_con j-start al-start">
-      {!enrolledcourses ? (
-        <Loader tempLoad={true} full={false} />
-      ) : enrolledcourses.length === 0 ? (
-        <div className="nt_found img flex-col">
-          <img src={not_found} alt="Not found" />
-          {isStudent ? (
-            <p className="text">You are yet to enrol for any course</p>
-          ) : (
-            <p className="text">You have not been assigned any Courses</p>
-          )}
-          {isStudent && (
-            <Button
-              link="utiva.io"
-              text="Start Learning"
-              className="flex-row"
-            />
-          )}
-        </div>
-      ) : (
-        <section className="course_list">
-          {enrolledcourses.map((course, i) => (
-            <CousreCard data={course} key={`enrolled_c_${i}`} />
-          ))}
-        </section>
-      )}
+      <section className="course_list">
+        {enrolledcourses.map((course, i) => (
+          <CousreCard data={course} key={`enrolled_c_${i}`} />
+        ))}
+      </section>
     </div>
   );
 };

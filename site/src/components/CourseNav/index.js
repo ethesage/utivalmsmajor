@@ -27,7 +27,9 @@ const CourseNav = () => {
     { link: `members/${courseId}`, title: 'Members' },
   ];
 
-  const t_link = [{ link: `assignments/${courseId}`, title: 'Assignments' }];
+  const t_link = [
+    { link: `all-assignments/${courseId}`, title: 'Assignments' },
+  ];
 
   const a_links = [
     { link: `study-plan/${courseId}`, title: 'Calender' },

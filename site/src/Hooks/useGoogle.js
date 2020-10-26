@@ -14,6 +14,7 @@ const Google = ({ updateSignInStatus = () => {} }) => {
         return err;
       }
 
+      // eslint-disable-next-line no-new-func
       const gapi = new Function(`${gapi_str.data} return gapi`)();
 
       gapi.load('client:auth2', () => {

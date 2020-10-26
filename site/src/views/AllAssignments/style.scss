@@ -1,0 +1,24 @@
+@import '../../media';
+
+.members {
+  width: 100%;
+  .memx_sec {
+    display: grid;
+    width: 100%;
+    grid-gap: 30px;
+    grid-template-columns: repeat(5, 1fr);
+    margin-top: 50px;
+
+    @include for-size(desktop-up) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    @include for-size(smaller-desktop) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    @include for-size(phone-only) {
+      grid-template-columns: repeat(1, 1fr);
+    }
+  }
+}

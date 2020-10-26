@@ -5,14 +5,19 @@ import numeral from 'numeral';
 import DropDown from '../../DropDown';
 import './style.scss';
 
-const FileSec = ({
-  file,
-  personal = false,
-  view,
-  download,
-  deleteFile,
-  linkExt,
-}) => {
+const FileSec = ({ file, personal = false, deleteFile, linkExt }) => {
+  const view = async (contentLink) => {
+    window.open(contentLink, '_blank');
+  };
+
+  const download = async (contentLink) => {
+    if (!contentLink) {
+      view(contentLink);
+      return;
+    }
+    window.open(contentLink);
+  };
+
   return (
     <div className="file_card flex-row j-space">
       <div

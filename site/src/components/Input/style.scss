@@ -24,7 +24,8 @@ $distance: 0px;
     width: 60%;
     content: attr(placeholder);
   }
-  input[type='date']:focus::before {
+  input[type='date']:focus::before,
+  input:not([value=''])::before {
     content: '' !important;
     background: none;
   }
