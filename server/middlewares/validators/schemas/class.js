@@ -29,7 +29,9 @@ export const editClassAssignmentSchema = Joi.object().keys({
   link: Joi.string().trim(),
   deadline: Joi.string().trim(),
   title: Joi.string().trim(),
-  description: Joi.string()
+  description: Joi.string(),
+  point: Joi.number(),
+  dueDate: Joi.date(),
 });
 
 export const deleteClassAssignmentSchema = Joi.object().keys({
