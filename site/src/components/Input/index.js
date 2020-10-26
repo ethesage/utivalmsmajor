@@ -19,6 +19,7 @@ const Input = ({
   label,
   showAsterix = true,
   shouldValidate = true,
+  attr = {},
 }) => {
   const [error, setError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -70,6 +71,7 @@ const Input = ({
             required ? (showAsterix ? '*' : '') : ''
           }`}
           rows={10}
+          {...attr}
         />
       ) : (
         <>
@@ -84,11 +86,7 @@ const Input = ({
             placeholder={`${placeHolder} ${
               required ? (showAsterix ? '*' : '') : ''
             }`}
-            autoComplete={
-              type === 'password' && method === 'sign-in'
-                ? 'current-password'
-                : 'new-password'
-            }
+            {...attr}
           />
           {type === 'checkbox' ? <label>{placeHolder}</label> : ''}
         </>

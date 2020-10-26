@@ -5,6 +5,7 @@ export const initialState = {
   classdays: null,
   counts: null,
   classResources: null,
+  allAssignments: null,
 };
 
 const course = (state = initialState, action) => {
@@ -114,11 +115,7 @@ const course = (state = initialState, action) => {
 
     case 'DELETE_RESOURCE':
       const prevAss_re = state.classResources[action.payload.name].files;
-      console.log(
-        prevAss_re,
-        action.payload.id,
-        prevAss_re.filter((file) => file.id !== action.payload.id)
-      );
+
       return {
         ...state,
         classResources: {

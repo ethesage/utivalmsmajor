@@ -37,34 +37,21 @@ const Assignment = ({ gapi }) => {
   const modalRef = useRef();
 
   useEffect(() => {
-    if (!enrolledcourses && !currentCourse)
-      (async () => {
-        await dispatch(getEnrolledCourses(courseId));
-      })();
-
-    return () => {};
-  }, [dispatch, enrolledcourses, courseId, currentCourse]);
-
-  useEffect(() => {
-    if (!enrolledcourses) return;
     if (currentCourse) return;
 
     dispatch(
       getEnrolledCourses(
         courseId,
-        enrolledcourses &&
-          enrolledcourses.find((course) => course.courseCohortId === courseId)
+        enrolledcourses.find((course) => course.courseCohortId === courseId)
       )
     );
 
     return () => {};
   }, [enrolledcourses, courseId, currentCourse, dispatch]);
 
-  const currentClass =
-    currentCourse &&
-    currentCourse.CourseCohort.Classes.find(
-      (classrum) => classrum.id === classroom
-    );
+  const currentClass = currentCourse?.CourseCohort?.Classes.find(
+    (classrum) => classrum.id === classroom
+  );
 
   const getFiles = useCallback(
     async (id) => {
@@ -186,10 +173,6 @@ const Assignment = ({ gapi }) => {
     modalRef.current.close();
   };
 
-  const viewFile = async (contentLink) => {
-    window.open(contentLink, '_blank');
-  };
-
   const deleteAssignment = async () => {
     const resource = classResources[
       currentClass.title
@@ -253,9 +236,7 @@ const Assignment = ({ gapi }) => {
               <div className="box-shade">
                 <Files
                   files={classResources[currentClass.title].submittedAssignment}
-                  view={viewFile}
                   personal={true}
-                  download={download}
                   deleteFile={deleteFIle}
                   handleImage={upload}
                   linkExt={{ courseId, classroom }}

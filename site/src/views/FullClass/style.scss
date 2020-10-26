@@ -3,6 +3,12 @@
 .cx_listnx_full {
   width: 100%;
   flex-grow: 1;
+
+  .fl-ass {
+    flex-grow: 1;
+    display: contents;
+  }
+
   .btns {
     margin: 20px 0 30px;
     h4 {

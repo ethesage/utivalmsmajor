@@ -1,0 +1,44 @@
+@import '../../media';
+
+.g_tbl {
+  width: 100%;
+  overflow-x: auto;
+  min-height: 600px;
+  flex-grow: 1;
+
+  table {
+    min-width: 1200px;
+    width: 100%;
+    border-collapse: collapse;
+
+    .tb-btn {
+      min-width: unset;
+      min-height: unset;
+      padding: 5px 10px;
+      border-radius: 20px;
+      p {
+        font-size: 0.8em;
+      }
+    }
+
+    thead {
+      th {
+        padding: 20px;
+      }
+      border-bottom: 2px solid color(fade);
+    }
+
+    th,
+    td {
+      min-width: 150px;
+      text-align: left;
+      padding: 12px 20px;
+    }
+
+    tr {
+      &:nth-child(even) {
+        background: color(fade);
+      }
+    }
+  }
+}

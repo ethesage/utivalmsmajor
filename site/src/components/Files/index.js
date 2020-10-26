@@ -7,14 +7,14 @@ import './style.scss';
 
 const Files = ({
   files,
-  view,
-  download,
   handleImage,
   deleteFile,
   showdrag = true,
   personal = false,
   children,
   linkExt,
+  useErrorMessage = true,
+  errorMsg,
 }) => {
   return (
     <div className="info_con">
@@ -35,17 +35,17 @@ const Files = ({
             ))}
           </div>
         ) : files.length === 0 ? (
-          <div className="n_available flex-col img">
-            <img src={no_file} alt="no classes" />
-            <p className="txts">You have no files yet</p>
-          </div>
+          useErrorMessage && (
+            <div className="n_available flex-col img">
+              <img src={no_file} alt="no classes" />
+              <p className="txts">{errorMsg || 'You have no uplods'}</p>
+            </div>
+          )
         ) : (
           files.map((file, i) => (
             <FilesSec
               file={file}
               key={`d_files_${i}`}
-              view={view}
-              download={download}
               deleteFile={deleteFile}
               personal={personal}
               linkExt={linkExt}

@@ -75,6 +75,8 @@ function Classes({
       setShowResourceDrop(classRef.current === openedRef.current);
 
     return () => {};
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openedRef]);
 
   useEffect(() => {
@@ -97,11 +99,12 @@ function Classes({
     }
 
     return () => {};
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     if (!classResources[title].assignment) {
-      if (resources.length === 0) {
+      if (assignment_.length === 0) {
         dispatch(getAssignments(title, null));
       }
 
@@ -120,6 +123,7 @@ function Classes({
     }
 
     return () => {};
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const dropDrop = (type) => {
@@ -139,10 +143,6 @@ function Classes({
 
   const viewFile = async (contentLink) => {
     window.open(contentLink, '_blank');
-  };
-
-  const download = async (contentLink) => {
-    window.open(contentLink);
   };
 
   const viewAssignment = (e) => {
@@ -228,11 +228,6 @@ function Classes({
     }
   };
 
-  // const upload = async (files, folderId) => {
-  //   modalRef.current.open();
-  //   gapi.gapi.upload(files, setProgress, '1F0r-bTgMLTkUhBf2o-ZTwtCPB3dWfnXp');
-  // };
-
   return (
     <>
       <div className="cx_listnx_con" ref={classRef}>
@@ -242,6 +237,7 @@ function Classes({
           runOnOpen={() => {
             setOpenedRef && setOpenedRef(classRef);
           }}
+          runOnClose={() => !full && setShowResourceDrop(false)}
           className="hx-main"
           header={
             <div className="cx_header flex-row j-space">
@@ -263,8 +259,7 @@ function Classes({
                         </Link>
                       )}
                       {isTrainer &&
-                        classResources[title].assignment &&
-                        classResources[title].assignment.length === 0 && (
+                        Array.isArray(classResources[title].assignment) && (
                           <Link
                             to=""
                             className="edit"
@@ -273,7 +268,9 @@ function Classes({
                               addAssignment();
                             }}
                           >
-                            Add Assignment
+                            {classResources[title].assignment.length === 0
+                              ? 'Add Assignment'
+                              : 'Edit Assignment'}
                           </Link>
                         )}
                     </>
@@ -362,12 +359,14 @@ function Classes({
                       ? classResources[title].files
                       : classResources[title].assignment
                   }
-                  view={viewFile}
-                  download={download}
                   showdrag={
+                    dropType === 'resource' ? true : false
+                    // : !!!classResources[title].files
+                  }
+                  errorMsg={
                     dropType === 'resource'
-                      ? true
-                      : !!!classResources[title].files
+                      ? 'No materials for this class yet'
+                      : 'No assignment Yet'
                   }
                   deleteFile={deleteFIle}
                   handleImage={upload}
@@ -379,12 +378,7 @@ function Classes({
           <Modal ref={modalRef}>
             <div className="class_file_con">
               <h3>Resource Materials</h3>
-              <Files
-                files={classResources[title].files}
-                view={viewFile}
-                download={download}
-                showdrag={false}
-              />
+              <Files files={classResources[title].files} showdrag={false} />
             </div>
           </Modal>
         )}

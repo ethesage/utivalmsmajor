@@ -9,7 +9,7 @@ import MemberCard from 'components/Member';
 // import
 import './style.scss';
 
-const Members = () => {
+const AllAssignmnets = () => {
   const { courseId } = useParams();
   const dispatch = useDispatch();
   const { enrolledStudents } = useSelector((state) => state.member);
@@ -53,4 +53,4 @@ const Members = () => {
   );
 };
 
-export default Members;
+export default AllAssignmnets;
