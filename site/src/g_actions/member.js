@@ -103,6 +103,18 @@ export const getAssignments = (name, file) => async (dispatch) => {
   });
 };
 
+export const editAssignments = (name, file, id) => async (dispatch) => {
+  dispatch({
+    type: 'DELETE_ASSIGNMENT',
+    payload: { name, id },
+  });
+
+  dispatch({
+    type: 'GET_ASSIGNMENT',
+    payload: { name, file },
+  });
+};
+
 export const deleteAssignmnet = (name, id) => async (dispatch) => {
   dispatch({
     type: 'DELETE_ASSIGNMENT',

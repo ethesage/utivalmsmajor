@@ -2,7 +2,11 @@ import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 import { useToasts } from 'react-toast-notifications';
-import { getAssignments, deleteAssignmnet } from 'g_actions/member';
+import {
+  getAssignments,
+  deleteAssignmnet,
+  editAssignments,
+} from 'g_actions/member';
 import Input from 'components/Input';
 import Modal from 'components/Modal';
 import { axiosInstance } from 'helpers';
@@ -168,6 +172,35 @@ const AddAssignment = ({ title, course, currentClass, gapi, folderId }) => {
 
   const submit = (e) => {
     e.preventDefault();
+
+    if (!resourceAssignment[0]) {
+      addToast('Please upload a file', {
+        appearance: 'error',
+        autoDismiss: false,
+      });
+
+      return;
+    }
+
+    try {
+      axiosInstance.patch(`/assignment/edit/${assignment[0].id}`, {
+        ...assData,
+        link: resourceAssignment[0].link,
+      });
+
+      dispatch(
+        editAssignments(
+          title,
+          { ...resourceAssignment[0], ...assData },
+          resourceAssignment[0].id
+        )
+      );
+    } catch (err) {
+      addToast('Unable to create assignment', {
+        appearance: 'err',
+        autoDismiss: false,
+      });
+    }
   };
 
   return (
