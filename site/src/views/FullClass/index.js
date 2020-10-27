@@ -24,6 +24,7 @@ function FullClass({ gapi }) {
   const currentCourse = useSelector((state) => state.member.currentCourse);
   const { isStudent } = useSelector((state) => state.auth);
   const userType = isStudent ? 'student' : 'trainer';
+
   // useBreadcrumbs(
   //   currentCourse && {
   //     name: currentCourse.Course.name,
@@ -57,8 +58,7 @@ function FullClass({ gapi }) {
     (classrum) => classrum.id === classroom
   );
 
-  // console.log(data);
-  // console.log(currentCourse);
+  const ass = data?.ClassResouces.filter((res) => res.type === 'assignment');
 
   return (
     <>
@@ -81,56 +81,58 @@ function FullClass({ gapi }) {
               </li>
             ))}
           >
-            {!addAssignment && (
-              <>
-                <Classes
-                  data={data}
-                  open={true}
-                  showArrow={false}
-                  full={true}
-                  gapi={gapi}
-                  isStudent={isStudent}
-                  folderId={
-                    currentCourse && currentCourse.CourseCohort.folderId
-                  }
-                  courseId={courseId}
-                  addAssignment={() => {
-                    history.push(`${pathname}/add-assignment`);
-                  }}
-                  editClass={() => setEditClass(!editClass)}
-                />
-                {isStudent && (
-                  <div className="btns">
-                    <div className="reg_text">
-                      <h4>Activities</h4>
-                      <div className="btn_sec_con flex-row j-start">
-                        <div className="btn_sec">
-                          <ResourceBtn
-                            img={assignment}
-                            text="Submit Assignment"
-                            color="approved"
-                            link={`/courses/assignment/${courseId}/${classroom}`}
-                          />
+            <div className="flex-col j-start al-start img">
+              {!addAssignment && (
+                <>
+                  <Classes
+                    data={data}
+                    open={true}
+                    showArrow={false}
+                    full={true}
+                    gapi={gapi}
+                    isStudent={isStudent}
+                    folderId={
+                      currentCourse && currentCourse.CourseCohort.folderId
+                    }
+                    courseId={courseId}
+                    addAssignment={() => {
+                      history.push(`${pathname}/add-assignment`);
+                    }}
+                    editClass={() => setEditClass(!editClass)}
+                  />
+                  {isStudent && ass.length > 0 && (
+                    <div className="btns">
+                      <div className="reg_text">
+                        <h4>Activities</h4>
+                        <div className="btn_sec_con flex-row j-start">
+                          <div className="btn_sec">
+                            <ResourceBtn
+                              img={assignment}
+                              text="Submit Assignment"
+                              color="approved"
+                              link={`/courses/assignment/${courseId}/${classroom}`}
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                )}
-                <div className="prev_courses"></div>
-              </>
-            )}
-            {addAssignment && (
-              <>
-                <AddAssignment
-                  title={data?.title}
-                  course={currentCourse}
-                  currentClass={data}
-                  gapi={gapi}
-                  isStudent={isStudent}
-                  folderId={currentCourse?.CourseCohort?.folderId}
-                />
-              </>
-            )}
+                  )}
+                  <div className="prev_courses"></div>
+                </>
+              )}
+              {addAssignment && (
+                <>
+                  <AddAssignment
+                    title={data?.title}
+                    course={currentCourse}
+                    currentClass={data}
+                    gapi={gapi}
+                    isStudent={isStudent}
+                    folderId={currentCourse?.CourseCohort?.folderId}
+                  />
+                </>
+              )}
+            </div>
           </Layout>
         )}
       </div>

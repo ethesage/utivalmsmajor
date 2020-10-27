@@ -1,10 +1,8 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import Sekeleton from 'react-skeleton-loader';
-import { getEnrolledMembers } from 'g_actions/member';
+import { getEnrolledCourses } from 'g_actions/member';
 import NavBar from 'components/CourseNav';
-import MemberCard from 'components/Member';
 
 // import
 import './style.scss';
@@ -12,43 +10,28 @@ import './style.scss';
 const AllAssignmnets = () => {
   const { courseId } = useParams();
   const dispatch = useDispatch();
-  const { enrolledStudents } = useSelector((state) => state.member);
-
-  useEffect(() => {
-    if (!enrolledStudents) {
-      (async () => {
-        await dispatch(getEnrolledMembers(courseId));
-      })();
-    }
-    return () => {};
-  }, [enrolledStudents, dispatch, courseId]);
-
-  const Loader = () => (
-    <div className="snx_mem">
-      <Sekeleton width="120%" height="100%" />
-    </div>
+  const { currentCourse, enrolledcourses } = useSelector(
+    (state) => state.member
   );
 
-  const NoClass = () => <div>No members enrolled yet</div>;
+  useEffect(() => {
+    if (currentCourse) return;
+
+    const course = enrolledcourses.find(
+      (course) => course.courseCohortId === courseId
+    );
+
+    dispatch(getEnrolledCourses(courseId, course, 'trainer'));
+
+    return () => {};
+  }, [enrolledcourses, courseId, currentCourse, dispatch]);
+
+  console.log()
 
   return (
     <>
       <NavBar />
-      <section className="members">
-        <h3>{enrolledStudents && enrolledStudents.length} Total Members</h3>
-
-        <div className="memx_sec">
-          {!enrolledStudents ? (
-            [1, 2, 3].map((i) => <Loader key={`load_${i}`} />)
-          ) : enrolledStudents.length === 0 ? (
-            <NoClass />
-          ) : (
-            enrolledStudents.map((students, i) => (
-              <MemberCard key={`enrolled_students_${i}`} data={students} />
-            ))
-          )}
-        </div>
-      </section>
+      <section className="members"></section>
     </>
   );
 };
