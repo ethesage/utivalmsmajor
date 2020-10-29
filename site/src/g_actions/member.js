@@ -22,6 +22,7 @@ export const getEnrolledCourses = (id, data, userType = 'student') => async (
           files: null,
           assignment: null,
           submittedAssignment: null,
+          allSubmittedAssignment: null,
         },
       }),
       {}
@@ -134,4 +135,21 @@ export const deleteSubmittedAssignment = (name, id) => async (dispatch) => {
     type: 'DELETE_SUBMITTED_ASSIGNMENT',
     payload: { name, id },
   });
+};
+
+export const getAllsubmittedAssignment = (name, classId) => async (
+  dispatch
+) => {
+  const res = await axiosInstance.get(
+    `/assignment/class/submitted/all/${classId}`
+  );
+
+  console.log('I ran', res);
+
+  // console.log(res.data);
+
+  // dispatch({
+  //   type: 'GET_ALL_SUBMITTED_ASSIGNMENTS',
+  //   payload: {name: '', data: ''}
+  // });
 };

@@ -70,6 +70,11 @@ $distance: 0px;
         font-size: 1em;
         color: color(text);
         position: relative;
+        text-transform: capitalize;
+
+        p {
+          padding-right: 10px;
+        }
 
         &::after {
           content: '\25BC';
@@ -85,7 +90,7 @@ $distance: 0px;
       }
 
       .dropDownButtons {
-        z-index: 4;
+        // z-index: 4;
         top: 100%;
         position: absolute;
         box-shadow: 0 0 3px rgba(black, 0.3);
