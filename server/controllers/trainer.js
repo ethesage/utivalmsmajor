@@ -1,5 +1,5 @@
-import models from "../database/models";
-import helpers from "../helpers";
+import models from '../database/models';
+import helpers from '../helpers';
 
 const { successStat, errorStat } = helpers;
 /**
@@ -16,7 +16,7 @@ export const createTrainer = async (req, res) => {
 
   try {
     const isUser = await models.User.findOne({
-      where: { id: userId }
+      where: { id: userId },
     });
 
     if (!isUser) {
@@ -24,7 +24,7 @@ export const createTrainer = async (req, res) => {
     }
 
     const course = await models.Course.findOne({
-      where: { id: courseId }
+      where: { id: courseId },
     });
 
     if (!course) {
@@ -32,7 +32,7 @@ export const createTrainer = async (req, res) => {
     }
 
     const isExist = await models.Trainer.findOne({
-      where: { courseId, userId }
+      where: { courseId, userId },
     });
 
     if (isExist) {
@@ -41,10 +41,13 @@ export const createTrainer = async (req, res) => {
 
     const trainer = await models.Trainer.create({
       userId,
-      courseId
+      courseId,
     });
 
-    return successStat(res, 201, 'data', { ...trainer.dataValues, message: 'Trainer Created' });
+    return successStat(res, 201, 'data', {
+      ...trainer.dataValues,
+      message: 'Trainer Created',
+    });
   } catch (e) {
     errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
@@ -69,10 +72,10 @@ export const getAllTrainerCourse = async (req, res) => {
             {
               model: models.CourseProgress,
               where: { userId: id },
-              required: false
+              required: false,
             },
             // required: false
-          ]
+          ],
         },
         {
           model: models.CourseCohort,
@@ -94,13 +97,13 @@ export const getAllTrainerCourse = async (req, res) => {
                   },
                 },
                 {
-                  model: models.ClassResouces,
+                  model: models.ClassResources,
                 },
               ],
             },
           ],
         },
-      ]
+      ],
     });
 
     if (!trainerCourse[0]) {
@@ -136,7 +139,7 @@ export const getSingleTrainerCourse = async (req, res) => {
             {
               model: models.CourseProgress,
               where: { userId: id },
-              required: false
+              required: false,
             },
           ],
         },
@@ -160,7 +163,7 @@ export const getSingleTrainerCourse = async (req, res) => {
                   },
                 },
                 {
-                  model: models.ClassResouces,
+                  model: models.ClassResources,
                 },
               ],
             },
@@ -238,7 +241,7 @@ export const updateTrainer = async (req, res) => {
     }
 
     const update = await trainer.update({
-      ...req.body.trainer
+      ...req.body.trainer,
     });
 
     return successStat(res, 200, 'data', update);

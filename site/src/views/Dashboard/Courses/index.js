@@ -104,8 +104,9 @@ const Courses = ({ gapi }) => {
             <TrainerProtected
               exact
               path={`${path}/all-assignments/:courseId/:classroom?`}
-              component={AllAssignments}
-            />
+            >
+              <AllAssignments gapi={gapi} />
+            </TrainerProtected>
           </Switch>
         </>
       )}

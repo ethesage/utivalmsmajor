@@ -106,7 +106,7 @@ export const getAllStudentCourse = async (req, res) => {
                   },
                 },
                 {
-                  model: models.ClassResouces,
+                  model: models.ClassResources,
                 },
               ],
             },
@@ -170,7 +170,7 @@ export const getSingleStudentCourse = async (req, res) => {
                   },
                 },
                 {
-                  model: models.ClassResouces,
+                  model: models.ClassResources,
                 },
               ],
             },

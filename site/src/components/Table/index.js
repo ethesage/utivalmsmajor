@@ -27,13 +27,15 @@ const Table = ({ children, keys, usedefaultTh }) => {
       children;
 
   return (
-    <div className="g_tbl shadow_div">
+    <div className="g_tbl box-shade">
       <table>
         {(!!!thead || usedefaultTh) && (
           <thead>
             <tr>
               {keys.map((tkey, i) => (
-                <th key={`table_head_${i}`}>{tkey}</th>
+                <th key={`table_head_${i}`} style={{ textAlign: tkey.align }}>
+                  {typeof tkey === 'string' ? tkey : tkey.name}
+                </th>
               ))}
             </tr>
           </thead>
@@ -65,11 +67,17 @@ const TableBody = ({ keys, children }) => {
   );
 };
 
-const Trow = ({ values, keys }) => {
+const Trow = ({ values, keys, attr = {} }) => {
   return (
     <tr>
       {keys.map((key, i) => (
-        <td key={`table_rows_xx_${i}`}>{values[key]}</td>
+        <td
+          key={`table_rows_xx_${i}`}
+          style={{ textAlign: key.align }}
+          {...attr}
+        >
+          {values[typeof key === 'string' ? key : key.name]}
+        </td>
       ))}
     </tr>
   );

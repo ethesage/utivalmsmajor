@@ -10,14 +10,14 @@ import Loader from 'components/Loading';
 import Files from 'components/Files';
 import Modal from 'components/Modal';
 import ProgressBar from 'components/ProgressBar';
-import ViewGrade from 'views/Assignment/ViewGrade';
+import ViewGrade from 'components/ViewGrade';
 import {
   getSubmittedAssignments,
   deleteSubmittedAssignment,
 } from 'g_actions/member';
 import { useToasts } from 'react-toast-notifications';
 import Button from 'components/Button';
-import 'components/Classes/style.scss';
+import 'components/ViewGrade/style.scss';
 import { axiosInstance } from 'helpers';
 import './style.scss';
 
@@ -130,7 +130,7 @@ const Assignment = ({ gapi }) => {
 
   const upload = async (files) => {
     setDeleteDialog(false);
-    const assignment_ = currentClass.ClassResouces.filter(
+    const assignment_ = currentClass.ClassResources.filter(
       (res) => res.type === 'assignment'
     )[0].id;
 

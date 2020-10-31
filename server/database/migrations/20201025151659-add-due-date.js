@@ -3,7 +3,7 @@ module.exports = {
     queryInterface.sequelize.transaction((t) =>
       Promise.all([
         queryInterface.addColumn(
-          'ClassResouces',
+          'ClassResources',
           'dueDate',
           {
             type: Sequelize.DATE,
@@ -12,7 +12,7 @@ module.exports = {
           { transaction: t }
         ),
         queryInterface.addColumn(
-          'ClassResouces',
+          'ClassResources',
           'point',
           {
             type: Sequelize.INTEGER,
@@ -20,15 +20,18 @@ module.exports = {
           },
           { transaction: t }
         ),
-      ])),
+      ])
+    ),
 
   down: (queryInterface) =>
     queryInterface.sequelize.transaction((t) =>
       Promise.all([
-        queryInterface.removeColumn('ClassResouces', 'dueDate', {
+        queryInterface.removeColumn('ClassResources', 'dueDate', {
           transaction: t,
         }),
-        queryInterface.removeColumn('ClassResouces', 'point', { transaction: t }),
-      ])),
+        queryInterface.removeColumn('ClassResources', 'point', {
+          transaction: t,
+        }),
+      ])
+    ),
 };
-

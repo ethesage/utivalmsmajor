@@ -22,6 +22,8 @@ const user = (state = initialState, action) => {
         ...state,
         loading: action.payload,
       };
+    case 'RESET':
+      return initialState;
     default:
       return state;
   }

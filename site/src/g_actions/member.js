@@ -144,12 +144,8 @@ export const getAllsubmittedAssignment = (name, classId) => async (
     `/assignment/class/submitted/all/${classId}`
   );
 
-  console.log('I ran', res);
-
-  // console.log(res.data);
-
-  // dispatch({
-  //   type: 'GET_ALL_SUBMITTED_ASSIGNMENTS',
-  //   payload: {name: '', data: ''}
-  // });
+  dispatch({
+    type: 'GET_ALL_SUBMITTED_ASSIGNMENTS',
+    payload: { name, data: res.data.data },
+  });
 };

@@ -32,7 +32,7 @@ const AddAssignment = ({ title, course, currentClass, gapi, folderId }) => {
   const [progress, setProgress] = useState(0);
   const { addToast } = useToasts();
   const { classResources } = useSelector((state) => state.member);
-  const assignment = currentClass?.ClassResouces?.filter(
+  const assignment = currentClass?.ClassResources?.filter(
     (res) => res.type === 'assignment'
   );
 

@@ -1,8 +1,8 @@
 /* eslint-disable import/prefer-default-export */
 // import sequelize from "sequelize";
 // import { paginate, calculateLimitAndOffset } from 'paginate-info';
-import models from "../database/models";
-import helpers from "../helpers";
+import models from '../database/models';
+import helpers from '../helpers';
 // import  from "../helpers"
 
 const { successStat, errorStat } = helpers;
@@ -28,17 +28,17 @@ export const getClassAssignment = async (req, res) => {
       include: [
         {
           model: models.Assignment,
-          attributes: ["fileId"],
+          attributes: ['fileId'],
         },
       ],
     });
 
     // if (!allClass[0]) return errorStat(res, 404, 'No class Found for this course');
 
-    return successStat(res, 200, "data", allClassAssignment);
+    return successStat(res, 200, 'data', allClassAssignment);
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
@@ -53,10 +53,10 @@ export const getStudentSubmitClassAssignment = async (req, res) => {
 
     // if (!allClass[0]) return errorStat(res, 404, 'No class Found for this course');
 
-    return successStat(res, 200, "data", submitAssignment);
+    return successStat(res, 200, 'data', submitAssignment);
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
@@ -67,14 +67,23 @@ export const getAllSubmitClassAssignment = async (req, res) => {
   try {
     const submitAssignment = await models.Assignment.findAll({
       where: { classId },
+      include: [
+        {
+          model: models.User,
+          attributes: ['firstName', 'lastName', 'profilePic'],
+        },
+        {
+          model: models.ClassResources,
+        },
+      ],
     });
 
     // if (!allClass[0]) return errorStat(res, 404, 'No class Found for this course');
 
-    return successStat(res, 200, "data", submitAssignment);
+    return successStat(res, 200, 'data', submitAssignment);
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
@@ -89,7 +98,7 @@ export const getStudentCourseCohortAssignment = async (req, res) => {
       include: [
         {
           model: models.Classes,
-          attributes: ["title"],
+          attributes: ['title'],
           include: [
             {
               model: models.Assignment,
@@ -101,11 +110,11 @@ export const getStudentCourseCohortAssignment = async (req, res) => {
     });
 
     // if (!allClass[0]) return errorStat(res, 404, 'No class Found for this course');
-    console.log("i am here");
-    return successStat(res, 200, "data", submitAssignment);
+    console.log('i am here');
+    return successStat(res, 200, 'data', submitAssignment);
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
@@ -120,17 +129,18 @@ export const submitAssignment = async (req, res) => {
       where: { id: classId },
       include: [
         {
-          model: models.ClassResouces,
+          model: models.ClassResources,
           where: {
             id: classResourcesId,
             classId,
-            type: "assignment",
+            type: 'assignment',
           },
         },
       ],
     });
 
-    if (!findClassAssignment) return errorStat(res, 404, "Class Assignment not found");
+    if (!findClassAssignment)
+      return errorStat(res, 404, 'Class Assignment not found');
 
     const data = await models.Assignment.create({
       studentId: id,
@@ -141,10 +151,10 @@ export const submitAssignment = async (req, res) => {
       classResourcesId,
     });
 
-    return successStat(res, 201, "data", data.dataValues);
+    return successStat(res, 201, 'data', data.dataValues);
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
@@ -163,14 +173,15 @@ export const gradeStudentAssignment = async (req, res) => {
       ],
     });
 
-    if (!checkTrainer || role === "student") return errorStat(res, 403, "Cant Grade Assignment");
+    if (!checkTrainer || role === 'student')
+      return errorStat(res, 403, 'Cant Grade Assignment');
 
     const foundAssignment = await models.Assignment.findOne({
       where: { id: assignmentId },
     });
 
     if (!foundAssignment) {
-      return errorStat(res, 404, "Assignment not found");
+      return errorStat(res, 404, 'Assignment not found');
     }
 
     const updateAssignmet = await foundAssignment.update({
@@ -180,10 +191,10 @@ export const gradeStudentAssignment = async (req, res) => {
       gradedBy: `${firstName} ${lastName}`,
     });
 
-    return successStat(res, 201, "data", updateAssignmet);
+    return successStat(res, 201, 'data', updateAssignmet);
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
@@ -195,21 +206,22 @@ export const editSubmittedAssignment = async (req, res) => {
       where: { id: assignmentId },
     });
 
-    if (!findAssignment) return errorStat(res, 404, "Assignment not found");
+    if (!findAssignment) return errorStat(res, 404, 'Assignment not found');
 
-    if (findAssignment.isGraded) return errorStat(res, 400, "Cannot Edit Graded Assignment");
+    if (findAssignment.isGraded)
+      return errorStat(res, 400, 'Cannot Edit Graded Assignment');
 
     await findAssignment.update({
       ...req.body.assignment,
     });
 
-    return successStat(res, 200, "data", {
+    return successStat(res, 200, 'data', {
       ...findAssignment.dataValues,
-      message: "Assignment updated successfully",
+      message: 'Assignment updated successfully',
     });
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
@@ -222,19 +234,21 @@ export const deleteAssignment = async (req, res) => {
       where: { id: assignmentId },
     });
 
-    if (!findAssignment) return errorStat(res, 404, "Assignment not found");
+    if (!findAssignment) return errorStat(res, 404, 'Assignment not found');
 
-    if (findAssignment.studentId !== id) return errorStat(res, 400, "Forbidden Access");
+    if (findAssignment.studentId !== id)
+      return errorStat(res, 400, 'Forbidden Access');
 
-    if (findAssignment.isGraded) return errorStat(res, 400, "Cannot Delete Graded Assignment");
+    if (findAssignment.isGraded)
+      return errorStat(res, 400, 'Cannot Delete Graded Assignment');
 
     await findAssignment.destroy();
-    return successStat(res, 200, "data", {
-      message: "Assignment deleted successfully",
+    return successStat(res, 200, 'data', {
+      message: 'Assignment deleted successfully',
     });
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
@@ -247,20 +261,20 @@ export const createAssignmentComment = async (req, res) => {
       where: { id: assignmentId },
     });
 
-    if (!findAssignment) return errorStat(res, 404, "Assignment not found");
+    if (!findAssignment) return errorStat(res, 404, 'Assignment not found');
 
     const createcomment = await models.AssignmentComment.create({
       ...req.body.assignment,
       userId: id,
     });
 
-    return successStat(res, 201, "data", {
+    return successStat(res, 201, 'data', {
       ...createcomment.dataValues,
-      message: "Comment created successfully",
+      message: 'Comment created successfully',
     });
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
@@ -273,19 +287,20 @@ export const editAssignmentComment = async (req, res) => {
       where: { id: assignmentCommentId },
     });
 
-    if (!findComment) return errorStat(res, 404, "Comment not found");
+    if (!findComment) return errorStat(res, 404, 'Comment not found');
     console.log(findComment.userId, id);
 
-    if (findComment.userId !== id) return errorStat(res, 400, "Cant edit this comment");
+    if (findComment.userId !== id)
+      return errorStat(res, 400, 'Cant edit this comment');
 
     await findComment.update({
       ...req.body.assignment,
     });
 
-    return successStat(res, 200, "data", findComment);
+    return successStat(res, 200, 'data', findComment);
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
@@ -296,19 +311,19 @@ export const getAssignmentComment = async (req, res) => {
     const findAssignment = await models.AssignmentComment.findAll({
       where: { assignmentId },
 
-      order: [["createdAt"]],
+      order: [['createdAt']],
       include: [
         {
           model: models.User,
-          attributes: ["firstName", "lastName", "profilePic"],
+          attributes: ['firstName', 'lastName', 'profilePic'],
         },
       ],
     });
 
-    return successStat(res, 200, "data", findAssignment);
+    return successStat(res, 200, 'data', findAssignment);
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
@@ -321,15 +336,15 @@ export const deleteAssignmentComment = async (req, res) => {
       where: { id: assignmentCommentId },
     });
 
-    if (findComment.userId !== id) return errorStat(res, 400, "Cant Delete");
+    if (findComment.userId !== id) return errorStat(res, 400, 'Cant Delete');
 
     await findComment.destroy();
 
-    return successStat(res, 200, "data", {
-      message: "Comment delete successfully",
+    return successStat(res, 200, 'data', {
+      message: 'Comment delete successfully',
     });
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };

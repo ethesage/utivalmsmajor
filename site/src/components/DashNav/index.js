@@ -1,10 +1,10 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom';
-import logo from '../../assets/logo.png';
-import hamburger from '../../assets/icons/hambuger.png';
-import notifyIcon from '../../assets/icons/notify.png';
-import { log_out } from '../../g_actions/user';
+import logo from 'assets/logo.png';
+import hamburger from 'assets/icons/hambuger.png';
+import notifyIcon from 'assets/icons/notify.png';
+import { log_out } from 'g_actions/user';
 import './style.scss';
 
 const NavBar = ({ open, grow }) => {
@@ -12,8 +12,8 @@ const NavBar = ({ open, grow }) => {
   const history = useHistory();
 
   const logout = async () => {
-    await dispatch(log_out());
-    history.push('/');
+    dispatch(log_out());
+    history.push('/home');
   };
 
   return (

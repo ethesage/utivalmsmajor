@@ -1,8 +1,8 @@
 /* eslint-disable import/prefer-default-export */
 // import sequelize from "sequelize";
 // import { paginate, calculateLimitAndOffset } from 'paginate-info';
-import models from "../database/models";
-import helpers from "../helpers";
+import models from '../database/models';
+import helpers from '../helpers';
 // import  from "../helpers"
 
 const { successStat, errorStat } = helpers;
@@ -29,13 +29,14 @@ export const createClass = async (req, res) => {
     // if (!course) return errorStat(res, 404, 'Course does not exist');
 
     const courseCohort = await models.CourseCohort.findOne({
-      where: { id: courseCohortId }
+      where: { id: courseCohortId },
     });
 
-    if (!courseCohort) return errorStat(res, 404, 'Course Cohort does not exist');
+    if (!courseCohort)
+      return errorStat(res, 404, 'Course Cohort does not exist');
 
     const trainer = await models.Trainer.findOne({
-      where: { id: trainerId }
+      where: { id: trainerId },
     });
 
     if (!trainer) return errorStat(res, 404, 'Trainer does not exist');
@@ -44,25 +45,27 @@ export const createClass = async (req, res) => {
       ...req.body.class,
     });
 
-    const resource = await models.ClassResouces.create({
+    const resource = await models.ClassResources.create({
       ...req.body.class,
       link: resourceLink,
-      classId: classCreate.id
-    }
-    );
+      classId: classCreate.id,
+    });
 
     const day = await models.ClassDays.create({
       ...req.body.class,
       classId: classCreate.id,
       // time: '16:17:03.084+01:00'
-    }
-    );
-
-    await courseCohort.update({
-      totalClasses: courseCohort.totalClasses + 1
     });
 
-    return successStat(res, 201, 'data', { classCreate, classResource: resource, classDays: day });
+    await courseCohort.update({
+      totalClasses: courseCohort.totalClasses + 1,
+    });
+
+    return successStat(res, 201, 'data', {
+      classCreate,
+      classResource: resource,
+      classDays: day,
+    });
   } catch (e) {
     console.log(e);
     errorStat(res, 500, 'Operation Failed, Please Try Again');
@@ -77,12 +80,12 @@ export const getClass = async (req, res) => {
       where: { id: classId },
       include: [
         {
-          model: models.ClassDays
+          model: models.ClassDays,
         },
         {
-          model: models.ClassResouces
-        }
-      ]
+          model: models.ClassResources,
+        },
+      ],
     });
 
     if (!allClass) return errorStat(res, 404, 'Class Not Found');
@@ -102,15 +105,16 @@ export const getAllClass = async (req, res) => {
       where: { courseCohortId },
       include: [
         {
-          model: models.CourseDays
+          model: models.CourseDays,
         },
         {
-          model: models.CourseResouces
-        }
-      ]
+          model: models.CourseResouces,
+        },
+      ],
     });
 
-    if (!allClass[0]) return errorStat(res, 404, 'No class Found for this course');
+    if (!allClass[0])
+      return errorStat(res, 404, 'No class Found for this course');
 
     return successStat(res, 200, 'data', allClass);
   } catch (e) {
@@ -131,14 +135,12 @@ export const getAllStudentClass = async (req, res) => {
           model: models.CourseCohort,
           include: [
             {
-              model: models.Classes
-            }
-          ]
-        }
+              model: models.Classes,
+            },
+          ],
+        },
       ],
-      order: [
-        ['createdAt', 'DESC']
-      ]
+      order: [['createdAt', 'DESC']],
     });
 
     if (!resource[0]) {
@@ -161,13 +163,10 @@ export const getAllTrainerClass = async (req, res) => {
       include: [
         {
           model: models.Classes,
-          where: { userId: id }
-        }
-
+          where: { userId: id },
+        },
       ],
-      order: [
-        ['createdAt', 'DESC']
-      ]
+      order: [['createdAt', 'DESC']],
     });
 
     if (!resource[0]) {
@@ -189,16 +188,16 @@ export const updateClass = async (req, res) => {
       where: { id: classId },
       include: [
         {
-          model: models.CourseDays
+          model: models.CourseDays,
         },
         {
-          model: models.CourseResourse
-        }
-      ]
+          model: models.CourseResourse,
+        },
+      ],
     });
 
     await foundClass.update({
-      ...req.body.class
+      ...req.body.class,
     });
 
     return successStat(res, 200, 'data', foundClass);
@@ -216,12 +215,12 @@ export const deleteClass = async (req, res) => {
       where: { id: classId },
       include: [
         {
-          model: models.CourseDays
+          model: models.CourseDays,
         },
         {
-          model: models.CourseResourse
-        }
-      ]
+          model: models.CourseResourse,
+        },
+      ],
     });
 
     if (!foundClass) {
@@ -242,16 +241,19 @@ export const classAssignment = async (req, res) => {
   // console.log(classId);
   try {
     const findClass = await models.Classes.findOne({
-      where: { id: classId }
+      where: { id: classId },
     });
 
     if (!findClass) return errorStat(res, 404, 'Class not found');
 
-    const createAssignment = await models.ClassResouces.create({
+    const createAssignment = await models.ClassResources.create({
       ...req.body.class,
-      type: 'assignment'
+      type: 'assignment',
     });
-    return successStat(res, 201, 'data', { ...createAssignment.dataValues, message: 'Class Assignment created successfully' });
+    return successStat(res, 201, 'data', {
+      ...createAssignment.dataValues,
+      message: 'Class Assignment created successfully',
+    });
   } catch (e) {
     console.log(e);
     errorStat(res, 500, 'Operation Failed, Please Try Again');
@@ -262,17 +264,21 @@ export const editClassAssignment = async (req, res) => {
   const { classResourceId } = req.body.class;
 
   try {
-    const findAssignment = await models.ClassResouces.findOne({
-      where: { id: classResourceId }
+    const findAssignment = await models.ClassResources.findOne({
+      where: { id: classResourceId },
     });
 
-    if (!findAssignment) return errorStat(res, 404, 'Class Assignment not found');
+    if (!findAssignment)
+      return errorStat(res, 404, 'Class Assignment not found');
 
     await findAssignment.update({
       ...req.body.class,
     });
 
-    return successStat(res, 201, 'data', { ...findAssignment.dataValues, message: 'Class Assignment created successfully' });
+    return successStat(res, 201, 'data', {
+      ...findAssignment.dataValues,
+      message: 'Class Assignment created successfully',
+    });
   } catch (e) {
     console.log(e);
     errorStat(res, 500, 'Operation Failed, Please Try Again');
@@ -282,15 +288,21 @@ export const editClassAssignment = async (req, res) => {
 export const deleteClassAssignment = async (req, res) => {
   const { classResourcesId } = req.body.class;
   try {
-    const findAssignment = await models.ClassResouces.findOne({
-      where: { id: classResourcesId }
+    const findAssignment = await models.ClassResources.findOne({
+      where: { id: classResourcesId },
     });
 
-    if (!findAssignment) return errorStat(res, 404, 'Class Assignment not found');
+    if (!findAssignment)
+      return errorStat(res, 404, 'Class Assignment not found');
 
     await findAssignment.destroy();
 
-    return successStat(res, 201, 'data', 'Class Assignment deleted successfully');
+    return successStat(
+      res,
+      201,
+      'data',
+      'Class Assignment deleted successfully'
+    );
   } catch (e) {
     console.log(e);
     errorStat(res, 500, 'Operation Failed, Please Try Again');
@@ -301,16 +313,19 @@ export const addClassResources = async (req, res) => {
   const { classId } = req.body.class;
   try {
     const findClass = await models.Classes.findOne({
-      where: { id: classId }
+      where: { id: classId },
     });
 
     if (!findClass) return errorStat(res, 404, 'Class not found');
 
-    const createResource = await models.ClassResouces.create({
+    const createResource = await models.ClassResources.create({
       ...req.body.class,
-      type: 'resource'
+      type: 'resource',
     });
-    return successStat(res, 201, 'data', { ...createResource.dataValues, message: 'Class Resource created successfully' });
+    return successStat(res, 201, 'data', {
+      ...createResource.dataValues,
+      message: 'Class Resource created successfully',
+    });
   } catch (e) {
     console.log(e);
     errorStat(res, 500, 'Operation Failed, Please Try Again');

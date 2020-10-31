@@ -58,7 +58,7 @@ function FullClass({ gapi }) {
     (classrum) => classrum.id === classroom
   );
 
-  const ass = data?.ClassResouces.filter((res) => res.type === 'assignment');
+  const ass = data?.ClassResources.filter((res) => res.type === 'assignment');
 
   return (
     <>

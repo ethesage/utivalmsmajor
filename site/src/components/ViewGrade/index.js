@@ -11,7 +11,7 @@ import Input from 'components/Input';
 import { axiosInstance, validate } from 'helpers';
 import user_icon from 'assets/user_icon.png';
 
-import 'components/Classes/style.scss';
+import '../Classes/style.scss';
 import './style.scss';
 
 const ViewGrade = ({ data, length, assignmentId, currentClass, view }) => {

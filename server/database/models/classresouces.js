@@ -1,26 +1,35 @@
 'use strict';
 
 module.exports = (sequelize, DataTypes) => {
-  const ClassResouces = sequelize.define('ClassResouces', {
-    id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-      primaryKey: true
+  const ClassResources = sequelize.define(
+    'ClassResources',
+    {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+      },
+      classId: DataTypes.UUID,
+      type: DataTypes.STRING,
+      link: DataTypes.STRING,
+      title: DataTypes.STRING,
+      description: DataTypes.TEXT,
+      dueDate: DataTypes.DATE,
+      point: DataTypes.INTEGER,
     },
-    classId: DataTypes.UUID,
-    type: DataTypes.STRING,
-    link: DataTypes.STRING,
-    title: DataTypes.STRING,
-    description: DataTypes.TEXT,
-    dueDate: DataTypes.DATE,
-    point: DataTypes.INTEGER
-  }, {});
-  ClassResouces.associate = (models) => {
+    {}
+  );
+  ClassResources.associate = (models) => {
     // associations can be defined here
-    ClassResouces.belongsTo(models.Classes, {
+    ClassResources.belongsTo(models.Classes, {
       foreignKey: 'classId',
-      onDelete: 'CASCADE'
+      onDelete: 'CASCADE',
+    });
+
+    ClassResources.hasMany(models.Assignment, {
+      foreignKey: 'classResourcesId',
+      onDelete: 'CASCADE',
     });
   };
-  return ClassResouces;
+  return ClassResources;
 };

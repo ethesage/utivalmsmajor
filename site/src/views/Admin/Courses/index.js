@@ -6,7 +6,7 @@ import CourseList from './CoursesList';
 import Classroom from 'views/Classroom';
 import FullClass from 'views/FullClass';
 import Assignment from 'views/Assignment';
-import ViewGrade from 'views/Assignment/ViewGrade';
+import ViewGrade from 'components/ViewGrade';
 import StudyPlan from 'views/StudyPlan';
 import Members from 'views/Members';
 import CreateCourse from 'views/CreateCourse';

@@ -51,8 +51,10 @@ function Classes({
   const { addToast } = useToasts();
   const classRef = useRef();
 
-  const resources = data.ClassResouces.filter((res) => res.type === 'resource');
-  const assignment_ = data.ClassResouces.filter(
+  const resources = data.ClassResources.filter(
+    (res) => res.type === 'resource'
+  );
+  const assignment_ = data.ClassResources.filter(
     (res) => res.type === 'assignment'
   );
 

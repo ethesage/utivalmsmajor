@@ -3,7 +3,7 @@ module.exports = {
     queryInterface.sequelize.transaction((t) =>
       Promise.all([
         queryInterface.addColumn(
-          'ClassResouces',
+          'ClassResources',
           'title',
           {
             type: Sequelize.STRING,
@@ -12,7 +12,7 @@ module.exports = {
           { transaction: t }
         ),
         queryInterface.addColumn(
-          'ClassResouces',
+          'ClassResources',
           'description',
           {
             type: Sequelize.TEXT,
@@ -20,14 +20,18 @@ module.exports = {
           },
           { transaction: t }
         ),
-      ])),
+      ])
+    ),
 
   down: (queryInterface) =>
     queryInterface.sequelize.transaction((t) =>
       Promise.all([
-        queryInterface.removeColumn('ClassResouces', 'title', {
+        queryInterface.removeColumn('ClassResources', 'title', {
           transaction: t,
         }),
-        queryInterface.removeColumn('ClassResouces', 'description', { transaction: t }),
-      ])),
+        queryInterface.removeColumn('ClassResources', 'description', {
+          transaction: t,
+        }),
+      ])
+    ),
 };

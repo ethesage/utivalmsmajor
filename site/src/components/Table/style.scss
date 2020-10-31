@@ -3,11 +3,11 @@
 .g_tbl {
   width: 100%;
   overflow-x: auto;
-  min-height: 600px;
+  min-height: 500px;
   flex-grow: 1;
 
   table {
-    min-width: 1200px;
+    // min-width: 1000px;
     width: 100%;
     border-collapse: collapse;
 
@@ -21,23 +21,39 @@
       }
     }
 
+    tbody {
+      display: block;
+      max-height: 600px;
+      overflow: auto;
+    }
+
+    thead,
+    tr {
+      display: table;
+      width: 100%;
+      table-layout: fixed;
+      /* even columns width , fix width of table too*/
+    }
+
     thead {
       th {
         padding: 20px;
       }
-      border-bottom: 2px solid color(fade);
+      border-bottom: 2px solid color(light_fade);
     }
 
     th,
     td {
-      min-width: 150px;
+      // min-width: 150px;
+
       text-align: left;
       padding: 12px 20px;
+      font-size: 0.85em;
     }
 
     tr {
       &:nth-child(even) {
-        background: color(fade);
+        background: color(light_fade);
       }
     }
   }
