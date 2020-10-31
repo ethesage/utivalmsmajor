@@ -149,3 +149,10 @@ export const getAllsubmittedAssignment = (name, classId) => async (
     payload: { name, data: res.data.data },
   });
 };
+
+export const gradeAssignment = (name, Id, grade) => async (dispatch) => {
+  dispatch({
+    type: 'GRADE_ASSIGNMENT',
+    payload: { name, Id, grade },
+  });
+};

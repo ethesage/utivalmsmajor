@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -12,7 +12,7 @@ import NavBar from 'components/CourseNav';
 import T from 'components/Table';
 import { stringSearch } from 'helpers';
 import Button from 'components/Button';
-import viewGrade from 'components/ViewGrade';
+import ViewGrade from 'components/ViewGrade';
 import './style.scss';
 
 const AllAssignmnets = ({ gapi }) => {
@@ -37,6 +37,31 @@ const AllAssignmnets = ({ gapi }) => {
   const currentClassdata = currentCourse?.CourseCohort?.Classes.filter(
     (class_) => class_.id === classroom
   );
+
+  const getFiles = useCallback(
+    async (id) => {
+      if (!gapi) return;
+      return await gapi.gapi.get(
+        null,
+        id,
+        'id, name, iconLink, webContentLink, size, webViewLink, parents'
+      );
+    },
+    [gapi]
+  );
+
+  // to view a particular assignment
+  // useEffect(() => {
+  //   if (viewGrade) {
+  //     (async () => {
+  //       let file = await getFiles();
+
+  //       setCurrentSubmitted(file);
+  //     })();
+  //   }
+
+  //   return () => {};
+  // }, []);
 
   useEffect(() => {
     if (currentCourse) return;
@@ -151,7 +176,7 @@ const AllAssignmnets = ({ gapi }) => {
             <div className="nav-item">
               <Input
                 inputs={listnameList || []}
-                value={currentClass}
+                value={listnameList ? 'loading...' : currentClass}
                 handleSelect={handleSelect}
                 placeHolder="Select Class"
                 label="Select class"
@@ -181,7 +206,24 @@ const AllAssignmnets = ({ gapi }) => {
     } else setFilteredData(null);
   };
 
-  console.log(currentClassdata[0]);
+  const grade = async (assignment) => {
+    setViewGrade(true);
+    setCurrentSubmitted(null);
+
+    let file = await getFiles(assignment.resourceLink);
+
+    setCurrentSubmitted({ ...assignment, file });
+  };
+
+  const viewAss = (e) => {
+    e.preventDefault();
+
+    if (!currentClass) return;
+    if (!currentSubmitted) return;
+    window.open(
+      currentSubmitted.file.webViewLink || currentSubmitted.file.webContentLink
+    );
+  };
 
   // let assLink =
   //   currentClassdata[0].ClassResources[0] &&
@@ -256,7 +298,15 @@ const AllAssignmnets = ({ gapi }) => {
                       <T.Trow
                         key={`mkeys_${i}`}
                         values={{
-                          Name: `${assignment.User.firstName} ${assignment.User.lastName}`,
+                          Name: (
+                            <div className="usr-img flex-row j-start">
+                              <img
+                                src={assignment.User.profilePic}
+                                alt={assignment.User.firstName}
+                              />
+                              <p>{`${assignment.User.firstName} ${assignment.User.lastName}`}</p>
+                            </div>
+                          ),
                           'Submission Date': moment(
                             assignment.submitDate
                           ).format('DD-MM-YYYY'),
@@ -264,10 +314,9 @@ const AllAssignmnets = ({ gapi }) => {
                           'Grade Now': 'yes',
                           '': (
                             <Button
-                              className="flex-row"
-                              text={
-                                assignment.isGraded ? 'View grade' : 'Grade'
-                              }
+                              className="td-cls flex-row"
+                              text={assignment.grade ? 'View grade' : 'Grade'}
+                              onClick={() => grade(assignment)}
                             />
                           ),
                         }}
@@ -278,11 +327,19 @@ const AllAssignmnets = ({ gapi }) => {
               </T.Table>
             )}
           </>
+        ) : !currentSubmitted ? (
+          <Loader />
         ) : (
-          <viewGrade
-            assignmentId={currentClassdata[0].id}
+          <ViewGrade
+            assignmentId={currentSubmitted.id}
             length={1}
+            data={
+              classResources[currentClassdata[0].title].allSubmittedAssignment
+            }
             currentClass={currentClassdata}
+            view={viewAss}
+            goBack={() => setViewGrade(false)}
+            name={listnameList.find((list) => list.value === currentClass).name}
           />
         )}
       </section>

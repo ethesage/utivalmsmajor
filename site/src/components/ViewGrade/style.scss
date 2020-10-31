@@ -11,8 +11,19 @@
     .cx_lis-content {
       .g_scx {
         max-width: 500px;
-        margin-bottom: 20px;
+        margin-bottom: 30px;
       }
+    }
+  }
+
+  .back {
+    margin-bottom: 25px;
+    cursor: pointer;
+
+    svg {
+      width: 25px;
+      margin-right: 20px;
+      fill: color(theme);
     }
   }
 
@@ -57,6 +68,16 @@
           }
         }
       }
+    }
+  }
+
+  .g_input {
+    margin-bottom: 50px;
+
+    max-width: 200px;
+
+    .hx {
+      margin-bottom: 10px;
     }
   }
 }

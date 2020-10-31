@@ -55,3 +55,20 @@
   min-width: auto;
   min-height: auto;
 }
+
+.next_cl {
+  width: 100%;
+  height: 100%;
+
+  span {
+    width: 100%;
+  }
+
+  img {
+    width: 100px;
+  }
+
+  .text-sec {
+    font-size: 0.7em;
+  }
+}
