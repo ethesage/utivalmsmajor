@@ -64,6 +64,7 @@ const course = (state = initialState, action) => {
           },
         },
       };
+
     case 'SUBMIT_ASSIGNMENT':
       const prevAss =
         state.classResources[action.payload.name].submittedAssignment;
@@ -80,6 +81,20 @@ const course = (state = initialState, action) => {
               : action.payload.file
               ? [action.payload.file]
               : [],
+          },
+        },
+      };
+
+    case 'GET_ALL_SUBMITTED_ASSIGNMENTS':
+      // const prevAss =
+      //   state.classResources[action.payload.name].submittedAssignment;
+      return {
+        ...state,
+        classResources: {
+          ...state.classResources,
+          [action.payload.name]: {
+            ...state.classResources[action.payload.name],
+            allSubmittedAssignment: action.payload.data,
           },
         },
       };

@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+// import { useDispatch } from 'react-redux';
 import { useToasts } from 'react-toast-notifications';
 import { axiosInstance, toBase64 } from 'helpers';
 import useInput from 'Hooks/useInput';
@@ -56,14 +56,13 @@ const CreateCourse = () => {
               name={form.name}
               type={form.type}
               itype={form.itype}
-              placeHolder={form.itype ? '' : form.placeHolder}
+              placeHolder={form.placeHolder}
               value={inputTypes[form.name]}
               errorMsg={form.errorMsg}
               required={form.required}
               handleChange={handleChange}
               validateSelf={validateSelf}
               inputs={form.select}
-              currentText={form.placeHolder}
               label={form.label}
               showAsterix={false}
             />
@@ -76,14 +75,13 @@ const CreateCourse = () => {
               name={form.name}
               type={form.type}
               itype={form.itype}
-              placeHolder={form.itype ? '' : form.placeHolder}
+              placeHolder={form.placeHolder}
               value={inputTypes[form.name]}
               errorMsg={form.errorMsg}
               required={form.required}
               handleChange={handleChange}
               validateSelf={validateSelf}
               inputs={form.selects}
-              currentText={form.placeHolder}
               handleSelect={handleChange}
               label={form.label}
               showAsterix={false}
@@ -97,14 +95,13 @@ const CreateCourse = () => {
               name={form.name}
               type={form.type}
               itype={form.itype}
-              placeHolder={form.itype ? '' : form.placeHolder}
+              placeHolder={form.placeHolder}
               value={inputTypes[form.name]}
               errorMsg={form.errorMsg}
               required={form.required}
               handleChange={handleChange}
               validateSelf={validateSelf}
               inputs={form.select}
-              currentText={form.placeHolder}
               label={form.label}
               showAsterix={false}
             />
@@ -117,14 +114,13 @@ const CreateCourse = () => {
               name={form.name}
               type={form.type}
               itype={form.itype}
-              placeHolder={form.itype ? '' : form.placeHolder}
+              placeHolder={form.placeHolder}
               value={inputTypes[form.name]}
               errorMsg={form.errorMsg}
               required={form.required}
               handleChange={handleChange}
               validateSelf={validateSelf}
               inputs={form.select}
-              currentText={form.placeHolder}
               handleSelect={handleChange}
               label={form.label}
               types={form.types}

@@ -159,7 +159,7 @@ function Signup() {
             name={form.name}
             type={form.type}
             itype={form.itype}
-            placeHolder={form.itype ? '' : form.placeHolder}
+            placeHolder={form.placeHolder}
             value={inputTypes[form.name]}
             errorMsg={form.errorMsg}
             required={form.required}
@@ -168,8 +168,8 @@ function Signup() {
             handleChange={handleChange}
             validateSelf={validateSelf}
             inputs={selects[form.name]}
-            currentText={form.placeHolder}
             handleSelect={handleChange}
+            showAsterix
           />
         ))}
 

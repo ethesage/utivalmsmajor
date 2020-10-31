@@ -41,7 +41,9 @@ const Courses = ({ gapi }) => {
     <section className="dash-con mx_courx flex-col al-start j-start">
       <BreadCrumb />
       {loading ? (
-        <Loader tempLoad={true} full={false} />
+        <div className="img">
+          <Loader tempLoad={true} full={false} />
+        </div>
       ) : error ? (
         <p>An Error Occurred</p>
       ) : enrolledcourses.length === 0 ? (
@@ -101,7 +103,7 @@ const Courses = ({ gapi }) => {
             />
             <TrainerProtected
               exact
-              path={`${path}/all-assignments/:courseId`}
+              path={`${path}/all-assignments/:courseId/:classroom?`}
               component={AllAssignments}
             />
           </Switch>

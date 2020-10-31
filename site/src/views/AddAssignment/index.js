@@ -2,7 +2,11 @@ import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 import { useToasts } from 'react-toast-notifications';
-import { getAssignments, deleteAssignmnet } from 'g_actions/member';
+import {
+  getAssignments,
+  deleteAssignmnet,
+  editAssignments,
+} from 'g_actions/member';
 import Input from 'components/Input';
 import Modal from 'components/Modal';
 import { axiosInstance } from 'helpers';
@@ -34,8 +38,6 @@ const AddAssignment = ({ title, course, currentClass, gapi, folderId }) => {
 
   const resourceAssignment = classResources[title].assignment;
 
-  console.log(resourceAssignment);
-
   const [assData, setAssData] = useState({
     dueDate: '',
     title: '',
@@ -46,8 +48,6 @@ const AddAssignment = ({ title, course, currentClass, gapi, folderId }) => {
   useEffect(() => {
     if (!resourceAssignment) return;
     if (!resourceAssignment[0]) return;
-
-    console.log(resourceAssignment);
 
     const n_data = Object.keys(assData).reduce(
       (acc, input) => ({
@@ -60,7 +60,6 @@ const AddAssignment = ({ title, course, currentClass, gapi, folderId }) => {
     );
 
     //update state
-    console.log('updated', n_data);
     setAssData(n_data);
 
     return () => {};
@@ -166,9 +165,52 @@ const AddAssignment = ({ title, course, currentClass, gapi, folderId }) => {
     }
   };
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
+
+    if (!resourceAssignment[0]) {
+      addToast('Please upload a file', {
+        appearance: 'error',
+        autoDismiss: false,
+      });
+
+      return;
+    }
+
+    const newData = Object.keys(assData).reduce((acc, cur) => {
+      if (assData[cur] === '') {
+        return { ...acc };
+      }
+      return { ...acc, [cur]: assData[cur] };
+    }, []);
+
+    try {
+      await axiosInstance.patch(`class/assignment/edit/${assignment[0].id}`, {
+        ...newData,
+        link: resourceAssignment[0].link,
+      });
+
+      dispatch(
+        editAssignments(
+          title,
+          { ...resourceAssignment[0], ...newData },
+          resourceAssignment[0].id
+        )
+      );
+
+      addToast('Successfully Edited', {
+        appearance: 'success',
+        autoDismiss: true,
+      });
+    } catch (err) {
+      addToast('Unable to create assignment', {
+        appearance: 'err',
+        autoDismiss: false,
+      });
+    }
   };
+
+  console.log(assData);
 
   return (
     <div className="add_ass cx_listnx_con">
@@ -236,6 +278,7 @@ const AddAssignment = ({ title, course, currentClass, gapi, folderId }) => {
               handleChange={handleChange}
               shouldValidate={false}
               name="dueDate"
+              attr={{ min: moment().format('YYYY-MM-DD') }}
             />
           </div>
           <div className="pl_sec flex-row">

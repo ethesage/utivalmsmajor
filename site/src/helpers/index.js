@@ -136,3 +136,7 @@ export const weeks = {
   14: "fourtheen",
   15: "fifteen",
 };
+
+export const stringSearch = (val, string) => {
+  return string && string.toLowerCase().search(val.toLowerCase()) !== -1;
+};

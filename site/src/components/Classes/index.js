@@ -148,13 +148,11 @@ function Classes({
   const viewAssignment = (e) => {
     e.preventDefault();
 
+    // console.log(classResources[title].assignment[0]);
+
     if (!isStudent) {
       dropDrop('assignment');
-    } else
-      viewFile(
-        classResources[title].assignment &&
-          classResources[title].assignment.webViewLink
-      );
+    } else viewFile(classResources[title].assignment[0].webViewLink);
   };
 
   const delete_file = async () => {
@@ -281,10 +279,10 @@ function Classes({
           }
         >
           <div className={`cx_lis-content ${full ? ' full' : ''}`}>
-            {assData ? (
+            {assData?.length > 0 ? (
               <div className="inf_x">
-                <h3>{assData.title}</h3>
-                <p>{assData.description}</p>
+                <h3>{assData[0].title}</h3>
+                <p>{assData[0].description}</p>
               </div>
             ) : (
               <div className="inf_x">
@@ -305,15 +303,17 @@ function Classes({
                 <div className="reg_text">
                   <h4>Resources</h4>
                   <div className="btn_sec_con flex-row j-start">
-                    <div className="btn_sec">
-                      <ResourceBtn
-                        img={assignment}
-                        text="Assignment"
-                        color="off"
-                        link=""
-                        handleClick={viewAssignment}
-                      />
-                    </div>
+                    {(assignment_.length > 0 || !isStudent) && (
+                      <div className="btn_sec">
+                        <ResourceBtn
+                          img={assignment}
+                          text="Assignment"
+                          color="off"
+                          link=""
+                          handleClick={viewAssignment}
+                        />
+                      </div>
+                    )}
 
                     <div className="btn_sec">
                       <ResourceBtn
@@ -378,7 +378,11 @@ function Classes({
           <Modal ref={modalRef}>
             <div className="class_file_con">
               <h3>Resource Materials</h3>
-              <Files files={classResources[title].files} showdrag={false} />
+              <Files
+                files={classResources[title].files}
+                errorMsg="No materials availabel yet"
+                showdrag={false}
+              />
             </div>
           </Modal>
         )}

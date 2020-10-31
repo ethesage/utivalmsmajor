@@ -1,54 +1,100 @@
-import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import Sekeleton from 'react-skeleton-loader';
-import { getEnrolledMembers } from 'g_actions/member';
+import {
+  getEnrolledCourses,
+  getAllsubmittedAssignment,
+} from 'g_actions/member';
+import Select from 'components/Select';
 import NavBar from 'components/CourseNav';
-import MemberCard from 'components/Member';
-
-// import
 import './style.scss';
 
 const AllAssignmnets = () => {
-  const { courseId } = useParams();
+  const { courseId, classroom } = useParams();
   const dispatch = useDispatch();
-  const { enrolledStudents } = useSelector((state) => state.member);
+  const { currentCourse, enrolledcourses } = useSelector(
+    (state) => state.member
+  );
+  const history = useHistory();
+  const [classes, setClasses] = useState(null);
+  const [currentClass, setCurrentClass] = useState('');
 
   useEffect(() => {
-    if (!enrolledStudents) {
-      (async () => {
-        await dispatch(getEnrolledMembers(courseId));
-      })();
-    }
+    if (currentCourse) return;
+
+    const course = enrolledcourses.find(
+      (course) => course.courseCohortId === courseId
+    );
+
+    dispatch(getEnrolledCourses(courseId, course, 'trainer'));
+
     return () => {};
-  }, [enrolledStudents, dispatch, courseId]);
+  }, [enrolledcourses, courseId, currentCourse, dispatch]);
 
-  const Loader = () => (
-    <div className="snx_mem">
-      <Sekeleton width="120%" height="100%" />
-    </div>
-  );
+  useEffect(() => {
+    if (!currentCourse) return;
+    if (classes) return;
 
-  const NoClass = () => <div>No members enrolled yet</div>;
+    setClasses(currentCourse?.CourseCohort?.Classes);
+
+    return () => {};
+  }, [classes, currentCourse, history, courseId, classroom]);
+
+  useEffect(() => {
+    if (!currentCourse) return;
+    if (!classes) return;
+    if (classroom) return;
+    // setCurrentClass();
+    const classname = currentCourse?.CourseCohort?.Classes[0].id;
+    history.push(`/courses/all-assignments/${courseId}/${classname}`);
+
+    return () => {};
+  }, [classes, currentCourse, history, courseId, classroom]);
+
+  //get all submitted assignment for a user
+  useEffect(() => {
+    if (!classroom) return;
+    if (!currentCourse) return;
+    setCurrentClass(classroom);
+
+    const currentClassdata = currentCourse.CourseCohort.Classes.filter(
+      (class_) => class_.id === classroom
+    );
+
+    console.log(currentClassdata[0]);
+    dispatch(getAllsubmittedAssignment(classroom));
+
+    return () => {};
+  }, [classroom, currentCourse, dispatch]);
+
+  const listnameList = classes?.map((class_) => ({
+    name: class_.title,
+    value: class_.id,
+  }));
+
+  const handleSelect = ({ target: { value } }) => {
+    setCurrentClass(value);
+    history.push(`/courses/all-assignments/${courseId}/${value}`);
+  };
+
+  // console.log(listnameList, currentClass);
 
   return (
     <>
       <NavBar />
-      <section className="members">
-        <h3>{enrolledStudents && enrolledStudents.length} Total Members</h3>
-
-        <div className="memx_sec">
-          {!enrolledStudents ? (
-            [1, 2, 3].map((i) => <Loader key={`load_${i}`} />)
-          ) : enrolledStudents.length === 0 ? (
-            <NoClass />
-          ) : (
-            enrolledStudents.map((students, i) => (
-              <MemberCard key={`enrolled_students_${i}`} data={students} />
-            ))
-          )}
+      {!classes ? (
+        <p>Loading...</p>
+      ) : (
+        <div>
+          <Select
+            inputs={listnameList || []}
+            value={currentClass}
+            handleSelect={handleSelect}
+            placeHolder="Select Class"
+          />
         </div>
-      </section>
+      )}
+      <section className="ass_ls"></section>
     </>
   );
 };

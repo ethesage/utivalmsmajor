@@ -11,7 +11,7 @@ import {
   deleteAssignmentComment,
   getStudentCourseCohortAssignment,
   getStudentSubmitClassAssignment,
-  getAllSubmitClassAssignment
+  getAllSubmitClassAssignment,
 } from '../../controllers/assignment';
 import middlewares from '../../middlewares';
 
@@ -82,7 +82,7 @@ assignmentRoutes.get(
 );
 
 assignmentRoutes.get(
-  '/class/assignment/all/:classId',
+  '/class/submitted/all/:classId',
   usession.can(''),
   validate(getStudentSubmitClassAssignmentSchema),
   getAllSubmitClassAssignment
