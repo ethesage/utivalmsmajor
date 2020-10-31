@@ -1,13 +1,27 @@
 import React, { useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Image from "../../components/Image";
 import "./style.scss";
 
-const CourseCard = ({
-  data: { img, title, desc, duration, value, cost, level, link },
-  size = "",
-}) => {
+const CourseCard = ({ data, size = "" }) => {
+  const {
+    img,
+    title,
+    desc,
+    duration,
+    value,
+    cost,
+    level,
+    link,
+    courseCohortId,
+    studentCourse,
+  } = data;
+
   const cousrecard = useRef();
+  const { user } = useSelector((state) => state.auth);
+
+  console.log(user);
   useEffect(() => {
     const position = () => {
       const smallerScreen = window.matchMedia("(max-width: 1000px)");
@@ -65,7 +79,21 @@ const CourseCard = ({
           </div>
 
           <div className="link btn">
-            <Link to={"/enroll/courseId"}>Enroll Now</Link>
+            {user ? (
+              studentCourse?.length > 0 ? (
+                <Link to={`/courses/overview/${courseCohortId}`}>
+                  View Course
+                </Link>
+              ) : (
+                <Link to={`/purchase/${courseCohortId}`} state={data}>
+                  Enroll Now
+                </Link>
+              )
+            ) : (
+              <Link to={`/auth/quickcheckout/${courseCohortId}`}>
+                Enroll Now
+              </Link>
+            )}
           </div>
         </div>
       </div>

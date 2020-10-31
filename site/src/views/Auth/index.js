@@ -48,7 +48,7 @@ const Auth = () => {
             <Route exact path={`${path}/signup`} component={SignUp} />
             <Route
               exact
-              path={`${path}/quickcheckout`}
+              path={`${path}/quickcheckout/:courseCohortId`}
               component={QuickCheckout}
             />
             <Route exact path={`${path}/forgot`} component={Forgot} />

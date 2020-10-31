@@ -73,32 +73,32 @@ export const getAllTrainerCourse = async (req, res) => {
             },
             // required: false
           ]
-          },
+        },
+        {
+          model: models.CourseCohort,
+          include: [
             {
-              model: models.CourseCohort,
+              model: models.Classes,
               include: [
                 {
-                  model: models.Classes,
-                  include: [
-                    {
-                      model: models.Trainer,
-                      include: {
-                        model: models.User,
-                        attributes: [
-                          'firstName',
-                          'lastName',
-                          'profilePic',
-                          'occupation',
-                          'bio',
-                        ],
-                      },
-                    },
-                    {
-                      model: models.ClassResouces,
-                    },
-                  ],
+                  model: models.Trainer,
+                  include: {
+                    model: models.User,
+                    attributes: [
+                      'firstName',
+                      'lastName',
+                      'profilePic',
+                      'occupation',
+                      'bio',
+                    ],
+                  },
+                },
+                {
+                  model: models.ClassResouces,
                 },
               ],
+            },
+          ],
         },
       ]
     });
@@ -182,11 +182,10 @@ export const getSingleTrainerCourse = async (req, res) => {
 
     return successStat(res, 200, 'data', resource);
   } catch (e) {
-    console.log(e)
+    console.log(e);
     errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
-}
-
+};
 
 export const getAllTrainer = async (req, res) => {
   const { courseId } = req.body.trainer;

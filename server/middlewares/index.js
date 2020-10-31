@@ -66,6 +66,8 @@ import {
   getStudentSubmitClassAssignmentSchema,
 } from "./validators/schemas/assignment";
 
+import { checkoutSchema } from "./validators/schemas/checkout"
+
 import { isLoggedIn } from "./auth";
 import { checkInvitation } from "./checker";
 
@@ -115,5 +117,6 @@ export default {
   deleteCommentSchema,
   getStudentCourseCohortAssignmentSchema,
   getStudentSubmitClassAssignmentSchema,
-  createClassAssignmentSchema
+  createClassAssignmentSchema,
+  checkoutSchema
 };

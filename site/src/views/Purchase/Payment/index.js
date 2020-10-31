@@ -1,8 +1,10 @@
-import React, { useState, useRef } from "react";
-// import { Link } from "react-router-dom";
+import React, { useState, useRef, } from "react";
+import { useHistory } from "react-router-dom";
 import category from "../../../data/categories";
 import card from "../../../assets/icons/card.png";
 import paystack from "../../../assets/icons/paystack.png";
+import Paystack from "./Paystack";
+import Paypal from "./Paypal";
 import paypal from "../../../assets/icons/paypal.png";
 import approved from "../../../assets/approved.png";
 import Card from "./Card";
@@ -10,8 +12,9 @@ import "./style.scss";
 
 // const course = category[0].data[0];
 
-const Payment = ({ back }) => {
+const Payment = ({ back, id }) => {
   // const [current, setPage] = useState(0);
+  const {push} = useHistory()
   const disRef = useRef();
 
   const goBack = () => {
@@ -19,8 +22,10 @@ const Payment = ({ back }) => {
   };
 
   function done() {
+    console.log('i dey here')
     disRef.current.showModal();
   }
+  
 
   return (
     <div className="payment container">
@@ -32,11 +37,11 @@ const Payment = ({ back }) => {
             <p>Your payment is successful</p>
           </div>
 
-          <button className="btn">Start Learning</button>
+          <button className="btn flex-row" onClick={() => push('/')}>Start Learning</button>
         </div>
       </dialog>
-      <div className="payment_con mx-auto">
-        <nav className="nav-sec flex-row j-space">
+      <div className="payment_con mx-auto txt-center">
+        {/* <nav className="nav-sec flex-row j-space">
           <div className="nav-item">
             <img src={card} alt="card" />
           </div>
@@ -46,11 +51,13 @@ const Payment = ({ back }) => {
           <div className="nav-item">
             <img src={paypal} alt="paypal" />
           </div>
-        </nav>
+        </nav> */}
 
-        <div className="flex-row card-sec">
-          <Card done={done} />
-        </div>
+        {/* <div className="flex-row card-sec"> */}
+          {/* <Card done={done} /> */}
+          <Paystack  done={done} />
+          <Paypal  done={done} />
+        {/* </div> */}
 
         <button className="back" onClick={goBack}>
           Back

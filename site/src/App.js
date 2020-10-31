@@ -21,7 +21,7 @@ function App() {
           <Switch>
             <Route path="/home" component={HomePage} />
             <Route path="/auth" component={Auth} />
-            <Route path="/purchase" component={Purchase} />
+            <Route path="/purchase/:courseCohortId" component={Purchase} />
             <AProtected path="/admin" component={Admin} type="admin" />
             <Protected path="/" component={Dashboard} />
           </Switch>

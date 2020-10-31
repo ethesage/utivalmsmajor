@@ -2,6 +2,8 @@ export const initialState = {
   categories: null,
   currentCourse: null,
   nextclasses: null,
+  allCourses: null,
+  mappedCourses: null
 };
 
 const course = (state = initialState, action) => {
@@ -20,6 +22,16 @@ const course = (state = initialState, action) => {
       return {
         ...state,
         nextclasses: action.payload,
+      };
+      case 'GET_ALl_ONGOING_COURSES':
+      return {
+        ...state,
+        allCourses: action.payload,
+      };
+      case 'MAP_COURSES':
+      return {
+        ...state,
+        mappedCourses: action.payload,
       };
     default:
       return state;

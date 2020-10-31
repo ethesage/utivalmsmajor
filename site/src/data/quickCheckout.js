@@ -9,4 +9,11 @@ export default [
     placeHolder: "Email",
     errorMsg: "email should be of the format johndoe@gmail.com",
   },
+  {
+    name: "password",
+    placeHolder: "Enter Password",
+    errorMsg: "",
+    // required: true,
+    type: 'password'
+  },
 ];

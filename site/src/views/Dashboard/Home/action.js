@@ -41,3 +41,25 @@ export const getNextClasses = () => async (dispatch) => {
     payload: course.data.data,
   });
 };
+
+export const getCourse = (page, link) => async (dispatch) => {
+  let allCourses;
+  try {
+    allCourses = await axiosInstance.get(`/course${link}?currentPage=${page}&pageLimit=10`);
+  } catch (error) {
+    return error;
+  }
+
+  dispatch({
+    type: 'GET_ALl_ONGOING_COURSES',
+    payload: allCourses.data.data,
+  });
+};
+
+export const mapCourse = (courses) => async (dispatch) => {
+  // console.log(courses, '...//')
+  dispatch({
+    type: 'MAP_COURSES',
+    payload: courses,
+  });
+};

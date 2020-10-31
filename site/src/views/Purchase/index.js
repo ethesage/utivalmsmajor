@@ -5,9 +5,12 @@ import Details from "./Details";
 import Payment from "./Payment";
 import "./style.scss";
 
-const Purchase = () => {
+const Purchase = (props ) => {
+  // console.log(props, '.....')
   const [currentPage, setPage] = useState(0);
-  const pages = [<Details proceed={setPage} />, <Payment back={setPage} />];
+  const [id, setId] = useState(0)
+
+  const pages = [<Details proceed={setPage} match={props.match} set={setId}/>, <Payment back={setPage} corhortId={id}/>];
   const disRef = useRef();
 
   useEffect(() => {
