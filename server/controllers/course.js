@@ -212,8 +212,7 @@ export const updateCourseDescription = async (req, res) => {
       where: { id: courseDescriptionId },
     });
 
-    if (!courseDescription)
-      return errorStat(res, 404, "Course Description not found");
+    if (!courseDescription) return errorStat(res, 404, "Course Description not found");
 
     await courseDescription.update({
       ...req.body.course,
@@ -263,6 +262,73 @@ export const getAllCoursesAdmin = async (req, res) => {
     );
 
     return successStat(res, 200, "data", studentByCourse);
+  } catch (e) {
+    console.log(e);
+    errorStat(res, 500, "Operation Failed, Please Try Again");
+  }
+};
+
+export const Courses = async (req, res) => {
+  const { pageLimit, currentPage } = req.body.course;
+  const { offset, limit } = calculateLimitAndOffset(currentPage, pageLimit);
+  // const id = req?.session?.user?.id ;
+  let user;
+
+  if (req.session.user) user = req.session.user.id;
+
+  const sqlQueryMap = {
+    offset,
+    limit,
+  };
+
+  const query = user ? [
+    {
+      model: models.CourseDescription,
+      attributes: ["courseId", "title", "description"],
+    },
+    {
+      model: models.CourseCohort,
+      required: false,
+      order: [["createdAt"]],
+      limit: 1,
+      attributes: [
+        "id",
+      ],
+    },
+    {
+      model: models.StudentCourse,
+      required: false,
+      where: { studentId: user },
+    }
+  ] : [
+    {
+      model: models.CourseDescription,
+      attributes: ["courseId", "title", "description"],
+    },
+    {
+      model: models.CourseCohort,
+      required: false,
+      order: [["createdAt"]],
+      limit: 1,
+      attributes: [
+        "id",
+      ],
+    },
+  ];
+
+  try {
+    const { rows, count } = await models.Course.findAndCountAll({
+      ...sqlQueryMap,
+      include: [
+        ...query
+      ],
+    });
+
+    // if (!rows[0]) return errorStat(res, 404, "Course Not Found");
+
+    const paginationMeta = paginate(currentPage, count, rows, pageLimit);
+
+    return successStat(res, 200, "data", { paginationMeta, rows });
   } catch (e) {
     console.log(e);
     errorStat(res, 500, "Operation Failed, Please Try Again");

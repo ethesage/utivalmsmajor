@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
     submitDate: DataTypes.DATE,
     gradeDate: DataTypes.DATE
   }, {});
-  Assignment.associate = function(models) {
+  Assignment.associate = function (models) {
     // associations can be defined here
     Assignment.belongsTo(models.Classes, {
       foreignKey: 'classId',

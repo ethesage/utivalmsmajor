@@ -105,6 +105,7 @@ export const quickCheckOut = async (req, res) => {
   const userProfile = fullName.split(' ');
 
   const password = await generatePassword(10);
+  console.log(password);
 
   const user = await models.User.create({
     role: 'user',
@@ -137,7 +138,7 @@ export const quickCheckOut = async (req, res) => {
 
   mail.sendMail();
 
-  await req.session.login(user.role, { user: user.dataValues }, res);
+  // await req.session.login(user.role, { user: user.dataValues }, res);
   const message = 'Registration is successful';
 
   return successStat(res, 201, 'user', { ...user.userResponse(), message });

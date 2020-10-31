@@ -44,6 +44,7 @@ export const quickCheckout = async (req, res) => {
       expiresAt: cour.expiresAt,
       cohortId: cour.cohortId,
       status: "ongoing",
+      courseId: cour.courseId
     });
 
     await models.CourseProgress.create({

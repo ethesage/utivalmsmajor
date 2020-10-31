@@ -1,4 +1,4 @@
-import Joi from '@hapi/joi';
+import Joi from "@hapi/joi";
 
 export const signUpSchema = Joi.object().keys({
   firstName: Joi.string()
@@ -9,13 +9,14 @@ export const signUpSchema = Joi.object().keys({
     .regex(/^[A-Za-z]{3,}$/)
     .trim()
     .required(),
-  email: Joi.string().email().required().lowercase().trim(),
+  email: Joi.string().email().required().lowercase()
+    .trim(),
   password: Joi.string()
     .min(8)
     .required()
     .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/)
     .message(
-      'password must contain at least 1 uppercase, 1 lowercase, 1 number and 1 special character'
+      "password must contain at least 1 uppercase, 1 lowercase, 1 number and 1 special character"
     ),
   country: Joi.string(),
   gender: Joi.string(),
@@ -74,9 +75,10 @@ export const quickCheckOutSchema = Joi.object({
     .required()
     .regex(/^([a-zA-Z]{3,})+\s([a-zA-Z]{3,})+$/)
     .message(
-      'Please enter Full Name with at least 3 characters seperated by a space example John Doe'
+      "Please enter Full Name with at least 3 characters seperated by a space example John Doe"
     ),
-  email: Joi.string().email().required().lowercase().trim(),
+  email: Joi.string().email().required().lowercase()
+    .trim(),
 });
 
 export const adminCreateSchema = Joi.object({
@@ -88,6 +90,7 @@ export const adminCreateSchema = Joi.object({
     .regex(/^[A-Za-z]{3,}$/)
     .trim()
     .required(),
-  email: Joi.string().email().required().lowercase().trim(),
+  email: Joi.string().email().required().lowercase()
+    .trim(),
   role: Joi.string().trim().required(),
 });

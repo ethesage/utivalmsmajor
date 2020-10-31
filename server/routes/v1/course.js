@@ -7,7 +7,8 @@ import {
   updateCourse,
   updateCourseDescription,
   deleteCourse,
-  getAllCoursesAdmin
+  getAllCoursesAdmin,
+  Courses
 } from '../../controllers/course';
 import middlewares from '../../middlewares';
 
@@ -34,6 +35,13 @@ courseRoutes.get(
   usession.can(''),
   validate(getAllCourseSchema),
   getAllCourses
+);
+
+courseRoutes.get(
+  '/main',
+  // usession.can(''),
+  validate(getAllCourseSchema),
+  Courses
 );
 
 courseRoutes.get(
