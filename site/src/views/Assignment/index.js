@@ -17,7 +17,7 @@ import {
 } from 'g_actions/member';
 import { useToasts } from 'react-toast-notifications';
 import Button from 'components/Button';
-import 'components/ViewGrade/style.scss';
+import 'components/Classes/style.scss';
 import { axiosInstance } from 'helpers';
 import './style.scss';
 
@@ -107,8 +107,8 @@ const Assignment = ({ gapi }) => {
     if (!currentClass) return;
     if (!classResources[currentClass.title].assignment) return;
     window.open(
-      classResources[currentClass.title].assignment.webContentLink ||
-        classResources[currentClass.title].assignment.webViewLink
+      classResources[currentClass.title].assignment[0].webViewLink ||
+        classResources[currentClass.title].assignment[0].webContentLink
     );
   };
 
@@ -131,7 +131,7 @@ const Assignment = ({ gapi }) => {
 
   const upload = async (files) => {
     setDeleteDialog(false);
-    const assignment_ = currentClass.ClassResources.filter(
+    const assignment_ = currentClass.ClassResouces.filter(
       (res) => res.type === 'assignment'
     )[0].id;
 

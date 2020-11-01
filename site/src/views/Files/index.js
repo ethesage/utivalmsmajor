@@ -31,6 +31,7 @@ const links = [
 
 const File_Page = ({ gapi }) => {
   const modalRef = useRef();
+  
 
   let { path } = useRouteMatch();
   let [files, setFiles] = useState();
@@ -102,8 +103,8 @@ const File_Page = ({ gapi }) => {
     <>
       <div className="search_file flex-row j-start">
         <p>Sort by</p>
-        <Select inputs={[]} currentText="All type" />
-        <Input placeHolder="Search File" />
+        {/* <Select inputs={[]} currentText="All type" /> */}
+        <Input placeHolder="Search File" handleChange={handleChange}  />
       </div>
 
       <div className="dash-con files_ cx_listnx_full flex-col j-start al-start">

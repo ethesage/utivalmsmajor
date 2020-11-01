@@ -233,24 +233,26 @@ const ViewGrade = ({
             </div>
           </div>
 
-          <form
-            className="g_input flex-col al-start"
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleGrade();
-            }}
-          >
-            <p className="hx">Grade</p>
-            <Input
-              placeHolder="Grade"
-              name="grade"
-              value={grade}
-              handleChange={gradeAss}
-              error=""
-            />
+          {!isStudent && (
+            <form
+              className="g_input flex-col al-start"
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleGrade();
+              }}
+            >
+              <p className="hx">Grade</p>
+              <Input
+                placeHolder="Grade"
+                name="grade"
+                value={grade}
+                handleChange={gradeAss}
+                error=""
+              />
 
-            <Button text="Grade" className="flex-row" btnRef={submitBtn} />
-          </form>
+              <Button text="Grade" className="flex-row" btnRef={submitBtn} />
+            </form>
+          )}
 
           <div className="comments">
             <h3 className="title-sec">Comments</h3>
