@@ -1,18 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import Sekeleton from "react-skeleton-loader";
-import CourseCard from "../../../components/CourseCard";
-import categories from "../../../data/categories";
-import { getCourse, mapCourse } from "../../Dashboard/Home/action";
-import no_course from "assets/dashboard/no_course.png";
-import "./style.scss";
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import Skeleton from 'react-skeleton-loader';
+import CourseCard from '../../../components/CourseCard';
+import categories from '../../../data/categories';
+import { getCourse, mapCourse } from '../../Dashboard/Home/action';
+import no_course from 'assets/dashboard/no_course.png';
+import './style.scss';
 
-const Loader = () => (
-  <div className="">
-    {/* {console.log('88876')} */}
-    <Sekeleton width="100%" height="100%" />
-  </div>
-);
+const Loader = ({ height }) => <Skeleton width="100%" height={height} />;
 
 const NoCourse = () => (
   <div className="next_class flex-row ">
@@ -57,8 +52,8 @@ const Course = () => {
                 link: course.learnMore,
                 title: course.name,
                 desc: course.description,
-                value: course.value || "Certificate",
-                level: course.level || "For expirenced professional",
+                value: course.value || 'Certificate',
+                level: course.level || 'For expirenced professional',
                 courseCohortId: course.CourseCohorts[0]?.id || null,
                 studentCourse: course.StudentCourses,
               };
@@ -92,7 +87,15 @@ const Course = () => {
             <CourseCard data={course} key={`current_cate_${i}`} />
           ))} */}
           {!mappedCourses ? (
-            [1, 2, 3].map((i) => <Loader key={`loaduio_${i}`} />)
+            <div className="course_ld">
+              {[1, 2, 3].map((d) => (
+                <div className="next_cl flex-col al-start">
+                  {['10px', '200px', '20px'].map((height) => (
+                    <Loader key={`load_${height}`} height={height} />
+                  ))}
+                </div>
+              ))}
+            </div>
           ) : mappedCourses.length === 0 ? (
             <NoCourse />
           ) : (
@@ -100,6 +103,7 @@ const Course = () => {
               <CourseCard
                 data={course}
                 // size="small"
+                size={mappedCourses.length === 1 ? 'small' : ''}
                 key={`current_cate_${i}`}
               />
             ))

@@ -1,4 +1,4 @@
-@import "../../../media";
+@import '../../../media';
 
 .home_page .courses {
   .container {
@@ -21,7 +21,7 @@
         padding: 10px 20px;
         white-space: nowrap;
 
-        &[data-active="true"] {
+        &[data-active='true'] {
           background: color(theme);
           color: white;
           border-radius: 10px;
@@ -34,6 +34,35 @@
 
       @include for-size(onek) {
         flex-direction: column;
+      }
+
+      .course_ld {
+        width: 100%;
+
+        display: grid;
+        grid-template-columns: repeat(
+          auto-fill,
+          minmax(#{'min(300px, 100%)'}, 1fr)
+        );
+        grid-gap: 30px;
+
+        .next_cl {
+          width: 100%;
+          height: 100%;
+          overflow: hidden;
+
+          span {
+            &:nth-child(1) {
+              width: 20%;
+            }
+            &:nth-child(2) {
+              width: 100%;
+            }
+            &:nth-child(3) {
+              width: 60%;
+            }
+          }
+        }
       }
     }
   }
