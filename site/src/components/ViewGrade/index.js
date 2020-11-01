@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useToasts } from 'react-toast-notifications';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Skeleton from 'react-skeleton-loader';
+import { gradeAssignment } from 'g_actions/member';
 import Moment from 'react-moment';
-import moment from 'moment';
+import Back from 'assets/icons/back';
 import Button from 'components/Button';
 import ResourceBtn from 'components/ResourceButton';
 import assignment from 'assets/icons/course/assignment.png';
@@ -14,31 +15,53 @@ import user_icon from 'assets/user_icon.png';
 import '../Classes/style.scss';
 import './style.scss';
 
-const ViewGrade = ({ data, length, assignmentId, currentClass, view }) => {
+const ViewGrade = ({
+  data,
+  length,
+  assignmentId,
+  currentClass,
+  view,
+  goBack,
+  name,
+}) => {
   const [loading, setLoading] = useState(false);
   const [comments, setComments] = useState(null);
   const [newComment, setNewComment] = useState('');
   const { addToast } = useToasts();
-  const { user } = useSelector((state) => state.auth);
+  const submitBtn = useRef();
+  const { user, isStudent } = useSelector((state) => state.auth);
   const [assData, setassData] = useState();
+  const [grade, setGrade] = useState();
+  const dispatch = useDispatch();
 
   // console.log(data, length, assignmentId, currentClass);
 
-  // console.log(user);
+  // console.log(data, assignmentId);
 
   useEffect(() => {
     if (assData) return;
 
     if (data) {
-      setassData(data.filter((ass) => ass.resourceId === assignmentId)[0]);
+      const current = data.filter(
+        (ass) => ass.resourceId === assignmentId || ass.id === assignmentId
+      )[0];
+
+      console.log(data, assignmentId);
+
+      setassData(current);
+      setGrade(current.grade || 0);
     }
   }, [assignmentId, data, length, assData]);
+
+  // console.log(assData);
 
   // console.log(assData);
 
   // get comment data
   useEffect(() => {
     if (comments) return;
+    if (!assData) return;
+
     (async () => {
       const comments_ = await axiosInstance.get(
         `assignment/comment/${assignmentId}`
@@ -48,7 +71,7 @@ const ViewGrade = ({ data, length, assignmentId, currentClass, view }) => {
     })();
 
     return () => {};
-  }, [assignmentId, comments]);
+  }, [assignmentId, comments, assData]);
 
   const createComment = async () => {
     setLoading(true);
@@ -95,19 +118,61 @@ const ViewGrade = ({ data, length, assignmentId, currentClass, view }) => {
     setNewComment(value);
   };
 
-  const deleteComment = (event, error) => {
+  const gradeAss = (event) => {
     const { value } = event.target;
-    setNewComment(value);
+
+    setGrade(value);
   };
 
-  const getComments = async () => {
-    if (comments) return;
-    const _comments = await axiosInstance.get(`/article/comments/${data.id}`);
-    setComments(_comments.data.comments);
+  const handleGrade = async () => {
+    try {
+      submitBtn.current.children[0].innerHTML = 'grading...';
+      submitBtn.current.classList.add('loader');
+
+      await axiosInstance.patch('/assignment/grade', {
+        classId: assData.classId,
+        assignmentId: assData.id,
+        grade,
+      });
+
+      dispatch(gradeAssignment(name, assData.id, grade));
+
+      submitBtn.current.children[0].innerHTML = 'Grade';
+      submitBtn.current.classList.remove('loader');
+      addToast('Assignment has been graded', {
+        appearance: 'success',
+        autoDismiss: true,
+      });
+    } catch (err) {
+      submitBtn.current.children[0].innerHTML = 'Grade';
+      submitBtn.current.classList.remove('loader');
+
+      addToast('An error occured', {
+        appearance: 'error',
+        autoDismiss: true,
+      });
+    }
   };
+
+  // const deleteComment = (event, error) => {
+  //   const { value } = event.target;
+  //   setNewComment(value);
+  // };
+
+  // const getComments = async () => {
+  //   if (comments) return;
+  //   const _comments = await axiosInstance.get(`/article/comments/${data.id}`);
+  //   setComments(_comments.data.comments);
+  // };
 
   return (
     <section className="cx_listnx_con vx_gax">
+      {!isStudent && (
+        <div className="back flex-row j-start" onClick={goBack}>
+          <Back />
+          <p>Go back</p>
+        </div>
+      )}
       {assData ? (
         <>
           <div className="info_sec">
@@ -118,22 +183,41 @@ const ViewGrade = ({ data, length, assignmentId, currentClass, view }) => {
             </div>
             <div className="cx_lis-content show full">
               <div className="inf_x">
-                <div className="g_scx flex-row j-space">
-                  <p>Graded by:</p>
-                  <p>{assData.gradedBy}</p>
-                </div>
-                <div className="g_scx flex-row j-space">
-                  <p>Date Graded:</p>
-                  <p>
-                    <Moment format="DD-MM-YYYY HH:mm A">
-                      {assData.gradeDate}
-                    </Moment>
-                  </p>
-                </div>
-                <div className="g_scx flex-row j-space">
-                  <p>Grade:</p>
-                  <p>{assData.grade}%</p>
-                </div>
+                {isStudent ? (
+                  <>
+                    <div className="g_scx flex-row j-space">
+                      <p>Graded by:</p>
+                      <p>{assData.gradedBy}</p>
+                    </div>
+                    <div className="g_scx flex-row j-space">
+                      <p>Date Graded:</p>
+                      <p>
+                        <Moment format="DD-MM-YYYY HH:mm A">
+                          {assData.gradeDate}
+                        </Moment>
+                      </p>
+                    </div>
+                    <div className="g_scx flex-row j-space">
+                      <p>Grade:</p>
+                      <p>{assData.grade}%</p>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="g_scx flex-row j-space">
+                      <p>Submitted By:</p>
+                      <p>{`${assData.User.firstName} ${assData.User.lastName}`}</p>
+                    </div>
+                    <div className="g_scx flex-row j-space">
+                      <p>Date Submitted:</p>
+                      <p>
+                        <Moment format="DD-MM-YYYY HH:mm A">
+                          {assData.submitDate}
+                        </Moment>
+                      </p>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
             <div className="btn_sec_con flex-row j-start">
@@ -148,6 +232,26 @@ const ViewGrade = ({ data, length, assignmentId, currentClass, view }) => {
               </div>
             </div>
           </div>
+
+          <form
+            className="g_input flex-col al-start"
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleGrade();
+            }}
+          >
+            <p className="hx">Grade</p>
+            <Input
+              placeHolder="Grade"
+              name="grade"
+              value={grade}
+              handleChange={gradeAss}
+              error=""
+            />
+
+            <Button text="Grade" className="flex-row" btnRef={submitBtn} />
+          </form>
+
           <div className="comments">
             <h3 className="title-sec">Comments</h3>
             <div>
@@ -195,6 +299,7 @@ const ViewGrade = ({ data, length, assignmentId, currentClass, view }) => {
                   </>
                 )}
               </div>
+
               <form
                 className="c_input flex-col"
                 onSubmit={(e) => {
@@ -211,7 +316,7 @@ const ViewGrade = ({ data, length, assignmentId, currentClass, view }) => {
                   error="Comment should be at least 2 characters long and not more than 255 characters"
                 />
 
-                <Button text="Submit" />
+                <Button text="Submit" className="flex-row" />
               </form>
             </div>
           </div>

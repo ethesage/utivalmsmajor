@@ -4,11 +4,11 @@ import Sekeleton from 'react-skeleton-loader';
 import Moment from 'react-moment';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
-import { getNextClasses } from '../../views/Dashboard/Home/action';
-import img from '../../assets/homepage/img1.png';
-import calender from '../../assets/dashboard/calendar.png';
-import clock from '../../assets/dashboard/clock.png';
-import no_course from '../../assets/dashboard/no_course.png';
+import { getNextClasses } from 'views/Dashboard/Home/action';
+import img from 'assets/homepage/img1.png';
+import calender from 'assets/dashboard/calendar.png';
+import clock from 'assets/dashboard/clock.png';
+import no_course from 'assets/dashboard/no_course.png';
 import './style.scss';
 
 const ClassesSec = ({ data: { thumbnail, link, name, time, date } }) => (

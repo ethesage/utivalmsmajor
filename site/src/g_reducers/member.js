@@ -99,6 +99,27 @@ const course = (state = initialState, action) => {
         },
       };
 
+    case 'GRADE_ASSIGNMENT':
+      const updated = state.classResources[
+        action.payload.name
+      ].allSubmittedAssignment.map((ass) => {
+        if (ass.id === action.payload.Id) {
+          return { ...ass, grade: action.payload.grade };
+        }
+        return ass;
+      });
+
+      return {
+        ...state,
+        classResources: {
+          ...state.classResources,
+          [action.payload.name]: {
+            ...state.classResources[action.payload.name],
+            allSubmittedAssignment: updated,
+          },
+        },
+      };
+
     case 'DELETE_SUBMITTED_ASSIGNMENT':
       const prevAs =
         state.classResources[action.payload.name].submittedAssignment;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { validateInput, validate } from '../../helpers';
-import Eye from '../../assets/icons/eye';
-import Hide from '../../assets/icons/hide';
+import { validateInput, validate } from 'helpers';
+import Eye from 'assets/icons/eye';
+import Hide from 'assets/icons/hide';
 import './style.scss';
 
 const Input = ({

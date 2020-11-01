@@ -26,6 +26,7 @@ const AddAssignment = ({ title, course, currentClass, gapi, folderId }) => {
     link: '#',
   });
 
+  const submitBtn = useRef();
   const dispatch = useDispatch();
   const progressDialog = useRef();
   const deleteDialog = useRef();
@@ -177,6 +178,9 @@ const AddAssignment = ({ title, course, currentClass, gapi, folderId }) => {
       return;
     }
 
+    submitBtn.current.children[0].innerHTML = 'Assigning...';
+    submitBtn.current.classList.add('loader');
+
     const newData = Object.keys(assData).reduce((acc, cur) => {
       if (assData[cur] === '') {
         return { ...acc };
@@ -198,19 +202,22 @@ const AddAssignment = ({ title, course, currentClass, gapi, folderId }) => {
         )
       );
 
+      submitBtn.current.children[0].innerHTML = 'Assign';
+      submitBtn.current.classList.remove('loader');
+
       addToast('Successfully Edited', {
         appearance: 'success',
         autoDismiss: true,
       });
     } catch (err) {
+      submitBtn.current.children[0].innerHTML = 'Assign';
+      submitBtn.current.classList.remove('loader');
       addToast('Unable to create assignment', {
         appearance: 'err',
         autoDismiss: false,
       });
     }
   };
-
-  console.log(assData);
 
   return (
     <div className="add_ass cx_listnx_con">
@@ -293,7 +300,12 @@ const AddAssignment = ({ title, course, currentClass, gapi, folderId }) => {
           </div>
           <div className="pl_sec flex-row">
             <dt></dt>
-            <Button text="Assign" className="flex-row" onClick={submit} />
+            <Button
+              text="Assign"
+              className="flex-row"
+              onClick={submit}
+              btnRef={submitBtn}
+            />
           </div>
         </div>
       </form>

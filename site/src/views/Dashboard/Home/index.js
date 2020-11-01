@@ -1,26 +1,26 @@
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import Sekeleton from "react-skeleton-loader";
-import ProfileCheck from "components/ProfileCheck";
-import Classes from "components/NextClassTrainer";
-import Files from "components/Files";
-import CountSection from "./CountSection";
-import Layout from "Layouts/HomeGrid";
-import Welcome from "./Welcome";
-import CourseCard from "components/CourseCard";
-import categories from "data/categories";
-import girl from "assets/utiva viretnship programme.png";
-import UserClases from "components/UserMainClass";
-import { getCourse } from "./action";
-import { mapCourse } from "./action";
-import no_course from "../../../assets/dashboard/no_course.png";
-import "./style.scss";
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import Sekeleton from 'react-skeleton-loader';
+import ProfileCheck from 'components/ProfileCheck';
+import Classes from 'components/NextClassTrainer';
+import Files from 'components/Files';
+import CountSection from './CountSection';
+import Layout from 'Layouts/HomeGrid';
+import Welcome from './Welcome';
+import CourseCard from 'components/CourseCard';
+import categories from 'data/categories';
+import girl from 'assets/utiva viretnship programme.png';
+import UserClases from 'components/UserMainClass';
+import { getCourse } from './action';
+import { mapCourse } from './action';
+import no_course from '../../../assets/dashboard/no_course.png';
+import './style.scss';
 
-const InfoSec = ({ txt, children }) => (
+const InfoSec = ({ txt, children, useSubtitle = true }) => (
   <div className="info_fx flex-col">
     <nav className="c_card_nav flex-row j-space _text">
       <h2>{txt}</h2>
-      <p>{txt && `View All ${txt}`}</p>
+      <p>{txt && useSubtitle && `View All ${txt}`}</p>
     </nav>
     {children}
   </div>
@@ -75,8 +75,8 @@ const Home = ({ gapi }) => {
                 link: course.learnMore,
                 title: course.name,
                 desc: course.description,
-                value: course.value || "Certificate",
-                level: course.level || "For expirenced professional",
+                value: course.value || 'Certificate',
+                level: course.level || 'For expirenced professional',
                 courseCohortId: course.CourseCohorts[0]?.id || null,
                 studentCourse: course.StudentCourses,
               };
@@ -103,7 +103,7 @@ const Home = ({ gapi }) => {
         <UserClases />
       ) : (
         <Layout>
-          <InfoSec txt="Classes">
+          <InfoSec txt="Next Classes" useSubtitle={false}>
             <Classes />
           </InfoSec>
 

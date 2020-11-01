@@ -96,6 +96,7 @@ const Assignment = ({ gapi }) => {
     })();
 
     return () => {};
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentClass]);
 
   // console.log(length.current);
