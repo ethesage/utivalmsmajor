@@ -83,7 +83,7 @@ export const checkout = (courseCohortId) => async (dispatch) => {
 };
 
 export const checkoutCourse = (course) => async (dispatch) => {
-  console.log(course, '...//')
+  // console.log(course, '...//')
   dispatch({
     type: 'CHECKOUT',
     payload: course,

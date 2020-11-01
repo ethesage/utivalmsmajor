@@ -1,15 +1,15 @@
-import { axiosInstance } from '../../../helpers';
+import { axiosInstance } from "../../../helpers";
 
 export const getcategories = () => async (dispatch) => {
   let categories;
   try {
-    categories = await axiosInstance.get('/category');
+    categories = await axiosInstance.get("/category");
   } catch (error) {
     return error;
   }
 
   dispatch({
-    type: 'GET_CATEGORIES',
+    type: "GET_CATEGORIES",
     payload: categories.data.Categories,
   });
 };
@@ -23,7 +23,7 @@ export const getSingleCourse = (slug) => async (dispatch) => {
   }
 
   dispatch({
-    type: 'GET_CURRENT_COURSE',
+    type: "GET_CURRENT_COURSE",
     payload: course.data.course,
   });
 };
@@ -31,13 +31,13 @@ export const getSingleCourse = (slug) => async (dispatch) => {
 export const getNextClasses = () => async (dispatch) => {
   let course;
   try {
-    course = await axiosInstance.get('/student/all/nextclass');
+    course = await axiosInstance.get("/student/all/nextclass");
   } catch (error) {
     return error;
   }
 
   dispatch({
-    type: 'GET_NEXT_COURSES',
+    type: "GET_NEXT_COURSES",
     payload: course.data.data,
   });
 };
@@ -45,13 +45,15 @@ export const getNextClasses = () => async (dispatch) => {
 export const getCourse = (page, link) => async (dispatch) => {
   let allCourses;
   try {
-    allCourses = await axiosInstance.get(`/course${link}?currentPage=${page}&pageLimit=10`);
+    allCourses = await axiosInstance.get(
+      `/course${link}?currentPage=${page}&pageLimit=10`
+    );
   } catch (error) {
     return error;
   }
 
   dispatch({
-    type: 'GET_ALl_ONGOING_COURSES',
+    type: "GET_ALl_ONGOING_COURSES",
     payload: allCourses.data.data,
   });
 };
@@ -59,7 +61,16 @@ export const getCourse = (page, link) => async (dispatch) => {
 export const mapCourse = (courses) => async (dispatch) => {
   // console.log(courses, '...//')
   dispatch({
-    type: 'MAP_COURSES',
+    type: "MAP_COURSES",
     payload: courses,
+  });
+};
+
+export const addStudentCourse = (courseCohortId, studentCourse) => async (
+  dispatch
+) => {
+  dispatch({
+    type: "ADD_STUDENT_COURSE",
+    payload: { studentCourse, courseCohortId },
   });
 };

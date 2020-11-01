@@ -33,6 +33,10 @@ function QuickCheckout({ match }) {
           if (response.data.user.message === "Registration is successful")
             setPass(true);
 
+            addToast(`Your Password has been sent to ${response.data.user.email}`, {
+              appearance: "success",
+              autoDismiss: false,
+            });
           submitButton.current.children[0].innerHTML = "Login";
           submitButton.current.classList.remove("loader");
         } catch (e) {

@@ -4,13 +4,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { usePaystackPayment } from "react-paystack";
 import paystack from "../../../../assets/icons/paystack.png";
 import { checkout } from "../../../../g_actions/courses";
-import { axiosInstance } from "../../../../helpers";
+import { addStudentCourse } from '../../../Dashboard/Home/action';
 // import './App.css';
 
 const Paystack = ({ done }) => {
   const dispatch = useDispatch();
   const { auth, courses } = useSelector((state) => state);
-  console.log(done)
+
 
   const config = {
     reference: new Date().getTime(),
@@ -23,13 +23,14 @@ const Paystack = ({ done }) => {
     done();
     // Implementation for whatever you want to do with reference and after success call.
     dispatch(checkout(courses.checkoutData.courseCohortId))
-    console.log(reference);
+    dispatch(addStudentCourse(courses.checkoutData.courseCohortId, [courses.checkoutData.courseCohortId]))
+    // dispatch
   };
 
   // you can call this function anything
   const onClose = () => {
     // implementation for  whatever you want to do when the Paystack dialog closed.
-    console.log("closed");
+    // console.log("closed");
   };
   const initializePayment = usePaystackPayment(config);
   return (
@@ -39,7 +40,7 @@ const Paystack = ({ done }) => {
           initializePayment(onSuccess, onClose);
         }}
       >
-        <img src={paystack} />
+        <img src={paystack} style={{marginBottom: '20px'}}/>
       </button>
     </div>
   );

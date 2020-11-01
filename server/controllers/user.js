@@ -108,7 +108,7 @@ export const quickCheckOut = async (req, res) => {
   console.log(password);
 
   const user = await models.User.create({
-    role: 'user',
+    role: 'student',
     firstentry: true,
     updated: false,
     email,

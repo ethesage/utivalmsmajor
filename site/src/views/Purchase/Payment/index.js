@@ -1,5 +1,6 @@
 import React, { useState, useRef, } from "react";
 import { useHistory } from "react-router-dom";
+import { useDispatch } from 'react-redux';
 import category from "../../../data/categories";
 import card from "../../../assets/icons/card.png";
 import paystack from "../../../assets/icons/paystack.png";
@@ -17,6 +18,8 @@ const Payment = ({ back, id }) => {
   const {push} = useHistory()
   const disRef = useRef();
 
+  const dispatch = useDispatch()
+
   const goBack = () => {
     back(0);
   };
@@ -24,6 +27,10 @@ const Payment = ({ back, id }) => {
   function done() {
     console.log('i dey here')
     disRef.current.showModal();
+  }
+
+  const handleClick = () => {
+
   }
   
 
