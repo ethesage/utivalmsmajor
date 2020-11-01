@@ -47,8 +47,6 @@ const Home = ({ gapi }) => {
   // const {  } = useSelector((state) => state.home);
   const dispatch = useDispatch();
 
-  console.log(mappedCourses);
-
   useEffect(() => {
     if (allCourses) return;
 

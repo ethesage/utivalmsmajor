@@ -25,7 +25,6 @@ const Payment = ({ back, id }) => {
   };
 
   function done() {
-    console.log('i dey here')
     disRef.current.showModal();
   }
 

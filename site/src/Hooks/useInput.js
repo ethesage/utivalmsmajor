@@ -58,7 +58,6 @@ export default function Input({
       response = await cb(inputTypes, setInputTypes);
     } catch (error) {
       // error.message = "Incorrect login details";
-      console.log(error.response, error);
       if (error.response) {
         if (error.response.status === 500)
           error.message = 'Network error please try again';

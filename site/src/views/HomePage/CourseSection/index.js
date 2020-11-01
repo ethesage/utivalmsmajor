@@ -91,7 +91,6 @@ const Course = () => {
           {/* {categories[currentCategory].data.map((course, i) => (
             <CourseCard data={course} key={`current_cate_${i}`} />
           ))} */}
-          {console.log(mappedCourses, 'op')}
           {!mappedCourses ? (
             [1, 2, 3].map((i) => <Loader key={`loaduio_${i}`} />)
           ) : mappedCourses.length === 0 ? (

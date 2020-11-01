@@ -96,7 +96,7 @@ const Assignment = ({ gapi }) => {
     })();
 
     return () => {};
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentClass]);
 
   // console.log(length.current);
@@ -131,7 +131,7 @@ const Assignment = ({ gapi }) => {
 
   const upload = async (files) => {
     setDeleteDialog(false);
-    const assignment_ = currentClass.ClassResouces.filter(
+    const assignment_ = currentClass.ClassResources.filter(
       (res) => res.type === 'assignment'
     )[0].id;
 

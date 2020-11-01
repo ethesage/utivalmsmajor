@@ -5,8 +5,6 @@ export const getEnrolledCourses = (id, data, userType = 'student') => async (
 ) => {
   let courses;
 
-  console.log(userType);
-
   const slug = userType === 'student' ? userType : 'trainer/course';
   const courseId = id ? `/${id}` : '';
 

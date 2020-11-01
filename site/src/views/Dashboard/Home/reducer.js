@@ -7,7 +7,6 @@ export const initialState = {
 };
 
 const course = (state = initialState, action) => {
-  console.log(state, action);
   switch (action.type) {
     case "GET_CATEGORIES":
       return {

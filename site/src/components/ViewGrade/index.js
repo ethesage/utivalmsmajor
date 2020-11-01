@@ -46,8 +46,6 @@ const ViewGrade = ({
         (ass) => ass.resourceId === assignmentId || ass.id === assignmentId
       )[0];
 
-      console.log(data, assignmentId);
-
       setassData(current);
       setGrade(current.grade || 0);
     }

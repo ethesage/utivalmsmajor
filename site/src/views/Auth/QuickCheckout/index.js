@@ -40,7 +40,6 @@ function QuickCheckout({ match }) {
           submitButton.current.children[0].innerHTML = "Login";
           submitButton.current.classList.remove("loader");
         } catch (e) {
-          console.log(e.response);
           if (e.response?.data.error === "User Already Exist") setPass(true);
 
           submitButton.current.children[0].innerHTML = "Login";

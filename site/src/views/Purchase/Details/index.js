@@ -36,18 +36,15 @@ const Details = ({ proceed, match, set }) => {
     // /
   };
 
-  console.log(val && !checkoutData);
-
   useEffect(() => {
     if (!oo) push("/");
     if (!val) setVal(oo);
     (async () => {
       if (val && !checkoutData) {
-        console.log("l");
         await dispatch(checkoutCourse(val));
       }
     })();
-  });
+  }, []);
 
   return (
     <div className="details">
