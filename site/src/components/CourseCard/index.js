@@ -22,7 +22,6 @@ const CourseCard = ({ data, size = '' }) => {
   const cousrecard = useRef();
   const { user } = useSelector((state) => state.auth);
 
-  console.log(user);
   useEffect(() => {
     const position = () => {
       const smallerScreen = window.matchMedia('(max-width: 1000px)');
