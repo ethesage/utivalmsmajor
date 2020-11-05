@@ -105,8 +105,6 @@ app.use((req, res) =>
 // Finally, check db connection then start the server...
 const { sequelize } = db;
 
-sequelize.sync();
-
 sequelize
   .authenticate()
   .then(() => {
