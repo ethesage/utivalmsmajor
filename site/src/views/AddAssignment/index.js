@@ -192,11 +192,7 @@ const AddAssignment = ({ title, course, currentClass, gapi, folderId }) => {
 
     try {
       await axiosInstance.patch(
-        `class/assignment/edit/${
-          assignment[0]?.id
-            ? assignment[0].id
-            : resourceAssignment[0].resourceId
-        }`,
+        `class/assignment/edit/${resourceAssignment[0].resourceId}`,
         {
           ...newData,
           link: resourceAssignment[0].link,
