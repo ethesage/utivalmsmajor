@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { Link, useHistory } from "react-router-dom";
-import Input from "../../../components/Input";
-import category from "../../../data/categories";
-import { check, checkoutCourse } from "../../../g_actions/courses";
-import "./style.scss";
+import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
+import Input from 'components/Input';
+// import category from "data/categories";
+import { check, checkoutCourse } from 'g_actions/courses';
+import './style.scss';
 
-const course = category[0].data[0];
+// const course = category[0].data[0];
 
 const Details = ({ proceed, match, set }) => {
   const { mappedCourses } = useSelector((state) => state.home);
@@ -15,13 +15,13 @@ const Details = ({ proceed, match, set }) => {
   const [val, setVal] = useState(null);
   // console.log(!mappedCourses && match.params.courseCohortId === "null");
 
-  if (!mappedCourses && match.params.courseCohortId === "null") push("/");
+  if (!mappedCourses && match.params.courseCohortId === 'null') push('/');
 
   const oo = mappedCourses?.find(
     (course) => course.courseCohortId === match.params.courseCohortId
   );
 
-  if (!oo) push("/");
+  if (!oo) push('/');
 
   // console.log(oo, "ooooo");
 
@@ -29,7 +29,7 @@ const Details = ({ proceed, match, set }) => {
 
   const checkout = async () => {
     const value = await dispatch(check(match.params.courseCohortId));
-    if (value.message === "Not Enrolled") {
+    if (value.message === 'Not Enrolled') {
       set(match.params.courseCohortId);
       proceed(1);
     } else push(`/courses/overview/${match.params.courseCohortId}`);
@@ -37,13 +37,14 @@ const Details = ({ proceed, match, set }) => {
   };
 
   useEffect(() => {
-    if (!oo) push("/");
+    if (!oo) push('/');
     if (!val) setVal(oo);
     (async () => {
       if (val && !checkoutData) {
         await dispatch(checkoutCourse(val));
       }
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -55,13 +56,13 @@ const Details = ({ proceed, match, set }) => {
           </div>
           <div className="text-sec flex-col j-space al-start">
             <h2>{oo?.title}</h2>
-            <p className="clipped-text" style={{ "--number": 4 }}>
+            <p className="clipped-text" style={{ '--number': 4 }}>
               {oo?.desc}
             </p>
             <div className="c_inf flex-row j-space">
               <small>{oo?.duration} Weeks</small>
               <small>
-                {"> "}
+                {'> '}
                 {oo?.level}
               </small>
               <small>{oo?.value}</small>

@@ -29,6 +29,7 @@ export default [
     placeHolder: 'Email Address',
     errorMsg: 'email should be of the format johndoe@domain.com',
     required: true,
+    attr: { autoComplete: 'email' },
   },
   {
     name: 'occupation',
@@ -41,6 +42,7 @@ export default [
     placeHolder: "Company's Name",
     errorMsg: 'should be more than 2 letters',
     required: false,
+    attr: { autoComplete: 'off' },
   },
   {
     name: 'country',
@@ -62,6 +64,7 @@ export default [
     type: 'password',
     required: true,
     errorMsg: 'password should be at least 8 characters',
+    attr: { autoComplete: 'new-password' },
   },
   {
     placeHolder: 'Confirm Password',
@@ -69,5 +72,6 @@ export default [
     type: 'password',
     required: true,
     errorMsg: 'password should be at least 8 characters',
+    attr: { autoComplete: 'new-password' },
   },
 ];

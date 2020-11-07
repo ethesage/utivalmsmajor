@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import Details from "./Details";
@@ -11,7 +11,7 @@ const Purchase = (props ) => {
   const [id, setId] = useState(0)
 
   const pages = [<Details proceed={setPage} match={props.match} set={setId}/>, <Payment back={setPage} corhortId={id}/>];
-  const disRef = useRef();
+  // const disRef = useRef();
 
   useEffect(() => {
     return () => {};

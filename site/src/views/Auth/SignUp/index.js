@@ -114,6 +114,7 @@ function Signup() {
     get_countries();
 
     return () => {};
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -144,6 +145,7 @@ function Signup() {
     get_states();
 
     return () => {};
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputTypes.country]);
 
   return (
@@ -170,6 +172,7 @@ function Signup() {
             inputs={selects[form.name]}
             handleSelect={handleChange}
             showAsterix
+            attr={form.attr}
           />
         ))}
 

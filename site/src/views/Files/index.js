@@ -6,15 +6,15 @@ import {
   NavLink,
   // useParams,
 } from 'react-router-dom';
-import Skeleton from 'react-skeleton-loader';
+// import Skeleton from 'react-skeleton-loader';
 import ProgressBar from 'components/ProgressBar';
 import Modal from 'components/Modal';
-import Button from 'components/Button';
+// import Button from 'components/Button';
 import Files from 'components/Files';
-import Select from 'components/Select';
+// import Select from 'components/Select';
 import Layout from 'Layouts/SideNavListLayout';
 import Input from 'components/Input';
-import Drag from 'components/Drag';
+// import Drag from 'components/Drag';
 import Nav from 'components/InnerHeader';
 import './style.scss';
 
@@ -31,7 +31,6 @@ const links = [
 
 const File_Page = ({ gapi }) => {
   const modalRef = useRef();
-  
 
   let { path } = useRouteMatch();
   let [files, setFiles] = useState();
@@ -104,7 +103,7 @@ const File_Page = ({ gapi }) => {
       <div className="search_file flex-row j-start">
         <p>Sort by</p>
         {/* <Select inputs={[]} currentText="All type" /> */}
-        <Input placeHolder="Search File" handleChange={handleChange}  />
+        <Input placeHolder="Search File" handleChange={handleChange} />
       </div>
 
       <div className="dash-con files_ cx_listnx_full flex-col j-start al-start">

@@ -8,7 +8,7 @@ import 'react-sweet-progress/lib/style.css';
 import './style.scss';
 
 const CourseListCard = ({ data }) => {
-  const { isStudent, isAdmin } = useSelector((state) => state.auth);
+  const { isStudent } = useSelector((state) => state.auth);
   const {
     isCompleted,
     id,

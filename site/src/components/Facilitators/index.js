@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import user_icon from '../../assets/user_icon.png';
 import './style.scss';
@@ -18,6 +18,7 @@ const Facilitators = ({ trainers }) => {
     setTrainerMap(mapped);
 
     return () => {};
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

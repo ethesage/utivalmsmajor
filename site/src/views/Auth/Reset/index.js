@@ -1,12 +1,12 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import Input from '../../../components/Input';
-import Button from '../../../components/Button';
-import useInput from '../../../Hooks/useInput';
-import data from '../../../data/reset';
+import Input from 'components/Input';
+import Button from 'components/Button';
+import useInput from 'Hooks/useInput';
+import data from 'data/reset';
 import { useToasts } from 'react-toast-notifications';
 import { Link } from 'react-router-dom';
-import { axiosInstance } from '../../../helpers';
+import { axiosInstance } from 'helpers';
 import '../style.scss';
 
 function Reset() {

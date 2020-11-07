@@ -1,24 +1,24 @@
-import React, { useState, useRef, } from "react";
-import { useHistory } from "react-router-dom";
-import { useDispatch } from 'react-redux';
-import category from "../../../data/categories";
-import card from "../../../assets/icons/card.png";
-import paystack from "../../../assets/icons/paystack.png";
-import Paystack from "./Paystack";
-import Paypal from "./Paypal";
-import paypal from "../../../assets/icons/paypal.png";
-import approved from "../../../assets/approved.png";
-import Card from "./Card";
-import "./style.scss";
+import React, { useRef } from 'react';
+import { useHistory } from 'react-router-dom';
+// import { useDispatch } from 'react-redux';
+// import category from 'data/categories';
+// import card from 'assets/icons/card.png';
+// import paystack from 'assets/icons/paystack.png';
+import Paystack from './Paystack';
+import Paypal from './Paypal';
+// import paypal from 'assets/icons/paypal.png';
+import approved from 'assets/approved.png';
+// import Card from './Card';
+import './style.scss';
 
 // const course = category[0].data[0];
 
 const Payment = ({ back, id }) => {
   // const [current, setPage] = useState(0);
-  const {push} = useHistory()
+  const { push } = useHistory();
   const disRef = useRef();
 
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch();
 
   const goBack = () => {
     back(0);
@@ -28,10 +28,7 @@ const Payment = ({ back, id }) => {
     disRef.current.showModal();
   }
 
-  const handleClick = () => {
-
-  }
-  
+  // const handleClick = () => {};
 
   return (
     <div className="payment container">
@@ -43,7 +40,9 @@ const Payment = ({ back, id }) => {
             <p>Your payment is successful</p>
           </div>
 
-          <button className="btn flex-row" onClick={() => push('/')}>Start Learning</button>
+          <button className="btn flex-row" onClick={() => push('/')}>
+            Start Learning
+          </button>
         </div>
       </dialog>
       <div className="payment_con mx-auto txt-center">
@@ -60,9 +59,9 @@ const Payment = ({ back, id }) => {
         </nav> */}
 
         {/* <div className="flex-row card-sec"> */}
-          {/* <Card done={done} /> */}
-          <Paystack  done={done} />
-          <Paypal  done={done} />
+        {/* <Card done={done} /> */}
+        <Paystack done={done} />
+        <Paypal done={done} />
         {/* </div> */}
 
         <button className="back" onClick={goBack}>

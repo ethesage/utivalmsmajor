@@ -8,36 +8,37 @@ export const initialState = {
 
 const course = (state = initialState, action) => {
   switch (action.type) {
-    case "GET_CATEGORIES":
+    case 'GET_CATEGORIES':
       return {
         ...state,
         categories: (state.categories = action.payload),
       };
-    case "GET_CURRENT_COURSE":
+    case 'GET_CURRENT_COURSE':
       return {
         ...state,
         currentCourse: action.payload,
       };
-    case "GET_NEXT_COURSES":
+    case 'GET_NEXT_COURSES':
       return {
         ...state,
         nextclasses: action.payload,
       };
-    case "GET_ALl_ONGOING_COURSES":
+    case 'GET_ALl_ONGOING_COURSES':
       return {
         ...state,
         allCourses: action.payload,
       };
-    case "MAP_COURSES":
+    case 'MAP_COURSES':
       return {
         ...state,
         mappedCourses: action.payload,
       };
-    case "ADD_STUDENT_COURSE":
+    case 'ADD_STUDENT_COURSE':
       const updated = state.mappedCourses.map((course) => {
         if (course.courseCohortId === action.payload.courseCohortId) {
           return { ...course, studentCourse: action.payload.studentCourse };
         }
+        return null;
       });
       return {
         ...state,

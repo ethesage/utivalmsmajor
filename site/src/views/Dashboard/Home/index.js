@@ -8,7 +8,6 @@ import CountSection from './CountSection';
 import Layout from 'Layouts/HomeGrid';
 import Welcome from './Welcome';
 import CourseCard from 'components/CourseCard';
-import categories from 'data/categories';
 import girl from 'assets/utiva viretnship programme.png';
 import UserClases from 'components/UserMainClass';
 import { getCourse } from './action';
@@ -85,7 +84,7 @@ const Home = ({ gapi }) => {
         );
       })();
     }
-  }, [dispatch, allCourses]);
+  }, [dispatch, allCourses, mappedCourses]);
 
   return (
     <main className="dash-con dash-home">

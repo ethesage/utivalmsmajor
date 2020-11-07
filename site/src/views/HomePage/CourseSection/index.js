@@ -64,7 +64,7 @@ const Course = () => {
         );
       })();
     }
-  }, [dispatch, allCourses]);
+  }, [dispatch, allCourses, mappedCourses]);
 
   return (
     <section className="courses m-150">
@@ -89,7 +89,10 @@ const Course = () => {
           {!mappedCourses ? (
             <div className="course_ld">
               {[1, 2, 3].map((d) => (
-                <div className="next_cl flex-col al-start">
+                <div
+                  className="next_cl flex-col al-start"
+                  key={`ldx_prnt_${d}`}
+                >
                   {['10px', '200px', '20px'].map((height) => (
                     <Loader key={`load_${height}`} height={height} />
                   ))}

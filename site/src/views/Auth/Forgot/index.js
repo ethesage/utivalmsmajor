@@ -1,11 +1,11 @@
 import React, { useRef, useState } from 'react';
-import Input from '../../../components/Input';
-import useInput from '../../../Hooks/useInput';
-import data from '../../../data/forgot';
-import Button from '../../../components/Button';
+import Input from 'components/Input';
+import useInput from 'Hooks/useInput';
+import data from 'data/forgot';
+import Button from 'components/Button';
 import { useToasts } from 'react-toast-notifications';
 import { Link } from 'react-router-dom';
-import { axiosInstance } from '../../../helpers';
+import { axiosInstance } from 'helpers';
 import '../style.scss';
 
 function QuickCheckout() {

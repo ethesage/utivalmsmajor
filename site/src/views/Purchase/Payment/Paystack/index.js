@@ -1,29 +1,32 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 // import logo from './logo.svg';
-import { usePaystackPayment } from "react-paystack";
-import paystack from "../../../../assets/icons/paystack.png";
-import { checkout } from "../../../../g_actions/courses";
-import { addStudentCourse } from '../../../Dashboard/Home/action';
+import { usePaystackPayment } from 'react-paystack';
+import paystack from 'assets/icons/paystack.png';
+import { checkout } from 'g_actions/courses';
+import { addStudentCourse } from 'views/Dashboard/Home/action';
 // import './App.css';
 
 const Paystack = ({ done }) => {
   const dispatch = useDispatch();
   const { auth, courses } = useSelector((state) => state);
 
-
   const config = {
     reference: new Date().getTime(),
     email: auth.user.email,
     amount: Number(courses.checkoutData.cost) * 100,
-    publicKey: "pk_test_58bb35af5f694a4b80d0f83f20818cc992508791",
+    publicKey: 'pk_test_58bb35af5f694a4b80d0f83f20818cc992508791',
   };
 
   const onSuccess = (reference) => {
     done();
     // Implementation for whatever you want to do with reference and after success call.
-    dispatch(checkout(courses.checkoutData.courseCohortId))
-    dispatch(addStudentCourse(courses.checkoutData.courseCohortId, [courses.checkoutData.courseCohortId]))
+    dispatch(checkout(courses.checkoutData.courseCohortId));
+    dispatch(
+      addStudentCourse(courses.checkoutData.courseCohortId, [
+        courses.checkoutData.courseCohortId,
+      ])
+    );
     // dispatch
   };
 
@@ -40,7 +43,11 @@ const Paystack = ({ done }) => {
           initializePayment(onSuccess, onClose);
         }}
       >
-        <img src={paystack} style={{marginBottom: '20px'}}/>
+        <img
+          src={paystack}
+          style={{ marginBottom: '20px' }}
+          alt="paystack button"
+        />
       </button>
     </div>
   );
@@ -49,7 +56,7 @@ const Paystack = ({ done }) => {
 function App({ done }) {
   return (
     <div className="App">
-      <Paystack done={done}/>
+      <Paystack done={done} />
     </div>
   );
 }

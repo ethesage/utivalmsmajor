@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import upload from '../../assets/icons/upload.png';
 import './style.scss';
 
 const Drag = ({ className, children, handleImage }) => {
-  let dragCounter;
-  const [drag, setDrag] = useState(false);
+  // let dragCounter;
+  // const [drag, setDrag] = useState(false);
 
   const handleDrag = (e) => {
     e.preventDefault();
@@ -13,27 +13,27 @@ const Drag = ({ className, children, handleImage }) => {
   const handleDragIn = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    dragCounter++;
-    if (e.dataTransfer.items && e.dataTransfer.items.length > 0) {
-      setDrag(true);
-    }
+    // dragCounter++;
+    // if (e.dataTransfer.items && e.dataTransfer.items.length > 0) {
+    //   setDrag(true);
+    // }
   };
   const handleDragOut = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    dragCounter--;
-    if (dragCounter === 0) {
-      setDrag(false);
-    }
+    // dragCounter--;
+    // if (dragCounter === 0) {
+    //   setDrag(false);
+    // }
   };
   const handleDrop = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    setDrag(false);
+    // setDrag(false);
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
       handleImage(e.dataTransfer.files[0]);
       e.dataTransfer.clearData();
-      dragCounter = 0;
+      // dragCounter = 0;
     }
   };
 

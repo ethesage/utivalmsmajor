@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { addCrumb, spliceAtIndex } from 'g_actions/breadcrumbs';
 import { useDispatch, useSelector } from 'react-redux';
@@ -36,7 +36,7 @@ const useBreadCrumbs = (crumb, start = false) => {
     }
 
     return () => {};
-  }, [crumb, pathname]);
+  }, [crumb, pathname, breadcrumbs, dispatch]);
 };
 
 export default useBreadCrumbs;
