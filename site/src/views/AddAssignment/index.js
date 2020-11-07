@@ -178,8 +178,6 @@ const AddAssignment = ({ title, course, currentClass, gapi, folderId }) => {
       return;
     }
 
-    console.log(resourceAssignment);
-
     submitBtn.current.children[0].innerHTML = 'Assigning...';
     submitBtn.current.classList.add('loader');
 
