@@ -161,7 +161,7 @@ function Classes({
     const file =
       dropType === 'resource'
         ? classResources[title].files.find((file) => file.id === currentFile)
-        : classResources[title].assignment;
+        : classResources[title].assignment[0];
 
     const resourceId = file.resourceId;
 
