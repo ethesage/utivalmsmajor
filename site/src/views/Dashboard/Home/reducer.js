@@ -44,6 +44,8 @@ const course = (state = initialState, action) => {
         ...state,
         mappedCourses: updated,
       };
+    case 'RESET':
+      return initialState;
     default:
       return state;
   }

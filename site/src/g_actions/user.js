@@ -38,7 +38,7 @@ export const login = () => async (dispatch) => {
 };
 
 export const log_out = () => async (dispatch) => {
-  await logout();
+  logout();
 
   dispatch({
     type: 'RESET',

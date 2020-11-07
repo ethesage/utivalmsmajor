@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { getEnrolledCourses } from 'g_actions/member';
+import GetCurrentCourse from 'Hooks/getCurrentCourse';
 import useBreadcrumbs from 'Hooks/useBreadCrumbs';
 import Loader from 'components/Loading';
 import CourseCard from '../ActiveCourseCard';
@@ -11,13 +11,12 @@ import './style.scss';
 
 const Overview = () => {
   const { isStudent } = useSelector((state) => state.auth);
-  const userType = isStudent ? 'student' : 'trainer';
 
   const { courseId } = useParams();
-  const dispatch = useDispatch();
-  const { enrolledcourses } = useSelector((state) => state.member);
   const { currentCourse } = useSelector((state) => state.member);
   const [errorState] = useState('none');
+
+  GetCurrentCourse();
 
   useBreadcrumbs(
     {
@@ -26,18 +25,6 @@ const Overview = () => {
     },
     !!currentCourse
   );
-
-  useEffect(() => {
-    const course = enrolledcourses.find(
-      (course) => course.courseCohortId === courseId
-    );
-
-    (async () => {
-      await dispatch(getEnrolledCourses(courseId, course, userType));
-    })();
-
-    return () => {};
-  }, [enrolledcourses, courseId, dispatch, userType]);
 
   return (
     <>

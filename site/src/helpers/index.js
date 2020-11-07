@@ -109,7 +109,7 @@ export function get_user() {
 
 export const logout = async () => {
   Cookies.remove('uti_va');
-  return axiosInstance.get('/logout');
+  axiosInstance.get('/logout');
 };
 
 export const toBase64 = (file) =>

@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import NavBar from 'components/CourseNav';
 import Calender from 'components/Calender';
+import GetCurrentCourse from 'Hooks/getCurrentCourse';
 import useBreadcrumbs from 'Hooks/useBreadCrumbs';
-import { getEnrolledCourses } from 'g_actions/member';
 import { useDispatch, useSelector } from 'react-redux';
 import { getClassDays } from 'g_actions/member';
 import './style.scss';
@@ -12,22 +12,8 @@ const StudyPlan = () => {
   const { courseId } = useParams();
   const dispatch = useDispatch();
   const classdays = useSelector((state) => state.member.classdays);
-  const enrolledcourses = useSelector((state) => state.member.enrolledcourses);
   const currentCourse = useSelector((state) => state.member.currentCourse);
-  const { isStudent } = useSelector((state) => state.auth);
-  const userType = isStudent ? 'student' : 'trainer';
-
-  useEffect(() => {
-    if (currentCourse) return;
-
-    const course = enrolledcourses.find(
-      (course) => course.courseCohortId === courseId
-    );
-
-    dispatch(getEnrolledCourses(courseId, course, userType));
-
-    return () => {};
-  }, [enrolledcourses, courseId, currentCourse, dispatch, userType]);
+  GetCurrentCourse();
 
   useBreadcrumbs(
     [
@@ -39,8 +25,6 @@ const StudyPlan = () => {
     ],
     !!currentCourse
   );
-
-  console.log(currentCourse);
 
   useEffect(() => {
     if (!classdays) {

@@ -1,11 +1,9 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  getEnrolledCourses,
-  getAllsubmittedAssignment,
-} from 'g_actions/member';
+import { getAllsubmittedAssignment } from 'g_actions/member';
 import { useDebounce } from 'use-debounce';
+import GetCurrentCourse from 'Hooks/getCurrentCourse';
 import useBreadcrumbs from 'Hooks/useBreadCrumbs';
 import moment from 'moment';
 import Input from 'components/InputType';
@@ -19,7 +17,7 @@ import './style.scss';
 const AllAssignmnets = ({ gapi }) => {
   const { courseId, classroom } = useParams();
   const dispatch = useDispatch();
-  const { currentCourse, enrolledcourses, classResources } = useSelector(
+  const { currentCourse, classResources } = useSelector(
     (state) => state.member
   );
   const history = useHistory();
@@ -39,6 +37,8 @@ const AllAssignmnets = ({ gapi }) => {
     (class_) => class_.id === classroom
   );
 
+  GetCurrentCourse();
+
   const getFiles = useCallback(
     async (id) => {
       if (!gapi) return;
@@ -50,19 +50,6 @@ const AllAssignmnets = ({ gapi }) => {
     },
     [gapi]
   );
-
-  // to view a particular assignment
-  // useEffect(() => {
-  //   if (viewGrade) {
-  //     (async () => {
-  //       let file = await getFiles();
-
-  //       setCurrentSubmitted(file);
-  //     })();
-  //   }
-
-  //   return () => {};
-  // }, []);
 
   useBreadcrumbs(
     [
@@ -77,18 +64,6 @@ const AllAssignmnets = ({ gapi }) => {
     ],
     !!currentCourse
   );
-
-  useEffect(() => {
-    if (currentCourse) return;
-
-    const course = enrolledcourses.find(
-      (course) => course.courseCohortId === courseId
-    );
-
-    dispatch(getEnrolledCourses(courseId, course, 'trainer'));
-
-    return () => {};
-  }, [enrolledcourses, courseId, currentCourse, dispatch]);
 
   useEffect(() => {
     if (!currentCourse) return;

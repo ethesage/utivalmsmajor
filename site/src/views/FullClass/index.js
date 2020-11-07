@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { NavLink, useParams, useLocation, useHistory } from 'react-router-dom';
-import { getEnrolledCourses } from 'g_actions/member';
+import GetCurrentCourse from 'Hooks/getCurrentCourse';
 import Loader from 'components/Loading';
 import Classes from 'components/Classes';
 import ResourceBtn from 'components/ResourceButton';
@@ -18,17 +18,14 @@ function FullClass({ gapi }) {
   const [editClass, setEditClass] = useState(false);
   const history = useHistory();
   const [addAssignment] = useState(pathname.includes('add-assignment'));
-  // const [weekNum, setWeek]
-
-  const dispatch = useDispatch();
-  const enrolledcourses = useSelector((state) => state.member.enrolledcourses);
   const currentCourse = useSelector((state) => state.member.currentCourse);
   const { isStudent } = useSelector((state) => state.auth);
-  const userType = isStudent ? 'student' : 'trainer';
 
   const curWeek = currentCourse?.CourseCohort?.Classes?.find(
     (classr) => classr.id === classroom
   );
+
+  GetCurrentCourse();
 
   useBreadcrumbs(
     addAssignment
@@ -53,20 +50,6 @@ function FullClass({ gapi }) {
 
     return () => {};
   }, [classroom, currentCourse]);
-
-  useEffect(() => {
-    if (currentCourse) return;
-
-    const course = enrolledcourses.find(
-      (course) => course.courseCohortId === courseId
-    );
-
-    dispatch(getEnrolledCourses(courseId, course, userType));
-
-    return () => {};
-  }, [enrolledcourses, courseId, currentCourse, dispatch, userType]);
-
-  // const onclick = (id) => {};
 
   const data = currentCourse?.CourseCohort?.Classes.find(
     (classrum) => classrum.id === classroom
