@@ -125,7 +125,7 @@ const AddAssignment = ({ title, course, currentClass, gapi, folderId }) => {
         file = await getFiles(file.id);
         file.resourceId = res.data.data.id;
         setProgress(100);
-        dispatch(getAssignments(title, file));
+        dispatch(getAssignments(title, { ...file, ...assData }));
 
         setTimeout(function () {
           progressDialog.current.close();
@@ -178,6 +178,8 @@ const AddAssignment = ({ title, course, currentClass, gapi, folderId }) => {
       return;
     }
 
+    console.log(resourceAssignment);
+
     submitBtn.current.children[0].innerHTML = 'Assigning...';
     submitBtn.current.classList.add('loader');
 
@@ -189,10 +191,17 @@ const AddAssignment = ({ title, course, currentClass, gapi, folderId }) => {
     }, []);
 
     try {
-      await axiosInstance.patch(`class/assignment/edit/${assignment[0].id}`, {
-        ...newData,
-        link: resourceAssignment[0].link,
-      });
+      await axiosInstance.patch(
+        `class/assignment/edit/${
+          assignment[0]?.id
+            ? assignment[0].id
+            : resourceAssignment[0].resourceId
+        }`,
+        {
+          ...newData,
+          link: resourceAssignment[0].link,
+        }
+      );
 
       dispatch(
         editAssignments(
@@ -210,10 +219,12 @@ const AddAssignment = ({ title, course, currentClass, gapi, folderId }) => {
         autoDismiss: true,
       });
     } catch (err) {
+      console.log(err);
+
       submitBtn.current.children[0].innerHTML = 'Assign';
       submitBtn.current.classList.remove('loader');
       addToast('Unable to create assignment', {
-        appearance: 'err',
+        appearance: 'error',
         autoDismiss: false,
       });
     }
