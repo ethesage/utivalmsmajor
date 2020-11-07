@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable import/prefer-default-export */
 // import sequelize from "sequelize";
 // import { paginate, calculateLimitAndOffset } from 'paginate-info';
@@ -32,8 +33,9 @@ export const createClass = async (req, res) => {
       where: { id: courseCohortId },
     });
 
-    if (!courseCohort)
+    if (!courseCohort) {
       return errorStat(res, 404, 'Course Cohort does not exist');
+    }
 
     const trainer = await models.Trainer.findOne({
       where: { id: trainerId },
@@ -113,8 +115,9 @@ export const getAllClass = async (req, res) => {
       ],
     });
 
-    if (!allClass[0])
+    if (!allClass[0]) {
       return errorStat(res, 404, 'No class Found for this course');
+    }
 
     return successStat(res, 200, 'data', allClass);
   } catch (e) {
@@ -268,8 +271,9 @@ export const editClassAssignment = async (req, res) => {
       where: { id: classResourceId },
     });
 
-    if (!findAssignment)
+    if (!findAssignment) {
       return errorStat(res, 404, 'Class Assignment not found');
+    }
 
     await findAssignment.update({
       ...req.body.class,
@@ -292,8 +296,9 @@ export const deleteClassAssignment = async (req, res) => {
       where: { id: classResourcesId },
     });
 
-    if (!findAssignment)
+    if (!findAssignment) {
       return errorStat(res, 404, 'Class Assignment not found');
+    }
 
     await findAssignment.destroy();
 
