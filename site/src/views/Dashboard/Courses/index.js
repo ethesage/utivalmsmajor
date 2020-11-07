@@ -21,7 +21,7 @@ import './style.scss';
 
 const Courses = ({ gapi }) => {
   let { path } = useRouteMatch();
-  useBreadcrumbs({ name: 'My Courses', link: '/courses', start: true });
+  useBreadcrumbs({ name: 'My Courses', link: '/courses' }, true);
   const dispatch = useDispatch();
   const { isStudent } = useSelector((state) => state.auth);
   const enrolledcourses = useSelector((state) => state.member.enrolledcourses);

@@ -18,10 +18,11 @@ const Classroom = ({ full = false, gapi }) => {
   const [openedRef, setOpenedRef] = useState();
 
   useBreadcrumbs(
-    currentCourse && {
-      name: currentCourse.Course.name,
+    {
+      name: currentCourse?.Course?.name,
       link: `/courses/classroom/${courseId}`,
-    }
+    },
+    !!currentCourse
   );
 
   const userType = isStudent ? 'student' : 'trainer';

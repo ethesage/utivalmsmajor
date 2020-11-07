@@ -1,6 +1,6 @@
 import React from 'react';
-import { Route, Switch, useRouteMatch, Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { Route, Switch, useRouteMatch } from 'react-router-dom';
+// import { useSelector } from 'react-redux';
 import Overview from 'components/OverView';
 import CourseList from './CoursesList';
 import Classroom from 'views/Classroom';
@@ -10,30 +10,13 @@ import ViewGrade from 'components/ViewGrade';
 import StudyPlan from 'views/StudyPlan';
 import Members from 'views/Members';
 import CreateCourse from 'views/CreateCourse';
-import Nav from 'components/InnerHeader';
 import './style.scss';
 
 const Courses = ({ gapi }) => {
   let { path } = useRouteMatch();
-  const currentCourse = useSelector((state) => state.courses.currentCourse);
 
   return (
     <section className="dash-con mx_courx flex-col al-start j-start">
-      <Nav>
-        {currentCourse ? (
-          <>
-            <span>{' > '}</span>
-            <Link
-              to={`/courses/overview/${currentCourse.courseCohortId}`}
-              className="reg_text"
-            >
-              <h3> {`${currentCourse.Course.name}`}</h3>
-            </Link>
-          </>
-        ) : (
-          ''
-        )}
-      </Nav>
       <Switch>
         <Route exact path={`${path}/overview/:courseId`} component={Overview} />
         <Route exact path={`${path}/create`} component={CreateCourse} />

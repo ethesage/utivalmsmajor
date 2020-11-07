@@ -7,18 +7,16 @@ const BreadCrumbs = () => {
   const breadcrumbs = useSelector((state) => state.breadcrumb);
 
   return (
-    <div>
-      <Nav>
-        {breadcrumbs.map((crumb, i) => (
-          <div key={`crumb_th_${i}`} className="flex-row">
-            {i !== 0 && <span>{' > '}</span>}
-            <Link to={crumb.link} className="reg_text">
-              <h3>{crumb.name}</h3>
-            </Link>
-          </div>
-        ))}
-      </Nav>
-    </div>
+    <Nav>
+      {breadcrumbs.map((crumb, i) => (
+        <div key={`crumb_th_${i}`} className="flex-row">
+          {i !== 0 && <span>{' > '}</span>}
+          <Link to={crumb?.link} className="reg_text">
+            <h3>{crumb?.name}</h3>
+          </Link>
+        </div>
+      ))}
+    </Nav>
   );
 };
 

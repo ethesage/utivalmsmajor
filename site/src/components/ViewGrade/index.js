@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
 import { useSelector, useDispatch } from 'react-redux';
 import Skeleton from 'react-skeleton-loader';
 import { gradeAssignment } from 'g_actions/member';
+import useBreadcrumbs from 'Hooks/useBreadCrumbs';
 import Moment from 'react-moment';
 import Back from 'assets/icons/back';
 import Button from 'components/Button';
@@ -23,6 +25,7 @@ const ViewGrade = ({
   view,
   goBack,
   name,
+  prevPath,
 }) => {
   const [loading, setLoading] = useState(false);
   const [comments, setComments] = useState(null);
@@ -33,6 +36,23 @@ const ViewGrade = ({
   const [assData, setassData] = useState();
   const [grade, setGrade] = useState();
   const dispatch = useDispatch();
+  const history = useHistory();
+
+  console.log(history);
+
+  useBreadcrumbs(
+    [
+      {
+        name: 'Assignments',
+        link: prevPath,
+      },
+      {
+        name: `${assData?.User?.firstName} ${assData?.User?.lastName}`,
+        link: '#',
+      },
+    ],
+    !!prevPath
+  );
 
   // console.log(data, length, assignmentId, currentClass);
 
@@ -50,10 +70,6 @@ const ViewGrade = ({
       setGrade(current.grade || 0);
     }
   }, [assignmentId, data, length, assData]);
-
-  // console.log(assData);
-
-  // console.log(assData);
 
   // get comment data
   useEffect(() => {

@@ -6,6 +6,7 @@ import {
   getAllsubmittedAssignment,
 } from 'g_actions/member';
 import { useDebounce } from 'use-debounce';
+import useBreadcrumbs from 'Hooks/useBreadCrumbs';
 import moment from 'moment';
 import Input from 'components/InputType';
 import NavBar from 'components/CourseNav';
@@ -62,6 +63,20 @@ const AllAssignmnets = ({ gapi }) => {
 
   //   return () => {};
   // }, []);
+
+  useBreadcrumbs(
+    [
+      {
+        name: currentCourse?.Course?.name,
+        link: `/courses/classroom/${courseId}`,
+      },
+      {
+        name: 'Assignments',
+        link: `/courses/all-assignments/${courseId}/${classroom}`,
+      },
+    ],
+    !!currentCourse
+  );
 
   useEffect(() => {
     if (currentCourse) return;
@@ -340,6 +355,7 @@ const AllAssignmnets = ({ gapi }) => {
             view={viewAss}
             goBack={() => setViewGrade(false)}
             name={listnameList.find((list) => list.value === currentClass).name}
+            prevPath={`/courses/all-assignments/${courseId}/${classroom}`}
           />
         )}
       </section>

@@ -5,7 +5,7 @@ import { getEnrolledCourses } from 'g_actions/member';
 import Loader from 'components/Loading';
 import Classes from 'components/Classes';
 import ResourceBtn from 'components/ResourceButton';
-// import useBreadcrumbs from 'Hooks/useBreadCrumbs';
+import useBreadcrumbs from 'Hooks/useBreadCrumbs';
 import NavBar from 'components/CourseNav';
 import assignment from 'assets/icons/course/assignment.png';
 import Layout from 'Layouts/SideNavListLayout';
@@ -18,6 +18,7 @@ function FullClass({ gapi }) {
   const [editClass, setEditClass] = useState(false);
   const history = useHistory();
   const [addAssignment] = useState(pathname.includes('add-assignment'));
+  // const [weekNum, setWeek]
 
   const dispatch = useDispatch();
   const enrolledcourses = useSelector((state) => state.member.enrolledcourses);
@@ -25,12 +26,25 @@ function FullClass({ gapi }) {
   const { isStudent } = useSelector((state) => state.auth);
   const userType = isStudent ? 'student' : 'trainer';
 
-  // useBreadcrumbs(
-  //   currentCourse && {
-  //     name: currentCourse.Course.name,
-  //     link: `/courses/classroom/${courseId}/${classroom}`,
-  //   }
-  // );
+  const curWeek = currentCourse?.CourseCohort?.Classes?.find(
+    (classr) => classr.id === classroom
+  );
+
+  useBreadcrumbs(
+    addAssignment
+      ? null
+      : [
+          {
+            name: currentCourse?.Course?.name,
+            link: `/courses/classroom/${courseId}`,
+          },
+          {
+            name: `${curWeek?.title}`,
+            link: `/courses/classroom/${courseId}/${classroom}`,
+          },
+        ],
+    !!currentCourse
+  );
 
   // scroll the appropraite button clicked into view during a rerender
   useEffect(() => {

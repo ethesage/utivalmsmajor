@@ -21,11 +21,6 @@ import './style.scss';
 import Button from 'components/Button';
 
 const AddAssignment = ({ title, course, currentClass, gapi, folderId }) => {
-  useBreadcrumbs({
-    name: 'Add Assignment',
-    link: '#',
-  });
-
   const submitBtn = useRef();
   const dispatch = useDispatch();
   const progressDialog = useRef();
@@ -38,6 +33,29 @@ const AddAssignment = ({ title, course, currentClass, gapi, folderId }) => {
   );
 
   const resourceAssignment = classResources[title].assignment;
+
+  //
+
+  useBreadcrumbs(
+    [
+      {
+        name: course.Course.name,
+        link: `/courses/classroom/${course.courseCohortId}`,
+      },
+      {
+        name: `${title}`,
+        link: `/courses/classroom/${course.courseCohortId}/${currentClass.id}`,
+      },
+      {
+        name:
+          classResources[title].assignment.length === 0
+            ? 'Add Assignment'
+            : 'Edit Assignment',
+        link: '#',
+      },
+    ],
+    true
+  );
 
   const [assData, setAssData] = useState({
     dueDate: '',

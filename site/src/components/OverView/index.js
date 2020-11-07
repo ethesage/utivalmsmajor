@@ -20,14 +20,14 @@ const Overview = () => {
   const [errorState] = useState('none');
 
   useBreadcrumbs(
-    currentCourse && {
-      name: currentCourse.Course.name,
+    {
+      name: currentCourse?.Course?.name,
       link: `/courses/overview/${courseId}`,
-    }
+    },
+    !!currentCourse
   );
 
   useEffect(() => {
-
     const course = enrolledcourses.find(
       (course) => course.courseCohortId === courseId
     );

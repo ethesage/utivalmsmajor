@@ -2,7 +2,8 @@ import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Sekeleton from 'react-skeleton-loader';
-import { getEnrolledMembers } from 'g_actions/member';
+import useBreadcrumbs from 'Hooks/useBreadCrumbs';
+import { getEnrolledMembers, getEnrolledCourses } from 'g_actions/member';
 import NavBar from 'components/CourseNav';
 import MemberCard from 'components/Member';
 
@@ -13,6 +14,22 @@ const Members = () => {
   const { courseId } = useParams();
   const dispatch = useDispatch();
   const { enrolledStudents } = useSelector((state) => state.member);
+  const enrolledcourses = useSelector((state) => state.member.enrolledcourses);
+  const currentCourse = useSelector((state) => state.member.currentCourse);
+  const { isStudent } = useSelector((state) => state.auth);
+  const userType = isStudent ? 'student' : 'trainer';
+
+  useEffect(() => {
+    if (currentCourse) return;
+
+    const course = enrolledcourses.find(
+      (course) => course.courseCohortId === courseId
+    );
+
+    dispatch(getEnrolledCourses(courseId, course, userType));
+
+    return () => {};
+  }, [enrolledcourses, courseId, currentCourse, dispatch, userType]);
 
   useEffect(() => {
     if (!enrolledStudents) {
@@ -22,6 +39,17 @@ const Members = () => {
     }
     return () => {};
   }, [enrolledStudents, dispatch, courseId]);
+
+  useBreadcrumbs(
+    [
+      {
+        name: currentCourse?.Course?.name,
+        link: `/courses/classroom/${courseId}`,
+      },
+      { name: 'Members', link: '#' },
+    ],
+    !!currentCourse
+  );
 
   const Loader = () => (
     <div className="snx_mem">

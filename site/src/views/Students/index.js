@@ -1,6 +1,5 @@
 import React from 'react';
-import { UserTableRow, UserRow } from 'components/UserTableRow';
-import Layout from 'Layouts/TableLayout';
+import T from 'components/Table';
 import Nav from 'components/InnerHeader';
 import Select from 'components/Select';
 import Input from 'components/Input';
@@ -28,25 +27,6 @@ const Students = () => {
           <Input />
         </div>
       </div>
-
-      <Layout>
-        <UserTableRow
-          r1={<strong>Name</strong>}
-          r2={<strong>Course</strong>}
-          r3={<strong>Active Since</strong>}
-          r4={<strong>Location</strong>}
-          r5={<strong>Courses</strong>}
-          r6={<strong>Action</strong>}
-        />
-        <UserRow />
-        <UserRow />
-        <UserRow />
-        <UserRow />
-        <UserRow />
-        <UserRow />
-        <UserRow />
-        <UserRow />
-      </Layout>
     </section>
   );
 };
