@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useHistory } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
 import { useSelector, useDispatch } from 'react-redux';
 import Skeleton from 'react-skeleton-loader';
@@ -36,9 +35,6 @@ const ViewGrade = ({
   const [assData, setassData] = useState();
   const [grade, setGrade] = useState();
   const dispatch = useDispatch();
-  const history = useHistory();
-
-  console.log(history);
 
   useBreadcrumbs(
     [
@@ -51,7 +47,7 @@ const ViewGrade = ({
         link: '#',
       },
     ],
-    !!prevPath
+    !!prevPath && !!assData
   );
 
   // console.log(data, length, assignmentId, currentClass);
