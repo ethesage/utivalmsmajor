@@ -20,7 +20,7 @@ const patterns = {
   country: /^(?!none)([\w. -])+$/,
   region: /^(?!none)([\w. -])+$/,
   gender: /^(?!none)([\w. -])+$/,
-  comment: /^[\w\s]{2,}$/,
+  comment: /[^\n]{2,}/,
   grade: /^[0-9]{1,}$/,
   linkedin: /(ftp|http|https):\/\/?((www|\w\w)\.)?linkedin.com(\w+:{0,1}\w*@)?(\S+)(:([0-9])+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/,
   bio: text,

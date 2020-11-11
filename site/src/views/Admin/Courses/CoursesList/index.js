@@ -1,66 +1,92 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { getAllCourses } from 'g_actions/courses';
-import Loader from 'components/Loading';
-import not_found from 'assets/not_found.png';
-import Button from 'components/Button';
-import CourseListSection from 'components/CourseListSection';
-import Pagination from 'react-js-pagination';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { Progress } from 'react-sweet-progress';
+import Image from 'components/Image';
+import medal from 'assets/icons/medal.png';
+import 'react-sweet-progress/lib/style.css';
 import './style.scss';
 
+const CousreCard = ({ data }) => {
+  const { isStudent } = useSelector((state) => state.auth);
+  const {
+    isCompleted,
+    CourseCohort: { id, dateRange },
+    Cohort: { cohort },
+    Course,
+  } = data;
+
+  return (
+    <div className="p_cx_cd">
+      <Link className="img-sec" to={`/courses/overview/${id}`}>
+        <Image image={Course.thumbnail} imgClass="img cover" lazyLoad={true} />
+      </Link>
+      <div className="txt-sec">
+        <div className="title_sec flex-row j-space">
+          <h3 className="theme-color">{Course.name}</h3>
+          {isStudent && isCompleted ? <img src={medal} alt="" /> : ''}
+        </div>
+
+        {isStudent ? (
+          <>
+            <div>
+              <small>Completion level</small>
+              <Progress
+                className="slim"
+                percent={
+                  Course.CourseProgresses[0]
+                    ? Course.CourseProgresses[0].progress
+                    : 0
+                }
+                status="error"
+                theme={{
+                  success: {
+                    symbol: '‍',
+                    color: 'rgb(223, 105, 180)',
+                  },
+                  error: {
+                    symbol: '40%',
+                    color: 'red',
+                  },
+                  default: {
+                    symbol: '😱',
+                    color: '#fbc630',
+                  },
+                }}
+              />
+            </div>
+            <div className="grade flex-row j-space">
+              <small>
+                <strong>Grade:</strong> 100
+              </small>
+              <button>
+                <small>View Details</small>
+              </button>
+            </div>
+          </>
+        ) : null}
+
+        {!isStudent ? (
+          <div className="chx flex-row j-space">
+            <strong>{<p>{cohort} Cohort</p>}</strong>
+            <small>{dateRange}</small>
+          </div>
+        ) : null}
+      </div>
+    </div>
+  );
+};
+
 const CourseList = () => {
-  const dispatch = useDispatch();
-  const courses = useSelector((state) => state.courses.courses);
-  const [page, setPage] = useState(1);
-
-  useEffect(() => {
-    if (!courses)
-      (async () => {
-        await dispatch(getAllCourses(page));
-      })();
-
-    return () => {};
-  }, [dispatch, courses, page]);
-
-  const paginate = async (num) => {
-    window.scroll({
-      behavior: 'auto',
-      left: 0,
-      top: 0,
-    });
-    setPage(num);
-
-    // if (num <= propertyCount) return;
-
-    await dispatch(getAllCourses(page));
-  };
+  const enrolledcourses = useSelector((state) => state.member.enrolledcourses);
 
   return (
     <div className="main flex-col cx_list_con j-start al-start">
-      {!courses ? (
-        <Loader tempLoad={true} full={false} />
-      ) : courses.length === 0 ? (
-        <div className="nt_found img flex-col">
-          <img src={not_found} alt="Not found" />
-          <p className="text">There are no courses yet</p>
-          <Button
-            link="utiva.io"
-            text="Create New Course"
-            className="flex-row"
-          />
-        </div>
-      ) : (
-        <>
-          <CourseListSection courses={courses} />
-          <Pagination
-            activePage={page}
-            itemsCountPerPage={12}
-            totalItemsCount={courses.paginationMeta.count}
-            pageRangeDisplayed={5}
-            onChange={(num) => paginate(num)}
-          />
-        </>
-      )}
+      <section className="course_list">
+        {enrolledcourses.map((course, i) => (
+          <CousreCard data={course} key={`enrolled_c_${i}`} />
+        ))}
+      </section>
     </div>
   );
 };

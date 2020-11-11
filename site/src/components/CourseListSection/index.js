@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Progress } from 'react-sweet-progress';
 import Image from '../Image';
 import medal from 'assets/icons/medal.png';
-import 'react-sweet-progress/lib/style.css';
+import 'views/Admin/Courses copy/CoursesList/node_modules/react-sweet-progress/lib/style.css';
 import './style.scss';
 
 const CourseListCard = ({ data }) => {
