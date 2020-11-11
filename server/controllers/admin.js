@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 // import sequelize from 'sequelize';
-import models from "../database/models";
-import helpers from "../helpers";
+import models, { sequelize } from '../database/models';
+import helpers from '../helpers';
 
 const { successStat, errorStat } = helpers;
 
@@ -13,7 +13,7 @@ const { successStat, errorStat } = helpers;
  * @param {Object} req - Request object
  * @param {Object} res - Response object
  * @returns {Object} object containing user data and access Token
- * @memberof contentCOntroller
+ * @memberof adminCOntroller
  */
 
 export const getAdminDashboard = async (req, res) => {
@@ -48,7 +48,7 @@ export const getAdminDashboard = async (req, res) => {
       return acc;
     }, {});
 
-    return successStat(res, 200, "data", {
+    return successStat(res, 200, 'data', {
       student,
       course,
       trainer,
@@ -58,6 +58,31 @@ export const getAdminDashboard = async (req, res) => {
     });
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
+};
+
+/**
+ * / @static
+ * @description returns all courses
+ * @param {Object} req - Request object
+ * @param {Object} res - Response object
+ * @returns {Object} object containing courses and their total courses cohorts.
+ * @memberof adminCOntroller
+ */
+
+export const getAllCourses = async (req, res) => {
+  const courses = await models.Course.findAll({
+    attributes: {
+      include: [[sequelize.fn('COUNT', 'cohortId'), 'cohorts']],
+    },
+    include: {
+      model: models.CourseCohort,
+      attributes: [],
+    },
+
+    group: ['Course.id'],
+  });
+
+  return successStat(res, 200, 'data', courses);
 };

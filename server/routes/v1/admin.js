@@ -1,10 +1,10 @@
-import express from "express";
-import "express-async-errors";
-import { getAdminDashboard } from "../../controllers/admin";
-import middlewares from "../../middlewares";
+import express from 'express';
+import 'express-async-errors';
+import { getAdminDashboard, getAllCourses } from '../../controllers/admin';
+import middlewares from '../../middlewares';
 
 const {
-//   validate,
+  //   validate,
   //   addStudentSchema,
   //   getStudentSchema,
   // getStudentCourseSchema,
@@ -30,7 +30,9 @@ const adminRoutes = express();
 //   getSingleStudentCourse
 // );
 
-adminRoutes.get("/dashboard", usession.can("course:crud"), getAdminDashboard);
+adminRoutes.get('/dashboard', usession.can('course:crud'), getAdminDashboard);
+
+adminRoutes.get('/courses', usession.can('course:crud'), getAllCourses);
 
 // adminRoutes.get('/', usession.can(''), getAllStudentCourse);
 
