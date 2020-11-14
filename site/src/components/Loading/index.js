@@ -16,6 +16,7 @@ const Loader = ({ tempLoad, full }) => {
     : {
         width: '100%',
         height: '100%',
+        minHeight: '500px',
         background: 'white',
         position: 'relative',
         zIndex: 200,

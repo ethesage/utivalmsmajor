@@ -24,6 +24,7 @@ const useFetch = (dispatch, initailLoadingState, reload) => {
         setError(null);
         // }
       } catch (err) {
+        console.log(err);
         if ((!err.response || err.response.status === 500) && reload) {
           if (running) return;
           setRunning(true);

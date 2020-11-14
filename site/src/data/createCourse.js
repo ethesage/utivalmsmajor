@@ -38,8 +38,8 @@ export default [
     itype: 'select',
   },
   {
-    label: 'Degree',
-    name: 'degree',
+    label: 'Category',
+    name: 'category',
     placeHolder: '',
     errorMsg: 'In weeks',
     required: false,
@@ -48,20 +48,20 @@ export default [
   },
   {
     label: 'Price',
-    name: 'price',
+    name: 'cost',
     placeHolder: 'NGN',
     errorMsg: '',
     required: true,
   },
   {
-    label: '',
-    name: 'cprice',
-    placeHolder: 'USD',
+    label: 'Course link',
+    name: 'learnMore',
+    placeHolder: '',
     errorMsg: '',
     required: true,
   },
   {
-    name: 'course_type',
+    name: 'type',
     placeHolder: 'Free Course',
     errorMsg: '',
     required: true,
@@ -76,5 +76,8 @@ export default [
         value: 'private',
       },
     ],
+  },
+  {
+    name: 'thumbnail',
   },
 ];

@@ -46,6 +46,8 @@ const CountSection = () => {
     (async () => {
       const response = await axiosInstance.get('/student/all/dashboard');
 
+      
+
       setData((prev) =>
         prev.map((pre) => ({ ...pre, num: response.data.data[pre.link] }))
       );

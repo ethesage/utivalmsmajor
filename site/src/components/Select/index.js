@@ -122,7 +122,9 @@ const Select = ({
             type="button"
             onClick={revileDropDown}
           >
-            <p>{presentValue ? presentText : placeHolder}</p>
+            <p className="clipped-text" style={{ '--number': 1 }}>
+              {presentValue ? presentText : placeHolder}
+            </p>
           </button>
           <div
             className={`dropDownButtons ${openDrop ? 'open-drop' : 'close'}`}

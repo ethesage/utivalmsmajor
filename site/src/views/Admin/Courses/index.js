@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAllcourses } from 'g_actions/admin';
 import useFetch from 'Hooks/useFetch';
 import Button from 'components/Button';
+import Create from 'views/CreateCourse';
 import Overview from 'components/OverView';
 import not_found from 'assets/not_found.png';
 import Loader from 'components/Loading';
@@ -13,7 +14,6 @@ import FullClass from 'views/FullClass';
 import Assignment from 'views/Assignment';
 import AllAssignments from 'views/AllAssignments';
 import TrainerProtected from 'components/Protected/TrainerProtected';
-import BreadCrumb from 'components/BreadCrumbs';
 import StudyPlan from '../../StudyPlan';
 import Members from '../../Members';
 import './style.scss';
@@ -35,7 +35,6 @@ const Courses = ({ gapi }) => {
 
   return (
     <section className="dash-con mx_courx flex-col al-start j-start">
-      <BreadCrumb />
       {loading ? (
         <div className="img">
           <Loader tempLoad={true} full={false} />
@@ -48,7 +47,7 @@ const Courses = ({ gapi }) => {
           <p className="text">There are no Courses yet</p>
 
           <Button
-            link="/create-course"
+            link="/admin/courses/create"
             text="Create Course"
             className="flex-row"
           />
@@ -62,6 +61,14 @@ const Courses = ({ gapi }) => {
               component={Overview}
             />
             <Route exact path={`${path}`} component={CourseList} />
+            <Route exact path={`${path}/create`} component={Create} />
+            <Route exact path={`${path}/edit/:courseId`}>
+              <Create edit />
+            </Route>
+            <Route exact path={`${path}/:courseId/cohorts`}>
+              <div>You</div>
+            </Route>
+
             <Route exact path={`${path}/classroom/:courseId`}>
               <Classroom gapi={gapi} />
             </Route>

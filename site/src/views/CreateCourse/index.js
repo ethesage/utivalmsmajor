@@ -1,32 +1,83 @@
-import React, { useRef, useState } from 'react';
-// import { useDispatch } from 'react-redux';
+import React, { useRef, useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { useToasts } from 'react-toast-notifications';
 import { axiosInstance, toBase64 } from 'helpers';
+import Loader from 'components/Loading';
+import { addCourse, getCurrentCourse, editCourse } from 'g_actions/admin';
+import useFetch from 'Hooks/useFetch';
 import useInput from 'Hooks/useInput';
+import Nav from 'components/InnerHeader';
 import data from 'data/createCourse';
 import Button from 'components/Button';
 import Input from 'components/InputType';
 import './style.scss';
 
-const CreateCourse = () => {
+const CreateCourse = ({ edit }) => {
   const submitButton = useRef();
   const { addToast } = useToasts();
-  const [imgSrc, setImgSrc] = useState();
+  const { currentCourse } = useSelector((state) => state.admin);
+  const [imgSrc, setImgSrc] = useState(currentCourse?.thumbnail || '');
+  const [categories, setCategories] = useState([]);
+  const [levels, setLevels] = useState([]);
   const image = useRef();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
+  const { courseId } = useParams();
+  const [loading, error, fetch] = useFetch(dispatch, !!!currentCourse);
 
-  const [handleSubmit, handleChange, inputTypes, validateSelf] = useInput({
+  useEffect(() => {
+    if (currentCourse) return;
+
+    fetch(() => getCurrentCourse(null, courseId));
+
+    return () => {};
+  }, [currentCourse, fetch, courseId]);
+
+  useEffect(() => {
+    (async () => {
+      const selects = await axiosInstance.get('/admin/cat-names');
+
+      setCategories(selects.data.data.categories);
+      setLevels(selects.data.data.levels);
+    })();
+
+    return () => {};
+  }, []);
+
+  const text = edit
+    ? {
+        loading: 'Editing...',
+        reg: 'Edit',
+      }
+    : {
+        loading: 'Creating...',
+        reg: 'Create',
+      };
+
+  const [
+    handleSubmit,
+    handleChange,
+    inputTypes,
+    validateSelf,
+    setInputTypes,
+  ] = useInput({
     inputs: data,
     submitButton,
-    initials: {},
-    btnText: {
-      loading: 'Creating...',
-      reg: 'Create',
-    },
+    initials: currentCourse || {},
+    btnText: text,
     cb: async (inputs) => {
-      await axiosInstance.patch('/user/update', inputs);
+      const formData = new FormData();
 
-      addToast(`Successfully Updated`, {
+      Object.keys(inputs).forEach((input) =>
+        formData.append(input, inputs[input])
+      );
+
+      const slug = edit ? `/course/update/${courseId}` : '/course/create';
+      const method = edit ? 'patch' : 'post';
+
+      const resp = await axiosInstance[method](slug, formData);
+
+      addToast(edit ? 'Successfully Edited' : `Successfully Created`, {
         appearance: 'success',
         autoDismiss: true,
       });
@@ -34,19 +85,62 @@ const CreateCourse = () => {
       submitButton.current.children[0].innerHTML = 'Create';
       submitButton.current.classList.remove('loader');
 
-      // dispatch(login());
+      edit
+        ? dispatch(editCourse(resp.data.data))
+        : dispatch(addCourse(resp.data.data.course));
     },
   });
+
+  useEffect(() => {
+    if (!currentCourse) return;
+
+    setImgSrc(currentCourse.thumbnail);
+    setInputTypes(
+      Object.keys(inputTypes).reduce(
+        (acc, input) => ({
+          ...acc,
+          [input]: currentCourse[input] ? currentCourse[input] : '',
+        }),
+        {}
+      )
+    );
+
+    return () => {};
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentCourse, setInputTypes]);
 
   const image_handler = async (e) => {
     const { files } = e.target;
     const _value = await toBase64(files[0]);
     setImgSrc(_value);
+
+    handleChange({ target: { name: 'thumbnail', value: files[0] } });
   };
+
+  const selects = {
+    category: categories,
+    level: levels,
+  };
+
+  console.log(inputTypes);
+
+  if (loading) {
+    return <Loader tempLoad={true} full={false} />;
+  }
+
+  if (error) {
+    return (
+      <div className="flex-row">
+        <p>An Error Occured</p>
+      </div>
+    );
+  }
 
   return (
     <section className="cre_cx">
-      <h1 className="cx_hdr">Create New Course</h1>
+      <Nav>
+        <h3 className="cx_hdr">{edit ? 'Edit Course' : 'Create New Course'}</h3>
+      </Nav>
 
       <form className="">
         <div className="sub_fm">
@@ -81,7 +175,7 @@ const CreateCourse = () => {
               required={form.required}
               handleChange={handleChange}
               validateSelf={validateSelf}
-              inputs={form.selects}
+              inputs={selects[form.name]}
               handleSelect={handleChange}
               label={form.label}
               showAsterix={false}
@@ -108,7 +202,7 @@ const CreateCourse = () => {
           ))}
         </div>
         <div className="sub_fm sec_4">
-          {data.slice(7).map((form, i) => (
+          {data.slice(7, 8).map((form, i) => (
             <Input
               key={`login_form_${i}`}
               name={form.name}
@@ -141,7 +235,7 @@ const CreateCourse = () => {
             <input
               type="file"
               id="image_profile"
-              name="profilePic"
+              name="thumbnail"
               accept="image/png, image/jpeg"
               style={{ display: 'none' }}
               onChange={image_handler}
@@ -153,7 +247,7 @@ const CreateCourse = () => {
           btnRef={submitButton}
           onClick={handleSubmit}
           className="s_btn flex-row mx-auto"
-          text="Create"
+          text={edit ? 'Edit' : 'Create'}
         />
       </form>
     </section>
@@ -161,3 +255,5 @@ const CreateCourse = () => {
 };
 
 export default CreateCourse;
+
+// The Data Incubator program of the Data school is designed for early professionals as an immersion program to help kick-start the journey of being a data scientist.

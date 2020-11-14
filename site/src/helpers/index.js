@@ -1,8 +1,8 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-let text = /^[a-zA-Z\d\s\w. -/'’“”"",:;?._{}()|/\\]{2,}$/;
-let shortText = /^[a-zA-Z]{3,}$/;
+let text = /[^\n]{2,}/;
+let shortText = /[^\n]{2,}/;
 let number = /^[0-9]{1,}$/;
 
 const patterns = {
@@ -29,9 +29,13 @@ const patterns = {
   duration: number,
   level: shortText,
   degree: shortText,
-  price: number,
+  cost: number,
   cprice: number,
   course_type: shortText,
+  thumbnail: text,
+  category: shortText,
+  type: shortText,
+  learnMore: shortText,
 };
 
 export const validate = (field, Regex) => {

@@ -3,15 +3,6 @@
 .cre_cx {
   width: 100%;
 
-  .cx_hdr {
-    font-size: 30px;
-    font-weight: normal;
-
-    @include for-size(phone-only) {
-      font-size: 20px;
-    }
-  }
-
   form {
     width: 100%;
     max-width: 700px;

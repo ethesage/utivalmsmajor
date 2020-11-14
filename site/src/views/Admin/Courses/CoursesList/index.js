@@ -1,89 +1,72 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { getCurrentCourse } from 'g_actions/admin';
 import { useSelector } from 'react-redux';
-import { Progress } from 'react-sweet-progress';
+import DropDown from 'components/DropDown';
+import Button from 'components/Button';
 import Image from 'components/Image';
-import medal from 'assets/icons/medal.png';
 import 'react-sweet-progress/lib/style.css';
 import './style.scss';
 
 const CousreCard = ({ data }) => {
-  const { isStudent } = useSelector((state) => state.auth);
-  const {
-    isCompleted,
-    CourseCohort: { id, dateRange },
-    Cohort: { cohort },
-    Course,
-  } = data;
+  const { id, thumbnail, name, CourseCohorts } = data;
+  const dispatch = useDispatch();
+  const { push } = useHistory();
+
+  const viewCohort = (e) => {
+    e.preventDefault();
+
+    dispatch(getCurrentCourse(data));
+    push(`/admin/courses/${id}/cohorts`);
+  };
 
   return (
     <div className="p_cx_cd">
-      <Link className="img-sec" to={`/courses/overview/${id}`}>
-        <Image image={Course.thumbnail} imgClass="img cover" lazyLoad={true} />
+      <Link className="img-sec" to={''} onClick={viewCohort}>
+        <Image image={thumbnail} imgClass="img cover" lazyLoad={true} />
       </Link>
       <div className="txt-sec">
         <div className="title_sec flex-row j-space">
-          <h3 className="theme-color">{Course.name}</h3>
-          {isStudent && isCompleted ? <img src={medal} alt="" /> : ''}
+          <h3 className="theme-color">{name}</h3>
+          <DropDown>
+            <ul>
+              <li onClick={viewCohort}>View</li>
+              <li
+                onClick={() => {
+                  dispatch(getCurrentCourse(data));
+                  push(`/admin/courses/edit/${id}`);
+                }}
+              >
+                Edit
+              </li>
+              {/* <li>Delete</li> */}
+            </ul>
+          </DropDown>
         </div>
 
-        {isStudent ? (
-          <>
-            <div>
-              <small>Completion level</small>
-              <Progress
-                className="slim"
-                percent={
-                  Course.CourseProgresses[0]
-                    ? Course.CourseProgresses[0].progress
-                    : 0
-                }
-                status="error"
-                theme={{
-                  success: {
-                    symbol: '‍',
-                    color: 'rgb(223, 105, 180)',
-                  },
-                  error: {
-                    symbol: '40%',
-                    color: 'red',
-                  },
-                  default: {
-                    symbol: '😱',
-                    color: '#fbc630',
-                  },
-                }}
-              />
-            </div>
-            <div className="grade flex-row j-space">
-              <small>
-                <strong>Grade:</strong> 100
-              </small>
-              <button>
-                <small>View Details</small>
-              </button>
-            </div>
-          </>
-        ) : null}
-
-        {!isStudent ? (
-          <div className="chx flex-row j-space">
-            <strong>{<p>{cohort} Cohort</p>}</strong>
-            <small>{dateRange}</small>
-          </div>
-        ) : null}
+        <div className="chx flex-row j-space">
+          <strong>{<p>{CourseCohorts.length} Cohorts</p>}</strong>
+        </div>
       </div>
     </div>
   );
 };
 
 const CourseList = () => {
-  const enrolledcourses = useSelector((state) => state.member.enrolledcourses);
+  const allCourses = useSelector((state) => state.admin.allCourses);
 
   return (
     <div className="main flex-col cx_list_con j-start al-start">
+      <div className="crx_nw flex-row j-end">
+        <Button
+          text="Create New Course"
+          className="flex-row"
+          link="/admin/courses/create"
+        />
+      </div>
       <section className="course_list">
-        {enrolledcourses.map((course, i) => (
+        {allCourses.map((course, i) => (
           <CousreCard data={course} key={`enrolled_c_${i}`} />
         ))}
       </section>

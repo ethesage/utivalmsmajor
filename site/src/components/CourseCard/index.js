@@ -68,9 +68,9 @@ const CourseCard = ({ data, size = '' }) => {
             </small>
             <small>{value}</small>
           </div>
-          <Link to={link} className="ext">
+          <a href={link} target="_" className="ext">
             Learn More
-          </Link>
+          </a>
         </div>
         <div className="en_rl flex-row j-space">
           <div className="cst">

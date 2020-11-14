@@ -8,12 +8,13 @@ const course = (state = initialState, action) => {
     case 'SPLICE_BREADCRUMB':
       const new_state = [...state];
       new_state.splice(action.payload);
-
       return new_state;
+
+    case 'RESET':
+      return initialState;
     default:
       return state;
   }
 };
 
 export default course;
-//SPLICE_BREADCRUMB

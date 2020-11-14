@@ -91,5 +91,5 @@ export default function Input({
     });
   };
 
-  return [handleSubmit, handleChange, inputTypes, validateSelf];
+  return [handleSubmit, handleChange, inputTypes, validateSelf, setInputTypes];
 }

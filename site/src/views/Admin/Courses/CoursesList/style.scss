@@ -5,6 +5,14 @@
   flex-grow: 1;
   width: 100%;
 
+  .crx_nw {
+    width: 100%;
+    margin-bottom: 50px;
+    .btn {
+      max-width: 200px;
+    }
+  }
+
   .nt_found {
     flex-grow: 1;
 

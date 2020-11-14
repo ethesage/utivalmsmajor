@@ -18,7 +18,7 @@ const DropDown = ({ children, header }) => {
         {header ? (
           header
         ) : (
-          <div className="img-sec flex-row">
+          <div className="flex-row">
             <img src={dots} alt="dots" className="img contain" />
           </div>
         )}

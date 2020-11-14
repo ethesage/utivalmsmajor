@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import './style.scss';
 
-const Select = ({ name, types, handleSelect }) => {
-  const [presentValue, setPresentValue] = useState('');
+const Select = ({ name, types, handleSelect, value }) => {
+  const [presentValue, setPresentValue] = useState(value);
 
   const parent = React.createRef();
 
