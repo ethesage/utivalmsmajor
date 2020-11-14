@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useToasts } from 'react-toast-notifications';
 import { axiosInstance, toBase64 } from 'helpers';
 import Loader from 'components/Loading';
-import { addCourse, getCurrentCourse, editCourse } from 'g_actions/admin';
-import useFetch from 'Hooks/useFetch';
+import { addCourse, editCourse } from 'g_actions/admin';
+import getCurrentCourse from 'Hooks/getCCAdmin';
 import useInput from 'Hooks/useInput';
 import Nav from 'components/InnerHeader';
 import data from 'data/createCourse';
@@ -23,15 +23,7 @@ const CreateCourse = ({ edit }) => {
   const image = useRef();
   const dispatch = useDispatch();
   const { courseId } = useParams();
-  const [loading, error, fetch] = useFetch(dispatch, !!!currentCourse);
-
-  useEffect(() => {
-    if (currentCourse) return;
-
-    fetch(() => getCurrentCourse(null, courseId));
-
-    return () => {};
-  }, [currentCourse, fetch, courseId]);
+  const [loading, error] = getCurrentCourse();
 
   useEffect(() => {
     (async () => {
@@ -121,8 +113,6 @@ const CreateCourse = ({ edit }) => {
     category: categories,
     level: levels,
   };
-
-  console.log(inputTypes);
 
   if (loading) {
     return <Loader tempLoad={true} full={false} />;

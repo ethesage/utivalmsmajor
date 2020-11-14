@@ -1,6 +1,7 @@
 export const initialState = {
   allCourses: null,
   currentCourse: null,
+  cohorts: null,
 };
 
 const course = (state = initialState, action) => {
@@ -9,6 +10,20 @@ const course = (state = initialState, action) => {
       return {
         ...state,
         allCourses: action.payload,
+      };
+
+    case 'GET_ALL_COURSE_COHORTS':
+      return {
+        ...state,
+        cohorts: action.payload,
+      };
+
+    case 'ADD_COURSE_COHORT':
+      return {
+        ...state,
+        cohorts: state.cohorts
+          ? [...state.cohorts, action.payload]
+          : [action.payload],
       };
 
     case 'ADD_COURSE':

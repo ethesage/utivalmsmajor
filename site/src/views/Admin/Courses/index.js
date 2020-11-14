@@ -5,10 +5,12 @@ import { getAllcourses } from 'g_actions/admin';
 import useFetch from 'Hooks/useFetch';
 import Button from 'components/Button';
 import Create from 'views/CreateCourse';
-import Overview from 'components/OverView';
 import not_found from 'assets/not_found.png';
 import Loader from 'components/Loading';
 import CourseList from './CoursesList';
+import CohortList from 'views/AllCourseCohorts';
+
+import Overview from 'components/OverView';
 import Classroom from 'views/Classroom';
 import FullClass from 'views/FullClass';
 import Assignment from 'views/Assignment';
@@ -65,9 +67,11 @@ const Courses = ({ gapi }) => {
             <Route exact path={`${path}/edit/:courseId`}>
               <Create edit />
             </Route>
-            <Route exact path={`${path}/:courseId/cohorts`}>
-              <div>You</div>
-            </Route>
+            <Route
+              exact
+              path={`${path}/:courseId/cohorts`}
+              component={CohortList}
+            />
 
             <Route exact path={`${path}/classroom/:courseId`}>
               <Classroom gapi={gapi} />

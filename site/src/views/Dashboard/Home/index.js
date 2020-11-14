@@ -12,7 +12,7 @@ import girl from 'assets/utiva viretnship programme.png';
 import UserClases from 'components/UserMainClass';
 import { getCourse } from './action';
 import { mapCourse } from './action';
-import no_course from '../../../assets/dashboard/no_course.png';
+import no_course from 'assets/dashboard/no_course.png';
 import './style.scss';
 
 const InfoSec = ({ txt, children, useSubtitle = true }) => (
