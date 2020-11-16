@@ -1,8 +1,9 @@
+/* eslint-disable indent */
 /* eslint-disable import/prefer-default-export */
 // import sequelize from "sequelize";
-import { paginate, calculateLimitAndOffset } from "paginate-info";
-import models from "../database/models";
-import helpers from "../helpers";
+import { paginate, calculateLimitAndOffset } from 'paginate-info';
+import models from '../database/models';
+import helpers from '../helpers';
 // import  from "../helpers"
 
 const { successStat, errorStat, uploadImage } = helpers;
@@ -23,9 +24,21 @@ export const create = async (req, res) => {
 
   const { id } = req.session.user;
 
-  console.log(req.files);
+  const exixtingCourse = await models.Course.findOne({
+    where: {
+      name: req.body.course.name,
+    },
+  });
+
+  if (exixtingCourse) {
+    return errorStat(res, 409, 'This Course already exists');
+  }
+
   const thumbnail = req.files.thumbnail
-    ? await uploadImage(req.files.thumbnail, `thumbnail-${Date.now()}`)
+    ? await uploadImage(
+        req.files.thumbnail,
+        `thumbnail-${req.body.course.name}`
+      )
     : null;
 
   try {
@@ -35,24 +48,28 @@ export const create = async (req, res) => {
       thumbnail,
     });
 
-    const descVals = courseDescription.map((desc) => ({
-      title: desc.title,
-      description: desc.description,
-      trainerId: id,
-      courseId: course.id,
-    }));
+    let resource = [];
 
-    const resource = await models.CourseDescription.bulkCreate(descVals, {
-      ignoreDuplicates: true,
-    });
+    if (courseDescription) {
+      const descVals = courseDescription.map((desc) => ({
+        title: desc.title,
+        description: desc.description,
+        trainerId: id,
+        courseId: course.id,
+      }));
 
-    return successStat(res, 201, "data", {
+      resource = await models.CourseDescription.bulkCreate(descVals, {
+        ignoreDuplicates: true,
+      });
+    }
+
+    return successStat(res, 201, 'data', {
       course,
       courseDescription: resource,
     });
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
@@ -95,33 +112,33 @@ export const getCourse = async (req, res) => {
       include: [
         {
           model: models.CourseDescription,
-          attributes: ["id", "courseId", "title", "description", "trainerId"],
+          attributes: ['id', 'courseId', 'title', 'description', 'trainerId'],
         },
         {
           model: models.Cohort,
           where: { courseId },
-          order: [["createdAt", "DESC"]],
+          order: [['createdAt', 'DESC']],
           limit: 1,
           attributes: [
-            "id",
-            "courseId",
-            "cohort",
-            "expiresAt",
-            "dateRange",
-            "status",
-            "totalStudent",
-            "totalClasses",
+            'id',
+            'courseId',
+            'cohort',
+            'expiresAt',
+            'dateRange',
+            'status',
+            'totalStudent',
+            'totalClasses',
           ],
         },
       ],
     });
 
-    if (!course) return errorStat(res, 404, "Course Not Found");
+    if (!course) return errorStat(res, 404, 'Course Not Found');
 
-    return successStat(res, 200, "data", course);
+    return successStat(res, 200, 'data', course);
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
@@ -141,22 +158,22 @@ export const getAllCourses = async (req, res) => {
       include: [
         {
           model: models.CourseDescription,
-          attributes: ["id", "courseId", "title", "description", "trainerId"],
+          attributes: ['id', 'courseId', 'title', 'description', 'trainerId'],
         },
         {
           model: models.CourseCohort,
           required: false,
-          order: [["createdAt"]],
+          order: [['createdAt']],
           limit: 1,
           attributes: [
-            "id",
-            "courseId",
+            'id',
+            'courseId',
             // "cohort",
-            "expiresAt",
-            "dateRange",
-            "status",
-            "totalStudent",
-            "totalClasses",
+            'expiresAt',
+            'dateRange',
+            'status',
+            'totalStudent',
+            'totalClasses',
           ],
         },
         {
@@ -168,39 +185,44 @@ export const getAllCourses = async (req, res) => {
       ],
     });
 
-    if (!rows[0]) return errorStat(res, 404, "Course Not Found");
+    if (!rows[0]) return errorStat(res, 404, 'Course Not Found');
 
     const paginationMeta = paginate(currentPage, count, rows, pageLimit);
 
-    return successStat(res, 200, "data", { paginationMeta, rows });
+    return successStat(res, 200, 'data', { paginationMeta, rows });
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
 export const updateCourse = async (req, res) => {
   const { courseId } = req.body.course;
 
-  const thumbnail = req.files.thumbnail
-    ? await uploadImage(req.files.thumbnail, `thumbnail-${Date.now()}`)
-    : null;
+  let thumbnail;
+
+  if (req.files.thumbnail && typeof req.files.thumbnail !== 'string') {
+    thumbnail = await uploadImage(
+      req.files.thumbnail,
+      `thumbnail-${req.body.course.name}`
+    );
+  } else thumbnail = req.files.thumbnail;
 
   try {
     const course = await models.Course.findOne({
       where: { id: courseId },
     });
 
-    if (!course) return errorStat(res, 404, "Course Description not found");
+    if (!course) return errorStat(res, 404, 'Course Description not found');
 
     await course.update({
       ...req.body.course,
-      ...(req.files.thumbnail ? thumbnail : {}),
+      thumbnail,
     });
 
-    return successStat(res, 200, "data", course);
+    return successStat(res, 200, 'data', course);
   } catch (e) {
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
@@ -212,15 +234,17 @@ export const updateCourseDescription = async (req, res) => {
       where: { id: courseDescriptionId },
     });
 
-    if (!courseDescription) return errorStat(res, 404, "Course Description not found");
+    if (!courseDescription) {
+      return errorStat(res, 404, 'Course Description not found');
+    }
 
     await courseDescription.update({
       ...req.body.course,
     });
 
-    return successStat(res, 200, "data", courseDescription);
+    return successStat(res, 200, 'data', courseDescription);
   } catch (e) {
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
@@ -241,14 +265,14 @@ export const deleteCourse = async (req, res) => {
     });
 
     if (!course) {
-      return errorStat(res, 404, "Course not found");
+      return errorStat(res, 404, 'Course not found');
     }
 
     await course.destroy();
 
-    return successStat(res, 200, "data", "Delete Successful");
+    return successStat(res, 200, 'data', 'Delete Successful');
   } catch (e) {
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
@@ -261,10 +285,10 @@ export const getAllCoursesAdmin = async (req, res) => {
  WHERE "Courses"."id" IS NOT NULL GROUP BY "Courses"."id"`
     );
 
-    return successStat(res, 200, "data", studentByCourse);
+    return successStat(res, 200, 'data', studentByCourse);
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
@@ -281,56 +305,52 @@ export const Courses = async (req, res) => {
     limit,
   };
 
-  const query = user ? [
-    {
-      model: models.CourseDescription,
-      attributes: ["courseId", "title", "description"],
-    },
-    {
-      model: models.CourseCohort,
-      required: false,
-      order: [["createdAt"]],
-      limit: 1,
-      attributes: [
-        "id",
-      ],
-    },
-    {
-      model: models.StudentCourse,
-      required: false,
-      where: { studentId: user },
-    }
-  ] : [
-    {
-      model: models.CourseDescription,
-      attributes: ["courseId", "title", "description"],
-    },
-    {
-      model: models.CourseCohort,
-      required: false,
-      order: [["createdAt"]],
-      limit: 1,
-      attributes: [
-        "id",
-      ],
-    },
-  ];
+  const query = user
+    ? [
+        {
+          model: models.CourseDescription,
+          attributes: ['courseId', 'title', 'description'],
+        },
+        {
+          model: models.CourseCohort,
+          required: false,
+          order: [['createdAt']],
+          limit: 1,
+          attributes: ['id'],
+        },
+        {
+          model: models.StudentCourse,
+          required: false,
+          where: { studentId: user },
+        },
+      ]
+    : [
+        {
+          model: models.CourseDescription,
+          attributes: ['courseId', 'title', 'description'],
+        },
+        {
+          model: models.CourseCohort,
+          required: false,
+          order: [['createdAt']],
+          limit: 1,
+          attributes: ['id'],
+        },
+      ];
 
   try {
     const { rows, count } = await models.Course.findAndCountAll({
       ...sqlQueryMap,
-      include: [
-        ...query
-      ],
+      include: [...query],
     });
 
     // if (!rows[0]) return errorStat(res, 404, "Course Not Found");
 
     const paginationMeta = paginate(currentPage, count, rows, pageLimit);
 
-    return successStat(res, 200, "data", { paginationMeta, rows });
+    return successStat(res, 200, 'data', { paginationMeta, rows });
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };

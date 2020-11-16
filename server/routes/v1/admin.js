@@ -1,10 +1,18 @@
 import express from 'express';
 import 'express-async-errors';
-import { getAdminDashboard, getAllCourses } from '../../controllers/admin';
+import {
+  getAdminDashboard,
+  getAllCourses,
+  getCourseCatnames,
+  getCourse,
+  getAllCourseCohorts,
+  getCourseCohort,
+} from '../../controllers/admin';
 import middlewares from '../../middlewares';
 
 const {
-  //   validate,
+  validate,
+  idSchema,
   //   addStudentSchema,
   //   getStudentSchema,
   // getStudentCourseSchema,
@@ -33,8 +41,27 @@ const adminRoutes = express();
 adminRoutes.get('/dashboard', usession.can('course:crud'), getAdminDashboard);
 
 adminRoutes.get('/courses', usession.can('course:crud'), getAllCourses);
+adminRoutes.get(
+  '/course/:id',
+  usession.can('course:crud'),
+  validate(idSchema),
+  getCourse
+);
+adminRoutes.get('/cat-names', usession.can('course:crud'), getCourseCatnames);
 
-// adminRoutes.get('/', usession.can(''), getAllStudentCourse);
+adminRoutes.get(
+  '/course-cohorts/:id',
+  usession.can(''),
+  validate(idSchema),
+  getAllCourseCohorts
+);
+
+adminRoutes.get(
+  '/course-cohort/:id',
+  usession.can(''),
+  validate(idSchema),
+  getCourseCohort
+);
 
 // adminRoutes.get(
 //   '/allstudents/:studentCourseId',

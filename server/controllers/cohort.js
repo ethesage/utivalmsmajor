@@ -1,8 +1,8 @@
 /* eslint-disable import/prefer-default-export */
 // import sequelize from "sequelize";
 import { paginate, calculateLimitAndOffset } from 'paginate-info';
-import models from "../database/models";
-import helpers from "../helpers";
+import models from '../database/models';
+import helpers from '../helpers';
 // import { createCourse } from "../middlewares/validators/schemas/course";
 // import  from "../helpers"
 
@@ -22,10 +22,10 @@ const { successStat, errorStat } = helpers;
 export const cohort = async (req, res) => {
   try {
     const isCohort = await models.Cohort.findOne({
-      where: { ...req.body.cohort }
+      where: { ...req.body.cohort },
     });
 
-    console.log(isCohort)
+    console.log(isCohort);
 
     if (isCohort) return errorStat(res, 404, 'Cohort already exist');
 
@@ -43,43 +43,86 @@ export const cohort = async (req, res) => {
 };
 
 export const addCohortCourse = async (req, res) => {
-  const { courseId, cohortId } = req.body.cohort;
+  const { courseId } = req.body.cohort;
 
-  //   const { id } = req.session.user;
+  // const { id } = req.session.user;
 
-  try {
-    const course = await models.Course.findOne({
-      where: { id: courseId }
+  const course = await models.Course.findOne({
+    where: { id: courseId },
+  });
+
+  if (!course) return errorStat(res, 404, 'Course does not exist');
+
+  let cohortGet = await models.Cohort.findOne({
+    where: { cohort: req.body.cohort.cohort },
+  });
+
+  if (!cohortGet) {
+    cohortGet = await models.Cohort.create({
+      cohort: req.body.cohort.cohort,
     });
-
-    if (!course) return errorStat(res, 404, 'Course does not exist');
-
-    const cohortGet = await models.Cohort.findOne({
-      where: { id: cohortId }
-    });
-
-    if (!cohortGet) return errorStat(res, 404, 'Cohort does not exist');
-
-    const courseCohort = await models.CourseCohort.findOne({
-      where: { courseId, cohortId }
-    });
-
-    if (courseCohort) return errorStat(res, 404, 'Course already exist in this cohort');
-
-    const createCohortCourse = await models.CourseCohort.create({
-      ...req.body.cohort,
-      status: 'ongoing',
-    });
-
-    await cohortGet.update({
-      totalCourse: cohortGet.totalCourse + 1
-    });
-
-    return successStat(res, 201, 'data', createCohortCourse);
-  } catch (e) {
-    console.log(e);
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
+
+  const courseCohort = await models.CourseCohort.findOne({
+    where: { courseId, cohortId: cohortGet.id },
+  });
+
+  if (courseCohort) {
+    return errorStat(res, 404, 'Course already exist in this cohort');
+  }
+
+  const createdCohort = await models.CourseCohort.create({
+    ...req.body.cohort,
+    status: 'ongoing',
+    totalStudent: 0,
+    cohortId: cohortGet.id,
+  });
+
+  await cohortGet.update({
+    totalCourse: cohortGet.totalCourse + 1,
+  });
+
+  const course_cohort = await models.CourseCohort.findOne({
+    where: {
+      id: createdCohort.id,
+    },
+    include: [
+      {
+        model: models.Cohort,
+      },
+      {
+        model: models.Course,
+        include: [
+          {
+            model: models.CourseDescription,
+          },
+        ],
+      },
+      {
+        model: models.Classes,
+        include: [
+          {
+            model: models.Trainer,
+            include: {
+              model: models.User,
+              attributes: [
+                'firstName',
+                'lastName',
+                'profilePic',
+                'occupation',
+                'bio',
+              ],
+            },
+          },
+          {
+            model: models.ClassResources,
+          },
+        ],
+      },
+    ],
+  });
+
+  return successStat(res, 201, 'data', course_cohort);
 };
 
 export const getCohort = async (req, res) => {
@@ -92,9 +135,9 @@ export const getCohort = async (req, res) => {
       where: { id: cohortId },
       include: [
         {
-          model: models.Course
-        }
-      ]
+          model: models.Course,
+        },
+      ],
     });
 
     if (!cohortGet) return errorStat(res, 404, 'Cohort does not exist');
@@ -120,9 +163,9 @@ export const getAllCohort = async (req, res) => {
       ...sqlQueryMap,
       include: [
         {
-          model: models.CourseCohort
-        }
-      ]
+          model: models.CourseCohort,
+        },
+      ],
     });
 
     if (!rows[0]) return errorStat(res, 404, 'Cohort does not exist');
@@ -152,7 +195,7 @@ export const updateCohort = async (req, res) => {
     if (!cohortGet) return errorStat(res, 404, 'Cohort does not exist');
 
     await cohortGet.update({
-      ...req.body.cohort
+      ...req.body.cohort,
     });
 
     return successStat(res, 201, 'data', cohortGet);
@@ -178,7 +221,7 @@ export const updateCourseCohort = async (req, res) => {
     if (!cohortGet) return errorStat(res, 404, 'Cohort does not exist');
 
     await cohortGet.update({
-      ...req.body.cohort
+      ...req.body.cohort,
     });
 
     return successStat(res, 201, 'data', cohortGet);
@@ -197,8 +240,8 @@ export const deleteCohort = async (req, res) => {
       include: [
         {
           model: models.Cohort,
-        }
-      ]
+        },
+      ],
     });
 
     if (!cohortGet) {
@@ -223,7 +266,7 @@ export const deleteCourseCohort = async (req, res) => {
         // {
         //   model: models.Cohort,
         // }
-      ]
+      ],
     });
 
     if (!cohortGet) {

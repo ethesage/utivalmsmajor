@@ -7,8 +7,9 @@ export const createCohort = Joi.object().keys({
 
 export const addcourse = Joi.object().keys({
   courseId: Joi.string().uuid().trim().required(),
-  cohortId: Joi.string().uuid().trim().required(),
+  cohort: Joi.string().trim(),
   expiresAt: Joi.string().required(),
+  folderId: Joi.string().required(),
   dateRange: Joi.string().required(),
 });
 

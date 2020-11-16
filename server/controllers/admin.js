@@ -73,16 +73,147 @@ export const getAdminDashboard = async (req, res) => {
 
 export const getAllCourses = async (req, res) => {
   const courses = await models.Course.findAll({
-    attributes: {
-      include: [[sequelize.fn('COUNT', 'cohortId'), 'cohorts']],
-    },
     include: {
       model: models.CourseCohort,
-      attributes: [],
+      attributes: ['id'],
     },
 
-    group: ['Course.id'],
+    group: ['Course.id', 'CourseCohorts.id'],
   });
 
   return successStat(res, 200, 'data', courses);
+};
+
+export const getAllCourseCohorts = async (req, res) => {
+  const { id } = req.body.admin;
+
+  const resource = await models.CourseCohort.findAll({
+    where: { courseId: id },
+    attributes: [
+      'id',
+      'cohortId',
+      'dateRange',
+      'totalStudent',
+      'courseId',
+      'folderId',
+    ],
+    include: [
+      {
+        model: models.Cohort,
+        attributes: ['cohort', 'id'],
+      },
+      {
+        model: models.Classes,
+        attributes: ['id'],
+        include: [
+          {
+            model: models.Trainer,
+            attributes: ['userId'],
+          },
+        ],
+      },
+    ],
+  });
+
+  if (!resource[0]) {
+    return successStat(res, 200, 'data', []);
+  }
+
+  return successStat(res, 200, 'data', resource);
+};
+
+export const getCourseCohort = async (req, res) => {
+  const { id } = req.body.admin;
+
+  const resource = await models.CourseCohort.findOne({
+    where: { id },
+    attributes: ['id', 'expiresAt', 'dateRange', 'folderId'],
+    include: [
+      {
+        model: models.Cohort,
+        attributes: ['id', 'cohort'],
+      },
+      {
+        model: models.Course,
+        attributes: ['id', 'name', 'description', 'duration', 'thumbnail'],
+        include: [
+          {
+            model: models.CourseDescription,
+            attributes: ['id', 'title', 'description'],
+          },
+        ],
+      },
+      {
+        model: models.Classes,
+        attributes: ['id', 'title', 'description', 'link'],
+        include: [
+          {
+            model: models.Trainer,
+            attributes: ['id', 'userId'],
+            include: {
+              model: models.User,
+              attributes: [
+                'firstName',
+                'lastName',
+                'profilePic',
+                'occupation',
+              ],
+            },
+          },
+          {
+            model: models.ClassResources,
+          },
+        ],
+      },
+    ],
+  });
+
+  if (!resource) {
+    return errorStat(res, 404, 'Course not found');
+  }
+
+  return successStat(res, 200, 'data', resource);
+};
+
+export const getCourse = async (req, res) => {
+  const { id } = req.body.admin;
+
+  const course = await models.Course.findOne({
+    where: {
+      id,
+    },
+  });
+
+  return successStat(res, 200, 'data', course);
+};
+
+export const getCourseCatnames = async (req, res) => {
+  const categories = await models.codeDesc.findAll({
+    where: {
+      seq: 1,
+    },
+    attributes: ['code', 'desc'],
+  });
+
+  const levels = await models.codeDesc.findAll({
+    where: {
+      seq: 2,
+    },
+    attributes: ['code', 'desc'],
+  });
+
+  const coursecats = categories.map((cat) => ({
+    name: cat.code,
+    value: cat.desc,
+  }));
+
+  const courseLevels = levels.map((cat) => ({
+    name: cat.code,
+    value: cat.desc,
+  }));
+
+  return successStat(res, 200, 'data', {
+    categories: coursecats,
+    levels: courseLevels,
+  });
 };

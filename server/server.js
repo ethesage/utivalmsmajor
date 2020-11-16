@@ -114,6 +114,8 @@ sequelize
     log(chalk.yellow(err.message));
   });
 
+// sequelize.sync();
+
 // app error handler, to handle sync and asyc errors
 app.use((err, req, res, next) => {
   res.locals.message = err.message;
