@@ -9,8 +9,8 @@ import not_found from 'assets/not_found.png';
 import Loader from 'components/Loading';
 import CourseList from './CoursesList';
 import CohortList from 'views/AllCourseCohorts';
+import Overview from 'components/OverView/Admin';
 
-import Overview from 'components/OverView';
 import Classroom from 'views/Classroom';
 import FullClass from 'views/FullClass';
 import Assignment from 'views/Assignment';
@@ -59,7 +59,12 @@ const Courses = ({ gapi }) => {
           <Switch>
             <Route
               exact
-              path={`${path}/overview/:courseId`}
+              path={`${path}/overview/:courseId/:cohortId`}
+              component={Overview}
+            />
+            <Route
+              exact
+              path={`${path}/overview/:courseId/:cohortId/edit`}
               component={Overview}
             />
             <Route exact path={`${path}`} component={CourseList} />

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import not_found from 'assets/not_found.png';
 import './style.scss';
 
 const ClassesSec = ({
@@ -24,7 +25,7 @@ const ClassesSec = ({
 
   return (
     <Link
-      to={`/admin/courses/${courseId}/${id}`}
+      to={`/admin/courses/overview/${courseId}/${id}`}
       className="next_class flex-row al-start j-space"
     >
       <img src={thumbnail} alt="" className="main_img" />
@@ -49,8 +50,17 @@ const ClassesSec = ({
 };
 
 const Classes = ({ data, thumbnail }) => {
+  if (!data || data?.length === 0) {
+    return (
+      <div className="nt_found img flex-col">
+        <img src={not_found} alt="Not found" />
+        <p className="text">There are no Cohorts yet</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="p_sec flex-row j-space">
+    <div className="p_sec_admin flex-row j-start">
       {data.map((nextclass, i) => (
         <ClassesSec
           key={`next_classes_${i}`}

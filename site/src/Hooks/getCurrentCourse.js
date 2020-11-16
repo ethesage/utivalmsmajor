@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import useFetch from 'Hooks/useFetch';
 import { getEnrolledCourses } from 'g_actions/member';
 
 export default () => {
@@ -11,6 +12,7 @@ export default () => {
   );
   const { isStudent } = useSelector((state) => state.auth);
   const userType = isStudent ? 'student' : 'trainer';
+  const [loading, error, fetch] = useFetch(dispatch, !!!currentCourse);
 
   useEffect(() => {
     if (currentCourse) return;
@@ -19,8 +21,19 @@ export default () => {
       (course) => course.courseCohortId === courseId
     );
 
-    dispatch(getEnrolledCourses(courseId, course, userType));
+    fetch(() => getEnrolledCourses(courseId, course, userType));
 
     return () => {};
-  }, [enrolledcourses, courseId, currentCourse, dispatch, userType]);
+  }, [
+    enrolledcourses,
+    courseId,
+    currentCourse,
+    dispatch,
+    userType,
+    loading,
+    error,
+    fetch,
+  ]);
+
+  return [loading, error, currentCourse];
 };

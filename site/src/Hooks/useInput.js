@@ -49,8 +49,10 @@ export default function Input({
       return;
     }
 
-    submitButton.current.children[0].innerHTML = btnText.loading;
-    submitButton.current.classList.add('loader');
+    if (submitButton.current) {
+      submitButton.current.children[0].innerHTML = btnText.loading;
+      submitButton.current.classList.add('loader');
+    }
 
     let response;
 

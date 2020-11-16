@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import './style.scss';
 
 const CourseNav = () => {
-  const { courseId } = useParams();
+  const { courseId, cohortId } = useParams();
   const { isStudent, isTrainer } = useSelector((state) => state.auth);
 
   useEffect(() => {
@@ -18,22 +18,29 @@ const CourseNav = () => {
   let links = [];
 
   const base_links = [
-    { link: `overview/${courseId}`, title: 'Overview' },
-    { link: `classroom/${courseId}`, title: 'Classroom' },
+    { link: `/courses/overview/${courseId}`, title: 'Overview' },
+    { link: `/courses/classroom/${courseId}`, title: 'Classroom' },
   ];
 
   const user_links = [
-    { link: `study-plan/${courseId}`, title: 'Study Plan' },
-    { link: `members/${courseId}`, title: 'Members' },
+    { link: `/courses/overview/${courseId}`, title: 'Overview' },
+    { link: `/courses/study-plan/${courseId}`, title: 'Study Plan' },
+    { link: `/courses/members/${courseId}`, title: 'Members' },
   ];
 
   const t_link = [
-    { link: `all-assignments/${courseId}`, title: 'Assignments' },
+    { link: `/courses/all-assignments/${courseId}`, title: 'Assignments' },
   ];
 
   const a_links = [
-    { link: `study-plan/${courseId}`, title: 'Calender' },
+    {
+      link: `/admin/courses/overview/${courseId}/${cohortId}`,
+      title: 'Overview',
+    },
+    { link: `classroom/${courseId}`, title: 'Classroom' },
     { link: `students`, title: 'Students' },
+    { link: `all-assignments/${courseId}`, title: 'Assignments' },
+    { link: `study-plan/${courseId}`, title: 'Calender' },
   ];
 
   if (isStudent) {
@@ -41,7 +48,7 @@ const CourseNav = () => {
   } else if (isTrainer) {
     links = [...base_links, ...user_links, ...t_link];
   } else {
-    links = [...base_links, ...t_link, ...a_links];
+    links = a_links;
   }
 
   return (
@@ -50,7 +57,7 @@ const CourseNav = () => {
         {links.map((link, i) => (
           <li key={`nav_cx_${i}`} className="cx_nav_item">
             <NavLink
-              to={`/courses/${link.link}`}
+              to={`${link.link}`}
               className="cx_linz"
               activeClassName="__active"
             >

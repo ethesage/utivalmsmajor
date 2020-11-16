@@ -39,6 +39,8 @@ const patterns = {
   category: shortText,
   type: shortText,
   learnMore: shortText,
+  title: shortText,
+  name: shortText,
 };
 
 export const validate = (field, Regex) => {

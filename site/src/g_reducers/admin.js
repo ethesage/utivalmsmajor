@@ -1,7 +1,8 @@
 export const initialState = {
   allCourses: null,
   currentCourse: null,
-  cohorts: null,
+  cohorts: {},
+  currentCohort: {},
 };
 
 const course = (state = initialState, action) => {
@@ -15,15 +16,33 @@ const course = (state = initialState, action) => {
     case 'GET_ALL_COURSE_COHORTS':
       return {
         ...state,
-        cohorts: action.payload,
+        cohorts: { [action.payload.name]: action.payload.cohort },
       };
 
     case 'ADD_COURSE_COHORT':
       return {
         ...state,
-        cohorts: state.cohorts
-          ? [...state.cohorts, action.payload]
-          : [action.payload],
+        cohorts: state.cohorts[action.payload.name]
+          ? {
+              ...state.cohorts,
+              [action.payload.name]: [
+                ...state.cohorts[action.payload.name],
+                action.payload.cohort,
+              ],
+            }
+          : {
+              ...state.cohorts,
+              [action.payload.name]: [action.payload.cohort],
+            },
+      };
+
+    case 'ADD_CURRENT_COHORT':
+      return {
+        ...state,
+        currentCohort: {
+          ...state.currentCohort,
+          [action.payload.name]: action.payload.courseCohort,
+        },
       };
 
     case 'ADD_COURSE':

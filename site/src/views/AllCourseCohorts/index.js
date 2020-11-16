@@ -2,10 +2,11 @@ import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
+import moment from 'moment';
 import { getAllCourseCohorts, addCourseCohort } from 'g_actions/admin';
 import Button from 'components/Button';
 import getCurrentCourse from 'Hooks/getCCAdmin';
-import Loading from 'components/Loader';
+import Loading from 'components/Loading';
 import Nav from 'components/InnerHeader';
 import useFetch from 'Hooks/useFetch';
 import AllCohorts from 'components/AllCohorts';
@@ -23,34 +24,43 @@ const CourseCohorts = () => {
   const { courseId } = useParams();
   const { addToast } = useToasts();
   const { cohorts } = useSelector((state) => state.admin);
-  const [c_loading, c_error, fetch] = useFetch(dispatch, !!!cohorts);
+  const [c_loading, c_error, fetch] = useFetch(
+    dispatch,
+    !!!cohorts[currentCourse?.name]
+  );
   const submitButton = useRef();
   const modalRef = useRef();
 
   useEffect(() => {
-    if (cohorts) return;
+    if (!currentCourse) return;
+    if (cohorts[currentCourse.name]) return;
 
-    fetch(() => getAllCourseCohorts(courseId));
+    fetch(() => getAllCourseCohorts(courseId, currentCourse.name));
 
     return () => {};
-  }, [cohorts, fetch, courseId]);
+  }, [cohorts, fetch, courseId, currentCourse]);
 
   const [handleSubmit, handleChange, inputTypes, validateSelf] = useInput({
     inputs: data,
     submitButton,
     initials: {},
-    btnText: {},
+    btnText: {
+      loading: 'Creating...',
+      reg: 'Create',
+    },
     cb: async (inputs) => {
-      const formData = new FormData();
+      const startDate = moment(new Date(inputs.startDate)).format('MMM Do');
+      const endDate = moment(new Date(inputs.endDate)).format('MMM Do YYYY');
 
-      Object.keys(inputs).forEach((input) =>
-        formData.append(input, inputs[input])
-      );
+      const newInputs = {
+        dateRange: `${startDate} - ${endDate}`,
+        cohort: inputs.cohort,
+        folderId: inputs.folderId,
+        courseId,
+        expiresAt: new Date(inputs.endDate),
+      };
 
-      const resp = await axiosInstance.post(
-        `/course/update/${courseId}`,
-        formData
-      );
+      const resp = await axiosInstance.post(`/cohort/addcourse`, newInputs);
 
       addToast('Successfully Created', {
         appearance: 'success',
@@ -60,12 +70,17 @@ const CourseCohorts = () => {
       submitButton.current.children[0].innerHTML = 'Create';
       submitButton.current.classList.remove('loader');
 
-      dispatch(addCourseCohort(resp.data.data));
+      dispatch(addCourseCohort(resp.data.data, currentCourse.name));
+      modalRef.current.close();
     },
   });
 
   if (loading || c_loading) {
-    return <Loading tempLoad={true} full={false} />;
+    return (
+      <section className="al_clx">
+        <Loading tempLoad={true} full={false} />;
+      </section>
+    );
   }
 
   if (error || c_error) {
@@ -90,7 +105,10 @@ const CourseCohorts = () => {
       </Nav>
 
       <div>
-        <AllCohorts data={cohorts} thumbnail={currentCourse.thumbnail} />
+        <AllCohorts
+          data={cohorts[currentCourse.name]}
+          thumbnail={currentCourse.thumbnail}
+        />
       </div>
 
       <Modal ref={modalRef}>
@@ -102,32 +120,35 @@ const CourseCohorts = () => {
           </Nav>
 
           <form className="">
-            <div className="sub_fm">
-              {data.map((form, i) => (
-                <Input
-                  key={`login_form_${i}`}
-                  name={form.name}
-                  type={form.type}
-                  itype={form.itype}
-                  placeHolder={form.placeHolder}
-                  value={inputTypes[form.name]}
-                  errorMsg={form.errorMsg}
-                  required={form.required}
-                  handleChange={handleChange}
-                  validateSelf={validateSelf}
-                  inputs={form.select}
-                  label={form.label}
-                  showAsterix={false}
-                />
-              ))}
-            </div>
+            {data.map((form, i) => (
+              <Input
+                key={`login_form_${i}`}
+                name={form.name}
+                type={form.type}
+                itype={form.itype}
+                placeHolder={form.placeHolder}
+                value={inputTypes[form.name]}
+                errorMsg={form.errorMsg}
+                required={form.required}
+                handleChange={handleChange}
+                validateSelf={validateSelf}
+                inputs={form.select}
+                label={form.label}
+                showAsterix={false}
+              />
+            ))}
 
-            <Button
-              btnRef={submitButton}
-              onClick={handleSubmit}
-              className="s_btn flex-row mx-auto"
-              text={'Create'}
-            />
+            <div className="flex-row j-end btn_sec">
+              <p className="cl" onClick={() => modalRef.current.close()}>
+                Cancel
+              </p>
+              <Button
+                btnRef={submitButton}
+                onClick={handleSubmit}
+                className="s_btn flex-row"
+                text="Create"
+              />
+            </div>
           </form>
         </div>
       </Modal>

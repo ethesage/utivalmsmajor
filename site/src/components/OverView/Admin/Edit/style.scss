@@ -1,0 +1,44 @@
+@import '../../../../media';
+
+.lnx {
+  form {
+    margin-top: 40px;
+  }
+
+  .over_view {
+    nav {
+      margin-bottom: 30px;
+      .btn {
+        width: 100px;
+        min-width: unset;
+      }
+
+      h3 {
+        color: color(secondary);
+      }
+    }
+
+    .list_info {
+      margin-top: 10px;
+
+      .list {
+        margin-bottom: 20px;
+      }
+
+      nav {
+        margin-bottom: 10px;
+        h3 {
+          color: color(theme);
+          font-size: 1.05em;
+        }
+
+        p {
+          cursor: pointer;
+        }
+      }
+      p {
+        font-size: 0.9em;
+      }
+    }
+  }
+}

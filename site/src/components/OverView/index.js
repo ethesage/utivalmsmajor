@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import React from 'react';
 import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import GetCurrentCourse from 'Hooks/getCurrentCourse';
 import useBreadcrumbs from 'Hooks/useBreadCrumbs';
 import Loader from 'components/Loading';
@@ -10,13 +10,9 @@ import NavBar from '../CourseNav';
 import './style.scss';
 
 const Overview = () => {
-  const { isStudent } = useSelector((state) => state.auth);
-
   const { courseId } = useParams();
-  const { currentCourse } = useSelector((state) => state.member);
-  const [errorState] = useState('none');
-
-  GetCurrentCourse();
+  const { isStudent } = useSelector((state) => state.auth);
+  const [loading, error, currentCourse] = GetCurrentCourse();
 
   useBreadcrumbs(
     {
@@ -30,9 +26,9 @@ const Overview = () => {
     <>
       <NavBar />
       <section className="cx_ovx">
-        {!currentCourse && errorState === 'none' ? (
+        {loading ? (
           <Loader tempLoad={true} full={false} />
-        ) : errorState === 'error' || currentCourse.length === 0 ? (
+        ) : error || currentCourse.length === 0 ? (
           <div>Course Not found</div>
         ) : (
           <>
