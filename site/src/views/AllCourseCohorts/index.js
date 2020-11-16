@@ -78,7 +78,7 @@ const CourseCohorts = () => {
   if (loading || c_loading) {
     return (
       <section className="al_clx">
-        <Loading tempLoad={true} full={false} />;
+        <Loading tempLoad={true} full={false} />
       </section>
     );
   }

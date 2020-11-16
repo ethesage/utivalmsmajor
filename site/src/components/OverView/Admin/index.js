@@ -56,7 +56,10 @@ const Overview = () => {
                 </div>
               </div>
             ) : (
-              <Edit descrip={currentCohort?.Course?.CourseDescriptions} />
+              <Edit
+                descrip={currentCohort?.Course?.CourseDescriptions}
+                courseName={currentCourse?.name}
+              />
             )}
           </>
         )}

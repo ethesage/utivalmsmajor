@@ -16,7 +16,51 @@ const course = (state = initialState, action) => {
     case 'GET_ALL_COURSE_COHORTS':
       return {
         ...state,
-        cohorts: { [action.payload.name]: action.payload.cohort },
+        cohorts: {
+          ...state.cohorts,
+          [action.payload.name]: action.payload.cohort,
+        },
+      };
+
+    case 'UPDATE_COURSE_DESCRIPTION':
+      return {
+        ...state,
+        currentCohort: {
+          ...state.currentCohort,
+          [action.payload.name]: {
+            ...state.currentCohort[action.payload.name],
+            Course: {
+              ...state.currentCohort[action.payload.name].Course,
+              CourseDescriptions: state.currentCohort[
+                action.payload.name
+              ].Course.CourseDescriptions.map((descrip) => {
+                if (descrip.id === action.payload.courseDescription.id) {
+                  return action.payload.courseDescription;
+                }
+                return descrip;
+              }),
+            },
+          },
+        },
+      };
+
+    case 'ADD_COURSE_DESCRIPTION':
+      return {
+        ...state,
+        currentCohort: {
+          ...state.currentCohort,
+          [action.payload.name]: {
+            ...state.currentCohort[action.payload.name],
+            Course: {
+              ...state.currentCohort[action.payload.name].Course,
+              CourseDescriptions: [
+                ...state.currentCohort[action.payload.name].Course
+                  .CourseDescriptions,
+                action.payload.courseDescription,
+              ],
+            },
+          },
+        },
       };
 
     case 'ADD_COURSE_COHORT':

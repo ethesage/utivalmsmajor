@@ -50,6 +50,20 @@ export const addCourseCohort = (course, name) => async (dispatch) => {
   });
 };
 
+export const addCourseDescription = (data, name) => async (dispatch) => {
+  dispatch({
+    type: 'ADD_COURSE_DESCRIPTION',
+    payload: { courseDescription: data, name },
+  });
+};
+
+export const updateCourseDescription = (data, name) => async (dispatch) => {
+  dispatch({
+    type: 'UPDATE_COURSE_DESCRIPTION',
+    payload: { courseDescription: data, name },
+  });
+};
+
 export const getCurrentCourseCohort = (courseCohortId, name) => async (
   dispatch
 ) => {

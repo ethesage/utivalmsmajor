@@ -12,7 +12,11 @@ const GetCurrentCohort = () => {
   const dispatch = useDispatch();
   const { currentCohort } = useSelector((state) => state.admin);
 
-  const course = currentCohort[currentCourse?.name];
+  let course = currentCohort[currentCourse?.name];
+  const existingCourse = course?.id === cohortId;
+  if (!existingCourse) {
+    course = null;
+  }
 
   const [loading, error, fetch] = useFetch(dispatch, !!!course);
 

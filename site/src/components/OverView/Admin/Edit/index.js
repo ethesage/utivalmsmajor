@@ -1,11 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useDispatch } from 'react-redux';
+import { useToasts } from 'react-toast-notifications';
+import { addCourseDescription, updateCourseDescription } from 'g_actions/admin';
 import useInput from 'Hooks/useInput';
 import Input from 'components/Input';
 import data from 'data/classDiscrip';
-import Button from 'components/Button';
+import { axiosInstance } from 'helpers';
 import './style.scss';
+import course from 'g_reducers/member';
 
-const AddDes = ({ editedDisp, reset }) => {
+const AddDes = ({ editedDisp, reset, courseName }) => {
+  const dispatch = useDispatch();
+  const editMode = editedDisp.title !== '' || editedDisp.description !== '';
+  const submitButton = useRef();
+  const { addToast } = useToasts();
+
+  const btnText = editMode
+    ? {
+        loading: 'Editing...',
+        reg: 'Edit',
+      }
+    : {
+        loading: 'Creating...',
+        reg: 'Create',
+      };
+
+  submitButton.current.children[0].innerHTML = btnText.reg;
+
   const [
     handleSubmit,
     handleChange,
@@ -14,13 +35,37 @@ const AddDes = ({ editedDisp, reset }) => {
     setInputTypes,
   ] = useInput({
     inputs: data,
-    submitButton: null,
+    submitButton,
     initials: editedDisp,
-    btnText: {
-      loading: 'Creating...',
-      reg: 'Create',
+    btnText,
+    cb: async (inputs) => {
+      const slug = editMode
+        ? `/course/update/description/${editedDisp.id}`
+        : `/course/add/description`;
+
+      console.log(inputs);
+
+      const method = editMode ? 'patch' : 'post';
+
+      const courseDescrip = await axiosInstance[method](slug, {
+        title: inputs.title,
+        description: inputs.description,
+      });
+
+      console.log(courseDescrip);
+
+      editMode
+        ? dispatch(updateCourseDescription(courseDescrip.data.data, courseName))
+        : dispatch(addCourseDescription(courseDescrip.data.data, courseName));
+
+      addToast(editMode ? 'Successfully Edited' : 'Successfully Created', {
+        appearance: 'success',
+        autoDismiss: true,
+      });
+
+      submitButton.current.children[0].innerHTML = btnText.reg;
+      submitButton.current.classList.remove('loader');
     },
-    cb: async (inputs) => {},
   });
 
   useEffect(() => {
@@ -31,7 +76,21 @@ const AddDes = ({ editedDisp, reset }) => {
 
   return (
     <form className="">
-      {editedDisp && <p onClick={() => reset({})}>New</p>}
+      {editMode && (
+        <button>
+          <p
+            className="reset"
+            onClick={() =>
+              reset({
+                title: '',
+                description: '',
+              })
+            }
+          >
+            Reset
+          </p>
+        </button>
+      )}
 
       {data.map((form, i) => (
         <Input
@@ -51,17 +110,22 @@ const AddDes = ({ editedDisp, reset }) => {
         />
       ))}
 
-      <button className="flex-row img" onClick={handleSubmit}>
-        Add New
+      <button
+        className="flex-row img"
+        onClick={handleSubmit}
+        ref={submitButton}
+      >
+        <p> {editMode ? 'Edit' : 'Add New'}</p>
       </button>
     </form>
   );
 };
 
-const Edit = ({ descrip }) => {
-  const [singleDisp, setSingleDisp] = useState({});
-
-  console.log(descrip);
+const Edit = ({ descrip, courseName }) => {
+  const [singleDisp, setSingleDisp] = useState({
+    title: '',
+    description: '',
+  });
 
   return (
     <div className="lnx">
@@ -83,7 +147,11 @@ const Edit = ({ descrip }) => {
         </div>
       </div>
 
-      <AddDes editedDisp={singleDisp} reset={setSingleDisp} />
+      <AddDes
+        editedDisp={singleDisp}
+        reset={setSingleDisp}
+        courseName={courseName}
+      />
     </div>
   );
 };
