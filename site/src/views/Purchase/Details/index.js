@@ -23,7 +23,7 @@ const Details = ({ proceed, match, set }) => {
 
   if (!oo) push('/');
 
-  // console.log(oo, "ooooo");
+  // console.log(oo, "ooooo",checkoutData,'ooop');
 
   const dispatch = useDispatch();
 
@@ -45,7 +45,7 @@ const Details = ({ proceed, match, set }) => {
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  });
 
   return (
     <div className="details">
