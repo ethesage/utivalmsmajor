@@ -1,6 +1,7 @@
+/* eslint-disable indent */
 /* eslint-disable no-console */
 /* eslint-disable import/prefer-default-export */
-// import sequelize from "sequelize";
+import sequelize from 'sequelize';
 // import { paginate, calculateLimitAndOffset } from 'paginate-info';
 import models from '../database/models';
 import helpers from '../helpers';
@@ -8,7 +9,7 @@ import helpers from '../helpers';
 
 const { successStat, errorStat } = helpers;
 
-// const { Op } = sequelize;
+const { Op } = sequelize;
 
 /**
  * / @static
@@ -20,58 +21,75 @@ const { successStat, errorStat } = helpers;
  */
 
 export const createClass = async (req, res) => {
-  const { resourceLink, trainerId, courseCohortId } = req.body.class;
+  const { resourceLink, userId, courseCohortId, courseId } = req.body.class;
 
-  try {
-    // const course = await models.Course.findOne({
-    //   where: { id: courseId }
-    // });
+  // const course = await models.Course.findOne({
+  //   where: { id: courseId }
+  // });
 
-    // if (!course) return errorStat(res, 404, 'Course does not exist');
+  // if (!course) return errorStat(res, 404, 'Course does not exist');
 
-    const courseCohort = await models.CourseCohort.findOne({
-      where: { id: courseCohortId },
-    });
+  const courseCohort = await models.CourseCohort.findOne({
+    where: { id: courseCohortId },
+  });
 
-    if (!courseCohort) {
-      return errorStat(res, 404, 'Course Cohort does not exist');
-    }
-
-    const trainer = await models.Trainer.findOne({
-      where: { id: trainerId },
-    });
-
-    if (!trainer) return errorStat(res, 404, 'Trainer does not exist');
-
-    const classCreate = await models.Classes.create({
-      ...req.body.class,
-    });
-
-    const resource = await models.ClassResources.create({
-      ...req.body.class,
-      link: resourceLink,
-      classId: classCreate.id,
-    });
-
-    const day = await models.ClassDays.create({
-      ...req.body.class,
-      classId: classCreate.id,
-      // time: '16:17:03.084+01:00'
-    });
-
-    await courseCohort.update({
-      totalClasses: courseCohort.totalClasses + 1,
-    });
-
-    return successStat(res, 201, 'data', {
-      classCreate,
-      classResource: resource,
-      classDays: day,
-    });
-  } catch (e) {
-    console.log(e);
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
+  if (!courseCohort) {
+    return errorStat(res, 404, 'Course Cohort does not exist');
   }
+
+  let trainer = await models.Trainer.findOne({
+    where: { [Op.and]: [{ userId }, { courseCohortId }] },
+    include: {
+      model: models.User,
+      attributes: ['id', 'firstName', 'lastName', 'profilePic'],
+    },
+  });
+
+  if (!trainer) {
+    trainer = await models.Trainer.create({
+      userId,
+      courseCohortId,
+      courseId,
+    });
+
+    trainer = await models.Trainer.findOne({
+      where: { [Op.and]: [{ userId }, { courseCohortId }] },
+      include: {
+        model: models.User,
+        attributes: ['id', 'firstName', 'lastName', 'profilePic'],
+      },
+    });
+  }
+
+  const classCreate = await models.Classes.create({
+    ...req.body.class,
+    trainerId: trainer.id,
+  });
+
+  const resource = resourceLink
+    ? await models.ClassResources.create({
+        ...req.body.class,
+        link: resourceLink,
+        classId: classCreate.id,
+      })
+    : [];
+
+  const day = await models.ClassDays.create({
+    ...req.body.class,
+    classId: classCreate.id,
+    // time: '16:17:03.084+01:00'
+  });
+
+  await courseCohort.update({
+    totalClasses: courseCohort.totalClasses + 1,
+  });
+
+  return successStat(res, 201, 'data', {
+    ...classCreate.dataValues,
+    ClassResources: resource,
+    ClassDays: [day],
+    Trainer: trainer,
+  });
 };
 
 export const getClass = async (req, res) => {

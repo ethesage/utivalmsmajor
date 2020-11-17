@@ -152,20 +152,19 @@ export const getCourseCohort = async (req, res) => {
             attributes: ['id', 'userId'],
             include: {
               model: models.User,
-              attributes: [
-                'firstName',
-                'lastName',
-                'profilePic',
-                'occupation',
-              ],
+              attributes: ['firstName', 'lastName', 'profilePic', 'occupation'],
             },
           },
           {
             model: models.ClassResources,
           },
+          {
+            model: models.ClassDays,
+          },
         ],
       },
     ],
+    order: [[{ model: models.Classes }, 'createdAt', 'ASC']],
   });
 
   if (!resource) {
@@ -216,4 +215,15 @@ export const getCourseCatnames = async (req, res) => {
     categories: coursecats,
     levels: courseLevels,
   });
+};
+
+export const getAllTrainers = async (req, res) => {
+  const trainers = await models.User.findAll({
+    where: {
+      role: 'trainer',
+    },
+    attributes: ['id', 'firstName', 'lastName', 'profilePic', 'occupation'],
+  });
+
+  return successStat(res, 200, 'data', trainers);
 };

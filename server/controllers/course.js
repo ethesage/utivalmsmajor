@@ -249,18 +249,11 @@ export const updateCourseDescription = async (req, res) => {
 };
 
 export const createCourseDescription = async (req, res) => {
-  const { courseId } = req.body.course;
+  const courseDescription = await models.CourseDescription.create(
+    req.body.course
+  );
 
-  try {
-    const courseDescription = await models.CourseDescription.create({
-      where: { courseId },
-      ...req.body.course,
-    });
-
-    return successStat(res, 201, 'data', courseDescription);
-  } catch (e) {
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
-  }
+  return successStat(res, 201, 'data', courseDescription);
 };
 
 export const deleteCourse = async (req, res) => {

@@ -49,7 +49,7 @@ export const getCourseSchema = Joi.object().keys({
 });
 
 export const getCourseDescriptionSchema = Joi.object().keys({
-  courseDescriptionId: Joi.string().uuid().trim().required(),
+  courseDescriptionId: Joi.string().uuid().trim(),
   title: Joi.string(),
   description: Joi.string(),
 });

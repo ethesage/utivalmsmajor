@@ -7,6 +7,7 @@ import {
   getCourse,
   getAllCourseCohorts,
   getCourseCohort,
+  getAllTrainers,
 } from '../../controllers/admin';
 import middlewares from '../../middlewares';
 
@@ -62,6 +63,8 @@ adminRoutes.get(
   validate(idSchema),
   getCourseCohort
 );
+
+adminRoutes.get('/all-trainers', usession.can(''), getAllTrainers);
 
 // adminRoutes.get(
 //   '/allstudents/:studentCourseId',

@@ -6,9 +6,10 @@ import {
   getAllCourses,
   updateCourse,
   updateCourseDescription,
+  createCourseDescription,
   deleteCourse,
   getAllCoursesAdmin,
-  Courses
+  Courses,
 } from '../../controllers/course';
 import middlewares from '../../middlewares';
 
@@ -18,7 +19,7 @@ const {
   getCourseSchema,
   getAllCourseSchema,
   getCourseDescriptionSchema,
-  usession
+  usession,
 } = middlewares;
 
 const courseRoutes = express();
@@ -70,6 +71,13 @@ courseRoutes.patch(
   usession.can('course:crud'),
   validate(getCourseDescriptionSchema),
   updateCourseDescription
+);
+
+courseRoutes.post(
+  '/add/description',
+  usession.can('course:crud'),
+  validate(getCourseDescriptionSchema),
+  createCourseDescription
 );
 
 courseRoutes.delete(
