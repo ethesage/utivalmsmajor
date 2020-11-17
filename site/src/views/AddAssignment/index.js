@@ -190,7 +190,7 @@ const AddAssignment = ({ title, course, currentClass, gapi, folderId }) => {
     if (!resourceAssignment[0]) {
       addToast('Please upload a file', {
         appearance: 'error',
-        autoDismiss: false,
+        autoDismiss: true,
       });
 
       return;
@@ -237,7 +237,7 @@ const AddAssignment = ({ title, course, currentClass, gapi, folderId }) => {
       submitBtn.current.classList.remove('loader');
       addToast('Unable to create assignment', {
         appearance: 'error',
-        autoDismiss: false,
+        autoDismiss: true,
       });
     }
   };

@@ -15,14 +15,16 @@ import './style.scss';
 
 const CreateCourse = ({ edit }) => {
   const submitButton = useRef();
+  const { courseId } = useParams();
   const { addToast } = useToasts();
   const { currentCourse } = useSelector((state) => state.admin);
-  const [imgSrc, setImgSrc] = useState(currentCourse?.thumbnail || '');
+  const [imgSrc, setImgSrc] = useState(
+    courseId ? currentCourse?.thumbnail || null : null
+  );
   const [categories, setCategories] = useState([]);
   const [levels, setLevels] = useState([]);
   const image = useRef();
   const dispatch = useDispatch();
-  const { courseId } = useParams();
   const [loading, error] = getCurrentCourse();
 
   useEffect(() => {
@@ -55,7 +57,7 @@ const CreateCourse = ({ edit }) => {
   ] = useInput({
     inputs: data,
     submitButton,
-    initials: currentCourse || {},
+    initials: courseId ? currentCourse || {} : {},
     btnText: text,
     cb: async (inputs) => {
       const formData = new FormData();
@@ -85,6 +87,7 @@ const CreateCourse = ({ edit }) => {
 
   useEffect(() => {
     if (!currentCourse) return;
+    if (!courseId) return;
 
     setImgSrc(currentCourse.thumbnail);
     setInputTypes(
@@ -114,11 +117,11 @@ const CreateCourse = ({ edit }) => {
     level: levels,
   };
 
-  if (loading) {
+  if (loading && courseId) {
     return <Loader tempLoad={true} full={false} />;
   }
 
-  if (error) {
+  if (error && courseId) {
     return (
       <div className="flex-row">
         <p>An Error Occured</p>

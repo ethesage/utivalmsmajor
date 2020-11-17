@@ -5,14 +5,15 @@ import { getAllcourses } from 'g_actions/admin';
 import useFetch from 'Hooks/useFetch';
 import Button from 'components/Button';
 import Create from 'views/CreateCourse';
+import AddClass from 'views/AddClass';
 import not_found from 'assets/not_found.png';
 import Loader from 'components/Loading';
 import CourseList from './CoursesList';
 import CohortList from 'views/AllCourseCohorts';
 import Overview from 'components/OverView/Admin';
+import Classroom from 'views/Classroom/Admin';
+import FullClass from 'views/FullClass/Admin';
 
-import Classroom from 'views/Classroom';
-import FullClass from 'views/FullClass';
 import Assignment from 'views/Assignment';
 import AllAssignments from 'views/AllAssignments';
 import TrainerProtected from 'components/Protected/TrainerProtected';
@@ -77,11 +78,22 @@ const Courses = ({ gapi }) => {
               path={`${path}/:courseId/cohorts`}
               component={CohortList}
             />
-
-            <Route exact path={`${path}/classroom/:courseId`}>
+            <Route exact path={`${path}/classroom/:courseId/:cohortId`}>
               <Classroom gapi={gapi} />
             </Route>
-            <Route exact path={`${path}/classroom/:courseId/:classroom`}>
+            <Route exact path={`${path}/classroom/:courseId/:cohortId/add`}>
+              <Classroom gapi={gapi} />
+            </Route>
+            <Route
+              exact
+              path={`${path}/classroom/:courseId/:cohortId/:classroom`}
+            >
+              <FullClass gapi={gapi} />
+            </Route>
+            <Route
+              exact
+              path={`${path}/classroom/:courseId/:cohortId/:classroom/edit`}
+            >
               <FullClass gapi={gapi} />
             </Route>
 

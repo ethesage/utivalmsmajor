@@ -72,7 +72,7 @@ export default function Input({
 
       addToast(err, {
         appearance: 'error',
-        autoDismiss: false,
+        autoDismiss: true,
       });
 
       if (submitButton.current) {

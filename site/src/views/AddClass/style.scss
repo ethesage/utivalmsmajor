@@ -1,0 +1,163 @@
+@import '../../media';
+
+.add_class {
+  width: 100%;
+  overflow: unset;
+
+  .h_con {
+    margin-bottom: 30px;
+  }
+
+  form {
+    @include for-size(smaller-desktop) {
+      flex-direction: column-reverse;
+      padding-left: 20px;
+    }
+  }
+
+  .desc_se {
+    max-width: 500px;
+    width: 100%;
+    margin: 0 70px 50px 0;
+    padding-left: 5px;
+
+    @include for-size(smaller-desktop) {
+      margin-right: 0px;
+      width: 100%;
+    }
+
+    .in_sec {
+      margin-bottom: 20px;
+      label {
+        margin-bottom: 10px;
+        display: block;
+        font-weight: bold;
+      }
+    }
+
+    .btn {
+      margin-top: 50px;
+    }
+  }
+
+  .cx-specs {
+    margin: 32px 15px 0 0;
+    padding: 20px;
+
+    @include for-size(smaller-desktop) {
+      margin: 20px 0 40px 0;
+    }
+
+    .pl_sec {
+      margin-bottom: 20px;
+      justify-content: space-between;
+
+      dt {
+        margin-right: 20px;
+        display: block;
+        font-size: 0.9em;
+        white-space: nowrap;
+      }
+
+      .input-div {
+        margin-bottom: 0;
+        min-width: unset;
+        width: 170px;
+
+        .input-type {
+          background: white;
+          border: 1px solid #e0e4ea;
+          padding-left: 10px;
+          font-size: 0.9em;
+        }
+      }
+    }
+
+    .trx_con {
+      margin-top: 30px;
+      width: 100%;
+    }
+  }
+
+  .choose_tnr {
+    background: white;
+    width: 90vw;
+    max-width: 400px;
+    min-height: 300px;
+    border-radius: 10px;
+    padding: 30px;
+
+    img {
+      width: 60px;
+      height: 60px;
+      border-radius: 100%;
+      object-fit: cover;
+      margin-right: 20px;
+    }
+
+    .selected {
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+
+      .slx_tr {
+        border-radius: 100%;
+        position: relative;
+
+        .rmv {
+          cursor: pointer;
+          position: absolute;
+          bottom: 10%;
+          right: 25%;
+          color: white;
+        }
+
+        p {
+          line-height: 0;
+          font-weight: 500;
+          font-size: 20px;
+        }
+      }
+    }
+
+    .trx_con {
+      max-height: 400px;
+      overflow-x: auto;
+      width: 100%;
+
+      h2 {
+        margin-bottom: 20px;
+        font-weight: 300;
+      }
+    }
+  }
+
+  .trainer {
+    margin-bottom: 15px;
+    cursor: pointer;
+
+    img {
+      width: 60px;
+      height: 60px;
+      border-radius: 100%;
+      object-fit: cover;
+      margin-right: 20px;
+    }
+
+    &:hover {
+      background: #f6f6f6;
+    }
+
+    p {
+      font-size: 0.9em;
+    }
+
+    small {
+      font-size: 0.75em;
+    }
+
+    p,
+    small {
+      color: color(theme);
+    }
+  }
+}

@@ -7,7 +7,7 @@ import { getAllCourseCohorts, addCourseCohort } from 'g_actions/admin';
 import Button from 'components/Button';
 import getCurrentCourse from 'Hooks/getCCAdmin';
 import Loading from 'components/Loading';
-import Nav from 'components/InnerHeader';
+import Nav from 'components/AdminHeader';
 import useFetch from 'Hooks/useFetch';
 import AllCohorts from 'components/AllCohorts';
 import Modal from 'components/Modal';
@@ -93,16 +93,11 @@ const CourseCohorts = () => {
 
   return (
     <section className="al_clx">
-      <Nav>
-        <div className="al_nav_sec flex-row j-space">
-          <h3>{currentCourse?.name}</h3>
-          <Button
-            text="Create New Cohort"
-            className="flex-row"
-            onClick={() => modalRef.current.open()}
-          />
-        </div>
-      </Nav>
+      <Nav
+        title={currentCourse?.name}
+        text="Create New Cohort"
+        onClick={() => modalRef.current.open()}
+      ></Nav>
 
       <div>
         <AllCohorts

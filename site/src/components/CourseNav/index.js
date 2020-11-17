@@ -37,7 +37,10 @@ const CourseNav = () => {
       link: `/admin/courses/overview/${courseId}/${cohortId}`,
       title: 'Overview',
     },
-    { link: `classroom/${courseId}`, title: 'Classroom' },
+    {
+      link: `/admin/courses/classroom/${courseId}/${cohortId}`,
+      title: 'Classroom',
+    },
     { link: `students`, title: 'Students' },
     { link: `all-assignments/${courseId}`, title: 'Assignments' },
     { link: `study-plan/${courseId}`, title: 'Calender' },

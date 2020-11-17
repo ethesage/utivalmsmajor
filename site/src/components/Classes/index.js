@@ -31,6 +31,7 @@ function Classes({
   showResources = true,
   gapi,
   folderId,
+  cohortId,
   assData,
   openedRef,
   setOpenedRef,
@@ -336,7 +337,11 @@ function Classes({
             {!full ? (
               <Link
                 className="view"
-                to={`/courses/classroom/${courseId}/${data.id}`}
+                to={
+                  isAdmin
+                    ? `/admin/courses/classroom/${courseId}/${cohortId}/${data.id}`
+                    : `/courses/classroom/${courseId}/${data.id}`
+                }
               >
                 View full outline
               </Link>

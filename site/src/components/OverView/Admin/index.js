@@ -2,7 +2,8 @@ import React from 'react';
 import GetCurrentCohort from 'Hooks/getCurrentCohort';
 import { useLocation, Link } from 'react-router-dom';
 import Loader from 'components/Loading';
-import Nav from 'components/InnerHeader';
+import Nav from 'components/AdminHeader';
+import NavBar from '../../CourseNav';
 import Edit from './Edit';
 import '../style.scss';
 import './style.scss';
@@ -14,13 +15,9 @@ const Overview = () => {
 
   return (
     <>
-      <Nav>
-        <h3>
-          {currentCourse && currentCohort
-            ? `${currentCourse.name} ${currentCohort?.Cohort.cohort} Cohort`
-            : ''}
-        </h3>
-      </Nav>
+      <Nav currentCohort={currentCohort} currentCourse={currentCourse} />
+
+      <NavBar />
       <section className="cx_ovx ad">
         {loading ? (
           <Loader tempLoad={true} full={false} />

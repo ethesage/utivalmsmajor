@@ -50,6 +50,13 @@ export const addCourseCohort = (course, name) => async (dispatch) => {
   });
 };
 
+export const addClass = (newClass, name) => async (dispatch) => {
+  dispatch({
+    type: 'ADD_CLASS',
+    payload: { newClass, name },
+  });
+};
+
 export const addCourseDescription = (data, name) => async (dispatch) => {
   dispatch({
     type: 'ADD_COURSE_DESCRIPTION',

@@ -11,6 +11,7 @@ export default () => {
   const [loading, error, fetch] = useFetch(dispatch, !!!currentCourse);
 
   useEffect(() => {
+    if (!courseId) return;
     if (currentCourse) return;
 
     fetch(() => getCurrentCourse(null, courseId));

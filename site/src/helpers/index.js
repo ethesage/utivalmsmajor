@@ -28,6 +28,8 @@ const patterns = {
   folderId: text,
   startDate: text,
   endDate: text,
+  date: text,
+  time: text,
   description: text,
   duration: number,
   level: shortText,
@@ -41,6 +43,7 @@ const patterns = {
   learnMore: shortText,
   title: shortText,
   name: shortText,
+  link: shortText,
 };
 
 export const validate = (field, Regex) => {
@@ -65,7 +68,7 @@ export const baseurl =
 
 export const axiosInstance = axios.create({
   baseURL: `${baseurl}/api/v1`,
-  timeout: 20000,
+  timeout: 100000,
   withCredentials: true,
   headers: {
     'Access-Control-Allow-Headers':

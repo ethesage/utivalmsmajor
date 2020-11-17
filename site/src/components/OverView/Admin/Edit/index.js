@@ -7,7 +7,6 @@ import Input from 'components/Input';
 import data from 'data/classDiscrip';
 import { axiosInstance } from 'helpers';
 import './style.scss';
-import course from 'g_reducers/member';
 
 const AddDes = ({ editedDisp, reset, courseName }) => {
   const dispatch = useDispatch();
@@ -25,7 +24,9 @@ const AddDes = ({ editedDisp, reset, courseName }) => {
         reg: 'Create',
       };
 
-  submitButton.current.children[0].innerHTML = btnText.reg;
+  if (submitButton.current) {
+    submitButton.current.children[0].innerHTML = btnText.reg;
+  }
 
   const [
     handleSubmit,

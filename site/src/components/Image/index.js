@@ -6,15 +6,15 @@ const Image = ({
   image,
   imgClass,
   usePlaceHolder = true,
-  transitionSpeed = '500',
+  transitionSpeed = '50',
   lazyLoad = false,
   alt,
-  srcset
+  srcset,
 }) => {
   const [ref, inView] = useInView({
     threshold: 0,
     triggerOnce: true,
-    rootMargin: '200px 50px 50px 50px'
+    rootMargin: '200px 50px 50px 50px',
   });
 
   useEffect(() => {
@@ -44,7 +44,7 @@ const Image = ({
     <>
       {loading === 0 && usePlaceHolder ? (
         <div style={{ width: '100%', height: '100%', position: 'absolute' }}>
-          <Skeleton width='100%' height='100%' />
+          <Skeleton width="100%" height="100%" />
         </div>
       ) : (
         ''
@@ -61,7 +61,7 @@ const Image = ({
         onLoad={handleLoad}
         style={{
           opacity: loading,
-          transition: `all ${transitionSpeed}ms ease-in-out`
+          transition: `all ${transitionSpeed}ms ease-in-out`,
         }}
         onError={handleError}
       />

@@ -6,6 +6,7 @@ import courses from './g_reducers/courses';
 import home from './views/Dashboard/Home/reducer';
 import breadcrumb from './g_reducers/breadcrumbs';
 import admin from './g_reducers/admin';
+import trainers from './g_reducers/trainer';
 
 const reducers = combineReducers({
   load,
@@ -15,6 +16,7 @@ const reducers = combineReducers({
   home,
   breadcrumb,
   admin,
+  trainers,
 });
 
 export default reducers;
