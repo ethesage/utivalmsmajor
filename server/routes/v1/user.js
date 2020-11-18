@@ -10,6 +10,10 @@ import {
   quickCheckOut,
   adminCreate,
   reset,
+  getAllUsers,
+  updateAccount,
+  activateUser,
+  deactivateUser,
 } from '../../controllers/user';
 import middlewares from '../../middlewares';
 
@@ -63,5 +67,14 @@ userRoutes.post(
   validate(adminCreateSchema),
   adminCreate
 );
+
+userRoutes.get('/all', usession.can('admin:create'), getAllUsers);
+userRoutes.post('/activate/:id', usession.can('admin:create'), activateUser);
+userRoutes.post(
+  '/deactivate/:id',
+  usession.can('admin:create'),
+  deactivateUser
+);
+userRoutes.post('/changeRole/:id', usession.can('admin:create'), updateAccount);
 
 export default userRoutes;

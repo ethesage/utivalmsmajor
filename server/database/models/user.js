@@ -28,6 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       verifiedPayment: DataTypes.BOOLEAN,
       verifiedEmail: DataTypes.BOOLEAN,
       byadmin: DataTypes.BOOLEAN,
+      status: DataTypes.STRING,
     },
     {
       getterMethods: {
@@ -95,6 +96,7 @@ module.exports = (sequelize, DataTypes) => {
       bio: this.bio,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
+      status: this.status,
     };
 
     return userData;

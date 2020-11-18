@@ -17,11 +17,7 @@ export default () => {
   useEffect(() => {
     if (currentCourse) return;
 
-    const course = enrolledcourses.find(
-      (course) => course.courseCohortId === courseId
-    );
-
-    fetch(() => getEnrolledCourses(courseId, course, userType));
+    fetch(() => getEnrolledCourses(courseId, null, userType));
 
     return () => {};
   }, [

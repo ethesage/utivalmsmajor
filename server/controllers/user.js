@@ -12,7 +12,6 @@ const {
   generatePassword,
   uploadImage,
 } = helpers;
-const { Op } = Sequelize;
 
 /**
  * / @static
@@ -30,7 +29,7 @@ export const login = async (req, res) => {
 
   const matchPasswords = await comparePassword(password, user.password);
 
-  console.log(matchPasswords, '[[login]]')
+  console.log(matchPasswords, '[[login]]');
 
   if (!matchPasswords) {
     return errorStat(res, 401, 'Incorrect Login information');
@@ -341,4 +340,71 @@ export const adminCreate = async (req, res) => {
     console.log(e);
     return errorStat(res, 409, 'Operation Failed, Please try again later');
   }
+};
+
+export const getAllUsers = async (req, res) => {
+  const users = await models.users.findAll({
+    where: { role: 'student' },
+    attributes: [
+      'id',
+      'firstName',
+      'lastName',
+      'occupation',
+      'region',
+      'status',
+    ],
+  });
+
+  return successStat(res, 200, 'users', users);
+};
+
+export const activateUser = async (req, res) => {
+  const { id } = req.params;
+
+  const User = await models.users.findOne({
+    where: { id },
+  });
+
+  await User.update({ status: 'active' });
+
+  return successStat(
+    res,
+    200,
+    'Message',
+    `${User.firstName} ${User.lastName} succesfully activated`
+  );
+};
+
+export const deactivateUser = async (req, res) => {
+  const { id } = req.params;
+
+  const User = await models.users.findOne({
+    where: { id },
+  });
+
+  await User.update({ status: 'inactive' });
+
+  return successStat(
+    res,
+    200,
+    'Message',
+    `${User.firstName} ${User.lastName} succesfully deactivated`
+  );
+};
+
+export const updateAccount = async (req, res) => {
+  const { id } = req.params;
+  const { role } = req.body;
+
+  const exixtingUser = await models.users.findOne({
+    where: { id },
+  });
+
+  if (!exixtingUser) {
+    return errorStat(res, 404, "User dosen't exist");
+  }
+
+  await exixtingUser.update({ role });
+
+  return successStat(res, 200, 'message', 'Successful');
 };

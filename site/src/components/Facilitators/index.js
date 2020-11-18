@@ -6,19 +6,26 @@ import './style.scss';
 const Facilitators = ({ trainers }) => {
   const [currentUser, setCurrentUser] = useState(0);
   const [trainerMap, setTrainerMap] = useState({});
+  const [Utrainers, setTrainers] = useState([]);
 
   useEffect(() => {
-    const mapped = trainers.reduce((acc, trainer, i) => {
-      let name = trainer.Trainer.User.firstName + trainer.Trainer.User.lastName;
+    const t = [];
 
+    const mapped = trainers.reduce((acc, trainer, i) => {
+      let name =
+        trainer?.Trainer?.User?.firstName + trainer?.Trainer?.User?.lastName;
+
+      if (!name) return acc;
       if (acc.hasOwnProperty(name)) return acc;
+      t.push(trainer);
 
       return { ...acc, [name]: i };
     }, {});
     setTrainerMap(mapped);
+    setTrainers(t);
 
     return () => {};
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -32,15 +39,17 @@ const Facilitators = ({ trainers }) => {
           <div className="fac_xc_sec flex-row j-start">
             <div className="img-sec">
               <img
-                src={trainers[currentUser].Trainer.User.profilePic || user_icon}
+                src={
+                  Utrainers[currentUser]?.Trainer?.User?.profilePic || user_icon
+                }
                 alt=""
                 className="img cover"
               />
             </div>
             <div className="text_sec">
               <p>Instructors</p>
-              <h2>{`${trainers[currentUser].Trainer.User.firstName} ${trainers[currentUser].Trainer.User.lastName}`}</h2>
-              <h3>{trainers[currentUser].Trainer.User.occupation}</h3>
+              <h2>{`${Utrainers[currentUser]?.Trainer?.User?.firstName} ${Utrainers[currentUser]?.Trainer?.User?.lastName}`}</h2>
+              <h3>{Utrainers[currentUser]?.Trainer?.User?.occupation}</h3>
             </div>
           </div>
         </CSSTransition>

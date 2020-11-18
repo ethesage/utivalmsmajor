@@ -1,6 +1,6 @@
-import sequelize from "sequelize";
-import models from "../database/models";
-import helpers from "../helpers";
+import sequelize from 'sequelize';
+import models from '../database/models';
+import helpers from '../helpers';
 
 const { successStat, errorStat } = helpers;
 
@@ -24,7 +24,7 @@ export const addStudentCourse = async (req, res) => {
     });
 
     if (!student) {
-      return errorStat(res, 404, "Student does not exist");
+      return errorStat(res, 404, 'Student does not exist');
     }
 
     const cour = await models.CourseCohort.findOne({
@@ -32,7 +32,7 @@ export const addStudentCourse = async (req, res) => {
     });
 
     if (!student) {
-      return errorStat(res, 404, "Course does not exist");
+      return errorStat(res, 404, 'Course does not exist');
     }
 
     const resource = await models.StudentCourse.findOne({
@@ -40,7 +40,7 @@ export const addStudentCourse = async (req, res) => {
     });
 
     if (resource) {
-      return errorStat(res, 404, "Student is Already Taking This Course");
+      return errorStat(res, 404, 'Student is Already Taking This Course');
     }
 
     const studC = await models.StudentCourse.create({
@@ -48,19 +48,19 @@ export const addStudentCourse = async (req, res) => {
       isCompleted: false,
       expiresAt: cour.expiresAt,
       cohortId: cour.cohortId,
-      status: "ongoing",
+      status: 'ongoing',
     });
 
     await cour.update({
       totalStudent: cour.totalStudent + 1,
     });
 
-    return successStat(res, 200, "data", {
+    return successStat(res, 200, 'data', {
       ...studC.dataValues,
-      message: "Student added Successfully",
+      message: 'Student added Successfully',
     });
   } catch (e) {
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
@@ -70,16 +70,17 @@ export const getAllStudentCourse = async (req, res) => {
   try {
     const resource = await models.StudentCourse.findAll({
       where: { studentId: id },
+      attributes: ['id'],
       include: [
         {
           model: models.Cohort,
+          attributes: ['cohort', 'id'],
         },
         {
           model: models.Course,
+          attributes: ['id', 'name', 'thumbnail'],
+
           include: [
-            {
-              model: models.CourseDescription,
-            },
             {
               model: models.CourseProgress,
               where: { userId: id },
@@ -88,40 +89,18 @@ export const getAllStudentCourse = async (req, res) => {
         },
         {
           model: models.CourseCohort,
-          include: [
-            {
-              model: models.Classes,
-              include: [
-                {
-                  model: models.Trainer,
-                  include: {
-                    model: models.User,
-                    attributes: [
-                      "firstName",
-                      "lastName",
-                      "profilePic",
-                      "occupation",
-                      "bio",
-                    ],
-                  },
-                },
-                {
-                  model: models.ClassResources,
-                },
-              ],
-            },
-          ],
+          attributes: ['id', 'cohortId', 'dateRange', 'courseId'],
         },
       ],
     });
 
     if (!resource[0]) {
-      return successStat(res, 200, "data", []);
+      return successStat(res, 200, 'data', []);
     }
 
-    return successStat(res, 200, "data", resource);
+    return successStat(res, 200, 'data', resource);
   } catch (e) {
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
@@ -161,11 +140,11 @@ export const getSingleStudentCourse = async (req, res) => {
                   include: {
                     model: models.User,
                     attributes: [
-                      "firstName",
-                      "lastName",
-                      "profilePic",
-                      "occupation",
-                      "bio",
+                      'firstName',
+                      'lastName',
+                      'profilePic',
+                      'occupation',
+                      'bio',
                     ],
                   },
                 },
@@ -177,22 +156,24 @@ export const getSingleStudentCourse = async (req, res) => {
           ],
         },
       ],
+
+      order: [[models.CourseCohort, models.Classes, 'createdAt', 'ASC']],
     });
 
     if (!resource) {
-      return errorStat(res, 404, "Student Course Not Found");
+      return errorStat(res, 404, 'Student Course Not Found');
     }
 
     if (!resource.isCompleted && new Date() > resource.duration) {
       resource.update({
         isCompleted: true,
-        status: "finished",
+        status: 'finished',
       });
     }
 
-    return successStat(res, 200, "data", resource);
+    return successStat(res, 200, 'data', resource);
   } catch (e) {
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
@@ -201,20 +182,20 @@ export const getStudentDashboard = async (req, res) => {
 
   try {
     const completed = await models.StudentCourse.count({
-      where: { studentId: id, status: "finished" },
+      where: { studentId: id, status: 'finished' },
     });
 
     const ongoing = await models.StudentCourse.count({
-      where: { studentId: id, status: "ongoing" },
+      where: { studentId: id, status: 'ongoing' },
     });
 
     const course = await models.StudentCourse.count({
       where: { studentId: id },
     });
 
-    return successStat(res, 200, "data", { course, ongoing, completed });
+    return successStat(res, 200, 'data', { course, ongoing, completed });
   } catch (e) {
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
@@ -232,20 +213,20 @@ export const allCourseStudents = async (req, res) => {
         {
           model: models.User,
           attributes: [
-            "firstName",
-            "lastName",
-            "linkedin",
-            "profilePic",
-            "occupation",
+            'firstName',
+            'lastName',
+            'linkedin',
+            'profilePic',
+            'occupation',
           ],
         },
       ],
-      attributes: ["courseCohortId"],
+      attributes: ['courseCohortId'],
     });
 
-    return successStat(res, 200, "data", courseStudent);
+    return successStat(res, 200, 'data', courseStudent);
   } catch (e) {
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
@@ -254,25 +235,25 @@ export const getStudentNextClass = async (req, res) => {
 
   try {
     const getClasses = await models.StudentCourse.findAll({
-      where: { studentId: id, isCompleted: false, status: "ongoing" },
-      attributes: ["studentId"],
+      where: { studentId: id, isCompleted: false, status: 'ongoing' },
+      attributes: ['studentId'],
       include: [
         {
           model: models.Course,
-          attributes: ["thumbnail", "name", "extLink"],
+          attributes: ['thumbnail', 'name', 'extLink'],
         },
         {
           model: models.CourseCohort,
-          attributes: ["courseId"],
+          attributes: ['courseId'],
           include: [
             {
               model: models.Classes,
-              attributes: ["link"],
+              attributes: ['link'],
               include: [
                 {
                   model: models.ClassDays,
                   where: { date: { [Op.gte]: new Date() } },
-                  attributes: ["date", "time"],
+                  attributes: ['date', 'time'],
                 },
               ],
             },
@@ -298,9 +279,9 @@ export const getStudentNextClass = async (req, res) => {
       return acc;
     }, []);
 
-    return successStat(res, 200, "data", getAll);
+    return successStat(res, 200, 'data', getAll);
   } catch (e) {
-    errorStat(res, 500, "Operation Failed Please Try Again");
+    errorStat(res, 500, 'Operation Failed Please Try Again');
   }
 };
 
@@ -318,20 +299,20 @@ export const getStudentClassDays = async (req, res) => {
       where: { studentId: id, courseCohortId },
     });
 
-    if (!checkStudent) return errorStat(res, 400, "Not Allowed");
+    if (!checkStudent) return errorStat(res, 400, 'Not Allowed');
 
     const getClassDays = await models.Classes.findAll({
       where: { courseCohortId },
-      attributes: ["title"],
+      attributes: ['title'],
       include: [
         {
           model: models.ClassDays,
-          attributes: ["date", "time"],
+          attributes: ['date', 'time'],
         },
       ],
     });
 
-    if (!getClassDays[0]) return errorStat(res, 400, "No Available Class Day");
+    if (!getClassDays[0]) return errorStat(res, 400, 'No Available Class Day');
 
     const getAll = getClassDays.reduce((acc, item, index) => {
       if (item.ClassDays[0]) {
@@ -346,9 +327,9 @@ export const getStudentClassDays = async (req, res) => {
       return acc;
     }, []);
 
-    return successStat(res, 200, "data", getAll);
+    return successStat(res, 200, 'data', getAll);
   } catch (e) {
     // console.log(e);
-    errorStat(res, 500, "Operation Failed Please Try Again");
+    errorStat(res, 500, 'Operation Failed Please Try Again');
   }
 };

@@ -21,7 +21,13 @@ const { Op } = sequelize;
  */
 
 export const createClass = async (req, res) => {
-  const { resourceLink, userId, courseCohortId, courseId } = req.body.class;
+  const {
+    resourceLink,
+    userId,
+    courseCohortId,
+    courseId,
+    cohortId,
+  } = req.body.class;
 
   // const course = await models.Course.findOne({
   //   where: { id: courseId }
@@ -38,7 +44,7 @@ export const createClass = async (req, res) => {
   }
 
   let trainer = await models.Trainer.findOne({
-    where: { [Op.and]: [{ userId }, { courseCohortId }] },
+    where: { [Op.and]: [{ userId }, { courseCohortId }, { cohortId }] },
     include: {
       model: models.User,
       attributes: ['id', 'firstName', 'lastName', 'profilePic'],
@@ -50,6 +56,7 @@ export const createClass = async (req, res) => {
       userId,
       courseCohortId,
       courseId,
+      cohortId,
     });
 
     trainer = await models.Trainer.findOne({
@@ -202,10 +209,10 @@ export const getAllTrainerClass = async (req, res) => {
 };
 
 export const updateClass = async (req, res) => {
-  const { userId, courseCohortId, courseId, classId } = req.body;
+  const { userId, courseCohortId, courseId, classId, cohortId } = req.body;
 
   let trainer = await models.Trainer.findOne({
-    where: { [Op.and]: [{ userId }, { courseCohortId }] },
+    where: { [Op.and]: [{ userId }, { courseCohortId }, { cohortId }] },
     include: {
       model: models.User,
       attributes: ['id', 'firstName', 'lastName', 'profilePic'],
@@ -217,6 +224,7 @@ export const updateClass = async (req, res) => {
       userId,
       courseCohortId,
       courseId,
+      cohortId,
     });
 
     trainer = await models.Trainer.findOne({

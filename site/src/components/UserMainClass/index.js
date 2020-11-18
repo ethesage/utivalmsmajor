@@ -22,7 +22,7 @@ const ClassesSec = ({ data: { thumbnail, link, name, time, date } }) => (
         <div className="info flex-row j-start">
           <img src={calender} alt="" />{' '}
           <p>
-            <Moment format="DD-MM-YYYY">{date}</Moment>
+            <Moment format="Do MMMM YYYY">{date}</Moment>
           </p>
         </div>
         <div className="info flex-row j-start">

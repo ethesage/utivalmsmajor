@@ -65,7 +65,7 @@ function FullClass({ gapi }) {
                   to={`/admin/courses/classroom/${courseId}/${cohortId}/${classrm.id}`}
                   data-active={classroom === classrm.id}
                 >
-                  Week {i + 1}
+                  Day {i + 1}
                 </NavLink>
               </li>
             ))}
@@ -115,6 +115,7 @@ function FullClass({ gapi }) {
                   editedClass={data}
                   name={currentCourse?.name}
                   courseId={courseId}
+                  mainCohortId={currentCohort?.Cohort?.id}
                 />
               )}
             </div>

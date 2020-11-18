@@ -59,49 +59,19 @@ export const getAllTrainerCourse = async (req, res) => {
   try {
     const trainerCourse = await models.Trainer.findAll({
       where: { userId: id },
+      attributes: ['id'],
       include: [
         {
           model: models.Cohort,
+          attributes: ['cohort', 'id'],
         },
         {
           model: models.Course,
-          include: [
-            {
-              model: models.CourseDescription,
-            },
-            {
-              model: models.CourseProgress,
-              where: { userId: id },
-              required: false,
-            },
-            // required: false
-          ],
+          attributes: ['id', 'name', 'thumbnail'],
         },
         {
           model: models.CourseCohort,
-          include: [
-            {
-              model: models.Classes,
-              include: [
-                {
-                  model: models.Trainer,
-                  include: {
-                    model: models.User,
-                    attributes: [
-                      'firstName',
-                      'lastName',
-                      'profilePic',
-                      'occupation',
-                      'bio',
-                    ],
-                  },
-                },
-                {
-                  model: models.ClassResources,
-                },
-              ],
-            },
-          ],
+          attributes: ['id', 'cohortId', 'dateRange', 'courseId'],
         },
       ],
     });
@@ -170,6 +140,8 @@ export const getSingleTrainerCourse = async (req, res) => {
           ],
         },
       ],
+
+      order: [[models.CourseCohort, models.Classes, 'createdAt', 'ASC']],
     });
 
     if (!resource) {

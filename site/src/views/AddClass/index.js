@@ -19,7 +19,7 @@ import Button from 'components/Button';
 import data from 'data/createClass';
 import './style.scss';
 
-const AddAssignment = ({ editedClass, edit, name, courseId }) => {
+const AddAssignment = ({ editedClass, edit, name, courseId, mainCohortId }) => {
   const dispatch = useDispatch();
   const { addToast } = useToasts();
   const submitButton = useRef();
@@ -36,6 +36,8 @@ const AddAssignment = ({ editedClass, edit, name, courseId }) => {
     }
   );
   const { cohortId } = useParams();
+
+  console.log(mainCohortId);
 
   useEffect(() => {
     if (allTrainers) return;
@@ -88,12 +90,14 @@ const AddAssignment = ({ editedClass, edit, name, courseId }) => {
             courseCohortId: cohortId,
             courseId,
             classId: editedClass.id,
+            cohortId: mainCohortId,
           }
         : {
             ...inputs,
             userId: trainer.id,
             courseCohortId: cohortId,
             courseId,
+            cohortId: mainCohortId,
           };
 
       const resp = await axiosInstance[method](slug, s_data);

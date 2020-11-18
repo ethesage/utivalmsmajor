@@ -23,7 +23,6 @@ const CourseNav = () => {
   ];
 
   const user_links = [
-    { link: `/courses/overview/${courseId}`, title: 'Overview' },
     { link: `/courses/study-plan/${courseId}`, title: 'Study Plan' },
     { link: `/courses/members/${courseId}`, title: 'Members' },
   ];

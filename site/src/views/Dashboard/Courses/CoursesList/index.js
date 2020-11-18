@@ -9,11 +9,14 @@ import './style.scss';
 
 const CousreCard = ({ data }) => {
   const { isStudent } = useSelector((state) => state.auth);
+
+  console.log(data);
+
   const {
     isCompleted,
     CourseCohort: { id, dateRange },
-    Cohort: { cohort },
     Course,
+    Cohort,
   } = data;
 
   return (
@@ -68,7 +71,7 @@ const CousreCard = ({ data }) => {
 
         {!isStudent ? (
           <div className="chx flex-row j-space">
-            <strong>{<p>{cohort} Cohort</p>}</strong>
+            <strong>{<p>{Cohort?.cohort} Cohort</p>}</strong>
             <small>{dateRange}</small>
           </div>
         ) : null}

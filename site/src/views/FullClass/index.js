@@ -73,7 +73,7 @@ function FullClass({ gapi }) {
                   to={`/courses/classroom/${courseId}/${classrm.id}`}
                   data-active={classroom === classrm.id}
                 >
-                  Week {i + 1}
+                  Day {i + 1}
                 </NavLink>
               </li>
             ))}

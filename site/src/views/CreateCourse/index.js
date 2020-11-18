@@ -81,7 +81,7 @@ const CreateCourse = ({ edit }) => {
 
       edit
         ? dispatch(editCourse(resp.data.data))
-        : dispatch(addCourse(resp.data.data.course));
+        : dispatch(addCourse({ ...resp.data.data.course, CourseCohorts: [] }));
     },
   });
 

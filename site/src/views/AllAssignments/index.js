@@ -11,6 +11,7 @@ import NavBar from 'components/CourseNav';
 import T from 'components/Table';
 import { stringSearch } from 'helpers';
 import Button from 'components/Button';
+import user_icon from 'assets/user_icon.png';
 import ViewGrade from 'components/ViewGrade';
 import './style.scss';
 
@@ -291,8 +292,9 @@ const AllAssignmnets = ({ gapi }) => {
                           Name: (
                             <div className="usr-img flex-row j-start">
                               <img
-                                src={assignment.User.profilePic}
+                                src={assignment.User.profilePic || user_icon}
                                 alt={assignment.User.firstName}
+                                onError={(e) => (e.target.src = user_icon)}
                               />
                               <p>{`${assignment.User.firstName} ${assignment.User.lastName}`}</p>
                             </div>

@@ -1,44 +1,51 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Skeleton from 'react-skeleton-loader';
+import Moment from 'react-moment';
+import moment from 'moment';
 import { getNextClasses } from 'views/Dashboard/Home/action';
 import Button from '../Button';
-import img from 'assets/homepage/img1.png';
-import week from 'assets/dashboard/week.png';
 import calender from 'assets/dashboard/calendar.png';
 import clock from 'assets/dashboard/clock.png';
 import no_course from 'assets/dashboard/no_course.png';
 import './style.scss';
 
-const ClassesSec = () => (
-  <div className="next_class_staff flex-row al-start j-space">
-    <img src={img} alt="" className="main_img" />
-    <div className="text-sec">
-      <h2>HR Analtytics</h2>
+const ClassesSec = ({ data }) => {
+  console.log(data);
 
-      <div className="info_sec">
-        <div className="info flex-row j-start">
-          <img src={week} alt="" /> <p>Week 2</p>
+  return (
+    <div className="next_class_staff flex-row al-start j-space">
+      <img src={data.thumbnail} alt="" className="main_img" />
+      <div className="text-sec">
+        <h2>HR Analtytics</h2>
+
+        <div className="info_sec">
+          {/* <div className="info flex-row j-start">
+            <img src={week} alt="" /> <p>Week 2</p>
+          </div> */}
+          <div className="info flex-row j-start">
+            <img src={calender} alt="" />{' '}
+            <p>
+              <Moment format="Do MMMM YYYY">{data.date}</Moment>
+            </p>
+          </div>
+          <div className="info flex-row j-start">
+            <img src={clock} alt="" />{' '}
+            <p>
+              <time>{moment(data.time, 'HH:mm').format('hh:mm A')}</time>
+            </p>
+          </div>
         </div>
-        <div className="info flex-row j-start">
-          <img src={calender} alt="" />{' '}
-          <p>
-            Sunday, <strong>June 10,</strong> 2010
-          </p>
-        </div>
-        <div className="info flex-row j-start">
-          <img src={clock} alt="" /> <p>10AM</p>
-        </div>
+
+        <Button
+          className="p_btn short flex-row"
+          link="/courses"
+          text="Start Class"
+        />
       </div>
-
-      <Button
-        className="p_btn short flex-row"
-        link="/courses"
-        text="Start Class"
-      />
     </div>
-  </div>
-);
+  );
+};
 
 const Classes = () => {
   const dispatch = useDispatch();
