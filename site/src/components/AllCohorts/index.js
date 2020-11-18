@@ -16,8 +16,12 @@ const ClassesSec = ({
 }) => {
   const countedtrainers = {};
   const trainers = Classes.reduce((acc, cur) => {
-    if (!countedtrainers[cur.Trainer.userId]) {
-      countedtrainers[cur.Trainer.userId] = 1;
+    if (!cur.Trainer) {
+      return acc;
+    }
+
+    if (!countedtrainers[cur?.Trainer?.userId]) {
+      countedtrainers[cur?.Trainer?.userId] = 1;
       return acc + 1;
     }
     return acc;

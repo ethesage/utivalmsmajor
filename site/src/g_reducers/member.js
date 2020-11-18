@@ -53,6 +53,33 @@ const course = (state = initialState, action) => {
           },
         },
       };
+
+    case 'UPDATE_RESOURCE_NAME':
+      // const prevRes = state.classResources[action.payload.name].files;
+      // const file = action.payload.file;
+
+
+      const newClassResoures = Object.keys(state.classResources).reduce(
+        (acc, cur) => {
+
+
+          if (cur === action.payload.oldname) {
+            return {
+              ...acc,
+              [action.payload.newname]:
+                state.classResources[action.payload.oldname],
+            };
+          }
+          return { ...acc, [cur]: state.classResources[cur] };
+        },
+        {}
+      );
+
+      return {
+        ...state,
+        classResources: newClassResoures,
+      };
+
     case 'GET_ASSIGNMENT':
       return {
         ...state,

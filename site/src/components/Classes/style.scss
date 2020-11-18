@@ -36,6 +36,15 @@
       pointer-events: all !important;
     }
 
+    .edit_btns {
+      a {
+        margin-left: 20px;
+        font-size: 0.8em;
+        color: color(theme);
+        white-space: nowrap;
+      }
+    }
+
     span {
       // width: 80%;
       @include for-size(phone-only) {

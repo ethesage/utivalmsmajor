@@ -39,6 +39,7 @@ export const getEnrolledCourses = (id, data, userType = 'student') => async (
   });
 };
 
+
 export const getEnrolledMembers = (id, data) => async (dispatch) => {
   let members;
   try {
@@ -94,6 +95,13 @@ export const deleteResources = (name, id) => async (dispatch) => {
     payload: { name, id },
   });
 };
+
+export const updateResourceName = (oldname, newname) => (dispatch) => {
+  dispatch({
+    type: 'UPDATE_RESOURCE_NAME',
+    payload: { oldname, newname },
+  });
+}
 
 export const getAssignments = (name, file) => async (dispatch) => {
   dispatch({

@@ -548,3 +548,33 @@ li {
     transform: translate(-50%, -50%) rotate(360deg);
   }
 }
+
+.trainer {
+  margin-bottom: 15px;
+  cursor: pointer;
+
+  img {
+    width: 60px;
+    height: 60px;
+    border-radius: 100%;
+    object-fit: cover;
+    margin-right: 20px;
+  }
+
+  &:hover {
+    background: #f6f6f6;
+  }
+
+  p {
+    font-size: 0.9em;
+  }
+
+  small {
+    font-size: 0.75em;
+  }
+
+  p,
+  small {
+    color: color(theme);
+  }
+}

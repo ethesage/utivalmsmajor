@@ -16,6 +16,7 @@ import material from 'assets/icons/course/material.png';
 import assignment from 'assets/icons/course/assignment.png';
 import class_icon from 'assets/icons/class_icon.png';
 import Modal from '../Modal';
+import user_icon from 'assets/user_icon.png';
 import Files from 'components/Files';
 import ResourceBtn from '../ResourceButton';
 import RevielDrop from '../RevielDrop';
@@ -229,6 +230,10 @@ function Classes({
     }
   };
 
+  const handleImgError = (e) => {
+    e.target.src = user_icon;
+  };
+
   return (
     <>
       <div className="cx_listnx_con" ref={classRef}>
@@ -242,22 +247,24 @@ function Classes({
           className="hx-main"
           header={
             <div className="cx_header flex-row j-space">
-              <h2 className={`h_con flex-row j-start ${full ? ' full' : ''}`}>
+              <h2 className={`h_con flex-row j-start  ${full ? ' full' : ''}`}>
                 <img src={class_icon} alt="class" />{' '}
                 <div className="flex-row j-space img">
-                  <span>
+                  <span style={{ '--number': 1 }} className="clipped-text">
                     {Number(index + 1) ? `Week ${weeks[index + 1]} - ` : ''}{' '}
                     {title}
                   </span>
                   {(isAdmin || isTrainer) && full ? (
                     <>
                       {isAdmin && (
-                        <Link
-                          to={`/courses/editClass/${courseId}/${data.id}`}
-                          className="edit"
-                        >
-                          Edit
-                        </Link>
+                        <div className="edit_btns">
+                          <Link
+                            to={`/admin/courses/classroom/${courseId}/${cohortId}/${data.id}/edit`}
+                            className="edit"
+                          >
+                            Edit Class
+                          </Link>
+                        </div>
                       )}
                       {isTrainer &&
                         Array.isArray(classResources[title].assignment) && (
@@ -303,6 +310,39 @@ function Classes({
                     link={link}
                   />
                 </div>
+
+                {isAdmin && full && (
+                  <div>
+                    <h4
+                      style={{ margin: '40px 0 10px' }}
+                      className="theme-color"
+                    >
+                      Trainer
+                    </h4>
+
+                    {data?.Trainer?.User ? (
+                      <div className="trainer flex-row j-start">
+                        <img
+                          src={data?.Trainer?.User?.profilePic || user_icon}
+                          alt="userimage"
+                          onError={handleImgError}
+                        />
+                        <div>
+                          <strong>
+                            <p>
+                              {data.Trainer.User.firstName}{' '}
+                              {data.Trainer.User.lastName}
+                            </p>
+                          </strong>
+                          <small>{data.Trainer.User.occupation}</small>
+                        </div>
+                      </div>
+                    ) : (
+                      <p>No Trainer has been assigned to this class</p>
+                    )}
+                  </div>
+                )}
+
                 <div className="reg_text">
                   <h4>Resources</h4>
                   <div className="btn_sec_con flex-row j-start">
@@ -351,6 +391,7 @@ function Classes({
         {/** For  a student show the modal pop up for the class materails and assignments
          * but for a trainer show this as a section underneat, this then helps to show the modal for uploading or deleting. Since we don't want overlapping modals
          */}
+
         {!isStudent ? (
           <RevielDrop open={showResourceDrop}>
             <div className="class_file_con">

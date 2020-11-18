@@ -1,46 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink, useParams, useLocation, useHistory } from 'react-router-dom';
-import GetCurrentCourse from 'Hooks/getCurrentCourse';
+import GetCurrentCohort from 'Hooks/getCurrentCohort';
 import Loader from 'components/Loading';
 import Classes from 'components/Classes';
 import ResourceBtn from 'components/ResourceButton';
-import useBreadcrumbs from 'Hooks/useBreadCrumbs';
+import Nav from 'components/AdminHeader';
 import NavBar from 'components/CourseNav';
 import assignment from 'assets/icons/course/assignment.png';
 import Layout from 'Layouts/SideNavListLayout';
+import AddClass from 'views/AddClass';
 import '../style.scss';
 
 function FullClass({ gapi }) {
-  const { courseId, classroom } = useParams();
+  const { courseId, classroom, cohortId } = useParams();
   const { pathname } = useLocation();
   const [editClass, setEditClass] = useState(false);
   const history = useHistory();
-  const [addAssignment] = useState(pathname.includes('add-assignment'));
-  const currentCourse = useSelector((state) => state.member.currentCourse);
+  const [loading, error, currentCohort, currentCourse] = GetCurrentCohort();
   const { isStudent } = useSelector((state) => state.auth);
-
-  const curWeek = currentCourse?.CourseCohort?.Classes?.find(
-    (classr) => classr.id === classroom
-  );
-
-  GetCurrentCourse();
-
-  useBreadcrumbs(
-    addAssignment
-      ? null
-      : [
-          {
-            name: currentCourse?.Course?.name,
-            link: `/courses/classroom/${courseId}`,
-          },
-          {
-            name: `${curWeek?.title}`,
-            link: `/courses/classroom/${courseId}/${classroom}`,
-          },
-        ],
-    !!currentCourse
-  );
+  const edit = pathname.includes('edit');
 
   // scroll the appropraite button clicked into view during a rerender
   useEffect(() => {
@@ -50,26 +29,40 @@ function FullClass({ gapi }) {
     return () => {};
   }, [classroom, currentCourse]);
 
-  const data = currentCourse?.CourseCohort?.Classes.find(
+  const data = currentCohort?.Classes.find(
     (classrum) => classrum.id === classroom
   );
 
   const ass = data?.ClassResources.filter((res) => res.type === 'assignment');
 
+  if (error) {
+    return (
+      <div>
+        <p>An Error Occured</p>
+      </div>
+    );
+  }
+
   return (
     <>
+      <Nav
+        currentCohort={currentCohort}
+        currentCourse={currentCourse}
+        link={`/admin/courses/classroom/${courseId}/${cohortId}/add`}
+        text={edit ? null : 'Add Class'}
+      />
       <NavBar />
       <div className="cx_listnx_full flex-row al-start">
-        {!currentCourse ? (
+        {loading ? (
           <Loader tempLoad={true} full={false} />
         ) : (
           <Layout
             subClassName="fl-ass"
-            links={currentCourse.CourseCohort.Classes.map((classrm, i) => (
+            links={currentCohort?.Classes.map((classrm, i) => (
               <li key={`side_link_courses_${i}`}>
                 <NavLink
                   className="side_link"
-                  to={`/courses/classroom/${courseId}/${classrm.id}`}
+                  to={`/admin/courses/classroom/${courseId}/${cohortId}/${classrm.id}`}
                   data-active={classroom === classrm.id}
                 >
                   Week {i + 1}
@@ -78,7 +71,7 @@ function FullClass({ gapi }) {
             ))}
           >
             <div className="flex-col j-start al-start img">
-              {!addAssignment && (
+              {!edit && (
                 <>
                   <Classes
                     data={data}
@@ -87,14 +80,13 @@ function FullClass({ gapi }) {
                     full={true}
                     gapi={gapi}
                     isStudent={isStudent}
-                    folderId={
-                      currentCourse && currentCourse.CourseCohort.folderId
-                    }
+                    folderId={currentCohort?.folderId}
                     courseId={courseId}
                     addAssignment={() => {
                       history.push(`${pathname}/add-assignment`);
                     }}
                     editClass={() => setEditClass(!editClass)}
+                    cohortId={cohortId}
                   />
                   {isStudent && ass.length > 0 && (
                     <div className="btns">
@@ -116,7 +108,15 @@ function FullClass({ gapi }) {
                   <div className="prev_courses"></div>
                 </>
               )}
-             
+
+              {edit && (
+                <AddClass
+                  edit
+                  editedClass={data}
+                  name={currentCourse?.name}
+                  courseId={courseId}
+                />
+              )}
             </div>
           </Layout>
         )}

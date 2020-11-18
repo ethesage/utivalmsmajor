@@ -78,6 +78,25 @@ const course = (state = initialState, action) => {
         },
       };
 
+    case 'EDIT_CLASS':
+      return {
+        ...state,
+        currentCohort: {
+          ...state.currentCohort,
+          [action.payload.name]: {
+            ...state.currentCohort[action.payload.name],
+            Classes: state.currentCohort[action.payload.name].Classes.map(
+              (e_class) => {
+                if (e_class.id === action.payload.newClass.id) {
+                  return action.payload.newClass;
+                }
+                return e_class;
+              }
+            ),
+          },
+        },
+      };
+
     case 'ADD_COURSE_COHORT':
       return {
         ...state,

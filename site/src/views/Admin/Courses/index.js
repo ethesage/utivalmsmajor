@@ -5,7 +5,6 @@ import { getAllcourses } from 'g_actions/admin';
 import useFetch from 'Hooks/useFetch';
 import Button from 'components/Button';
 import Create from 'views/CreateCourse';
-import AddClass from 'views/AddClass';
 import not_found from 'assets/not_found.png';
 import Loader from 'components/Loading';
 import CourseList from './CoursesList';
@@ -97,9 +96,14 @@ const Courses = ({ gapi }) => {
               <FullClass gapi={gapi} />
             </Route>
 
+
+
+
+            
+
             <TrainerProtected
               exact
-              path={`${path}/classroom/:courseId/:classroom/add-assignment`}
+              path={`${path}/classroom/:courseId/:cohortId/:classroom/add-assignment`}
             >
               <FullClass gapi={gapi} />
             </TrainerProtected>

@@ -44,16 +44,12 @@ const AddDes = ({ editedDisp, reset, courseName }) => {
         ? `/course/update/description/${editedDisp.id}`
         : `/course/add/description`;
 
-      console.log(inputs);
-
       const method = editMode ? 'patch' : 'post';
 
       const courseDescrip = await axiosInstance[method](slug, {
         title: inputs.title,
         description: inputs.description,
       });
-
-      console.log(courseDescrip);
 
       editMode
         ? dispatch(updateCourseDescription(courseDescrip.data.data, courseName))

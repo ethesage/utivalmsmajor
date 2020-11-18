@@ -60,7 +60,6 @@ function QuickCheckout({ match }) {
         });
         dispatch(login());
         push(`/purchase/${match.params.courseCohortId}`);
-        console.log(response);
       }
       // console.log(response.data.user.message);
 

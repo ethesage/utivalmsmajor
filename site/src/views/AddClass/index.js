@@ -4,7 +4,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 import { useToasts } from 'react-toast-notifications';
 import { getAllTrainers } from 'g_actions/trainer';
-import { addClass } from 'g_actions/admin';
+import { addClass, editClass } from 'g_actions/admin';
+import { updateResourceName } from 'g_actions/member';
 import TrainerIcon from 'assets/icons/addTrainer';
 import Modal from 'components/Modal';
 import Input from 'components/Input';
@@ -18,15 +19,23 @@ import data from 'data/createClass';
 import './style.scss';
 
 const AddAssignment = ({ editedClass, edit, name, courseId }) => {
-  const submitBtn = useRef();
   const dispatch = useDispatch();
   const { addToast } = useToasts();
   const submitButton = useRef();
   const modalRef = useRef();
   const allTrainers = useSelector((state) => state.trainers);
-  const [loading, error, fetch] = useFetch(dispatch, !!!allTrainers);
-  const [trainer, setTrainer] = useState();
+  const [loading, , fetch] = useFetch(dispatch, !!!allTrainers);
+  const [trainer, setTrainer] = useState(
+    editedClass?.Trainer?.User && {
+      id: editedClass?.Trainer?.userId,
+      firstName: editedClass?.Trainer?.User?.firstName,
+      lastName: editedClass?.Trainer?.User?.lastName,
+      occupation: editedClass?.Trainer?.User?.occupation,
+      profilePic: editedClass?.Trainer?.User?.profilePic,
+    }
+  );
   const { cohortId } = useParams();
+
 
   useEffect(() => {
     if (allTrainers) return;
@@ -46,16 +55,18 @@ const AddAssignment = ({ editedClass, edit, name, courseId }) => {
         reg: 'Create',
       };
 
-  const [
-    handleSubmit,
-    handleChange,
-    inputTypes,
-    validateSelf,
-    setInputTypes,
-  ] = useInput({
+  const [handleSubmit, handleChange, inputTypes, validateSelf] = useInput({
     inputs: data,
     submitButton,
-    initials: edit ? editedClass || {} : {},
+    initials: edit
+      ? {
+          ...editedClass,
+          date:
+            editedClass?.ClassDays[0]?.date &&
+            moment(editedClass?.ClassDays[0]?.date).format('YYYY-MM-DD'),
+          time: editedClass?.ClassDays[0]?.time,
+        } || {}
+      : {},
     btnText: text,
     cb: async (inputs) => {
       if (!trainer) {
@@ -70,13 +81,22 @@ const AddAssignment = ({ editedClass, edit, name, courseId }) => {
 
       const slug = edit ? `/class/update/${editedClass.id}` : '/class/create';
       const method = edit ? 'patch' : 'post';
+      const s_data = edit
+        ? {
+            ...inputs,
+            userId: trainer.id,
+            courseCohortId: cohortId,
+            courseId,
+            classId: editedClass.id,
+          }
+        : {
+            ...inputs,
+            userId: trainer.id,
+            courseCohortId: cohortId,
+            courseId,
+          };
 
-      const resp = await axiosInstance[method](slug, {
-        ...inputs,
-        userId: trainer.id,
-        courseCohortId: cohortId,
-        courseId,
-      });
+      const resp = await axiosInstance[method](slug, s_data);
 
       addToast(edit ? 'Successfully Edited' : `Successfully Created`, {
         appearance: 'success',
@@ -86,15 +106,16 @@ const AddAssignment = ({ editedClass, edit, name, courseId }) => {
       submitButton.current.children[0].innerHTML = text.reg;
       submitButton.current.classList.remove('loader');
 
-      console.log(resp);
 
       edit
-        ? dispatch(resp.data.data)
+        ? dispatch(editClass(resp.data.data, name))
         : dispatch(addClass(resp.data.data, name));
+
+      if (editedClass.title !== inputs.title) {
+        dispatch(updateResourceName(editedClass.title, inputs.title));
+      }
     },
   });
-
-  console.log(trainer);
 
   const handleImgError = (e) => {
     e.target.src = user_icon;
@@ -222,10 +243,13 @@ const AddAssignment = ({ editedClass, edit, name, courseId }) => {
               </div>
             )}
           </div>
-          {allTrainers ? (
+          {!loading ? (
             <div className="trx_con">
               <h2>Results</h2>
-              {allTrainers.map((trainer) => (
+              {allTrainers?.length === 0 && (
+                <p>No trainers on the platform yet</p>
+              )}
+              {allTrainers?.map((trainer) => (
                 <div
                   key={trainer.id}
                   className="trainer flex-row j-start"

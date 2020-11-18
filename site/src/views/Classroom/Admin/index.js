@@ -10,7 +10,7 @@ import AddNewClass from 'views/AddClass';
 import '../style.scss';
 
 const Classroom = ({ full = false, gapi }) => {
-  const { courseId } = useParams();
+  const { courseId, cohortId } = useParams();
   const { pathname } = useLocation();
   const [openedRef, setOpenedRef] = useState();
   const [loading, error, currentCohort, currentCourse] = GetCurrentCohort();
@@ -50,7 +50,7 @@ const Classroom = ({ full = false, gapi }) => {
                   openedRef={openedRef}
                   setOpenedRef={setOpenedRef}
                   folderId={currentCohort.folderId}
-                  cohortId={currentCohort.cohortId}
+                  cohortId={cohortId}
                 />
               ))}
             </div>
