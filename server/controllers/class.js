@@ -202,30 +202,58 @@ export const getAllTrainerClass = async (req, res) => {
 };
 
 export const updateClass = async (req, res) => {
-  const { classId } = req.body.class;
+  const { userId, courseCohortId, courseId, classId } = req.body;
 
-  try {
-    const foundClass = await models.Class.findOne({
-      where: { id: classId },
-      include: [
-        {
-          model: models.CourseDays,
-        },
-        {
-          model: models.CourseResourse,
-        },
-      ],
+  let trainer = await models.Trainer.findOne({
+    where: { [Op.and]: [{ userId }, { courseCohortId }] },
+    include: {
+      model: models.User,
+      attributes: ['id', 'firstName', 'lastName', 'profilePic'],
+    },
+  });
+
+  if (!trainer) {
+    trainer = await models.Trainer.create({
+      userId,
+      courseCohortId,
+      courseId,
     });
 
-    await foundClass.update({
-      ...req.body.class,
+    trainer = await models.Trainer.findOne({
+      where: { [Op.and]: [{ userId }, { courseCohortId }] },
+      include: {
+        model: models.User,
+        attributes: ['id', 'firstName', 'lastName', 'profilePic'],
+      },
     });
-
-    return successStat(res, 200, 'data', foundClass);
-  } catch (e) {
-    console.log(e);
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
+
+  await models.Classes.update(
+    {
+      ...req.body,
+      trainerId: trainer.id,
+    },
+    { where: { id: classId } }
+  );
+
+  const updatedClass = await models.Classes.findOne({ where: { id: classId } });
+
+  const resource = await models.ClassResources.findAll({
+    where: { classId },
+  });
+
+  await models.ClassDays.update(req.body, { where: { classId } });
+
+  const updateClassdays = await models.ClassDays.findAll({
+    where: { classId },
+  });
+
+  return successStat(res, 200, 'data', {
+    ...updatedClass.dataValues,
+    ClassResources: resource || [],
+    ClassDays: updateClassdays,
+    Trainer: trainer,
+  });
 };
 
 export const deleteClass = async (req, res) => {
