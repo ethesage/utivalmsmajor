@@ -1,11 +1,12 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { useDebounce } from 'use-debounce';
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 import { useToasts } from 'react-toast-notifications';
 import { getAllTrainers } from 'g_actions/trainer';
 import { addClass, editClass } from 'g_actions/admin';
-import { updateResourceName } from 'g_actions/member';
+import { updateResourceName, createResourceName } from 'g_actions/member';
 import TrainerIcon from 'assets/icons/addTrainer';
 import Modal from 'components/Modal';
 import Input from 'components/Input';
@@ -35,7 +36,6 @@ const AddAssignment = ({ editedClass, edit, name, courseId }) => {
     }
   );
   const { cohortId } = useParams();
-
 
   useEffect(() => {
     if (allTrainers) return;
@@ -106,14 +106,13 @@ const AddAssignment = ({ editedClass, edit, name, courseId }) => {
       submitButton.current.children[0].innerHTML = text.reg;
       submitButton.current.classList.remove('loader');
 
-
       edit
         ? dispatch(editClass(resp.data.data, name))
         : dispatch(addClass(resp.data.data, name));
 
-      if (editedClass.title !== inputs.title) {
+      if (editedClass?.title !== inputs?.title && edit) {
         dispatch(updateResourceName(editedClass.title, inputs.title));
-      }
+      } else dispatch(createResourceName(inputs.title));
     },
   });
 
@@ -124,6 +123,8 @@ const AddAssignment = ({ editedClass, edit, name, courseId }) => {
   const remove = () => {
     setTrainer(null);
   };
+
+  const handleSearch = ({ target: { name, value } }) => {};
 
   return (
     <div className="add_class cx_listnx_con">
@@ -194,7 +195,12 @@ const AddAssignment = ({ editedClass, edit, name, courseId }) => {
           <div className="pl_sec flex-col">
             <div className="flex-row j-space img">
               <dt>Trainer</dt>
-              <button onClick={() => modalRef.current.open()}>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  modalRef.current.open();
+                }}
+              >
                 <TrainerIcon />
               </button>
             </div>
@@ -227,7 +233,11 @@ const AddAssignment = ({ editedClass, edit, name, courseId }) => {
       </form>
       <Modal ref={modalRef}>
         <div className="choose_tnr flex-col j-start al-start">
-          <Input placeHolder="Enter a name" />
+          <Input
+            placeHolder="Enter a name"
+            name="search"
+            handleChange={handleSearch}
+          />
 
           <div className="selected flex-row j-start">
             {trainer && (

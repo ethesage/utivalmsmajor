@@ -44,6 +44,7 @@ const patterns = {
   title: shortText,
   name: shortText,
   link: shortText,
+  search: shortText,
 };
 
 export const validate = (field, Regex) => {

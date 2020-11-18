@@ -58,11 +58,8 @@ const course = (state = initialState, action) => {
       // const prevRes = state.classResources[action.payload.name].files;
       // const file = action.payload.file;
 
-
       const newClassResoures = Object.keys(state.classResources).reduce(
         (acc, cur) => {
-
-
           if (cur === action.payload.oldname) {
             return {
               ...acc,
@@ -78,6 +75,21 @@ const course = (state = initialState, action) => {
       return {
         ...state,
         classResources: newClassResoures,
+      };
+
+    //UPDATE_RESOURCE_NAME
+
+    case 'CREATE_RESOURCE_NAME':
+      return {
+        ...state,
+        classResources: {
+          ...state.classResources,
+          [action.payload]: {
+            files: [],
+            assignment: [],
+            allSubmittedAssignment: null,
+          },
+        },
       };
 
     case 'GET_ASSIGNMENT':
