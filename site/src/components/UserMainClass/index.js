@@ -12,7 +12,7 @@ import no_course from 'assets/dashboard/no_course.png';
 import './style.scss';
 
 const ClassesSec = ({ data: { thumbnail, link, name, time, date } }) => (
-  <Link to={link} className="next_class flex-row al-start j-space">
+  <a href={link} className="next_class flex-row al-start j-space" target="_">
     <img src={thumbnail} alt="" className="main_img" />
     <div className="text-sec flex-col j-space al-start">
       <h2>{name}</h2>
@@ -35,7 +35,7 @@ const ClassesSec = ({ data: { thumbnail, link, name, time, date } }) => (
         </div>
       </div>
     </div>
-  </Link>
+  </a>
 );
 
 const Loader = () => (

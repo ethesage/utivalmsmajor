@@ -1,13 +1,13 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import "./style.scss";
+import React from 'react';
+import './style.scss';
 
-const ResourceBtn = ({ img, text, color, link, handleClick }) => {
+const ResourceBtn = ({ img, text, color, link, handleClick, ext }) => {
   return (
-    <Link
+    <a
       className={`rcx_btn flex-row ${color}`}
-      to={link}
+      href={link}
       onClick={handleClick}
+      target={ext ? '_' : null}
     >
       <div className="rcx_img flex-row">
         <img src={img} alt={text} />
@@ -15,7 +15,7 @@ const ResourceBtn = ({ img, text, color, link, handleClick }) => {
       <div className="txt flex-row">
         <p>{text}</p>
       </div>
-    </Link>
+    </a>
   );
 };
 

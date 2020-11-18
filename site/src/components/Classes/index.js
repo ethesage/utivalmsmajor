@@ -305,9 +305,10 @@ function Classes({
                 <div>
                   <ResourceBtn
                     img={play}
-                    text="Join Class"
+                    text={isAdmin ? 'Class Link' : 'Join Class'}
                     color="theme"
                     link={link}
+                    ext
                   />
                 </div>
 
