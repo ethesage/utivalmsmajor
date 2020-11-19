@@ -49,24 +49,24 @@ const adminlinks = [
   },
   {
     img: student,
-    title: 'Students',
-    link: '/admin/students',
+    title: 'Users',
+    link: '/admin/users',
   },
   {
     img: course,
     title: 'Courses',
     link: '/admin/courses',
   },
-  {
-    img: trainer,
-    title: 'Trainers',
-    link: '/admin/trainers',
-  },
-  {
-    img: admin,
-    title: 'Admin',
-    link: '/admin/admins',
-  },
+  // {
+  //   img: trainer,
+  //   title: 'Trainers',
+  //   link: '/admin/trainers',
+  // },
+  // {
+  //   img: admin,
+  //   title: 'Admin',
+  //   link: '/admin/admins',
+  // },
   {
     img: settings,
     title: 'Settings',

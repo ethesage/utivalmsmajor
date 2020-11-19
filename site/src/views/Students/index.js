@@ -7,7 +7,7 @@ import { axiosInstance, stringSearch } from 'helpers';
 import { getAllUsers, updateUser } from 'g_actions/users';
 import useFetch from 'Hooks/useFetch';
 import Select from 'components/Select';
-import Button from 'components/Button';
+import Toggle from 'components/Toggle';
 import user_icon from 'assets/user_icon.png';
 import Input from 'components/Input';
 import T from 'components/Table';
@@ -22,21 +22,19 @@ const Users = ({ sidebar }) => {
   };
 
   const dispatch = useDispatch();
-  const {
-    users,
-    auth: { isCompanyAdmin },
-  } = useSelector((state) => state);
+  const { users } = useSelector((state) => state);
   const [displayUsers, setdisplayedUsers] = useState(users);
   const { addToast } = useToasts();
   const [state, setState] = useState(initialState);
-  const { push } = useHistory();
-  const [loading, , fetch] = useFetch(dispatch, !users.length, true);
+  // const { push } = useHistory();
+  const [currentUser, setCurrentUser] = useState();
+  const [loading, error, fetch] = useFetch(dispatch, !users.length, true);
   const imgref = [];
 
   useEffect(() => {
     (async () => {
       if (loading) {
-        // fetch(() => getAllUsers());
+        fetch(() => getAllUsers());
       }
     })();
   }, [loading, fetch]);
@@ -45,44 +43,9 @@ const Users = ({ sidebar }) => {
     setdisplayedUsers(users);
   }, [users]);
 
-  const updateUserStatus = async (id, status) => {
-    try {
-      let res = await axiosInstance.patch(
-        status === 'active' ? `users/${id}/activate` : `users/${id}/deactivate`
-      );
-      addToast(`${res.data.Message}`, {
-        appearance: res.data.status === 200 ? 'success' : 'error',
-        autoDismiss: true,
-      });
-    } catch (error) {
-      addToast('No network connection', {
-        appearance: 'error',
-        autoDismiss: true,
-        autoDismissTimeout: 10000,
-      });
-    }
-  };
-
-  const handleChange = ({ target: { value } }) => {
-    setState({ ...state, nameFilter: value });
-    if (state.nameFilter !== '') {
-      const searchResult = displayUsers.filter(
-        ({ firstName, lastName, department, email, status }) =>
-          stringSearch(value, firstName) ||
-          stringSearch(value, lastName) ||
-          stringSearch(value, department) ||
-          stringSearch(value, email) ||
-          stringSearch(value, status)
-      );
-      setState({ ...state, nameFilter: value, searchUsers: searchResult });
-    } else {
-      setState({
-        ...state,
-        searchUsers: [],
-        nameFilter: value,
-      });
-    }
-  };
+  if (error) {
+    <p>An Error ocurred</p>;
+  }
 
   const handleSelect = ({ target: { value } }) => {
     const results =
@@ -96,14 +59,122 @@ const Users = ({ sidebar }) => {
     });
   };
 
-  const userKeys = isCompanyAdmin
-    ? ['S/N', 'Staff ID', 'Name', 'Email', 'Role', 'Enable User', '']
-    : ['S/N', 'Name', 'Email', 'Role', 'Enable User'];
+  const updateUserStatus = async (id, status, user, role) => {
+    try {
+      let res = await axiosInstance.patch(
+        role
+          ? `user/changeRole/${id}/${role}`
+          : status === 'active'
+          ? `user/activate/${id}`
+          : `user/deactivate/${id}`
+      );
+
+      document.querySelector('body').classList.remove('spinner1');
+
+      addToast(`${res.data.message}`, {
+        appearance: res.data.status === 200 ? 'success' : 'error',
+        autoDismiss: true,
+      });
+    } catch (error) {
+      const stat = status === 'active' ? 'inactive' : 'active';
+
+      dispatch(
+        updateUser({
+          ...user,
+          status: stat,
+        })
+      );
+
+      if (state.select) {
+        const name = role ? 'role' : 'status';
+        const value = role ? user.role : stat;
+
+        const newState = state.searchUsers.map((s_user) => {
+          if (s_user.id === user.id) {
+            return { ...user, [name]: value };
+          }
+          return s_user;
+        });
+
+        setState({
+          ...state,
+          searchUsers: newState,
+        });
+      }
+
+      document.querySelector('body').classList.remove('spinner1');
+
+      addToast('No network connection', {
+        appearance: 'error',
+        autoDismiss: true,
+        autoDismissTimeout: 10000,
+      });
+    }
+  };
+
+  const handleChange = ({ target: { value } }) => {
+    setState({ ...state, nameFilter: value });
+    if (state.nameFilter !== '') {
+      const searchResult = displayUsers.filter(
+        ({ firstName, lastName, location, email, occupation, role }) =>
+          stringSearch(value, firstName) ||
+          stringSearch(value, lastName) ||
+          stringSearch(value, location) ||
+          stringSearch(value, email) ||
+          stringSearch(value, occupation) ||
+          stringSearch(value, role)
+      );
+      setState({ ...state, nameFilter: value, searchUsers: searchResult });
+    } else {
+      setState({
+        ...state,
+        searchUsers: [],
+        nameFilter: value,
+      });
+    }
+  };
 
   const handleUserStatusChange = (user) => {
+    document.querySelector('body').classList.add('spinner1');
     const status = user.status === 'active' ? 'inactive' : 'active';
-    // dispatch(updateUser({ ...user, status }));
-    updateUserStatus(user.id, status);
+    dispatch(updateUser({ ...user, status }));
+
+    if (state.searchUsers.length > 0) {
+      const newState = state.searchUsers.map((s_user) => {
+        if (s_user.id === user.id) {
+          return { ...user, status };
+        }
+        return s_user;
+      });
+
+      setState({
+        ...state,
+        searchUsers: newState,
+      });
+    }
+
+    updateUserStatus(user.id, status, user);
+  };
+
+  const handleRoleChange = async ({ target: { value, user } }) => {
+    document.querySelector('body').classList.add('spinner1');
+
+    await updateUserStatus(user.id, '', user, value);
+    if (state.searchUsers.length > 0) {
+      const newState = state.searchUsers.map((s_user) => {
+        if (s_user.id === user.id) {
+          return { ...user, role: user };
+        }
+        return s_user;
+      });
+
+      setState({
+        ...state,
+        searchUsers: newState,
+      });
+    }
+
+    dispatch(updateUser({ ...user, role: value }));
   };
 
   let usersToRender = state.searchUsers.length
@@ -117,23 +188,15 @@ const Users = ({ sidebar }) => {
   return (
     <>
       {!loading ? (
-        <section className="user flex-col al-start">
-          <nav className="count-nav flex-row j-space al-start">
-            <div className="nav-item">
-              <Button.Full
-                colored
-                text="Bulk upload Users"
-                onClick={() => push('/users/bulk')}
-              />
-            </div>
-          </nav>
-
+        <section className="students dash-con flex-col al-start j-start">
           <nav className="filter-nav flex-row j-space">
             <Input
               inputValidate={false}
-              placeHolder="Search Name"
+              placeHolder="Search"
               value={state.nameFilter || ''}
               handleChange={handleChange}
+              name="search"
+              label="Search"
             />
 
             <Select
@@ -145,10 +208,34 @@ const Users = ({ sidebar }) => {
               placeHolder="Status"
               value={state.select}
               handleSelect={handleSelect}
+              label="Status"
             />
+
+            {/* <Select
+              inputs={[
+                { name: 'All', value: 'reset' },
+                { name: 'Admin', value: 'admin' },
+                { name: 'Trainer', value: 'trainer' },
+                { name: 'Student', value: 'student' },
+              ]}
+              placeHolder="Role"
+              value={state.select}
+              handleSelect={handleSelect}
+              label="Role"
+            /> */}
           </nav>
 
-          <T.Table keys={userKeys}>
+          <T.Table
+            keys={[
+              'S/N',
+              'Name',
+              'Email',
+              'Occupation',
+              'Location',
+              'Change Role',
+              'Status',
+            ]}
+          >
             {({ keys }) => (
               <T.Body keys={keys}>
                 {usersToRender.map((user, i) => (
@@ -171,15 +258,29 @@ const Users = ({ sidebar }) => {
                       ),
                       Email: user.email,
                       'S/N': i + 1,
-                      'Enable User': (
-                        <Button.Toggle
+                      Occupation: user.occupation,
+                      Location: user.region,
+                      Status: (
+                        <Toggle
                           key={user.email}
                           onClick={() => handleUserStatusChange(user)}
                           value={user.status === 'active' ? true : false}
                         />
                       ),
-                      'Staff ID': user.staffId,
-                      Role: user?.role?.split('_').join(' '),
+                      'Change Role': (
+                        <Select
+                          key={`${user.email}${user.occupation}`}
+                          inputs={[
+                            { name: 'Admin', value: 'admin' },
+                            { name: 'Trainer', value: 'trainer' },
+                            { name: 'Student', value: 'student' },
+                          ]}
+                          value={user.role}
+                          handleSelect={(e) => {
+                            handleRoleChange({ target: { ...e.target, user } });
+                          }}
+                        />
+                      ),
                     }}
                   />
                 ))}
@@ -188,7 +289,7 @@ const Users = ({ sidebar }) => {
           </T.Table>
         </section>
       ) : (
-        <Loader />
+        <Loader tempLoad={true} full={false} />
       )}
     </>
   );

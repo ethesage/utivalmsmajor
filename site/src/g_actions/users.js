@@ -1,7 +1,7 @@
 import { axiosInstance } from '../helpers';
 
 export const getAllUsers = () => async (dispatch) => {
-  const res = await axiosInstance.get('/users');
+  const res = await axiosInstance.get('/user/all');
 
   dispatch({
     type: 'GET_ALL_USERS',

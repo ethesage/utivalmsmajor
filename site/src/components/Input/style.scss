@@ -133,7 +133,7 @@ $distance: 0px;
 
           &:hover {
             @extend %selected;
-            background: lighten(color(theme), 10%);
+            background: rgba(color(theme), 0.1);
           }
         }
 

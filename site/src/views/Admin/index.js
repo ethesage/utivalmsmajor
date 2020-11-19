@@ -19,7 +19,7 @@ const Dashboard = () => {
         <Courses gapi={gapi} />
       </Route>
 
-      <Route path="/admin/students">
+      <Route path="/admin/users">
         <Students />
       </Route>
 
