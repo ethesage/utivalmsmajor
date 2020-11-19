@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { axiosInstance } from 'helpers';
 // import drive from '../../../../helpers/drive';
 import course from 'assets/icons/dashboard/course.png';
 import CountCard from 'components/CountCard';
 import student from 'assets/icons/dashboard/students.png';
 import admin from 'assets/icons/dashboard/admin.png';
 import trainer from 'assets/icons/dashboard/trainer.png';
-import organization from 'assets/icons/dashboard/organization.png';
+// import organization from 'assets/icons/dashboard/organization.png';
 
-const CountSection = () => {
+const CountSection = ({ counts }) => {
   const [data, setData] = useState([
     {
       title: 'Total Courses',
@@ -19,40 +18,36 @@ const CountSection = () => {
     {
       title: 'Total Students',
       num: 0,
-      link: 'ongoing',
+      link: 'student',
       img: student,
     },
     {
       title: 'Total trainers',
       num: 0,
-      link: 'completed',
+      link: 'trainer',
       img: trainer,
     },
     {
       title: 'Total Admins',
       num: 0,
-      link: 'completed',
+      link: 'admins',
       img: admin,
     },
-    {
-      title: 'Total Organizations',
-      num: 0,
-      link: 'completed',
-      img: organization,
-    },
+    // {
+    //   title: 'Total Organizations',
+    //   num: 0,
+    //   link: 'completed',
+    //   img: organization,
+    // },
   ]);
 
   useEffect(() => {
     (async () => {
-      const response = await axiosInstance.get('/student/all/dashboard');
+      if (!counts) return;
 
-      
-
-      setData((prev) =>
-        prev.map((pre) => ({ ...pre, num: response.data.data[pre.link] }))
-      );
+      setData((prev) => prev.map((pre) => ({ ...pre, num: counts[pre.link] })));
     })();
-  }, []);
+  }, [counts]);
 
   return (
     <>

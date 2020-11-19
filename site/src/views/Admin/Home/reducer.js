@@ -1,7 +1,5 @@
 export const initialState = {
-  categories: null,
-  currentCourse: null,
-  nextclasses: null,
+  dashboard: null,
 };
 
 const course = (state = initialState, action) => {
@@ -20,6 +18,12 @@ const course = (state = initialState, action) => {
       return {
         ...state,
         nextclasses: action.payload,
+      };
+
+    case 'GET_ADMIN_DASHBOARD':
+      return {
+        ...state,
+        dashboard: action.payload,
       };
     default:
       return state;

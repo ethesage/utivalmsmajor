@@ -9,24 +9,7 @@ const colors = ['#120C64', '#09AC23', '#FFB800', '#0077B5'];
 
 export const position_pie = (data, id) => {
   var chart = am4core.create(id, am4charts.PieChart);
-  chart.data = [
-    {
-      name: 'Data Incubator',
-      value: 20,
-    },
-    {
-      name: 'Data Acceleratord',
-      value: 20,
-    },
-    {
-      name: 'Growth Hack',
-      value: 15,
-    },
-    {
-      name: 'HR Analytics',
-      value: 7,
-    },
-  ];
+  chart.data = data;
 
   // Set inner radius
   chart.innerRadius = am4core.percent(65);
@@ -69,6 +52,8 @@ export const position_pie = (data, id) => {
     return new am4core.color(color);
   });
   pieSeries.colors = colorSet;
+
+  return chart;
 };
 
 export function position_bar(data, id) {
@@ -76,29 +61,14 @@ export function position_bar(data, id) {
   am4core.addLicense('CH123616381');
   var chart = am4core.create(id, am4charts.XYChart);
 
-  chart.data = [
-    ...months,
-    {
-      name: 'Jan',
-      value: 600,
-    },
-    {
-      name: 'Feb',
-      value: 400,
-    },
-    {
-      name: 'Mar',
-      value: 300,
-    },
-    {
-      name: 'Jul',
-      value: 200,
-    },
-    {
-      name: 'Dec',
-      value: 50,
-    },
-  ];
+  const datas = months.reduce((acc, cur) => {
+    if (data[cur.name]) {
+      return [...acc, { name: cur.name, value: data[cur.name] }];
+    }
+    return [...acc, cur];
+  }, []);
+
+  chart.data = datas;
 
   let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
   categoryAxis.dataFields.category = 'name';
@@ -124,4 +94,6 @@ export function position_bar(data, id) {
   series.columns.template.column.adapter.add('fill', (fill, target) => {
     return colors[target.dataItem.index];
   });
+
+  return chart;
 }

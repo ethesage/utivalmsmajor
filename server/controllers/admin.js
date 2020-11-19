@@ -24,6 +24,8 @@ export const getAdminDashboard = async (req, res) => {
 
     const trainer = await models.Trainer.count();
 
+    const admins = await models.User.count({ where: { role: 'admin' } });
+
     const studentByCourse = await models.sequelize.query(
       `SELECT "Courses"."name", COUNT("studentId") AS 
         value FROM "Courses" LEFT JOIN "StudentCourses" ON "Courses"."id" = "StudentCourses"."courseId" 
@@ -52,6 +54,7 @@ export const getAdminDashboard = async (req, res) => {
       student,
       course,
       trainer,
+      admins,
       studentByCourse: studentByCourse[0],
       trainerByCourse: trainerByCourse[0],
       studentByMonth: getAll,

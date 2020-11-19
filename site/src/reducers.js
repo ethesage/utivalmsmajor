@@ -8,6 +8,7 @@ import breadcrumb from './g_reducers/breadcrumbs';
 import admin from './g_reducers/admin';
 import trainers from './g_reducers/trainer';
 import users from './g_reducers/users';
+import adminHome from 'views/Admin/Home/reducer';
 
 const reducers = combineReducers({
   load,
@@ -19,6 +20,7 @@ const reducers = combineReducers({
   admin,
   trainers,
   users,
+  adminHome,
 });
 
 export default reducers;

@@ -6,6 +6,7 @@ export default [
   { name: 'May', value: 0 },
   { name: 'Jun', value: 0 },
   { name: 'Jul', value: 0 },
+  { name: 'Aug', value: 0 },
   { name: 'Sep', value: 0 },
   { name: 'Oct', value: 0 },
   { name: 'Nov', value: 0 },
