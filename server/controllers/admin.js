@@ -222,7 +222,17 @@ export const getAllTrainers = async (req, res) => {
     where: {
       role: 'trainer',
     },
-    attributes: ['id', 'firstName', 'lastName', 'profilePic', 'occupation'],
+    attributes: [
+      'id',
+      'email',
+      'firstName',
+      'lastName',
+      'occupation',
+      'region',
+      'status',
+      'role',
+      'profilePic',
+    ],
   });
 
   return successStat(res, 200, 'data', trainers);

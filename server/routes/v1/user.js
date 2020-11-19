@@ -69,12 +69,16 @@ userRoutes.post(
 );
 
 userRoutes.get('/all', usession.can('admin:create'), getAllUsers);
-userRoutes.post('/activate/:id', usession.can('admin:create'), activateUser);
-userRoutes.post(
+userRoutes.patch('/activate/:id', usession.can('admin:create'), activateUser);
+userRoutes.patch(
   '/deactivate/:id',
   usession.can('admin:create'),
   deactivateUser
 );
-userRoutes.post('/changeRole/:id', usession.can('admin:create'), updateAccount);
+userRoutes.patch(
+  '/changeRole/:id/:role',
+  usession.can('admin:create'),
+  updateAccount
+);
 
 export default userRoutes;

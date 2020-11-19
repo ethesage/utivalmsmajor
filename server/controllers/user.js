@@ -29,8 +29,6 @@ export const login = async (req, res) => {
 
   const matchPasswords = await comparePassword(password, user.password);
 
-  console.log(matchPasswords, '[[login]]');
-
   if (!matchPasswords) {
     return errorStat(res, 401, 'Incorrect Login information');
   }
@@ -343,15 +341,17 @@ export const adminCreate = async (req, res) => {
 };
 
 export const getAllUsers = async (req, res) => {
-  const users = await models.users.findAll({
-    where: { role: 'student' },
+  const users = await models.User.findAll({
     attributes: [
       'id',
+      'email',
       'firstName',
       'lastName',
       'occupation',
       'region',
       'status',
+      'role',
+      'profilePic',
     ],
   });
 
@@ -361,7 +361,7 @@ export const getAllUsers = async (req, res) => {
 export const activateUser = async (req, res) => {
   const { id } = req.params;
 
-  const User = await models.users.findOne({
+  const User = await models.User.findOne({
     where: { id },
   });
 
@@ -370,7 +370,7 @@ export const activateUser = async (req, res) => {
   return successStat(
     res,
     200,
-    'Message',
+    'message',
     `${User.firstName} ${User.lastName} succesfully activated`
   );
 };
@@ -378,7 +378,7 @@ export const activateUser = async (req, res) => {
 export const deactivateUser = async (req, res) => {
   const { id } = req.params;
 
-  const User = await models.users.findOne({
+  const User = await models.User.findOne({
     where: { id },
   });
 
@@ -387,16 +387,15 @@ export const deactivateUser = async (req, res) => {
   return successStat(
     res,
     200,
-    'Message',
+    'message',
     `${User.firstName} ${User.lastName} succesfully deactivated`
   );
 };
 
 export const updateAccount = async (req, res) => {
-  const { id } = req.params;
-  const { role } = req.body;
+  const { id, role } = req.params;
 
-  const exixtingUser = await models.users.findOne({
+  const exixtingUser = await models.User.findOne({
     where: { id },
   });
 
@@ -406,5 +405,5 @@ export const updateAccount = async (req, res) => {
 
   await exixtingUser.update({ role });
 
-  return successStat(res, 200, 'message', 'Successful');
+  return successStat(res, 200, 'message', 'Successful Updated');
 };
