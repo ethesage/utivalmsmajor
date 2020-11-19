@@ -40,9 +40,15 @@ const CourseNav = () => {
       link: `/admin/courses/classroom/${courseId}/${cohortId}`,
       title: 'Classroom',
     },
-    { link: `students`, title: 'Students' },
-    { link: `all-assignments/${courseId}`, title: 'Assignments' },
-    { link: `study-plan/${courseId}`, title: 'Calender' },
+    {
+      link: `/admin/courses/students/${courseId}/${cohortId}`,
+      title: 'Students',
+    },
+    {
+      link: `/admin/courses/all-assignments/${courseId}/${cohortId}`,
+      title: 'Assignments',
+    },
+    { link: `/admin/courses/study-plan/${courseId}`, title: 'Calender' },
   ];
 
   if (isStudent) {

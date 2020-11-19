@@ -11,8 +11,7 @@ import CourseList from './CoursesList';
 import Classroom from 'views/Classroom';
 import FullClass from 'views/FullClass';
 import Assignment from 'views/Assignment';
-import AllAssignments from 'views/AllAssignments';
-import TrainerProtected from 'components/Protected/TrainerProtected';
+import AllAssignments from 'views/AllAssignments/index';
 import BreadCrumb from 'components/BreadCrumbs';
 import useBreadcrumbs from 'Hooks/useBreadCrumbs';
 import StudyPlan from '../../StudyPlan';
@@ -78,12 +77,12 @@ const Courses = ({ gapi }) => {
               <FullClass gapi={gapi} />
             </Route>
 
-            <TrainerProtected
+            <Route
               exact
               path={`${path}/classroom/:courseId/:classroom/add-assignment`}
             >
               <FullClass gapi={gapi} />
-            </TrainerProtected>
+            </Route>
 
             <Route
               exact
@@ -101,12 +100,9 @@ const Courses = ({ gapi }) => {
               path={`${path}/members/:courseId`}
               component={Members}
             />
-            <TrainerProtected
-              exact
-              path={`${path}/all-assignments/:courseId/:classroom?`}
-            >
+            <Route exact path={`${path}/all-assignments/:courseId/:classroom?`}>
               <AllAssignments gapi={gapi} />
-            </TrainerProtected>
+            </Route>
           </Switch>
         </>
       )}

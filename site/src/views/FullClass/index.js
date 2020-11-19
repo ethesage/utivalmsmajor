@@ -97,7 +97,7 @@ function FullClass({ gapi }) {
                     }}
                     editClass={() => setEditClass(!editClass)}
                   />
-                  {isStudent && ass.length > 0 && (
+                  {/* {isStudent && ass.length > 0 && (
                     <div className="btns">
                       <div className="reg_text">
                         <h4>Activities</h4>
@@ -113,7 +113,7 @@ function FullClass({ gapi }) {
                         </div>
                       </div>
                     </div>
-                  )}
+                  )} */}
                   <div className="prev_courses"></div>
                 </>
               )}

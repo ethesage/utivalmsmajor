@@ -145,19 +145,19 @@ function Classes({
     } else modalRef.current.open();
   };
 
-  const viewFile = async (contentLink) => {
-    window.open(contentLink, '_blank');
-  };
+  // const viewFile = async (contentLink) => {
+  //   window.open(contentLink, '_blank');
+  // };
 
-  const viewAssignment = (e) => {
-    e.preventDefault();
+  // const viewAssignment = (e) => {
+  //   e.preventDefault();
 
-    // console.log(classResources[title].assignment[0]);
+  //   // console.log(classResources[title].assignment[0]);
 
-    if (!isStudent) {
-      dropDrop('assignment');
-    } else viewFile(classResources[title].assignment[0].webViewLink);
-  };
+  //   if (!isStudent) {
+  //     dropDrop('assignment');
+  //   } else viewFile(classResources[title].assignment[0].webViewLink);
+  // };
 
   const delete_file = async () => {
     const file =
@@ -234,6 +234,8 @@ function Classes({
     e.target.src = user_icon;
   };
 
+  console.log(courseId, data.id);
+
   return (
     <>
       <div className="cx_listnx_con" ref={classRef}>
@@ -251,7 +253,7 @@ function Classes({
                 <img src={class_icon} alt="class" />{' '}
                 <div className="flex-row j-space img">
                   <span style={{ '--number': 1 }} className="clipped-text">
-                    {Number(index + 1) ? `Week ${weeks[index + 1]} - ` : ''}{' '}
+                    {Number(index + 1) ? `Day ${weeks[index + 1]} - ` : ''}{' '}
                     {title}
                   </span>
                   {(isAdmin || isTrainer) && full ? (
@@ -318,14 +320,35 @@ function Classes({
 
             {showResources ? (
               <div className="btns">
-                <div>
-                  <ResourceBtn
-                    img={play}
-                    text={isAdmin ? 'Class Link' : 'Join Class'}
-                    color="theme"
-                    link={link}
-                    ext
-                  />
+                <div className="reg_text">
+                  <div className="btn_sec_con flex-row j-start">
+                    <div className="btn_sec">
+                      <ResourceBtn
+                        img={play}
+                        text={isAdmin ? 'Class Link' : 'Join Class'}
+                        color="theme"
+                        link={link}
+                        ext
+                      />
+                    </div>
+
+                    {(assignment_.length > 0 || !isStudent) && (
+                      <div className="btn_sec">
+                        <ResourceBtn
+                          img={assignment}
+                          text="Assignment"
+                          color="off"
+                          link={
+                            isAdmin
+                              ? ''
+                              : isTrainer
+                              ? `/courses/all-assignments/${courseId}/${data.id}`
+                              : `/courses/assignment/${courseId}/${data.id}`
+                          }
+                        />
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 {isAdmin && full && (
@@ -363,18 +386,6 @@ function Classes({
                 <div className="reg_text">
                   <h4>Resources</h4>
                   <div className="btn_sec_con flex-row j-start">
-                    {(assignment_.length > 0 || !isStudent) && (
-                      <div className="btn_sec">
-                        <ResourceBtn
-                          img={assignment}
-                          text="Assignment"
-                          color="off"
-                          link=""
-                          handleClick={viewAssignment}
-                        />
-                      </div>
-                    )}
-
                     <div className="btn_sec">
                       <ResourceBtn
                         img={material}

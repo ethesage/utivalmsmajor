@@ -14,7 +14,7 @@ import Classroom from 'views/Classroom/Admin';
 import FullClass from 'views/FullClass/Admin';
 
 import Assignment from 'views/Assignment';
-import AllAssignments from 'views/AllAssignments';
+import AllAssignments from 'views/AllAssignments/Admin';
 import TrainerProtected from 'components/Protected/TrainerProtected';
 import StudyPlan from '../../StudyPlan';
 import Members from '../../Members';
@@ -95,18 +95,12 @@ const Courses = ({ gapi }) => {
             >
               <FullClass gapi={gapi} />
             </Route>
-
-
-
-
-            
-
-            <TrainerProtected
+            <Route
               exact
               path={`${path}/classroom/:courseId/:cohortId/:classroom/add-assignment`}
             >
               <FullClass gapi={gapi} />
-            </TrainerProtected>
+            </Route>
 
             <Route
               exact
@@ -124,12 +118,12 @@ const Courses = ({ gapi }) => {
               path={`${path}/members/:courseId`}
               component={Members}
             />
-            <TrainerProtected
+            <Route
               exact
-              path={`${path}/all-assignments/:courseId/:classroom?`}
+              path={`${path}/all-assignments/:courseId/:cohortId/:classroom?`}
             >
               <AllAssignments gapi={gapi} />
-            </TrainerProtected>
+            </Route>
           </Switch>
         </>
       )}

@@ -4,10 +4,8 @@ import { NavLink, useParams, useLocation, useHistory } from 'react-router-dom';
 import GetCurrentCohort from 'Hooks/getCurrentCohort';
 import Loader from 'components/Loading';
 import Classes from 'components/Classes';
-import ResourceBtn from 'components/ResourceButton';
 import Nav from 'components/AdminHeader';
 import NavBar from 'components/CourseNav';
-import assignment from 'assets/icons/course/assignment.png';
 import Layout from 'Layouts/SideNavListLayout';
 import AddClass from 'views/AddClass';
 import AddAssignment from '../../AddAssignment';
@@ -34,8 +32,6 @@ function FullClass({ gapi }) {
   const data = currentCohort?.Classes.find(
     (classrum) => classrum.id === classroom
   );
-
-  const ass = data?.ClassResources.filter((res) => res.type === 'assignment');
 
   if (error) {
     return (
@@ -90,23 +86,7 @@ function FullClass({ gapi }) {
                     editClass={() => setEditClass(!editClass)}
                     cohortId={cohortId}
                   />
-                  {isStudent && ass.length > 0 && (
-                    <div className="btns">
-                      <div className="reg_text">
-                        <h4>Activities</h4>
-                        <div className="btn_sec_con flex-row j-start">
-                          <div className="btn_sec">
-                            <ResourceBtn
-                              img={assignment}
-                              text="Submit Assignment"
-                              color="approved"
-                              link={`/courses/assignment/${courseId}/${classroom}`}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
+
                   <div className="prev_courses"></div>
                 </>
               )}
