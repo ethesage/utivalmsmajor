@@ -11,8 +11,6 @@ import no_course from 'assets/dashboard/no_course.png';
 import './style.scss';
 
 const ClassesSec = ({ data }) => {
-  console.log(data);
-
   return (
     <div className="next_class_staff flex-row al-start j-space">
       <img src={data.thumbnail} alt="" className="main_img" />

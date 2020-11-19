@@ -54,20 +54,20 @@ const AllAssignmnets = ({ gapi, currentCourse, isAdmin, cohortId }) => {
     return () => {};
   }, [classes, currentCourse, history, courseId, classroom]);
 
-  useEffect(() => {
-    if (!currentCourse) return;
-    if (!classes) return;
-    if (classroom) return;
-    // setCurrentClass();
-    const classname = currentCourse?.CourseCohort?.Classes[0].id;
-    history.push(
-      isAdmin
-        ? `/admin/courses/all-assignments/${courseId}/${cohortId}/${classname}`
-        : `/courses/all-assignments/${courseId}/${classname}`
-    );
+  // useEffect(() => {
+  //   if (!currentCourse) return;
+  //   if (!classes) return;
+  //   if (classroom) return;
+  //   // setCurrentClass();
+  //   const classname = currentCourse?.CourseCohort?.Classes[0].id;
+  //   history.push(
+  //     isAdmin
+  //       ? `/admin/courses/all-assignments/${courseId}/${cohortId}/${classname}`
+  //       : `/courses/all-assignments/${courseId}/${classname}`
+  //   );
 
-    return () => {};
-  }, [classes, currentCourse, history, courseId, classroom, isAdmin, cohortId]);
+  //   return () => {};
+  // }, [classes, currentCourse, history, courseId, classroom, isAdmin, cohortId]);
 
   //get all submitted assignment for a user
   useEffect(() => {
@@ -142,8 +142,7 @@ const AllAssignmnets = ({ gapi, currentCourse, isAdmin, cohortId }) => {
     !classes ||
     !currentClassdata?.length === 0 ||
     currentClass === '' ||
-    loading ||
-    !classroom
+    loading
   ) {
     // if (true) {
     return (
@@ -166,7 +165,8 @@ const AllAssignmnets = ({ gapi, currentCourse, isAdmin, cohortId }) => {
     );
   }
 
-  const data = classResources[currentClassdata[0].title].allSubmittedAssignment;
+  const data =
+    classResources[currentClassdata[0]?.title]?.allSubmittedAssignment;
 
   const updateInput = (name, value) => {
     setFilters({ ...filters, [name]: value });
@@ -260,7 +260,13 @@ const AllAssignmnets = ({ gapi, currentCourse, isAdmin, cohortId }) => {
             </div>
 
             {loading || !data ? (
-              <div className="spinner1" style={{ height: '300px' }}></div>
+              classroom ? (
+                <div className="spinner1" style={{ height: '300px' }}></div>
+              ) : (
+                <div className="flex-row" style={{ height: '300px' }}>
+                  <p>Please select a class</p>
+                </div>
+              )
             ) : data.length === 0 ? (
               <div className="flex-row" style={{ height: '300px' }}>
                 <p>No Submitted Assignments Yet</p>

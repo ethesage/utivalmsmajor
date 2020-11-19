@@ -12,12 +12,9 @@ import CohortList from 'views/AllCourseCohorts';
 import Overview from 'components/OverView/Admin';
 import Classroom from 'views/Classroom/Admin';
 import FullClass from 'views/FullClass/Admin';
-
-import Assignment from 'views/Assignment';
 import AllAssignments from 'views/AllAssignments/Admin';
-import TrainerProtected from 'components/Protected/TrainerProtected';
-import StudyPlan from '../../StudyPlan';
-import Members from '../../Members';
+import StudyPlan from '../../StudyPlan/Admin';
+import Members from '../../Members/Admin';
 import './style.scss';
 
 const Courses = ({ gapi }) => {
@@ -104,18 +101,12 @@ const Courses = ({ gapi }) => {
 
             <Route
               exact
-              path={`${path}/assignment/:courseId/:classroom/:assignmentId?`}
-            >
-              <Assignment gapi={gapi} />
-            </Route>
-            <Route
-              exact
-              path={`${path}/study-plan/:courseId`}
+              path={`${path}/study-plan/:courseId/:cohortId`}
               component={StudyPlan}
             />
             <Route
               exact
-              path={`${path}/members/:courseId`}
+              path={`${path}/students/:courseId/:cohortId`}
               component={Members}
             />
             <Route

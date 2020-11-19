@@ -1,32 +1,19 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import Sekeleton from 'react-skeleton-loader';
+import { useSelector } from 'react-redux';
 import useBreadcrumbs from 'Hooks/useBreadCrumbs';
 import GetCurrentCourse from 'Hooks/getCurrentCourse';
-import { getEnrolledMembers } from 'g_actions/member';
 import NavBar from 'components/CourseNav';
-import MemberCard from 'components/Member';
+import Member from './members';
 
 // import
 import './style.scss';
 
 const Members = () => {
   const { courseId } = useParams();
-  const dispatch = useDispatch();
-  const { enrolledStudents } = useSelector((state) => state.member);
   const currentCourse = useSelector((state) => state.member.currentCourse);
 
   GetCurrentCourse();
-
-  useEffect(() => {
-    if (!enrolledStudents) {
-      (async () => {
-        await dispatch(getEnrolledMembers(courseId));
-      })();
-    }
-    return () => {};
-  }, [enrolledStudents, dispatch, courseId]);
 
   useBreadcrumbs(
     [
@@ -39,32 +26,10 @@ const Members = () => {
     !!currentCourse
   );
 
-  const Loader = () => (
-    <div className="snx_mem">
-      <Sekeleton width="120%" height="100%" />
-    </div>
-  );
-
-  const NoClass = () => <div>No members enrolled yet</div>;
-
   return (
     <>
       <NavBar />
-      <section className="members">
-        <h3>{enrolledStudents && enrolledStudents.length} Total Members</h3>
-
-        <div className="memx_sec">
-          {!enrolledStudents ? (
-            [1, 2, 3].map((i) => <Loader key={`load_${i}`} />)
-          ) : enrolledStudents.length === 0 ? (
-            <NoClass />
-          ) : (
-            enrolledStudents.map((students, i) => (
-              <MemberCard key={`enrolled_students_${i}`} data={students} />
-            ))
-          )}
-        </div>
-      </section>
+      <Member courseId={courseId} />
     </>
   );
 };

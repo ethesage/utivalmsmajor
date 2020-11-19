@@ -10,8 +10,6 @@ import './style.scss';
 const CousreCard = ({ data }) => {
   const { isStudent } = useSelector((state) => state.auth);
 
-  console.log(data);
-
   const {
     isCompleted,
     CourseCohort: { id, dateRange },

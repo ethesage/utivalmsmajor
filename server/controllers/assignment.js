@@ -173,8 +173,9 @@ export const gradeStudentAssignment = async (req, res) => {
       ],
     });
 
-    if (!checkTrainer || role === 'student')
+    if (!checkTrainer || role === 'student') {
       return errorStat(res, 403, 'Cant Grade Assignment');
+    }
 
     const foundAssignment = await models.Assignment.findOne({
       where: { id: assignmentId },

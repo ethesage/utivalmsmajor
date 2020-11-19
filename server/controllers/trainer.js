@@ -101,7 +101,7 @@ export const getSingleTrainerCourse = async (req, res) => {
         },
         {
           model: models.Course,
-          // where: { id: courseId },
+          attributes: ['id', 'name', 'description', 'thumbnail'],
           include: [
             {
               model: models.CourseDescription,
@@ -134,6 +134,9 @@ export const getSingleTrainerCourse = async (req, res) => {
                 },
                 {
                   model: models.ClassResources,
+                },
+                {
+                  model: models.ClassDays,
                 },
               ],
             },

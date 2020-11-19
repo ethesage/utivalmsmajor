@@ -48,7 +48,10 @@ const CourseNav = () => {
       link: `/admin/courses/all-assignments/${courseId}/${cohortId}`,
       title: 'Assignments',
     },
-    { link: `/admin/courses/study-plan/${courseId}`, title: 'Calender' },
+    {
+      link: `/admin/courses/study-plan/${courseId}/${cohortId}`,
+      title: 'Calender',
+    },
   ];
 
   if (isStudent) {

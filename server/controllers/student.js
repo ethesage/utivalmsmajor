@@ -119,6 +119,7 @@ export const getSingleStudentCourse = async (req, res) => {
         },
         {
           model: models.Course,
+          attributes: ['id', 'name', 'description', 'thumbnail'],
           include: [
             {
               model: models.CourseDescription,
@@ -150,6 +151,9 @@ export const getSingleStudentCourse = async (req, res) => {
                 },
                 {
                   model: models.ClassResources,
+                },
+                {
+                  model: models.ClassDays,
                 },
               ],
             },

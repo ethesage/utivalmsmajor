@@ -234,8 +234,6 @@ function Classes({
     e.target.src = user_icon;
   };
 
-  console.log(courseId, data.id);
-
   return (
     <>
       <div className="cx_listnx_con" ref={classRef}>
@@ -340,7 +338,7 @@ function Classes({
                           color="off"
                           link={
                             isAdmin
-                              ? ''
+                              ? `/admin/courses/all-assignments/${courseId}/${cohortId}/${data.id}`
                               : isTrainer
                               ? `/courses/all-assignments/${courseId}/${data.id}`
                               : `/courses/assignment/${courseId}/${data.id}`

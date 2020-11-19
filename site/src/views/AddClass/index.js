@@ -37,8 +37,6 @@ const AddAssignment = ({ editedClass, edit, name, courseId, mainCohortId }) => {
   );
   const { cohortId } = useParams();
 
-  console.log(mainCohortId);
-
   useEffect(() => {
     if (allTrainers) return;
 
