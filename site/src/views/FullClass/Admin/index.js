@@ -10,6 +10,7 @@ import NavBar from 'components/CourseNav';
 import assignment from 'assets/icons/course/assignment.png';
 import Layout from 'Layouts/SideNavListLayout';
 import AddClass from 'views/AddClass';
+import AddAssignment from '../../AddAssignment';
 import '../style.scss';
 
 function FullClass({ gapi }) {
@@ -17,6 +18,7 @@ function FullClass({ gapi }) {
   const { pathname } = useLocation();
   const [editClass, setEditClass] = useState(false);
   const history = useHistory();
+  const [addAssignment] = useState(pathname.includes('add-assignment'));
   const [loading, error, currentCohort, currentCourse] = GetCurrentCohort();
   const { isStudent } = useSelector((state) => state.auth);
   const edit = pathname.includes('edit');
@@ -49,7 +51,7 @@ function FullClass({ gapi }) {
         currentCohort={currentCohort}
         currentCourse={currentCourse}
         link={`/admin/courses/classroom/${courseId}/${cohortId}/add`}
-        text={edit ? null : 'Add Class'}
+        text={edit || !!addAssignment ? null : 'Add Class'}
       />
       <NavBar />
       <div className="cx_listnx_full flex-row al-start">
@@ -71,7 +73,7 @@ function FullClass({ gapi }) {
             ))}
           >
             <div className="flex-col j-start al-start img">
-              {!edit && (
+              {!edit && !addAssignment && (
                 <>
                   <Classes
                     data={data}
@@ -117,6 +119,19 @@ function FullClass({ gapi }) {
                   courseId={courseId}
                   mainCohortId={currentCohort?.Cohort?.id}
                 />
+              )}
+
+              {addAssignment && (
+                <>
+                  <AddAssignment
+                    title={data?.title}
+                    course={currentCohort}
+                    currentClass={data}
+                    gapi={gapi}
+                    isStudent={isStudent}
+                    folderId={currentCohort?.folderId}
+                  />
+                </>
               )}
             </div>
           </Layout>

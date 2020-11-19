@@ -257,13 +257,29 @@ function Classes({
                   {(isAdmin || isTrainer) && full ? (
                     <>
                       {isAdmin && (
-                        <div className="edit_btns">
-                          <Link
-                            to={`/admin/courses/classroom/${courseId}/${cohortId}/${data.id}/edit`}
-                            className="edit"
-                          >
-                            Edit Class
-                          </Link>
+                        <div className="edit_btns flex-row">
+                          <div className="edit_btns">
+                            <Link
+                              to={`/admin/courses/classroom/${courseId}/${cohortId}/${data.id}/edit`}
+                              className="edit"
+                            >
+                              Edit Class
+                            </Link>
+                          </div>
+                          {Array.isArray(classResources[title].assignment) && (
+                            <Link
+                              to=""
+                              className="edit"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                addAssignment();
+                              }}
+                            >
+                              {classResources[title].assignment.length === 0
+                                ? 'Add Assignment'
+                                : 'Edit Assignment'}
+                            </Link>
+                          )}
                         </div>
                       )}
                       {isTrainer &&
