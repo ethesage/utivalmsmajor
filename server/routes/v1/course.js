@@ -19,6 +19,7 @@ const {
   getCourseSchema,
   getAllCourseSchema,
   getCourseDescriptionSchema,
+  getAllMainCourseSchema,
   usession,
 } = middlewares;
 
@@ -41,7 +42,7 @@ courseRoutes.get(
 courseRoutes.get(
   '/main',
   // usession.can(''),
-  validate(getAllCourseSchema),
+  validate(getAllMainCourseSchema),
   Courses
 );
 

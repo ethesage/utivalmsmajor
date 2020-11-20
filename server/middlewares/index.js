@@ -16,6 +16,7 @@ import {
   getCourseSchema,
   getAllCourseSchema,
   getCourseDescriptionSchema,
+  getAllMainCourseSchema
 } from './validators/schemas/course';
 
 import {
@@ -102,6 +103,7 @@ export default {
   updateFileSchema,
   createCohort,
   getCourseDescriptionSchema,
+  getAllMainCourseSchema,
   addcourse,
   updateCohortSchema,
   updateCohorCoursetSchema,

@@ -301,7 +301,7 @@ export const getAllCoursesAdmin = async (req, res) => {
 };
 
 export const Courses = async (req, res) => {
-  const { pageLimit, currentPage } = req.body.course;
+  const { pageLimit, currentPage, category } = req.body.course;
   const { offset, limit } = calculateLimitAndOffset(currentPage, pageLimit);
   // const id = req?.session?.user?.id ;
   let user;
@@ -349,6 +349,7 @@ export const Courses = async (req, res) => {
   try {
     const { rows, count } = await models.Course.findAndCountAll({
       ...sqlQueryMap,
+      where: { category },
       include: [...query],
     });
 

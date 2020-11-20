@@ -58,3 +58,9 @@ export const getAllCourseSchema = Joi.object().keys({
   currentPage: Joi.number().required(),
   pageLimit: Joi.number().required(),
 });
+
+export const getAllMainCourseSchema = Joi.object().keys({
+  currentPage: Joi.number().required(),
+  pageLimit: Joi.number().required(),
+  category: Joi.string().required(),
+});
