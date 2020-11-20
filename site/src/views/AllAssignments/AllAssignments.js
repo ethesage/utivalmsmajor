@@ -282,11 +282,11 @@ const AllAssignmnets = ({ gapi, currentCourse, isAdmin, cohortId }) => {
                           Name: (
                             <div className="usr-img flex-row j-start">
                               <img
-                                src={assignment.User.profilePic || user_icon}
-                                alt={assignment.User.firstName}
+                                src={assignment?.User?.profilePic || user_icon}
+                                alt={assignment?.User?.firstName}
                                 onError={(e) => (e.target.src = user_icon)}
                               />
-                              <p>{`${assignment.User.firstName} ${assignment.User.lastName}`}</p>
+                              <p>{`${assignment?.User?.firstName} ${assignment?.User?.lastName}`}</p>
                             </div>
                           ),
                           'Submission Date': moment(

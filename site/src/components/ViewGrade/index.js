@@ -280,14 +280,14 @@ const ViewGrade = ({
                         key={`article_comment_${i}`}
                       >
                         <img
-                          src={comment.User.profilePic || user_icon}
+                          src={comment?.User?.profilePic || user_icon}
                           alt="profilePic"
                           className="logo cover"
                         />
                         <div className="text-sec">
                           <div className="u_name flex-row j-space">
                             <small className="name">
-                              {comment.User.firstName} {comment.User.lastName}
+                              {comment?.User?.firstName} {comment?.User?.lastName}
                             </small>
                             <div>
                               <small>

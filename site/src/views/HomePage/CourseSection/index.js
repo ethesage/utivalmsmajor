@@ -58,8 +58,6 @@ const Course = () => {
     c_fetch(() => getcategories());
   }, [c_fetch, c_loading]);
 
-  console.log(courses);
-
   return (
     <section className="courses m-150">
       <h2 className="hd middle">Available Courses</h2>
