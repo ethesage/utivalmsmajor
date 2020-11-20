@@ -6,15 +6,15 @@ import './style.scss';
 
 const CourseCard = ({ data, size = '' }) => {
   const {
-    img,
-    title,
-    desc,
+    thumbnail,
+    name,
+    description,
     duration,
     value,
     cost,
     level,
-    link,
-    courseCohortId,
+    learnMore,
+    CourseCohorts,
     studentCourse,
     classname = '',
   } = data;
@@ -46,19 +46,19 @@ const CourseCard = ({ data, size = '' }) => {
     <div className={`cl_crd smaller ${size} ${classname}`} ref={cousrecard}>
       <div className="img-sec">
         <Image
-          key={img}
-          image={img}
+          key={thumbnail}
+          image={thumbnail}
           usePlaceHolder={true}
           lazyLoad={true}
           imgClass="img cover"
-          alt={title}
+          alt={name}
         />
       </div>
       <div className="text_cont flex-col al-start">
         <div className="text-sec">
-          <h2>{title}</h2>
+          <h2>{name}</h2>
           <p className="clipped-text" style={{ '--number': 4 }}>
-            {desc}
+            {description}
           </p>
           <div className="c_inf flex-row j-space">
             <small>{duration} Weeks</small>
@@ -68,7 +68,7 @@ const CourseCard = ({ data, size = '' }) => {
             </small>
             <small>{value}</small>
           </div>
-          <a href={link} target="_" className="ext">
+          <a href={learnMore} target="_" className="ext">
             Learn More
           </a>
         </div>
@@ -81,16 +81,16 @@ const CourseCard = ({ data, size = '' }) => {
           <div className="link btn">
             {user ? (
               studentCourse?.length > 0 ? (
-                <Link to={`/courses/overview/${courseCohortId}`}>
+                <Link to={`/courses/overview/${CourseCohorts[0].id}`}>
                   View Course
                 </Link>
               ) : (
-                <Link to={`/purchase/${courseCohortId}`} state={data}>
+                <Link to={`/purchase/${CourseCohorts[0].id}`} state={data}>
                   Enroll Now
                 </Link>
               )
             ) : (
-              <Link to={`/auth/quickcheckout/${courseCohortId}`}>
+              <Link to={`/auth/quickcheckout/${CourseCohorts[0].id}`}>
                 Enroll Now
               </Link>
             )}

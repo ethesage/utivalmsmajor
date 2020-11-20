@@ -9,6 +9,7 @@ import admin from './g_reducers/admin';
 import trainers from './g_reducers/trainer';
 import users from './g_reducers/users';
 import adminHome from 'views/Admin/Home/reducer';
+import homepage from './g_reducers/mainCourse';
 
 const reducers = combineReducers({
   load,
@@ -21,6 +22,7 @@ const reducers = combineReducers({
   trainers,
   users,
   adminHome,
+  homepage,
 });
 
 export default reducers;

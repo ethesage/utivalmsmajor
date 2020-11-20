@@ -56,7 +56,12 @@ const useFetch = (dispatch, initailLoadingState, reload) => {
     };
   }, [cb, started, timeOut, reload, dispatch, running]);
 
-  return [loading, error, fetch];
+  const restart = () => {
+    setLoading(true);
+    setStarted(false);
+  };
+
+  return [loading, error, fetch, restart];
 };
 
 export default useFetch;

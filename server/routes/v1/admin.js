@@ -48,7 +48,7 @@ adminRoutes.get(
   validate(idSchema),
   getCourse
 );
-adminRoutes.get('/cat-names', usession.can('course:crud'), getCourseCatnames);
+adminRoutes.get('/cat-names', getCourseCatnames);
 
 adminRoutes.get(
   '/course-cohorts/:id',
