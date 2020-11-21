@@ -55,7 +55,11 @@ const Classroom = ({ full = false, gapi }) => {
               ))}
             </div>
           ) : (
-            <AddNewClass name={currentCourse?.name} courseId={courseId} />
+            <AddNewClass
+              name={currentCourse?.name}
+              courseId={courseId}
+              mainCohortId={currentCohort?.Cohort?.id}
+            />
           )
         ) : (
           <div className="flex-col" style={{ minHeight: '500px' }}>
