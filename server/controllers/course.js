@@ -336,6 +336,7 @@ export const Courses = async (req, res) => {
         {
           model: models.CourseDescription,
           attributes: ['courseId', 'title', 'description'],
+          required: false,
         },
         {
           model: models.CourseCohort,
