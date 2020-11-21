@@ -23,12 +23,11 @@
 #    See the documentation for each action used below for the recommended IAM policies for this IAM user,
 #    and best practices on handling the access key credentials.
 
-on:
-  push:
-    branches:
-      - release
-
 name: Deploy to Amazon ECS
+
+on:
+  release:
+    types: [created]
 
 jobs:
   deploy:
@@ -56,6 +55,10 @@ jobs:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: utiva-app
         IMAGE_TAG: latest
+        APP_SECRET: ${{ secrets.APP_SECRET }}
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        SKIP_PREFLIGHT_CHECK: ${{ secrets.SKIP_PREFLIGHT_CHECK }}
+        whiteList: ${{ secrets.WHITELIST }}
       run: |
         # Build a docker container and
         # push it to ECR so that it can
@@ -63,7 +66,6 @@ jobs:
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-
     - name: Fill in the new image ID in the Amazon ECS task definition
       id: task-def
       uses: aws-actions/amazon-ecs-render-task-definition@v1
