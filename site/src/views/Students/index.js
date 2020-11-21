@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions */
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+// import { useHistory } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
 import { useDispatch, useSelector } from 'react-redux';
 import { axiosInstance, stringSearch } from 'helpers';
@@ -27,7 +27,7 @@ const Users = ({ sidebar }) => {
   const { addToast } = useToasts();
   const [state, setState] = useState(initialState);
   // const { push } = useHistory();
-  const [currentUser, setCurrentUser] = useState();
+  // const [currentUser, setCurrentUser] = useState();
   const [loading, error, fetch] = useFetch(dispatch, !users.length, true);
   const imgref = [];
 

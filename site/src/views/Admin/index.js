@@ -4,7 +4,6 @@ import Layout from 'Layouts/MainView';
 import Courses from './Courses';
 import Home from './Home';
 import Students from '../Students';
-import Trainers from '../Trainers';
 import Admins from '../Admins';
 import Settings from '../Settings';
 import './style.scss';
@@ -21,10 +20,6 @@ const Dashboard = () => {
 
       <Route path="/admin/users">
         <Students />
-      </Route>
-
-      <Route path="/admin/trainers">
-        <Trainers />
       </Route>
 
       <Route path="/admin/admins">
