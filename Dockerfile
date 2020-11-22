@@ -1,6 +1,9 @@
 FROM node:latest as build
 
-WORKDIR /usr/src/app
+ARG APP_SECRET
+ARG DATABASE_URL
+ARG SKIP_PREFLIGHT_CHECK
+ARG whiteList
 
 COPY package*.json ./
 
