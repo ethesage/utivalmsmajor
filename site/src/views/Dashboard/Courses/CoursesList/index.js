@@ -15,6 +15,7 @@ const CousreCard = ({ data }) => {
     CourseCohort: { id, dateRange },
     Course,
     Cohort,
+    progress,
   } = data;
 
   return (
@@ -34,11 +35,7 @@ const CousreCard = ({ data }) => {
               <small>Completion level</small>
               <Progress
                 className="slim"
-                percent={
-                  Course.CourseProgresses[0]
-                    ? Course.CourseProgresses[0].progress
-                    : 0
-                }
+                percent={progress ? progress : 0}
                 status="error"
                 theme={{
                   success: {
@@ -56,14 +53,14 @@ const CousreCard = ({ data }) => {
                 }}
               />
             </div>
-            <div className="grade flex-row j-space">
+            {/* <div className="grade flex-row j-space">
               <small>
                 <strong>Grade:</strong> 100
               </small>
               <button>
                 <small>View Details</small>
               </button>
-            </div>
+            </div> */}
           </>
         ) : null}
 

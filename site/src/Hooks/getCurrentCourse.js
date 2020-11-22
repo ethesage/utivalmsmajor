@@ -12,10 +12,17 @@ export default () => {
   );
   const { isStudent } = useSelector((state) => state.auth);
   const userType = isStudent ? 'student' : 'trainer';
-  const [loading, error, fetch] = useFetch(dispatch, !!!currentCourse);
+
+  let course = currentCourse;
+  const existingCourse = course?.id === courseId;
+  if (!existingCourse) {
+    course = null;
+  }
+
+  const [loading, error, fetch] = useFetch(dispatch, !!!course);
 
   useEffect(() => {
-    if (currentCourse) return;
+    if (course) return;
 
     fetch(() => getEnrolledCourses(courseId, null, userType));
 
@@ -23,7 +30,7 @@ export default () => {
   }, [
     enrolledcourses,
     courseId,
-    currentCourse,
+    course,
     dispatch,
     userType,
     loading,

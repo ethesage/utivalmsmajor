@@ -1,7 +1,7 @@
-import React, { useRef, useEffect, useCallback, useState } from "react";
-import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { useToasts } from "react-toast-notifications";
+import React, { useRef, useEffect, useCallback, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { useToasts } from 'react-toast-notifications';
 import {
   getAssignments,
   getResources,
@@ -9,21 +9,20 @@ import {
   deleteResources,
   studentProgress,
   courseProgress,
-} from "g_actions/member";
-import ProgressBar from "components/ProgressBar";
-import { weeks, axiosInstance } from "helpers";
-import Confirm from "components/Confirm";
-import play from "assets/icons/course/play.png";
-import material from "assets/icons/course/material.png";
-import assignment from "assets/icons/course/assignment.png";
-import class_icon from "assets/icons/class_icon.png";
-import Modal from "../Modal";
-import Loader from "components/Loading";
-import user_icon from "assets/user_icon.png";
-import Files from "components/Files";
-import ResourceBtn from "../ResourceButton";
-import RevielDrop from "../RevielDrop";
-import "./style.scss";
+} from 'g_actions/member';
+import ProgressBar from 'components/ProgressBar';
+import { weeks, axiosInstance } from 'helpers';
+import Confirm from 'components/Confirm';
+import play from 'assets/icons/course/play.png';
+import material from 'assets/icons/course/material.png';
+import assignment from 'assets/icons/course/assignment.png';
+import class_icon from 'assets/icons/class_icon.png';
+import Modal from '../Modal';
+import user_icon from 'assets/user_icon.png';
+import Files from 'components/Files';
+import ResourceBtn from '../ResourceButton';
+import RevielDrop from '../RevielDrop';
+import './style.scss';
 
 function Classes({
   data,
@@ -65,10 +64,10 @@ function Classes({
   // const courseCohortId = data.courseCohortId
 
   const resources = data.ClassResources.filter(
-    (res) => res.type === "resource"
+    (res) => res.type === 'resource'
   );
   const assignment_ = data.ClassResources.filter(
-    (res) => res.type === "assignment"
+    (res) => res.type === 'assignment'
   );
 
   const getFiles = useCallback(
@@ -77,7 +76,7 @@ function Classes({
       return await gapi.gapi.get(
         null,
         id,
-        "id, name, iconLink, webContentLink, size, webViewLink, parents"
+        'id, name, iconLink, webContentLink, size, webViewLink, parents'
       );
     },
     [gapi]
@@ -152,7 +151,7 @@ function Classes({
     e.preventDefault();
 
     if (!isStudent) {
-      dropDrop("resource");
+      dropDrop('resource');
     } else modalRef.current.open();
   };
 
@@ -164,27 +163,27 @@ function Classes({
     if (isStudent) {
       result = await dispatch(studentProgress(courseCohortId, classId));
       if (result.data) {
-        window.open(link, "_blank");
+        window.open(link, '_blank');
         openclass(true);
-      } else if (result.error === "Not Started") {
+      } else if (result.error === 'Not Started') {
         setWait(true);
       } else {
         openclass(true);
-        addToast("Request Failed", {
-          appearance: "error",
+        addToast('Request Failed', {
+          appearance: 'error',
           autoDismiss: true,
         });
       }
-    } else if (isTrainer || isAdmin) {
+    } else {
       openclass();
       result = await dispatch(courseProgress(courseCohortId, classId));
       openclass(true);
 
       if (result.data) {
-        window.open(link, "_blank");
+        window.open(link, '_blank');
       } else {
-        addToast("You are not allowed to start this class", {
-          appearance: "error",
+        addToast('You are not allowed to start this class', {
+          appearance: 'error',
           autoDismiss: true,
         });
       }
@@ -206,19 +205,19 @@ function Classes({
 
   const delete_file = async () => {
     const file =
-      dropType === "resource"
+      dropType === 'resource'
         ? classResources[title].files.find((file) => file.id === currentFile)
         : classResources[title].assignment[0];
 
     const resourceId = file.resourceId;
 
     const slug =
-      dropType === "resource" ? `class/assignment/` : `class/assignment/`;
+      dropType === 'resource' ? `class/assignment/` : `class/assignment/`;
 
     try {
       const res = await axiosInstance.delete(`${slug}${resourceId}`);
       if (res) {
-        dropType === "resource"
+        dropType === 'resource'
           ? dispatch(deleteResources(title, file.id))
           : dispatch(deleteAssignmnet(title, file.id));
         await gapi.gapi.deleteFile(file.id);
@@ -227,8 +226,8 @@ function Classes({
       }
     } catch (err) {
       // console.log(err);
-      addToast("Error Deleting file", {
-        appearance: "error",
+      addToast('Error Deleting file', {
+        appearance: 'error',
         autoDismiss: true,
       });
       return false;
@@ -271,8 +270,8 @@ function Classes({
       // console.log(err);
       progressDialog.current.close();
 
-      addToast("Error Uploding File", {
-        appearance: "error",
+      addToast('Error Uploding File', {
+        appearance: 'error',
         autoDismiss: true,
       });
 
@@ -297,11 +296,11 @@ function Classes({
           className="hx-main"
           header={
             <div className="cx_header flex-row j-space">
-              <h2 className={`h_con flex-row j-start  ${full ? " full" : ""}`}>
-                <img src={class_icon} alt="class" />{" "}
+              <h2 className={`h_con flex-row j-start  ${full ? ' full' : ''}`}>
+                <img src={class_icon} alt="class" />{' '}
                 <div className="flex-row j-space img">
-                  <span style={{ "--number": 1 }} className="clipped-text">
-                    {Number(index + 1) ? `Day ${weeks[index + 1]} - ` : ""}{" "}
+                  <span style={{ '--number': 1 }} className="clipped-text">
+                    {Number(index + 1) ? `Day ${weeks[index + 1]} - ` : ''}{' '}
                     {title}
                   </span>
                   {(isAdmin || isTrainer) && full ? (
@@ -326,8 +325,8 @@ function Classes({
                               }}
                             >
                               {classResources[title].assignment.length === 0
-                                ? "Add Assignment"
-                                : "Edit Assignment"}
+                                ? 'Add Assignment'
+                                : 'Edit Assignment'}
                             </Link>
                           )}
                         </div>
@@ -343,8 +342,8 @@ function Classes({
                             }}
                           >
                             {classResources[title].assignment.length === 0
-                              ? "Add Assignment"
-                              : "Edit Assignment"}
+                              ? 'Add Assignment'
+                              : 'Edit Assignment'}
                           </Link>
                         )}
                     </>
@@ -354,7 +353,7 @@ function Classes({
             </div>
           }
         >
-          <div className={`cx_lis-content ${full ? " full" : ""}`}>
+          <div className={`cx_lis-content ${full ? ' full' : ''}`}>
             {assData?.length > 0 ? (
               <div className="inf_x">
                 <h3>{assData[0].title}</h3>
@@ -373,7 +372,7 @@ function Classes({
                     <div className="btn_sec">
                       <ResourceBtn
                         img={play}
-                        text={isAdmin ? "Class Link" : "Join Class"}
+                        text={isAdmin ? 'Class Link' : 'Join Class'}
                         color="theme"
                         link={link}
                         ext
@@ -403,7 +402,7 @@ function Classes({
                 {isAdmin && full && (
                   <div>
                     <h4
-                      style={{ margin: "40px 0 10px" }}
+                      style={{ margin: '40px 0 10px' }}
                       className="theme-color"
                     >
                       Trainer
@@ -419,7 +418,7 @@ function Classes({
                         <div>
                           <strong>
                             <p>
-                              {data.Trainer.User.firstName}{" "}
+                              {data.Trainer.User.firstName}{' '}
                               {data.Trainer.User.lastName}
                             </p>
                           </strong>
@@ -438,7 +437,7 @@ function Classes({
                     <div className="btn_sec">
                       <ResourceBtn
                         img={material}
-                        text={`${isStudent ? "Download" : "Class"} Materials`}
+                        text={`${isStudent ? 'Download' : 'Class'} Materials`}
                         color="secondary"
                         link=""
                         handleClick={viewResources}
@@ -448,7 +447,7 @@ function Classes({
                 </div>
               </div>
             ) : (
-              ""
+              ''
             )}
 
             {!full ? (
@@ -474,24 +473,24 @@ function Classes({
             <div className="class_file_con">
               <div className="box-shade" data-open={showResourceDrop}>
                 <h3>
-                  {dropType === "resource"
-                    ? "Resource Materials"
-                    : "Class assignment"}
+                  {dropType === 'resource'
+                    ? 'Resource Materials'
+                    : 'Class assignment'}
                 </h3>
                 <Files
                   files={
-                    dropType === "resource"
+                    dropType === 'resource'
                       ? classResources[title].files
                       : classResources[title].assignment
                   }
                   showdrag={
-                    dropType === "resource" ? true : false
+                    dropType === 'resource' ? true : false
                     // : !!!classResources[title].files
                   }
                   errorMsg={
-                    dropType === "resource"
-                      ? "No materials for this class yet"
-                      : "No assignment Yet"
+                    dropType === 'resource'
+                      ? 'No materials for this class yet'
+                      : 'No assignment Yet'
                   }
                   deleteFile={deleteFIle}
                   handleImage={upload}
@@ -528,11 +527,12 @@ function Classes({
       <Modal ref={startclass}>
         <div
           style={{
-            background: "white",
-            width: "400px",
-            height: "300px",
-            textAlign: "center",
-            margin: "auto",
+            background: 'white',
+            width: '400px',
+            height: '300px',
+            textAlign: 'center',
+            margin: 'auto',
+            borderRadius: '10px',
           }}
           className="s_btn flex-row loader"
         >
@@ -540,7 +540,7 @@ function Classes({
             <p className="loader_con_main">Loading class...</p>
           )}
           {wait ? (
-            <div>Administrator is yet to start this classs</div>
+            <div>This class is yet to start</div>
           ) : (
             <p className="loader_con_main">Loading class...</p>
           )}

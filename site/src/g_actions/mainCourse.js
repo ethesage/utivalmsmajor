@@ -43,18 +43,20 @@ export const getNextClasses = () => async (dispatch) => {
 };
 
 export const getCourse = (page, link, category) => async (dispatch) => {
-  let allCourses;
-  try {
-    allCourses = await axiosInstance.get(
-      `/course${link}?currentPage=${page}&pageLimit=10&category=${category}`
-    );
-  } catch (error) {
-    return error;
-  }
+  let allCourses = await axiosInstance.get(
+    `/course${link}?currentPage=${page}&pageLimit=10&category=${category}`
+  );
+
+  const courses = allCourses.data.data.rows.reduce((acc, course) => {
+    if (course.CourseCohorts[0]) {
+      return [...acc, course];
+    }
+    return acc;
+  }, []);
 
   dispatch({
     type: 'GET_ALl_ONGOING_COURSES',
-    payload: { category, data: allCourses.data.data.rows },
+    payload: { category, data: courses },
   });
 };
 
@@ -72,5 +74,11 @@ export const addStudentCourse = (courseCohortId, studentCourse) => async (
   dispatch({
     type: 'ADD_STUDENT_COURSE',
     payload: { studentCourse, courseCohortId },
+  });
+};
+
+export const resetHomePageCourse = () => async (dispatch) => {
+  dispatch({
+    type: 'RESET_HM',
   });
 };

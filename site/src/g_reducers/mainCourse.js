@@ -45,6 +45,12 @@ const course = (state = initialState, action) => {
         mappedCourses: updated,
       };
 
+    case 'RESET_HM':
+      return {
+        ...initialState,
+        categories: state.categories,
+      };
+
     case 'RESET':
       return initialState;
     default:

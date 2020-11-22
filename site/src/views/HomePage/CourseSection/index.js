@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Skeleton from 'react-skeleton-loader';
 import CourseCard from 'components/CourseCard';
-import { getcategories } from 'g_actions/mainCourse';
-import { getCourse } from 'g_actions/mainCourse';
+import {
+  getCourse,
+  resetHomePageCourse,
+  getcategories,
+} from 'g_actions/mainCourse';
 import no_course from 'assets/dashboard/no_course.png';
 import useFetch from 'Hooks/useFetch';
 import './style.scss';
@@ -57,6 +60,12 @@ const Course = () => {
 
     c_fetch(() => getcategories());
   }, [c_fetch, c_loading]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(resetHomePageCourse());
+    };
+  }, []);
 
   return (
     <section className="courses m-150">
