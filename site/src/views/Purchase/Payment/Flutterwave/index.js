@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useFlutterwave, FlutterWaveButton } from "react-flutterwave";
+import { useFlutterwave } from "react-flutterwave";
 import { checkout } from "g_actions/courses";
 import paystack from "assets/icons/Flutterwave.png";
 import { addStudentCourse } from "views/Dashboard/Home/action";

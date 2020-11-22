@@ -269,7 +269,9 @@ export const getStudentNextClass = async (req, res) => {
     // if (!getClasses[0]) return errorStat(res, 400, 'No Available Class');
 
     const getAll = getClasses.reduce((acc, item, index) => {
-      if (item.dataValues) {
+      const n_item = item.dataValues;
+
+      if (n_item && n_item.CourseCohort.Classes[0]) {
         const course = item.dataValues.Course.dataValues;
         const link = {
           link: item.dataValues.CourseCohort.Classes[0].dataValues.link,

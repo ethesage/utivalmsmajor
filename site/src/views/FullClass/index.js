@@ -4,10 +4,10 @@ import { NavLink, useParams, useLocation, useHistory } from 'react-router-dom';
 import GetCurrentCourse from 'Hooks/getCurrentCourse';
 import Loader from 'components/Loading';
 import Classes from 'components/Classes';
-import ResourceBtn from 'components/ResourceButton';
+// import ResourceBtn from 'components/ResourceButton';
 import useBreadcrumbs from 'Hooks/useBreadCrumbs';
 import NavBar from 'components/CourseNav';
-import assignment from 'assets/icons/course/assignment.png';
+// import assignment from 'assets/icons/course/assignment.png';
 import Layout from 'Layouts/SideNavListLayout';
 import AddAssignment from '../AddAssignment';
 import './style.scss';
@@ -55,7 +55,7 @@ function FullClass({ gapi }) {
     (classrum) => classrum.id === classroom
   );
 
-  const ass = data?.ClassResources.filter((res) => res.type === 'assignment');
+  // const ass = data?.ClassResources.filter((res) => res.type === 'assignment');
 
   return (
     <>
