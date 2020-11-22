@@ -38,6 +38,7 @@ const Overview = () => {
                 cohort={currentCourse.Cohort}
                 isStudent={isStudent}
                 range={currentCourse.CourseCohort.dateRange}
+                progress={isStudent ? currentCourse.progress : currentCourse.CourseCohort.progress}
               />
               <Facilitators trainers={currentCourse.CourseCohort.Classes} />
             </div>

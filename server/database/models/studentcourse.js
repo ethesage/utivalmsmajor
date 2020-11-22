@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
     isCompleted: DataTypes.BOOLEAN,
     cohortId: DataTypes.UUID,
     courseId: DataTypes.UUID,
+    progress: DataTypes.INTEGER,
     status: {
       type: DataTypes.STRING,
       values: ['ongoing', 'finished']

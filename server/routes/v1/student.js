@@ -8,6 +8,7 @@ import {
   allCourseStudents,
   getStudentNextClass,
   getStudentClassDays,
+  addStudentProgress
 } from '../../controllers/student';
 import middlewares from '../../middlewares';
 
@@ -15,6 +16,7 @@ const {
   validate,
   addStudentSchema,
   getStudentSchema,
+  addStudentProgressSchema,
   // getStudentCourseSchema,
   //   coursestudentSchema,
   //   studentSchema,
@@ -56,6 +58,13 @@ studentRoutes.get(
   usession.can(''),
   validate(getStudentSchema),
   getStudentClassDays
+);
+
+studentRoutes.post(
+  '/addprogress',
+  usession.can(''),
+  validate(addStudentProgressSchema),
+  addStudentProgress
 );
 
 // studentRoutes.delete(

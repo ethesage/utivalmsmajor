@@ -9,7 +9,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     courseId: DataTypes.UUID,
     userId: DataTypes.UUID,
-    progress: DataTypes.INTEGER
+    progress: DataTypes.INTEGER,
+    type: DataTypes.STRING,
+    courseCohortId: DataTypes.UUID,
+    classId: DataTypes.UUID,
   }, {});
   CourseProgress.associate = (models) => {
     // associations can be defined here

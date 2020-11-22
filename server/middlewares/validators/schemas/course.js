@@ -64,3 +64,8 @@ export const getAllMainCourseSchema = Joi.object().keys({
   pageLimit: Joi.number().required(),
   category: Joi.string().required(),
 });
+
+export const addCourseCohortProgressSchema = Joi.object().keys({
+  courseCohortId: Joi.string().uuid().trim().required(),
+  classId: Joi.string().uuid().trim().required(),
+});

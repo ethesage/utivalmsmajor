@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
       description: DataTypes.TEXT,
       link: DataTypes.STRING,
       dateRange: DataTypes.STRING,
+      started: DataTypes.BOOLEAN
     },
     {}
   );

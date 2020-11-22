@@ -10,6 +10,7 @@ import {
   deleteCourse,
   getAllCoursesAdmin,
   Courses,
+  addCourseCohortProgress
 } from '../../controllers/course';
 import middlewares from '../../middlewares';
 
@@ -20,6 +21,7 @@ const {
   getAllCourseSchema,
   getCourseDescriptionSchema,
   getAllMainCourseSchema,
+  addCourseCohortProgressSchema,
   usession,
 } = middlewares;
 
@@ -86,6 +88,13 @@ courseRoutes.delete(
   usession.can('course:crud'),
   validate(getCourseSchema),
   deleteCourse
+);
+
+courseRoutes.post(
+  '/addprogress',
+  usession.can(''),
+  validate(addCourseCohortProgressSchema),
+  addCourseCohortProgress
 );
 
 export default courseRoutes;

@@ -168,3 +168,35 @@ export const gradeAssignment = (name, Id, grade) => async (dispatch) => {
     payload: { name, Id, grade },
   });
 };
+
+export const studentProgress = (courseCohortId, classId) => async (dispatch) => {
+  let members;
+  const data = {
+    courseCohortId,
+    classId,
+  }
+
+  try {
+    members = await axiosInstance.post('/student/addprogress', data);
+    // console.log(members, 'members');
+    return members.data
+  } catch (error) {
+    // console.log(error.message.error)
+    return error;
+  }
+};
+
+export const courseProgress = (courseCohortId, classId) => async (dispatch) => {
+  let members;
+  const data = {
+    courseCohortId,
+    classId,
+  }
+  try {
+    members = await axiosInstance.post('/course/addprogress', data);
+    // console.log(members, 'members');
+    return members.data
+  } catch (error) {
+    return error;
+  }
+};

@@ -16,7 +16,8 @@ import {
   getCourseSchema,
   getAllCourseSchema,
   getCourseDescriptionSchema,
-  getAllMainCourseSchema
+  getAllMainCourseSchema,
+  addCourseCohortProgressSchema
 } from './validators/schemas/course';
 
 import {
@@ -31,6 +32,7 @@ import {
   addStudentSchema,
   getStudentSchema,
   getStudentCourseSchema,
+  addStudentProgressSchema
 } from './validators/schemas/student';
 
 import {
@@ -96,6 +98,7 @@ export default {
   trainerSchema,
   updateTrainerSchema,
   addStudentSchema,
+  addStudentProgressSchema,
   getStudentSchema,
   createClassroom,
   createFileSchema,
@@ -104,6 +107,7 @@ export default {
   createCohort,
   getCourseDescriptionSchema,
   getAllMainCourseSchema,
+  addCourseCohortProgressSchema,
   addcourse,
   updateCohortSchema,
   updateCohorCoursetSchema,

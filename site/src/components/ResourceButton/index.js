@@ -19,14 +19,15 @@ const ResourceBtn = ({ img, text, color, link, handleClick, ext }) => {
   return (
     <>
       {ext ? (
-        <a
+        <div
           className={`rcx_btn flex-row ${color}`}
-          href={link}
+          // href={link}
           onClick={handleClick}
-          target={'_'}
+          // target={'_'}
+          style={{cursor: 'pointer'}}
         >
           <Inner />
-        </a>
+        </div>
       ) : (
         <Link
           className={`rcx_btn flex-row ${color}`}
