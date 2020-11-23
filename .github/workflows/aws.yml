@@ -55,12 +55,15 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: utiva-app
           IMAGE_TAG: latest
-
+          APP_SECRET: ${{ secrets.APP_SECRET }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          SKIP_PREFLIGHT_CHECK: ${{ secrets.SKIP_PREFLIGHT_CHECK }}
+          whiteList: ${{ secrets.WHITELIST }}
         run: |
           # Build a docker container and
           # push it to ECR so that it can
           # be deployed to ECS.
-          docker build --build-arg APP_SECRET: ${{ secrets.APP_SECRET }} DATABASE_URL: ${{ secrets.DATABASE_URL }} SKIP_PREFLIGHT_CHECK: ${{ secrets.SKIP_PREFLIGHT_CHECK }} whiteList: ${{ secrets.WHITELIST }} -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG . --build-arg APP_SECRET=$APP_SECRET --build-arg DATABASE_URL=$DATABASE_URL --build-arg SKIP_PREFLIGHT_CHECK=$SKIP_PREFLIGHT_CHECK --build-arg whiteList=$WHITELIST 
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
       - name: Fill in the new image ID in the Amazon ECS task definition
