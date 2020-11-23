@@ -63,7 +63,7 @@ jobs:
           # Build a docker container and
           # push it to ECR so that it can
           # be deployed to ECS.
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG . --build-arg APP_SECRET=$APP_SECRET --build-arg DATABASE_URL=$DATABASE_URL --build-arg SKIP_PREFLIGHT_CHECK=$SKIP_PREFLIGHT_CHECK --build-arg whiteList=$WHITELIST 
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG . --build-arg APP_SECRET=$APP_SECRET --build-arg DATABASE_URL=$DATABASE_URL --build-arg SKIP_PREFLIGHT_CHECK=$SKIP_PREFLIGHT_CHECK --build-arg whiteList=$whiteList 
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
       - name: Fill in the new image ID in the Amazon ECS task definition
