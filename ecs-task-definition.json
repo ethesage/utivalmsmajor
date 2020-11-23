@@ -1,16 +1,14 @@
 {
-  "family": "utiva-app",
+  "family": "utiva-app-v1",
   "executionRoleArn": "arn:aws:iam::489043346574:role/ecsTaskExecutionRole",
   "networkMode": "awsvpc",
   "containerDefinitions": [
     {
       "name": "utiva-app",
-      "image": "489043346574.dkr.ecr.us-east-1.amazonaws.com/utiva-app:latest",
+      "image": "489043346574.dkr.ecr.us-east-1.amazonaws.com/utiva-app-repo:latest",
       "portMappings": [
         {
-          "containerPort": 4000,
-          "hostPort": 4000,
-          "protocol": "tcp"
+          "containerPort": 4000
         }
       ],
       "essential": true
