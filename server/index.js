@@ -1,17 +1,17 @@
-import chalk from "chalk";
-import debug from "debug";
-import http from "http";
-import { config } from "dotenv";
-import app from "./server";
-import Notif from "./services/Notification";
+import chalk from 'chalk';
+import debug from 'debug';
+import http from 'http';
+import { config } from 'dotenv';
+import app from './server';
+import Notif from './services/Notification';
 
 config();
 
-const log = debug("dev");
+const log = debug('dev');
 
 const { PORT } = process.env;
 
-const port = PORT || 4000;
+const port = PORT || 3000;
 const server = http.createServer(app);
 const Notification = new Notif(server);
 
