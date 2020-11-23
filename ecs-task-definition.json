@@ -8,8 +8,8 @@
       "image": "489043346574.dkr.ecr.us-east-1.amazonaws.com/utiva-app:latest",
       "portMappings": [
         {
-          "containerPort": 3000,
-          "hostPort": 3000,
+          "containerPort": 4000,
+          "hostPort": 4000,
           "protocol": "tcp"
         }
       ],

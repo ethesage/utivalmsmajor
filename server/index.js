@@ -11,7 +11,7 @@ const log = debug('dev');
 
 const { PORT } = process.env;
 
-const port = PORT || 3000;
+const port = PORT || 4000;
 const server = http.createServer(app);
 const Notification = new Notif(server);
 
