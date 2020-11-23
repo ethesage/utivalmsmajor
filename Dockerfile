@@ -10,10 +10,6 @@ ENV DATABASE_URL=${DATABASE_URL}
 ENV SKIP_PREFLIGHT_CHECK=${SKIP_PREFLIGHT_CHECK}
 ENV whiteList=${whiteList}
 
-RUN echo "Variables => ${DATABASE_URL}"
-
-WORKDIR /app
-
 COPY ["package.json", "package-lock.json*", "./"]
 
 RUN npm install
