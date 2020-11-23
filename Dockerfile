@@ -5,7 +5,7 @@ ARG DATABASE_URL
 ARG SKIP_PREFLIGHT_CHECK
 ARG whiteList
 
-RUN echo "Variables => ${DATABASE_URL} ${APP_SECRET} ${SKIP_PREFLIGHT_CHECK} ${whiteList}"
+RUN echo "Variables => ${DATABASE_URL}"
 
 COPY package*.json ./
 
