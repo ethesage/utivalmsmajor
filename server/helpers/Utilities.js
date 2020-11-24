@@ -1,18 +1,34 @@
-import { v2 as cloudinary } from 'cloudinary';
+import AWS from 'aws-sdk';
+import isBase64 from 'is-base64';
+import bluebird from 'bluebird';
 import {
-  CLOUD_NAME,
-  API_KEY,
-  API_SECRET,
+  AWS_SECRET_ACCESS_KEY,
+  AWS_ACCESS_KEY_ID,
+  AWS_REGION,
+  AWS_BUCKET_NAME,
   ENCRYPTION_SECRET,
 } from '../config/envVariables';
 
 const Cryptr = require('cryptr');
 
-cloudinary.config({
-  cloud_name: CLOUD_NAME,
-  api_key: API_KEY,
-  api_secret: API_SECRET,
+const config = {
+  aws: {
+    secret_access_key: AWS_SECRET_ACCESS_KEY,
+    access_key_id: AWS_ACCESS_KEY_ID,
+    region: AWS_REGION,
+    bucket_name: AWS_BUCKET_NAME,
+  },
+};
+
+AWS.config.update({
+  secretAccessKey: config.aws.secret_access_key,
+  accessKeyId: config.aws.access_key_id,
+  region: config.aws.region,
 });
+
+AWS.config.setPromisesDependency(bluebird);
+
+const s3 = new AWS.S3({ params: { Bucket: config.aws.bucket_name } });
 
 /**
  * @Module UserController
@@ -75,12 +91,27 @@ export function validateJoi(object, schema, req, res, next, name) {
   return next();
 }
 
-export const uploadImage = (image, id) =>
-  new Promise((resolve, reject) => {
-    cloudinary.uploader.upload(image.path, { public_id: id }, (err, res) =>
-      (err ? reject(err) : resolve(res.url))
+export const uploadImage = async (url, fileName) => {
+  try {
+    if (!isBase64(url, { mimeRequired: true })) {
+      throw Error('Invalid base64 image');
+    }
+    const buffer = new Buffer.from(
+      url.replace(/^data:image\/\w+;base64,/, ''),
+      'base64'
     );
-  });
+    const data = {
+      ACL: 'public-read',
+      Key: fileName,
+      Body: buffer,
+      ContentEncoding: 'base64',
+      ContentType: 'image/jpeg',
+    };
+    return s3.upload(data).promise();
+  } catch (err) {
+    return err.message;
+  }
+};
 
 export const encryptQuery = (string) => {
   try {
@@ -111,10 +142,10 @@ const shuffleArray = (array) => {
 };
 
 export const generatePassword = (passwordLength) => {
-  const numberChars = "0123456789";
-  const upperChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  const lowerChars = "abcdefghijklmnopqrstuvwxyz";
-  const symbols = "!@#$%&*";
+  const numberChars = '0123456789';
+  const upperChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const lowerChars = 'abcdefghijklmnopqrstuvwxyz';
+  const symbols = '!@#$%&*';
 
   const allChars = numberChars + upperChars + lowerChars + symbols;
   let randPasswordArray = Array(passwordLength);
@@ -123,5 +154,7 @@ export const generatePassword = (passwordLength) => {
   randPasswordArray[2] = lowerChars;
   randPasswordArray[3] = symbols;
   randPasswordArray = randPasswordArray.fill(allChars, 4);
-  return shuffleArray(randPasswordArray.map((x) => x[Math.floor(Math.random() * x.length)])).join('');
+  return shuffleArray(
+    randPasswordArray.map((x) => x[Math.floor(Math.random() * x.length)])
+  ).join('');
 };

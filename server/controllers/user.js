@@ -1,4 +1,4 @@
-import Sequelize from 'sequelize';
+// import Sequelize from 'sequelize';
 import models from '../database/models';
 import helpers from '../helpers';
 import Mail from '../services/mail/email';
@@ -156,11 +156,22 @@ export const updateUser = async (req, res) => {
     where: { id },
   });
 
-  const profilePic = req.files.profilePic
-    ? await uploadImage(req.files.profilePic, `${Date.now()}-profileImg`)
-    : req.session.user.profilePic;
+  const data = req.body.user;
 
-  const updatedUser = { id, ...req.body.user, profilePic };
+  if (data.profilePic && !data.profilePic.includes('media')) {
+    let fileName =
+      user.profilePic &&
+      user.profilePic.split('https://utiva-app.s3.amazonaws.com/media/')[1];
+
+    fileName = fileName || `${user.email.split('@')[0]}`;
+
+    const image = await uploadImage(data.profilePic, `media/${fileName}`);
+
+    // eslint-disable-next-line prefer-destructuring
+    data.profilePic = image.Location;
+  }
+
+  const updatedUser = { id, ...data };
 
   await user.update(updatedUser);
   await req.session.login(user.role, { user: user.userResponse() }, res);

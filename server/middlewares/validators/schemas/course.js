@@ -24,7 +24,7 @@ export const createCourse = Joi.object().keys({
       description: Joi.string().required(),
     })
   ),
-  thumbnail: Joi.object(),
+  thumbnail: Joi.string(),
 });
 
 export const getCourseSchema = Joi.object().keys({

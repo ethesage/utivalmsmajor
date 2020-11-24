@@ -76,7 +76,7 @@ const CreateCourse = ({ edit }) => {
         autoDismiss: true,
       });
 
-      submitButton.current.children[0].innerHTML = 'Create';
+      submitButton.current.children[0].innerHTML = text.reg;
       submitButton.current.classList.remove('loader');
 
       edit
@@ -109,7 +109,7 @@ const CreateCourse = ({ edit }) => {
     const _value = await toBase64(files[0]);
     setImgSrc(_value);
 
-    handleChange({ target: { name: 'thumbnail', value: files[0] } });
+    handleChange({ target: { name: 'thumbnail', value: _value } });
   };
 
   const selects = {

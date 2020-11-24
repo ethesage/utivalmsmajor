@@ -34,9 +34,9 @@ export const create = async (req, res) => {
     return errorStat(res, 409, 'This Course already exists');
   }
 
-  const thumbnail = req.files.thumbnail
+  const thumbnail = req.body.course.thumbnail
     ? await uploadImage(
-        req.files.thumbnail,
+        req.body.course.thumbnail,
         `thumbnail-${req.body.course.name}`
       )
     : null;
@@ -45,7 +45,7 @@ export const create = async (req, res) => {
     const course = await models.Course.create({
       ...req.body.course,
       trainerId: id,
-      thumbnail,
+      thumbnail: thumbnail && thumbnail.Location,
     });
 
     let resource = [];
@@ -201,29 +201,37 @@ export const updateCourse = async (req, res) => {
 
   let thumbnail;
 
-  if (req.files.thumbnail && typeof req.files.thumbnail !== 'string') {
-    thumbnail = await uploadImage(
-      req.files.thumbnail,
-      `thumbnail-${req.body.course.name}`
+  const course = await models.Course.findOne({
+    where: { id: courseId },
+  });
+
+  if (
+    req.body.course.thumbnail &&
+    !req.body.course.thumbnail.includes('media')
+  ) {
+    let fileName =
+      course.thumbnail &&
+      course.thumbnail.split('https://utiva-app.s3.amazonaws.com/media/')[1];
+
+    fileName = fileName || `thumbnail-${req.body.course.name}`;
+
+    const image = await uploadImage(
+      req.body.course.thumbnail,
+      `media/${fileName}`
     );
-  } else thumbnail = req.files.thumbnail;
 
-  try {
-    const course = await models.Course.findOne({
-      where: { id: courseId },
-    });
+    // eslint-disable-next-line prefer-destructuring
+    thumbnail = image.Location;
+  } else thumbnail = req.body.course.thumbnail;
 
-    if (!course) return errorStat(res, 404, 'Course Description not found');
+  if (!course) return errorStat(res, 404, 'Course Description not found');
 
-    await course.update({
-      ...req.body.course,
-      thumbnail,
-    });
+  await course.update({
+    ...req.body.course,
+    thumbnail,
+  });
 
-    return successStat(res, 200, 'data', course);
-  } catch (e) {
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
-  }
+  return successStat(res, 200, 'data', course);
 };
 
 export const updateCourseDescription = async (req, res) => {
