@@ -1,27 +1,28 @@
 import React from 'react';
 import { NavLink, Switch, useRouteMatch, Route } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import Layout from '../../Layouts/SideNavListLayout';
 import Profile from '../Profile';
 import Reset from '../Profile/PasswordReset';
 import './style.scss';
 
-const links = [
-  {
-    title: 'Profile',
-    link: '',
-  },
-  {
-    title: 'Password',
-    link: 'reset-password',
-  },
-  {
-    title: 'Notifications',
-    link: 'notifications',
-  },
-];
-
 const File_Page = () => {
   let { path } = useRouteMatch();
+
+  const links = [
+    {
+      title: 'Profile',
+      link: '',
+    },
+    {
+      title: 'Password',
+      link: 'reset-password',
+    },
+    {
+      title: 'Notifications',
+      link: 'notifications',
+    },
+  ];
 
   return (
     <section className="dash-con settings flex-col al-start j-start">

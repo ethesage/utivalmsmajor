@@ -4,7 +4,6 @@ import Layout from 'Layouts/MainView';
 import Courses from './Courses';
 import Home from './Home';
 import Students from '../Students';
-import Admins from '../Admins';
 import Settings from '../Settings';
 import './style.scss';
 
@@ -20,10 +19,6 @@ const Dashboard = () => {
 
       <Route path="/admin/users">
         <Students />
-      </Route>
-
-      <Route path="/admin/admins">
-        <Admins />
       </Route>
 
       <Route exact path="/admin/settings">
