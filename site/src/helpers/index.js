@@ -65,10 +65,10 @@ export const get_rand = (array) => {
 export const baseurl =
   process.env.NODE_ENV === 'development'
     ? 'http://localhost:4000'
-    : window.location.href.split('/');
+    : window.location.origin;
 
 export const axiosInstance = axios.create({
-  baseURL: window.location.origin,
+  baseURL: `${baseurl}/api/v1`,
   timeout: 100000,
   withCredentials: true,
   headers: {
