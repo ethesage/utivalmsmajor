@@ -86,7 +86,7 @@ const Course = () => {
                 </div>
               ))}
         </div>
-        <div className="course-sec flex-row j-space">
+        <div className="course-sec flex-row j-start">
           {/* {categories[currentCategory].data.map((course, i) => (
             <CourseCard data={course} key={`current_cate_${i}`} />
           ))} */}
@@ -106,14 +106,16 @@ const Course = () => {
           ) : courses?.length === 0 ? (
             <NoCourse />
           ) : (
-            courses?.map((course, i) => (
-              <CourseCard
-                data={course}
-                // size="small"
-                size={courses.length === 1 ? 'small' : ''}
-                key={`current_cate_${i}`}
-              />
-            ))
+            <div className='crs_con'>
+              {courses?.map((course, i) => (
+                <CourseCard
+                  data={course}
+                  // size="small"
+                  size={courses.length === 1 ? 'small' : ''}
+                  key={`current_cate_${i}`}
+                />
+              ))}
+            </div>
           )}
         </div>
       </div>

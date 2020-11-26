@@ -16,7 +16,6 @@ const CourseCard = ({ data, size = "" }) => {
     level,
     learnMore,
     CourseCohorts,
-    studentCourse,
     classname = "",
   } = data;
 

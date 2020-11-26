@@ -32,8 +32,17 @@
     .course-sec {
       margin-top: 40px;
 
-      @include for-size(onek) {
-        flex-direction: column;
+      .crs_con {
+        display: grid;
+        grid-template-columns: repeat(
+          auto-fill,
+          minmax(#{'min(300px, 100%)'}, 1fr)
+        );
+        grid-gap: 30px;
+
+        @include for-size(onek) {
+          display: flex;
+        }
       }
 
       .course_ld {
