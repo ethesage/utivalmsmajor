@@ -85,7 +85,32 @@ export const checkout = (courseCohortId) => async (dispatch) => {
 export const checkoutCourse = (course) => async (dispatch) => {
   // console.log(course, '...//')
   dispatch({
-    type: 'CHECKOUT',
+    type: "CHECKOUT",
     payload: course,
+  });
+};
+
+export const purchaseCourse = (course) => async (dispatch) => {
+  // console.log(course, '...//')
+  dispatch({
+    type: "PURCHASE_COURSE",
+    payload: course,
+  });
+};
+
+export const addPurchaseCourse = (courseCohortId) => async (dispatch) => {
+  // console.log(course, '...//')
+  let p_course;
+  try {
+    p_course = await axiosInstance.get(
+      `/course/getCohortCourse/${courseCohortId}`
+    );
+  } catch (error) {
+    return error;
+  }
+  // console.log(p_course, 'oop')
+  dispatch({
+    type: "PURCHASE_COURSE",
+    payload: p_course.data.data,
   });
 };

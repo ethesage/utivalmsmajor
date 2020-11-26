@@ -34,7 +34,8 @@ const course = (state = initialState, action) => {
         mappedCourses: action.payload,
       };
     case 'ADD_STUDENT_COURSE':
-      const updated = state.mappedCourses.map((course) => {
+      const updated = state.allCourses.map((course) => {
+        // console.log(course)
         if (course.courseCohortId === action.payload.courseCohortId) {
           return { ...course, studentCourse: action.payload.studentCourse };
         }
