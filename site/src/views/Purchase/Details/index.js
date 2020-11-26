@@ -13,6 +13,8 @@ const Details = ({ proceed, match, set }) => {
   const dispatch = useDispatch();
   const btnRef = useRef();
 
+  console.log(purchaseCourse?.type)
+
   const checkout = async () => {
     btnRef.current.classList.add('loader');
     const value = await dispatch(check(match.params.courseCohortId));
