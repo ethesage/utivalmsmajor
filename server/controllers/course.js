@@ -265,31 +265,19 @@ export const createCourseDescription = async (req, res) => {
 };
 
 export const deleteCourse = async (req, res) => {
-  const { courseId } = req.body.course;
+  const { courseId } = req.params;
 
-  try {
-    const course = await models.Course.findOne({
-      where: { id: courseId },
-      include: [
-        {
-          model: models.CourseDescription,
-        },
-        {
-          model: models.Cohort,
-        },
-      ],
-    });
+  const course = await models.Course.findOne({
+    where: { id: courseId },
+  });
 
-    if (!course) {
-      return errorStat(res, 404, 'Course not found');
-    }
-
-    await course.destroy();
-
-    return successStat(res, 200, 'data', 'Delete Successful');
-  } catch (e) {
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
+  if (!course) {
+    return errorStat(res, 404, 'Course not found');
   }
+
+  await course.destroy();
+
+  return successStat(res, 200, 'data', 'Delete Successful');
 };
 
 export const getAllCoursesAdmin = async (req, res) => {
