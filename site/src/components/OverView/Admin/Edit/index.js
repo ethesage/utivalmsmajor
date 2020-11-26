@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useToasts } from 'react-toast-notifications';
 import { addCourseDescription, updateCourseDescription } from 'g_actions/admin';
@@ -10,6 +11,7 @@ import './style.scss';
 
 const AddDes = ({ editedDisp, reset, courseName }) => {
   const dispatch = useDispatch();
+  const { courseId } = useParams();
   const editMode = editedDisp.title !== '' || editedDisp.description !== '';
   const submitButton = useRef();
   const { addToast } = useToasts();
@@ -49,6 +51,7 @@ const AddDes = ({ editedDisp, reset, courseName }) => {
       const courseDescrip = await axiosInstance[method](slug, {
         title: inputs.title,
         description: inputs.description,
+        courseId,
       });
 
       editMode
