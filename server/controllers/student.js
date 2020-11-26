@@ -124,6 +124,7 @@ export const getSingleStudentCourse = async (req, res) => {
           include: [
             {
               model: models.Classes,
+              required: false,
               include: [
                 {
                   model: models.Trainer,

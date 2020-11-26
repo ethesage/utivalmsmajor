@@ -14,7 +14,7 @@ export default () => {
   const userType = isStudent ? 'student' : 'trainer';
 
   let course = currentCourse;
-  const existingCourse = course?.id === courseId;
+  const existingCourse = course?.courseCohortId === courseId;
   if (!existingCourse) {
     course = null;
   }
@@ -24,7 +24,7 @@ export default () => {
   useEffect(() => {
     if (course) return;
 
-    fetch(() => getEnrolledCourses(courseId, null, userType));
+    fetch(() => getEnrolledCourses(courseId, course, userType));
 
     return () => {};
   }, [
