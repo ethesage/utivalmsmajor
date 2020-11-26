@@ -2,7 +2,8 @@ export const initialState = {
   categories: null,
   currentCourse: null,
   courses: null,
-  checkoutData: null
+  checkoutData: null,
+  purchaseCourse: null,
 };
 
 const course = (state = initialState, action) => {
@@ -26,6 +27,11 @@ const course = (state = initialState, action) => {
       return {
         ...state,
         checkoutData: action.payload,
+      };
+      case 'PURCHASE_COURSE':
+      return {
+        ...state,
+        purchaseCourse: action.payload,
       };
     default:
       return state;

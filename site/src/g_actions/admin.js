@@ -23,6 +23,13 @@ export const editCourse = (course) => async (dispatch) => {
   });
 };
 
+export const deleteCourse = (course) => async (dispatch) => {
+  dispatch({
+    type: 'DELETE_COURSE',
+    payload: course,
+  });
+};
+
 export const getCurrentCourse = (course, id) => async (dispatch) => {
   const currCourse = course
     ? course

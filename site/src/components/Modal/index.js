@@ -7,7 +7,7 @@ import React, {
 import Close from '../../assets/icons/close';
 import './style.scss';
 
-const Modal = forwardRef(({ children }, ref) => {
+const Modal = forwardRef(({ children, useButton = true }, ref) => {
   const disRef = useRef();
 
   useEffect(() => {
@@ -37,9 +37,11 @@ const Modal = forwardRef(({ children }, ref) => {
   return (
     <dialog ref={disRef} className="apx_mod">
       <div className="apx_in">
-        <button className="apx_close" onClick={close}>
-          <Close fill="black" width="30px" height="30px" />
-        </button>
+        {useButton && (
+          <button className="apx_close" onClick={close}>
+            <Close fill="black" width="30px" height="30px" />
+          </button>
+        )}
         {children}
       </div>
     </dialog>

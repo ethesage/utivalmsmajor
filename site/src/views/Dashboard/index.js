@@ -29,7 +29,7 @@ const Dashboard = () => {
       <Route exact path="/faqs/:info?">
         <FAQ />
       </Route>
-      <Route exact path="/files">
+      <Route path="/files">
         <Files gapi={gapi} />
       </Route>
       <Route path="/settings">

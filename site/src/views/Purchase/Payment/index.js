@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 // import card from 'assets/icons/card.png';
 // import paystack from 'assets/icons/paystack.png';
 // import Paystack from './Paystack';
-import Paypal from './Paypal';
+// import Paypal from './Paypal';
 import Flutterwave from './Flutterwave';
 // import paypal from 'assets/icons/paypal.png';
 import approved from 'assets/approved.png';
@@ -63,8 +63,9 @@ const Payment = ({ back, id }) => {
         {/* <Card done={done} /> */}
 
         {/* <Paystack done={done} /> */}
+        <p>Pay using</p>
         <Flutterwave done={done} />
-        <Paypal done={done} />
+        {/* <Paypal done={done} /> */}
 
         {/* </div> */}
 

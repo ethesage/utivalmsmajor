@@ -41,36 +41,31 @@ export const create = async (req, res) => {
       )
     : null;
 
-  try {
-    const course = await models.Course.create({
-      ...req.body.course,
+  const course = await models.Course.create({
+    ...req.body.course,
+    trainerId: id,
+    thumbnail: thumbnail && thumbnail.Location,
+  });
+
+  let resource = [];
+
+  if (courseDescription) {
+    const descVals = courseDescription.map((desc) => ({
+      title: desc.title,
+      description: desc.description,
       trainerId: id,
-      thumbnail: thumbnail && thumbnail.Location,
+      courseId: course.id,
+    }));
+
+    resource = await models.CourseDescription.bulkCreate(descVals, {
+      ignoreDuplicates: true,
     });
-
-    let resource = [];
-
-    if (courseDescription) {
-      const descVals = courseDescription.map((desc) => ({
-        title: desc.title,
-        description: desc.description,
-        trainerId: id,
-        courseId: course.id,
-      }));
-
-      resource = await models.CourseDescription.bulkCreate(descVals, {
-        ignoreDuplicates: true,
-      });
-    }
-
-    return successStat(res, 201, 'data', {
-      course,
-      courseDescription: resource,
-    });
-  } catch (e) {
-    console.log(e);
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
+
+  return successStat(res, 201, 'data', {
+    course,
+    courseDescription: resource,
+  });
 };
 
 // export const addCourseClass = async (req, res) => {
@@ -106,40 +101,35 @@ export const create = async (req, res) => {
 export const getCourse = async (req, res) => {
   const { courseId } = req.body.course;
 
-  try {
-    const course = await models.Course.findOne({
-      where: { id: courseId },
-      include: [
-        {
-          model: models.CourseDescription,
-          attributes: ['id', 'courseId', 'title', 'description', 'trainerId'],
-        },
-        {
-          model: models.Cohort,
-          where: { courseId },
-          order: [['createdAt', 'DESC']],
-          limit: 1,
-          attributes: [
-            'id',
-            'courseId',
-            'cohort',
-            'expiresAt',
-            'dateRange',
-            'status',
-            'totalStudent',
-            'totalClasses',
-          ],
-        },
-      ],
-    });
+  const course = await models.Course.findOne({
+    where: { id: courseId },
+    include: [
+      {
+        model: models.CourseDescription,
+        attributes: ['id', 'courseId', 'title', 'description', 'trainerId'],
+      },
+      {
+        model: models.Cohort,
+        where: { courseId },
+        order: [['createdAt', 'DESC']],
+        limit: 1,
+        attributes: [
+          'id',
+          'courseId',
+          'cohort',
+          'expiresAt',
+          'dateRange',
+          'status',
+          'totalStudent',
+          'totalClasses',
+        ],
+      },
+    ],
+  });
 
-    if (!course) return errorStat(res, 404, 'Course Not Found');
+  if (!course) return errorStat(res, 404, 'Course Not Found');
 
-    return successStat(res, 200, 'data', course);
-  } catch (e) {
-    console.log(e);
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
-  }
+  return successStat(res, 200, 'data', course);
 };
 
 export const getAllCourses = async (req, res) => {
@@ -152,48 +142,43 @@ export const getAllCourses = async (req, res) => {
     limit,
   };
 
-  try {
-    const { rows, count } = await models.Course.findAndCountAll({
-      ...sqlQueryMap,
-      include: [
-        {
-          model: models.CourseDescription,
-          attributes: ['id', 'courseId', 'title', 'description', 'trainerId'],
-        },
-        {
-          model: models.CourseCohort,
-          required: false,
-          order: [['createdAt']],
-          limit: 1,
-          attributes: [
-            'id',
-            'courseId',
-            // "cohort",
-            'expiresAt',
-            'dateRange',
-            'status',
-            'totalStudent',
-            'totalClasses',
-          ],
-        },
-        {
-          model: models.StudentCourse,
-          required: false,
-          where: { studentId: id },
-          // order: [["createdAt"]],
-        },
-      ],
-    });
+  const { rows, count } = await models.Course.findAndCountAll({
+    ...sqlQueryMap,
+    include: [
+      {
+        model: models.CourseDescription,
+        attributes: ['id', 'courseId', 'title', 'description', 'trainerId'],
+      },
+      {
+        model: models.CourseCohort,
+        required: false,
+        order: [['createdAt']],
+        limit: 1,
+        attributes: [
+          'id',
+          'courseId',
+          // "cohort",
+          'expiresAt',
+          'dateRange',
+          'status',
+          'totalStudent',
+          'totalClasses',
+        ],
+      },
+      {
+        model: models.StudentCourse,
+        required: false,
+        where: { studentId: id },
+        // order: [["createdAt"]],
+      },
+    ],
+  });
 
-    if (!rows[0]) return errorStat(res, 404, 'Course Not Found');
+  if (!rows[0]) return errorStat(res, 404, 'Course Not Found');
 
-    const paginationMeta = paginate(currentPage, count, rows, pageLimit);
+  const paginationMeta = paginate(currentPage, count, rows, pageLimit);
 
-    return successStat(res, 200, 'data', { paginationMeta, rows });
-  } catch (e) {
-    console.log(e);
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
-  }
+  return successStat(res, 200, 'data', { paginationMeta, rows });
 };
 
 export const updateCourse = async (req, res) => {
@@ -237,23 +222,19 @@ export const updateCourse = async (req, res) => {
 export const updateCourseDescription = async (req, res) => {
   const { courseDescriptionId } = req.body.course;
 
-  try {
-    const courseDescription = await models.CourseDescription.findOne({
-      where: { id: courseDescriptionId },
-    });
+  const courseDescription = await models.CourseDescription.findOne({
+    where: { id: courseDescriptionId },
+  });
 
-    if (!courseDescription) {
-      return errorStat(res, 404, 'Course Description not found');
-    }
-
-    await courseDescription.update({
-      ...req.body.course,
-    });
-
-    return successStat(res, 200, 'data', courseDescription);
-  } catch (e) {
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
+  if (!courseDescription) {
+    return errorStat(res, 404, 'Course Description not found');
   }
+
+  await courseDescription.update({
+    ...req.body.course,
+  });
+
+  return successStat(res, 200, 'data', courseDescription);
 };
 
 export const createCourseDescription = async (req, res) => {
@@ -265,47 +246,30 @@ export const createCourseDescription = async (req, res) => {
 };
 
 export const deleteCourse = async (req, res) => {
-  const { courseId } = req.body.course;
+  const { courseId } = req.params;
 
-  try {
-    const course = await models.Course.findOne({
-      where: { id: courseId },
-      include: [
-        {
-          model: models.CourseDescription,
-        },
-        {
-          model: models.Cohort,
-        },
-      ],
-    });
+  const course = await models.Course.findOne({
+    where: { id: courseId },
+  });
 
-    if (!course) {
-      return errorStat(res, 404, 'Course not found');
-    }
-
-    await course.destroy();
-
-    return successStat(res, 200, 'data', 'Delete Successful');
-  } catch (e) {
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
+  if (!course) {
+    return errorStat(res, 404, 'Course not found');
   }
+
+  await course.destroy();
+
+  return successStat(res, 200, 'data', 'Delete Successful');
 };
 
 export const getAllCoursesAdmin = async (req, res) => {
-  try {
-    const studentByCourse = await models.sequelize.query(
-      `SELECT "Courses"."name", COUNT("studentId") AS 
+  const studentByCourse = await models.sequelize.query(
+    `SELECT "Courses"."name", COUNT("studentId") AS 
   value FROM "Courses" LEFT JOIN "StudentCourses" ON "Courses"."id" = "StudentCourses"."courseId" 
   LEFT JOIN "CourseCohorts" ON "Courses"."id" = "CourseCohorts"."courseId" 
  WHERE "Courses"."id" IS NOT NULL GROUP BY "Courses"."id"`
-    );
+  );
 
-    return successStat(res, 200, 'data', studentByCourse);
-  } catch (e) {
-    console.log(e);
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
-  }
+  return successStat(res, 200, 'data', studentByCourse);
 };
 
 export const Courses = async (req, res) => {
@@ -352,22 +316,17 @@ export const Courses = async (req, res) => {
         },
       ];
 
-  try {
-    const { rows, count } = await models.Course.findAndCountAll({
-      ...sqlQueryMap,
-      where: { category },
-      include: [...query],
-    });
+  const { rows, count } = await models.Course.findAndCountAll({
+    ...sqlQueryMap,
+    where: { category },
+    include: [...query],
+  });
 
-    // if (!rows[0]) return errorStat(res, 404, "Course Not Found");
+  // if (!rows[0]) return errorStat(res, 404, "Course Not Found");
 
-    const paginationMeta = paginate(currentPage, count, rows, pageLimit);
+  const paginationMeta = paginate(currentPage, count, rows, pageLimit);
 
-    return successStat(res, 200, 'data', { paginationMeta, rows });
-  } catch (e) {
-    console.log(e);
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
-  }
+  return successStat(res, 200, 'data', { paginationMeta, rows });
 };
 
 export const addCourseCohortProgress = async (req, res) => {
@@ -375,58 +334,114 @@ export const addCourseCohortProgress = async (req, res) => {
 
   const { id, role } = req.session.user;
 
-  try {
-    const getClass = await models.CourseProgress.findOne({
-      where: { classId, type: 'course' },
-    });
+  const getClass = await models.CourseProgress.findOne({
+    where: { classId, type: 'course' },
+  });
 
-    const checkStudent = await models.Classes.findOne({
-      where: { courseCohortId, id: classId },
-      include: [
-        {
-          model: models.Trainer,
-          where: { userId: id },
-        },
-      ],
-    });
+  const checkStudent = await models.Classes.findOne({
+    where: { courseCohortId, id: classId },
+    include: [
+      {
+        model: models.Trainer,
+        where: { userId: id },
+      },
+    ],
+  });
 
-    if (!getClass && !checkStudent && role !== 'admin')
-      return errorStat(res, 400, 'Not Allowed');
-
-    const findclassProgress = await models.CourseProgress.findAll({
-      where: { type: 'course', classId },
-    });
-
-    if (!findclassProgress[0]) {
-      const course = await models.CourseCohort.findOne({
-        where: { id: courseCohortId },
-      });
-
-      await models.CourseProgress.create({
-        courseCohortId,
-        userId: id,
-        classId,
-        type: 'course',
-      });
-
-      const find = await models.CourseProgress.findAll({
-        where: { type: 'course', courseCohortId },
-      });
-
-      const count = await models.Classes.findAll({
-        where: { courseCohortId },
-      });
-
-      await course.update({
-        progress: Math.floor((find.length / count.length) * 100),
-      });
-    }
-
-    await models.Classes.update({ started: true }, { where: { id: classId } });
-
-    return successStat(res, 200, 'data', 'update successful');
-  } catch (e) {
-    console.log(e);
-    errorStat(res, 500, 'Operation Failed Please Try Again');
+  if (!getClass && !checkStudent && role !== 'admin') {
+    return errorStat(res, 400, 'Not Allowed');
   }
+
+  const findclassProgress = await models.CourseProgress.findAll({
+    where: { type: 'course', classId },
+  });
+
+  if (!findclassProgress[0]) {
+    const course = await models.CourseCohort.findOne({
+      where: { id: courseCohortId },
+    });
+
+    await models.CourseProgress.create({
+      courseCohortId,
+      userId: id,
+      classId,
+      type: 'course',
+    });
+
+    const find = await models.CourseProgress.findAll({
+      where: { type: 'course', courseCohortId },
+    });
+
+    const count = await models.Classes.findAll({
+      where: { courseCohortId },
+    });
+
+    await course.update({
+      progress: Math.floor((find.length / count.length) * 100),
+    });
+  }
+
+  await models.Classes.update({ started: true }, { where: { id: classId } });
+
+  return successStat(res, 200, 'data', 'update successful');
+};
+
+export const getCohortCourse = async (req, res) => {
+  const { courseCohortId } = req.params;
+  // console.log()
+  // const { offset, limit } = calculateLimitAndOffset(currentPage, pageLimit);
+  // const id = req?.session?.user?.id ;
+  let user = true;
+
+  if (req.session.user) user = req.session.user.id;
+
+  // const sqlQueryMap = {
+  //   offset,
+  //   limit,
+  // };
+
+  const query = user
+    ? [
+        {
+          model: models.CourseCohort,
+          // order: [['createdAt']],
+          // limit: 1,
+          where: { id: courseCohortId },
+          attributes: ['id'],
+        },
+        {
+          model: models.CourseDescription,
+          attributes: ['courseId', 'title', 'description'],
+        },
+        {
+          model: models.StudentCourse,
+          required: false,
+          where: { studentId: user },
+        },
+      ]
+    : [
+        {
+          model: models.CourseCohort,
+          where: { id: courseCohortId },
+          // order: [['createdAt']],
+          // limit: 1,
+          attributes: ['id'],
+        },
+        {
+          model: models.CourseDescription,
+          attributes: ['courseId', 'title', 'description'],
+        },
+      ];
+
+  const rows = await models.Course.findOne({
+    // ...sqlQueryMap,
+    // where: { category },
+    include: [...query],
+  });
+
+  // if (!rows[0]) return errorStat(res, 404, "Course Not Found");
+
+  // const paginationMeta = paginate(currentPage, count, rows, pageLimit);
+
+  return successStat(res, 200, 'data', rows);
 };

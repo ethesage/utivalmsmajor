@@ -33,17 +33,7 @@ const course = (state = initialState, action) => {
         ...state,
         mappedCourses: action.payload,
       };
-    case 'ADD_STUDENT_COURSE':
-      const updated = state.mappedCourses.map((course) => {
-        if (course.courseCohortId === action.payload.courseCohortId) {
-          return { ...course, studentCourse: action.payload.studentCourse };
-        }
-        return null;
-      });
-      return {
-        ...state,
-        mappedCourses: updated,
-      };
+
     case 'RESET':
       return initialState;
     default:

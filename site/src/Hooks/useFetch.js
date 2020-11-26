@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useToasts } from 'react-toast-notifications';
 import { log_out } from 'g_actions/user';
 
@@ -10,6 +10,13 @@ const useFetch = (dispatch, initailLoadingState, reload) => {
   const [cb, fetch] = useState();
   const [running, setRunning] = useState(false);
   const { addToast } = useToasts();
+  const mounted = useRef(true);
+
+  useEffect(() => {
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
 
   useEffect(() => {
     let timeOutID;
@@ -22,6 +29,8 @@ const useFetch = (dispatch, initailLoadingState, reload) => {
         setStarted(true);
         setLoading(true);
         await dispatch(cb);
+
+        if (!mounted.current) return;
 
         setLoading(false);
         setError(null);

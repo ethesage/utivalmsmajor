@@ -97,6 +97,20 @@ const course = (state = initialState, action) => {
         },
       };
 
+    case 'DELETE_CLASS':
+      return {
+        ...state,
+        currentCohort: {
+          ...state.currentCohort,
+          [action.payload.name]: {
+            ...state.currentCohort[action.payload.name],
+            Classes: state.currentCohort[action.payload.name].Classes.filter(
+              (e_class) => e_class.id !== action.payload.newClass.id
+            ),
+          },
+        },
+      };
+
     case 'ADD_COURSE_COHORT':
       return {
         ...state,
@@ -140,6 +154,14 @@ const course = (state = initialState, action) => {
           }
           return course;
         }),
+      };
+
+    case 'DELETE_COURSE':
+      return {
+        ...state,
+        allCourses: state.allCourses.filter(
+          (course) => course.id !== action.payload.id
+        ),
       };
 
     case 'GET_CURRENT_COURSE':

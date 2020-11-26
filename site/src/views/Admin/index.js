@@ -21,7 +21,7 @@ const Dashboard = () => {
         <Students />
       </Route>
 
-      <Route exact path="/admin/settings">
+      <Route path="/admin/settings">
         <Settings />
       </Route>
     </Switch>

@@ -1,4 +1,4 @@
-@import "../../../media";
+@import '../../../media';
 
 .payment {
   .payment_con {
@@ -7,6 +7,19 @@
     box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
     border-radius: 10px;
     padding: 30px 7%;
+
+    .flutter_btn {
+      box-shadow: 0 0 5px rgba(#000, 0.1);
+      margin: 20px;
+
+      button {
+        width: 100%;
+      }
+
+      img {
+        margin-bottom: 0 !important;
+      }
+    }
 
     .nav-sec {
       margin-bottom: 30px;
