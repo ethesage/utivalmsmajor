@@ -430,3 +430,69 @@ export const addCourseCohortProgress = async (req, res) => {
     errorStat(res, 500, 'Operation Failed Please Try Again');
   }
 };
+
+
+export const getCohortCourse = async (req, res) => {
+  const { courseCohortId } = req.params;
+  // console.log()
+  // const { offset, limit } = calculateLimitAndOffset(currentPage, pageLimit);
+  // const id = req?.session?.user?.id ;
+  let user=true;
+
+  if (req.session.user) user = req.session.user.id;
+
+  // const sqlQueryMap = {
+  //   offset,
+  //   limit,
+  // };
+
+  const query = user
+    ? [
+        {
+          model: models.CourseCohort,
+          // order: [['createdAt']],
+          // limit: 1,
+          where: {id : courseCohortId},
+          attributes: ['id'],
+        },
+        {
+          model: models.CourseDescription,
+          attributes: ['courseId', 'title', 'description'],
+        },
+        {
+          model: models.StudentCourse,
+          required: false,
+          where: { studentId: user },
+        },
+      ]
+    : [
+        {
+          model: models.CourseCohort,
+          where: {id : courseCohortId},
+          // order: [['createdAt']],
+          // limit: 1,
+          attributes: ['id'],
+        },
+        {
+          model: models.CourseDescription,
+          attributes: ['courseId', 'title', 'description'],
+        },
+      ];
+
+  try {
+    const rows = await models.Course.findOne({
+      // ...sqlQueryMap,
+      // where: { category },
+      include: [...query],
+    });
+
+    // if (!rows[0]) return errorStat(res, 404, "Course Not Found");
+
+    // const paginationMeta = paginate(currentPage, count, rows, pageLimit);
+
+    return successStat(res, 200, 'data', rows );
+  } catch (e) {
+    console.log(e);
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
+  }
+};
