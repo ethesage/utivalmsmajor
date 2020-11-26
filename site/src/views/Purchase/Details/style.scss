@@ -1,4 +1,4 @@
-@import "../../../media";
+@import '../../../media';
 
 .details {
   .container {
@@ -24,6 +24,7 @@
       border-radius: 5px;
       height: 250px;
       margin-right: 50px;
+      // max-width: 300px;
 
       @include for-size(tablet-portrait-up) {
         margin-right: 30px;
@@ -31,11 +32,13 @@
 
       @include for-size(phone-only) {
         margin: 0 0 40px;
+        justify-content: center;
       }
 
       img {
         width: auto;
         border-radius: 10px;
+        max-width: 350px;
 
         @include for-size(tablet-portrait-up) {
           width: 100%;

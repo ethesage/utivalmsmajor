@@ -10,8 +10,8 @@ export default ({ done }) => {
   const { auth, courses } = useSelector((state) => state);
 
   const config = {
-    // public_key: 'FLWPUBK-e836e7b389eda0faa7c37b9c12fb4119-X',
-    public_key: 'FLWPUBK_TEST-676fa99372c8af0bcb924e15ad1de6d6-X',
+    public_key: 'FLWPUBK-e836e7b389eda0faa7c37b9c12fb4119-X',
+    // public_key: 'FLWPUBK_TEST-676fa99372c8af0bcb924e15ad1de6d6-X',
     tx_ref: Date.now(),
     amount: Number(courses.checkoutData.cost),
     currency: 'NGN',
