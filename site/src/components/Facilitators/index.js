@@ -29,8 +29,8 @@ const Facilitators = ({ trainers }) => {
   }, []);
 
   return (
-    <div className="fac_xc">
-      <TransitionGroup className="fac_xc_con flex-row j-start">
+    <div className="fac_xc flex-col">
+      <TransitionGroup className="fac_xc_con flex-row ">
         <CSSTransition
           classNames="slide"
           key={`fac_sec_${currentUser}`}

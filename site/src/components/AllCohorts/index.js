@@ -32,7 +32,7 @@ const ClassesSec = ({
       to={`/admin/courses/overview/${courseId}/${id}`}
       className="next_class flex-row al-start j-space"
     >
-      <img src={thumbnail} alt="" className="main_img" />
+      <img src={thumbnail} alt="" className="main_img cover" />
       <div className="text-sec flex-col j-space al-start">
         <div>
           <h2>{cohort}</h2>
