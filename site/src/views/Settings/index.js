@@ -17,7 +17,9 @@ const File_Page = () => {
     },
     {
       title: 'Password',
-      link: isAdmin ? '/admin/settings/reset-password' : '/reset-password',
+      link: isAdmin
+        ? '/admin/settings/reset-password'
+        : '/settings/reset-password',
     },
     // {
     //   title: 'Notifications',

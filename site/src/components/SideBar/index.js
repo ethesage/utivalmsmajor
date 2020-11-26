@@ -6,7 +6,7 @@ import course from 'assets/icons/side-nav/course.png';
 import student from 'assets/icons/side-nav/student.png';
 // import trainer from 'assets/icons/side-nav/trainer.png';
 // import admin from 'assets/icons/side-nav/admin.png';
-import files from 'assets/icons/side-nav/files.png';
+// import files from 'assets/icons/side-nav/files.png';
 import faq from 'assets/icons/side-nav/faq.png';
 import settings from 'assets/icons/side-nav/settings.png';
 import settings1 from 'assets/icons/side-nav/settings-1.png';
@@ -24,11 +24,11 @@ const links = [
     title: 'Courses',
     link: '/courses',
   },
-  {
-    img: files,
-    title: 'My Files',
-    link: '/files',
-  },
+  // {
+  //   img: files,
+  //   title: 'My Files',
+  //   link: '/files',
+  // },
   {
     img: faq,
     title: 'FAQs',

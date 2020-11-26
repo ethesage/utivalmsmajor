@@ -38,7 +38,7 @@ const ClassesSec = ({ data: { thumbnail, link, name, time, date } }) => (
 );
 
 const Loader = () => (
-  <div className="next_class">
+  <div className="next_class" style={{ height: '100px', marginRight: '30px' }}>
     <Sekeleton width="120%" height="100%" />
   </div>
 );
