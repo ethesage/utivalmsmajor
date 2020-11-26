@@ -29,10 +29,17 @@ const Profile = () => {
   const [imgSrc, setImgSrc] = useState((user && user.profilePic) || user_icon);
   const image = useRef();
   const modalRef = useRef();
+  const mounted = useRef(true);
 
   const open = () => {
     modalRef.current.open();
   };
+
+  useEffect(() => {
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
 
   const [selects, setSelects] = useState({
     gender,
@@ -77,7 +84,7 @@ const Profile = () => {
         }
       );
 
-      setApiToken(apiToken.data.auth_token);
+      mounted.current && setApiToken(apiToken.data.auth_token);
     };
 
     getApiToken();
@@ -103,10 +110,11 @@ const Profile = () => {
         value: country.country_name,
       }));
 
-      setSelects((e) => ({
-        ...e,
-        country: countries,
-      }));
+      mounted.current &&
+        setSelects((e) => ({
+          ...e,
+          country: countries,
+        }));
     };
 
     get_countries();
@@ -135,10 +143,11 @@ const Profile = () => {
         value: country.state_name,
       }));
 
-      setSelects((e) => ({
-        ...e,
-        region: states,
-      }));
+      mounted.current &&
+        setSelects((e) => ({
+          ...e,
+          region: states,
+        }));
     };
 
     get_states();

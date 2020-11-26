@@ -8,20 +8,21 @@ import './style.scss';
 
 const File_Page = () => {
   let { path } = useRouteMatch();
+  const { isAdmin } = useSelector((state) => state.auth);
 
   const links = [
     {
       title: 'Profile',
-      link: '',
+      link: isAdmin ? '/admin/settings' : '/settings',
     },
     {
       title: 'Password',
-      link: 'reset-password',
+      link: isAdmin ? '/admin/settings/reset-password' : '/reset-password',
     },
-    {
-      title: 'Notifications',
-      link: 'notifications',
-    },
+    // {
+    //   title: 'Notifications',
+    //   link: isAdmin ? ' ' : 'notifications',
+    // },
   ];
 
   return (
@@ -31,7 +32,7 @@ const File_Page = () => {
         subClassName="setting_sec"
         links={links.map((info, i) => (
           <li key={`side_link_courses_${i}`}>
-            <NavLink exact className="side_link" to={`${path}/${info.link}`}>
+            <NavLink exact className="side_link" to={`${info.link}`}>
               {info.title}
             </NavLink>
           </li>

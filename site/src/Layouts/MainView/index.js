@@ -51,12 +51,13 @@ const MainView = ({ children, type }) => {
 
   return (
     <main className="dashboard flex-row al-start">
-      <Modal ref={modalRef}>
+      <Modal ref={modalRef} useButton={false}>
         <section className="g_signup flex-col box-shade">
           <p className="intro">
             To better participate in this course please signin to access google
             drive materials for this course
           </p>
+          <p className="ext">click on the button below to signin.</p>
           <button className="flex-row" onClick={signin}>
             <img src={google} alt="google" />
             <p>Google</p>

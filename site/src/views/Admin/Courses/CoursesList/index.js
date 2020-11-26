@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useRef } from 'react';
+import { useToasts } from 'react-toast-notifications';
 import { Link, useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { getCurrentCourse } from 'g_actions/admin';
+import { getCurrentCourse, deleteCourse } from 'g_actions/admin';
 import { useSelector } from 'react-redux';
+import { axiosInstance } from 'helpers';
 import DropDown from 'components/DropDown';
 import Button from 'components/Button';
 import Image from 'components/Image';
@@ -11,8 +13,10 @@ import './style.scss';
 
 const CousreCard = ({ data }) => {
   const { id, thumbnail, name, CourseCohorts } = data;
+  const { addToast } = useToasts();
   const dispatch = useDispatch();
   const { push } = useHistory();
+  const el = useRef();
 
   const viewCohort = (e) => {
     e.preventDefault();
@@ -21,8 +25,25 @@ const CousreCard = ({ data }) => {
     push(`/admin/courses/${id}/cohorts`);
   };
 
+  const deletecourse = async () => {
+    try {
+      el.current.classList.add('spinner1');
+      await axiosInstance.delete(`/course/${data.id}`);
+
+      el.current.classList.remove('spinner1');
+      dispatch(deleteCourse(data));
+    } catch (e) {
+      el.current.classList.remove('spinner1');
+      console.log(e);
+      addToast('An error occured', {
+        appearance: 'error',
+        autoDismiss: true,
+      });
+    }
+  };
+
   return (
-    <div className="p_cx_cd">
+    <div className="p_cx_cd" ref={el} key={data.name}>
       <Link className="img-sec" to={''} onClick={viewCohort}>
         <Image image={thumbnail} imgClass="img cover" lazyLoad={true} />
       </Link>
@@ -40,7 +61,7 @@ const CousreCard = ({ data }) => {
               >
                 Edit
               </li>
-              {/* <li>Delete</li> */}
+              <li onClick={deletecourse}>Delete</li>
             </ul>
           </DropDown>
         </div>
