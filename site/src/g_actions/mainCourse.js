@@ -68,12 +68,10 @@ export const mapCourse = (courses, category) => async (dispatch) => {
   });
 };
 
-export const addStudentCourse = (courseCohortId, studentCourse) => async (
-  dispatch
-) => {
+export const addStudentCourse = (course, studentCourse) => async (dispatch) => {
   dispatch({
     type: 'ADD_STUDENT_COURSE',
-    payload: { studentCourse, courseCohortId },
+    payload: { studentCourse, course },
   });
 };
 

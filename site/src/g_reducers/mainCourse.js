@@ -34,15 +34,24 @@ const course = (state = initialState, action) => {
       };
 
     case 'ADD_STUDENT_COURSE':
-      const updated = state.mappedCourses.map((course) => {
-        if (course.courseCohortId === action.payload.courseCohortId) {
-          return { ...course, studentCourse: action.payload.studentCourse };
+      if (!state.allCourses[action.payload.course.category]) return state;
+      const updated = state.allCourses[action.payload.course.category].map(
+        (course) => {
+          if (
+            course.CourseCohorts[0].id ===
+            action.payload.course.CourseCohorts[0].id
+          ) {
+            return { ...course, studentCourse: action.payload.studentCourse };
+          }
+          return course;
         }
-        return course;
-      });
+      );
       return {
         ...state,
-        mappedCourses: updated,
+        allCourses: {
+          ...state.allCourses,
+          [action.payload.course.category]: updated,
+        },
       };
 
     case 'RESET_HM':

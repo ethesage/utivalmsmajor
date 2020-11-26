@@ -65,7 +65,7 @@ const Course = () => {
     return () => {
       dispatch(resetHomePageCourse());
     };
-  }, []);
+  }, [dispatch]);
 
   return (
     <section className="courses m-150">
