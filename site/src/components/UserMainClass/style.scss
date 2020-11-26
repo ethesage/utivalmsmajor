@@ -1,42 +1,42 @@
 @import '../../media';
 
-.p_sec {
+.p_sec_class {
   margin-bottom: 100px;
-  @include for-size(tablet-portrait-up) {
-    flex-direction: column;
-    align-items: flex-start;
+  // @include for-size(tablet-portrait-up) {
+  //   flex-direction: column;
+  //   align-items: flex-start;
+  // }
+
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(#{'min(300px, 100%)'}, 1fr));
+  grid-gap: 30px;
+
+  @include for-size(onek) {
+    flex-wrap: wrap;
   }
 
   .next_class {
-    height: 180px;
-    width: 32%;
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+    min-height: 180px;
+    width: 100%;
     border-radius: 5px;
-    overflow: hidden;
 
-    @include for-size(desktop-up) {
-      width: 48%;
-      margin-bottom: 4%;
+    .class_sec {
+      box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      margin-top: 10px;
     }
 
-    @include for-size(smaller-desktop) {
-      height: 150px;
-    }
+    h2 {
+      color: color(theme);
+      font-size: 1em;
 
-    @include for-size(tablet-portrait-up) {
-      width: 100%;
-      max-width: 550px;
-      margin-bottom: 4%;
-      height: 200px;
-    }
-
-    @include for-size(phone-only) {
-      height: 150px;
-      box-shadow: 0px 25px 30px -25px rgba(0, 0, 0, 0.1);
+      @include for-size(smaller-desktop) {
+        font-size: 0.9em;
+      }
     }
 
     .main_img {
-      width: 50%;
+      width: 40%;
       height: 100%;
       border-radius: 5px;
 
@@ -48,21 +48,12 @@
     }
 
     .text-sec {
-      width: 70%;
+      width: 60%;
       padding: 4%;
       height: 100%;
 
       @include for-size(phone-only) {
         padding-left: 10px;
-      }
-
-      h2 {
-        color: color(theme);
-        font-size: 1.1em;
-
-        @include for-size(smaller-desktop) {
-          font-size: 0.9em;
-        }
       }
     }
 

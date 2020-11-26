@@ -13,7 +13,7 @@ const Details = ({ proceed, match, set }) => {
   const dispatch = useDispatch();
   const btnRef = useRef();
 
-  console.log(purchaseCourse?.type)
+  console.log(purchaseCourse?.type);
 
   const checkout = async () => {
     btnRef.current.classList.add('loader');
@@ -82,7 +82,11 @@ const Details = ({ proceed, match, set }) => {
               <div className="cost-analysis">
                 <div className="flex-row j-space">
                   <p>Price</p>
-                  <p>₦ {Math.round(purchaseCourse?.cost)}</p>
+                  <p>
+                    {purchaseCourse?.type === 'free'
+                      ? 'Free'
+                      : `₦ ${Math.round(purchaseCourse?.cost)}`}
+                  </p>
                 </div>
                 <div className="flex-row j-space">
                   <p>Discount</p>
@@ -90,7 +94,11 @@ const Details = ({ proceed, match, set }) => {
                 </div>
                 <div className="flex-row j-space theme-color strong">
                   <p>Total</p>
-                  <p>₦ {Math.round(purchaseCourse?.cost)}</p>
+                  <p>
+                    {purchaseCourse?.type === 'free'
+                      ? 'Free'
+                      : `₦ ${Math.round(purchaseCourse?.cost)}`}
+                  </p>
                 </div>
               </div>
               <div className="checkout">
