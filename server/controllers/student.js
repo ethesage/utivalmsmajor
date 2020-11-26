@@ -82,6 +82,7 @@ export const getAllStudentCourse = async (req, res) => {
 
           include: [
             {
+              required: false,
               model: models.CourseProgress,
               where: { userId: id },
             },
