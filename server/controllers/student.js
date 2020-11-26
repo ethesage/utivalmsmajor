@@ -79,14 +79,6 @@ export const getAllStudentCourse = async (req, res) => {
         {
           model: models.Course,
           attributes: ['id', 'name', 'thumbnail'],
-
-          include: [
-            {
-              required: false,
-              model: models.CourseProgress,
-              where: { userId: id },
-            },
-          ],
         },
         {
           model: models.CourseCohort,
@@ -124,10 +116,6 @@ export const getSingleStudentCourse = async (req, res) => {
           include: [
             {
               model: models.CourseDescription,
-            },
-            {
-              model: models.CourseProgress,
-              where: { userId: id },
             },
           ],
         },
