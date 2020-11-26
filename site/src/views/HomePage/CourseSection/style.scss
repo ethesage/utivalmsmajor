@@ -30,7 +30,7 @@
     }
 
     .course-sec {
-      margin-top: 40px;
+      margin-top: 20px;
 
       .crs_con {
         display: grid;
@@ -41,6 +41,11 @@
         grid-gap: 30px;
 
         @include for-size(onek) {
+          display: flex;
+          flex-wrap: wrap;
+        }
+
+        &.single {
           display: flex;
         }
       }

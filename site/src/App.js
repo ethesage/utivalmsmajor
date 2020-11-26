@@ -11,6 +11,7 @@ const Auth = lazy(() => import('./views/Auth'));
 const Purchase = lazy(() => import('./views/Purchase'));
 const Dashboard = lazy(() => import('./views/Dashboard'));
 const Admin = lazy(() => import('./views/Admin'));
+const Courses = lazy(() => import('./views/AllCourses'));
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             <Route path="/auth" component={Auth} />
             <Route path="/purchase/:courseCohortId" component={Purchase} />
             <AProtected path="/admin" component={Admin} type="admin" />
+            <Route path="/all-courses" component={Courses} />
             <Protected path="/" component={Dashboard} />
           </Switch>
         </Suspense>

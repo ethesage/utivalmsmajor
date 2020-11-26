@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import Skeleton from 'react-skeleton-loader';
 import CourseCard from 'components/CourseCard';
@@ -69,7 +70,14 @@ const Course = () => {
 
   return (
     <section className="courses m-150">
-      <h2 className="hd middle">Available Courses</h2>
+      <div className="container">
+        <h2 className="hd middle">Available Courses</h2>
+        <Link to="/all-courses">
+          <strong>
+            <small className="theme-color">View All {'>'}</small>
+          </strong>
+        </Link>
+      </div>
       <div className="container">
         <div className="cat-sec flex-row j-space">
           {categories &&
@@ -106,8 +114,12 @@ const Course = () => {
           ) : courses?.length === 0 ? (
             <NoCourse />
           ) : (
-            <div className='crs_con'>
-              {courses?.map((course, i) => (
+            <div
+              className={`crs_con flex-row j-start  ${
+                courses?.length === 1 ? 'single' : ''
+              }`}
+            >
+              {courses?.slice(0, 4)?.map((course, i) => (
                 <CourseCard
                   data={course}
                   // size="small"
