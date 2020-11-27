@@ -27,7 +27,7 @@ const Payment = ({ back, id }) => {
   // const dispatch = useDispatch();
 
   useEffect(() => {
-    if (courses.purchaseCourse.type === 'free') {
+    if (courses?.purchaseCourse?.type === 'free') {
     
       dispatch(checkout(courses.purchaseCourse.CourseCohorts[0].id))
       dispatch(

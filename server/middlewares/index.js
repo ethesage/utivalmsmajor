@@ -73,6 +73,8 @@ import { idSchema } from './validators/schemas/general';
 
 import { checkoutSchema } from './validators/schemas/checkout';
 
+import {transactionSchema} from './validators/schemas/transaction';
+
 import { isLoggedIn } from './auth';
 import { checkInvitation } from './checker';
 
@@ -128,4 +130,5 @@ export default {
   createClassAssignmentSchema,
   checkoutSchema,
   idSchema,
+  transactionSchema
 };

@@ -10,6 +10,7 @@ import cohort from "./cohort";
 import assignment from "./assignment";
 import admin from "./admin";
 import checkout from "./checkout";
+import transaction from './transaction';
 import helpers from "../../helpers";
 
 const { errorStat, successStat } = helpers;
@@ -40,5 +41,6 @@ router.use("/cohort", cohort);
 router.use("/assignment", assignment);
 router.use("/admin", admin);
 router.use("/checkout", checkout);
+router.use("/transaction", transaction);
 
 export default router;

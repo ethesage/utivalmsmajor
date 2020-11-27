@@ -80,3 +80,10 @@ export const resetHomePageCourse = () => async (dispatch) => {
     type: 'RESET_HM',
   });
 };
+
+
+export const addTransaction = (data) => async (dispatch) => {
+  await axiosInstance.post(
+    'transaction/addtransaction', data
+  );
+};
