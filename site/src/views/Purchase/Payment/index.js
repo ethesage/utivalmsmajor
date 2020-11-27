@@ -1,18 +1,18 @@
-import React, { useRef, useEffect } from "react";
-import { useHistory } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useRef, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 // import category from 'data/categories';
 // import card from 'assets/icons/card.png';
 // import paystack from 'assets/icons/paystack.png';
 // import Paystack from './Paystack';
 // import Paypal from './Paypal';
-import Flutterwave from "./Flutterwave";
+import Flutterwave from './Flutterwave';
 // import paypal from 'assets/icons/paypal.png';
-import approved from "assets/approved.png";
+import approved from 'assets/approved.png';
 import { checkout } from 'g_actions/courses';
 import { addStudentCourse } from 'g_actions/mainCourse';
 // import Card from './Card';
-import "./style.scss";
+import './style.scss';
 
 // const course = category[0].data[0];
 
@@ -22,22 +22,22 @@ const Payment = ({ back, id }) => {
   const disRef = useRef();
 
   const dispatch = useDispatch();
-  const { auth, courses } = useSelector((state) => state);
+  const { courses } = useSelector((state) => state);
 
   // const dispatch = useDispatch();
 
   useEffect(() => {
     if (courses?.purchaseCourse?.type === 'free') {
-    
       dispatch(checkout(courses.purchaseCourse.CourseCohorts[0].id))
       dispatch(
         addStudentCourse(courses.purchaseCourse, [
           { courseCohortId: courses.purchaseCourse.CourseCohorts[0].id },
         ])
       );
-      done()
+      done();
     }
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const goBack = () => {
     back(0);
@@ -59,7 +59,14 @@ const Payment = ({ back, id }) => {
             <p>Your payment is successful</p>
           </div>
 
-          <button className="btn flex-row" onClick={() => push(`/courses/overview/${courses.purchaseCourse.CourseCohorts[0].id}`)}>
+          <button
+            className="btn flex-row"
+            onClick={() =>
+              push(
+                `/courses/overview/${courses.purchaseCourse.CourseCohorts[0].id}`
+              )
+            }
+          >
             Start Learning
           </button>
         </div>
@@ -82,7 +89,7 @@ const Payment = ({ back, id }) => {
 
         {/* <Paystack done={done} /> */}
         <p>Pay using</p>
-        {courses.purchaseCourse.type !== "free" && <Flutterwave done={done} />}
+        {courses.purchaseCourse.type !== 'free' && <Flutterwave done={done} />}
         {/* <Paypal done={done} /> */}
 
         {/* </div> */}

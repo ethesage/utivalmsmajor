@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 // import Sekeleton from 'react-skeleton-loader';
 import ProfileCheck from 'components/ProfileCheck';
 import Classes from 'components/NextClassTrainer';
-import Files from 'components/Files';
+// import Files from 'components/Files';
 import CountSection from './CountSection';
 import Layout from 'Layouts/HomeGrid';
 import Welcome from './Welcome';
@@ -65,11 +65,11 @@ const Home = ({ gapi }) => {
             <Classes />
           </InfoSec>
 
-          <InfoSec txt="Files">
+          {/* <InfoSec txt="Files">
             <Files />
           </InfoSec>
 
-          <InfoSec txt=""></InfoSec>
+          <InfoSec txt=""></InfoSec> */}
         </Layout>
       )}
 

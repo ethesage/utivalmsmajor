@@ -2,12 +2,12 @@ import React from 'react';
 import Button from '../Button';
 import './style.scss';
 
-const ProfileCheck = ({ user, admin }) => {
-  const link = admin ? '/admin/settings' : 'settings';
+const ProfileCheck = ({ user }) => {
+  const link = user.role === 'admin' ? 'admin/settings' : 'settings';
 
   return (
     <>
-      {!user.profilePic || user.profilePic === '' ? (
+      {true ? (
         <div className="com-profile flex-row j-space">
           <p>Your profile is incomplete. Please update your profile</p>
 
