@@ -5,7 +5,7 @@ import Navbar from 'components/NavBar';
 import Course from './CourseSection';
 import Started from './GetStarted';
 import Testimonial from './Testimonial';
-import Footer from './Footer';
+import Footer from 'components/Footer';
 import './style.scss';
 
 const HomePage = () => {
