@@ -9,11 +9,11 @@ import clock from 'assets/dashboard/clock.png';
 import no_course from 'assets/dashboard/no_course.png';
 import './style.scss';
 
-const ClassesSec = ({ data: { thumbnail, link, name, time, date } }) => (
-  <a href={link} className="next_class" target="_">
-    <h2>{name}</h2>
+const ClassesSec = ({ data }) => (
+  <a href={data?.link} className="next_class" target="_">
+    <h2>{data?.name}</h2>
     <div className="class_sec flex-row j-space">
-      <img src={thumbnail} alt="" className="main_img" />
+      <img src={data?.thumbnail} alt="" className="main_img" />
       <div className="text-sec flex-col j-space al-start">
         <div className="info_sec ">
           <strong>
@@ -22,13 +22,13 @@ const ClassesSec = ({ data: { thumbnail, link, name, time, date } }) => (
           <div className="info flex-row j-start">
             <img src={calender} alt="" />{' '}
             <p>
-              <Moment format="Do MMMM YYYY">{date}</Moment>
+              <Moment format="Do MMMM YYYY">{data?.date}</Moment>
             </p>
           </div>
           <div className="info flex-row j-start">
             <img src={clock} alt="" />{' '}
             <p>
-              <time>{moment(time, 'HH:mm').format('hh:mm A')}</time>
+              <time>{moment(data?.time, 'HH:mm').format('hh:mm A')}</time>
             </p>
           </div>
         </div>
@@ -72,9 +72,13 @@ const Classes = () => {
       ) : nextclasses.length === 0 ? (
         <NoClass />
       ) : (
-        nextclasses.map((nextclass, i) => (
-          <ClassesSec key={`next_classes_${i}`} data={nextclass} />
-        ))
+        nextclasses.map((nextclass, i) => {
+          return (
+            !!nextclass && (
+              <ClassesSec key={`next_classes_${i}`} data={nextclass} />
+            )
+          );
+        })
       )}
     </div>
   );

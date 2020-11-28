@@ -5,7 +5,7 @@ import Skeleton from 'react-skeleton-loader';
 import CourseCard from 'components/CourseCard';
 import {
   getCourse,
-  resetHomePageCourse,
+  // resetHomePageCourse,
   getcategories,
 } from 'g_actions/mainCourse';
 import no_course from 'assets/dashboard/no_course.png';
@@ -28,33 +28,20 @@ const Course = () => {
   const { allCourses, categories } = useSelector((state) => state.homepage);
   const dispatch = useDispatch();
 
-  const courses =
-    allCourses && categories && allCourses[categories[currentCategory].name];
+  const courses = categories && allCourses[categories[currentCategory].name];
 
-  const [loading, , fetch, restart] = useFetch(dispatch, !!!courses, true);
   const [c_loading, , c_fetch] = useFetch(dispatch, !!!categories, true);
 
   const onClick = (id) => {
     setCurrentCategory(id);
-    setTimeout(() => restart(), 0);
   };
 
   useEffect(() => {
     if (!categories) return;
     if (courses) return;
 
-    if (loading) {
-      fetch(() => getCourse(1, '/main', categories[currentCategory].name));
-    }
-  }, [
-    dispatch,
-    allCourses,
-    fetch,
-    loading,
-    categories,
-    currentCategory,
-    courses,
-  ]);
+    dispatch(getCourse(1, '/main', categories[currentCategory].name));
+  }, [dispatch, allCourses, categories, currentCategory, courses]);
 
   useEffect(() => {
     if (!c_loading) return;
@@ -64,7 +51,7 @@ const Course = () => {
 
   useEffect(() => {
     return () => {
-      dispatch(resetHomePageCourse());
+      // dispatch(resetHomePageCourse());
     };
   }, [dispatch]);
 
@@ -98,7 +85,7 @@ const Course = () => {
           {/* {categories[currentCategory].data.map((course, i) => (
             <CourseCard data={course} key={`current_cate_${i}`} />
           ))} */}
-          {loading ? (
+          {!courses ? (
             <div className="course_ld">
               {[1, 2, 3].map((d) => (
                 <div
@@ -124,7 +111,7 @@ const Course = () => {
                   data={course}
                   // size="small"
                   size={courses.length === 1 ? 'small' : ''}
-                  key={`current_cate_${i}`}
+                  key={`current_cate_${course.name}`}
                 />
               ))}
             </div>

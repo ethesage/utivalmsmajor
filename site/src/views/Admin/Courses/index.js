@@ -40,7 +40,7 @@ const Courses = ({ gapi }) => {
         </div>
       ) : error ? (
         <p>An Error Occurred</p>
-      ) : allCourses.length === 0 ? (
+      ) : allCourses.length < 0 ? (
         <div className="nt_found img flex-col">
           <img src={not_found} alt="Not found" />
           <p className="text">There are no Courses yet</p>

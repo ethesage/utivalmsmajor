@@ -55,7 +55,7 @@ const Courses = ({ gapi }) => {
           )}
           {isStudent && (
             <Button
-              link="utiva.io"
+              link="/all-courses"
               text="Start Learning"
               className="flex-row"
             />
