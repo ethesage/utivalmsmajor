@@ -299,7 +299,7 @@ function Classes({
               <h2 className={`h_con flex-row j-start  ${full ? ' full' : ''}`}>
                 <img src={class_icon} alt="class" />{' '}
                 <div className="flex-row j-space img">
-                  <span style={{ '--number': 1 }} className="clipped-text">
+                  <span>
                     {Number(index + 1) ? `Day ${weeks[index + 1]} - ` : ''}{' '}
                     {title}
                   </span>

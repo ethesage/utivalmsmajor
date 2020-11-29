@@ -13,7 +13,7 @@ export const getEnrolledCourses = (id, data, userType = 'student') => async (
   if (id) {
     const useObject = data ? data : courses.data.data;
 
-    const data_ = useObject.CourseCohort.Classes.reduce(
+    const data_ = useObject.Course.Classes.reduce(
       (acc, cur) => ({
         ...acc,
         [cur.title]: {
@@ -169,17 +169,19 @@ export const gradeAssignment = (name, Id, grade) => async (dispatch) => {
   });
 };
 
-export const studentProgress = (courseCohortId, classId) => async (dispatch) => {
+export const studentProgress = (courseCohortId, classId) => async (
+  dispatch
+) => {
   let members;
   const data = {
     courseCohortId,
     classId,
-  }
+  };
 
   try {
     members = await axiosInstance.post('/student/addprogress', data);
     // console.log(members, 'members');
-    return members.data
+    return members.data;
   } catch (error) {
     // console.log(error.message.error)
     return error;
@@ -191,11 +193,11 @@ export const courseProgress = (courseCohortId, classId) => async (dispatch) => {
   const data = {
     courseCohortId,
     classId,
-  }
+  };
   try {
     members = await axiosInstance.post('/course/addprogress', data);
     // console.log(members, 'members');
-    return members.data
+    return members.data;
   } catch (error) {
     return error;
   }

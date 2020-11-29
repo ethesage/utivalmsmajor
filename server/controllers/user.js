@@ -10,6 +10,7 @@ const {
   errorStat,
   comparePassword,
   generatePassword,
+  hashPassword,
   uploadImage,
 } = helpers;
 
@@ -225,7 +226,12 @@ export const resetPassword = async (req, res) => {
     { expiresIn: 60 * 15 }
   );
 
-  const link = `${req.protocol}://${req.headers.host}/auth/reset-password?emailToken=${token}&id=${findUser.id}`;
+  const domain =
+    process.env.NODE_ENV === 'production'
+      ? 'https://app.utiva.io'
+      : 'http://localhost:3000';
+
+  const link = `${domain}/auth/reset-password?emailToken=${token}&id=${findUser.id}`;
 
   const mail = new Mail({
     to: email,
@@ -273,7 +279,7 @@ export const changePassword = async (req, res) => {
   }
 
   await findUser.update({
-    password,
+    password: await hashPassword(password),
   });
 
   return successStat(res, 200, 'Message', 'Your password has been changed');

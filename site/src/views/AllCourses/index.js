@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Skeleton from 'react-skeleton-loader';
 import { Helmet } from 'react-helmet';
 import { useSelector, useDispatch } from 'react-redux';
+import Footer from 'components/Footer';
 import CourseCard from 'components/CourseCard';
 import { getCourse, getcategories } from 'g_actions/mainCourse';
 import './style.scss';
@@ -123,6 +124,7 @@ const AllCourses = () => {
           })}
         </div>
       )}
+      <Footer />
     </section>
   );
 };

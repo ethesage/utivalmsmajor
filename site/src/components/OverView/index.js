@@ -22,6 +22,8 @@ const Overview = () => {
     !!currentCourse
   );
 
+  console.log(currentCourse, error);
+
   return (
     <>
       <NavBar />
@@ -44,7 +46,7 @@ const Overview = () => {
                     : currentCourse.CourseCohort.progress
                 }
               />
-              <Facilitators trainers={currentCourse.CourseCohort.Classes} />
+              <Facilitators trainers={currentCourse.Course.Classes} />
             </div>
 
             <div className="info_sec _text">

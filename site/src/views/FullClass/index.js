@@ -21,7 +21,7 @@ function FullClass({ gapi }) {
   const currentCourse = useSelector((state) => state.member.currentCourse);
   const { isStudent } = useSelector((state) => state.auth);
 
-  const curWeek = currentCourse?.CourseCohort?.Classes?.find(
+  const curWeek = currentCourse?.Course?.Classes?.find(
     (classr) => classr.id === classroom
   );
 
@@ -51,7 +51,7 @@ function FullClass({ gapi }) {
     return () => {};
   }, [classroom, currentCourse]);
 
-  const data = currentCourse?.CourseCohort?.Classes.find(
+  const data = currentCourse?.Course?.Classes.find(
     (classrum) => classrum.id === classroom
   );
 
@@ -66,7 +66,7 @@ function FullClass({ gapi }) {
         ) : (
           <Layout
             subClassName="fl-ass"
-            links={currentCourse.CourseCohort.Classes.map((classrm, i) => (
+            links={currentCourse.Course.Classes.map((classrm, i) => (
               <li key={`side_link_courses_${i}`}>
                 <NavLink
                   className="side_link"

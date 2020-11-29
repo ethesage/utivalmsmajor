@@ -28,7 +28,8 @@ const Payment = ({ back, id }) => {
 
   useEffect(() => {
     if (courses?.purchaseCourse?.type === 'free') {
-      dispatch(checkout(courses.purchaseCourse.CourseCohorts[0].id))
+      // if (courses?.purchaseCourse?.type !== 'free') {
+      dispatch(checkout(courses.purchaseCourse.CourseCohorts[0].id));
       dispatch(
         addStudentCourse(courses.purchaseCourse, [
           { courseCohortId: courses.purchaseCourse.CourseCohorts[0].id },

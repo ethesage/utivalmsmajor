@@ -24,6 +24,8 @@ const Classroom = ({ full = false, gapi }) => {
     !!currentCourse
   );
 
+  console.log(currentCourse?.CourseCohort?.folderId);
+
   return (
     <>
       <NavBar />
@@ -32,7 +34,7 @@ const Classroom = ({ full = false, gapi }) => {
           <Loader tempLoad={true} full={false} />
         ) : (
           <div>
-            {currentCourse.CourseCohort.Classes.map((class_room, i) => (
+            {currentCourse.Course.Classes.map((class_room, i) => (
               <Classes
                 key={`cx_listnx_${i}`}
                 data={class_room}

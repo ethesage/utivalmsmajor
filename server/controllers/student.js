@@ -101,74 +101,68 @@ export const getSingleStudentCourse = async (req, res) => {
   const { id } = req.session.user;
 
   const { courseCohortId } = req.body.student;
-  let resource;
-
-  try {
-    resource = await models.StudentCourse.findOne({
-      where: { courseCohortId, studentId: id },
-      include: [
-        {
-          model: models.Cohort,
-        },
-        {
-          model: models.Course,
-          attributes: ['id', 'name', 'description', 'thumbnail'],
-          include: [
-            {
-              model: models.CourseDescription,
-            },
-          ],
-        },
-        {
-          model: models.CourseCohort,
-          include: [
-            {
-              model: models.Classes,
-              required: false,
-              include: [
-                {
-                  model: models.Trainer,
-                  include: {
-                    model: models.User,
-                    attributes: [
-                      'firstName',
-                      'lastName',
-                      'profilePic',
-                      'occupation',
-                      'bio',
-                    ],
-                  },
+  const resource = await models.StudentCourse.findOne({
+    where: { courseCohortId, studentId: id },
+    include: [
+      {
+        model: models.Cohort,
+      },
+      {
+        model: models.Course,
+        attributes: ['id', 'name', 'description', 'thumbnail'],
+        include: [
+          {
+            model: models.CourseDescription,
+          },
+          {
+            model: models.Classes,
+            required: false,
+            include: [
+              {
+                model: models.Trainer,
+                // where: { courseCohortId },
+                include: {
+                  model: models.User,
+                  attributes: [
+                    'firstName',
+                    'lastName',
+                    'profilePic',
+                    'occupation',
+                    'bio',
+                  ],
                 },
-                {
-                  model: models.ClassResources,
-                },
-                {
-                  model: models.ClassDays,
-                },
-              ],
-            },
-          ],
-        },
-      ],
+              },
+              {
+                model: models.ClassResources,
+              },
+              // {
+              //   model: models.ClassDays,
+              //   where: { courseCohortId },
+              // },
+            ],
+          },
+        ],
+      },
+      {
+        model: models.CourseCohort,
+      },
+    ],
 
-      order: [[models.CourseCohort, models.Classes, 'createdAt', 'ASC']],
-    });
+    order: [[models.Course, models.Classes, 'createdAt', 'ASC']],
+  });
 
-    if (!resource) {
-      return errorStat(res, 404, 'Student Course Not Found');
-    }
-
-    if (!resource.isCompleted && new Date() > resource.duration) {
-      resource.update({
-        isCompleted: true,
-        status: 'finished',
-      });
-    }
-
-    return successStat(res, 200, 'data', resource);
-  } catch (e) {
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
+  if (!resource) {
+    return errorStat(res, 404, 'Student Course Not Found');
   }
+
+  if (!resource.isCompleted && new Date() > resource.duration) {
+    resource.update({
+      isCompleted: true,
+      status: 'finished',
+    });
+  }
+
+  return successStat(res, 200, 'data', resource);
 };
 
 export const getStudentDashboard = async (req, res) => {
