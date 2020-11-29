@@ -9,6 +9,7 @@ const {
   successStat,
   errorStat,
   comparePassword,
+  hashPassword,
   generatePassword,
   uploadImage,
 } = helpers;
@@ -273,7 +274,7 @@ export const changePassword = async (req, res) => {
   }
 
   await findUser.update({
-    password,
+    password: await hashPassword(password),
   });
 
   return successStat(res, 200, 'Message', 'Your password has been changed');

@@ -7,7 +7,7 @@ const style = `
 .container {
   margin: auto;
   width: 70%;
-  background: linear-gradient(#ffc700 40%, #fdfdfd 0);
+  background: linear-gradient(#120c64 40%, #fdfdfd 0);
   display: flex;
   height: 600px;
 }
@@ -21,7 +21,7 @@ const style = `
   text-transform: capitalize;
   font-size: medium;
   border-radius: 3px;
-  color: rgb(255, 199, 0);
+  color: #120c64;
 }
 .mail-message {
   margin: auto;

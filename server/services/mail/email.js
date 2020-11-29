@@ -41,7 +41,7 @@ class Mailer {
     this.iButton = iButton || false;
     this.iTemplate = iTemplate || false;
     this.subject = subject;
-    this.header = header || 'Welcome to Authors Haven';
+    this.header = header || 'Welcome to The utiva Learning Platform';
     this.buttonTemp = '';
     this.bodyStyle = '';
     this.headerStyle = '';
@@ -142,7 +142,7 @@ class Mailer {
 
     this.buttonTemp = `
       <div class='button' style = '${bStyle}'>
-        <a style = 'color: rgb(255, 199, 0); ${lStyle}' class='link' href = '${link}'>${text}</a>
+        <a style = 'color: #120c64; ${lStyle}' class='link' href = '${link}'>${text}</a>
       </div>
     `;
   }
