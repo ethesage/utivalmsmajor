@@ -41,7 +41,7 @@ class Mailer {
     this.iButton = iButton || false;
     this.iTemplate = iTemplate || false;
     this.subject = subject;
-    this.header = header || 'Welcome To The Utiva Learning Platform';
+    this.header = header || 'Welcome to The utiva Learning Platform';
     this.buttonTemp = '';
     this.bodyStyle = '';
     this.headerStyle = '';

@@ -9,6 +9,7 @@ const {
   successStat,
   errorStat,
   comparePassword,
+  hashPassword,
   generatePassword,
   hashPassword,
   uploadImage,
