@@ -7,7 +7,7 @@ export default [
     attr: { autoComplete: 'email' },
   },
   {
-    placeHolder: 'Create Password',
+    placeHolder: 'Password',
     name: 'password',
     type: 'password',
     required: true,

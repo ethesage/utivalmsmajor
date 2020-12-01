@@ -28,56 +28,5 @@
         }
       }
     }
-
-    .course-sec {
-      margin-top: 20px;
-
-      .crs_con {
-        display: grid;
-        grid-template-columns: repeat(
-          auto-fill,
-          minmax(#{'min(300px, 100%)'}, 1fr)
-        );
-        grid-gap: 30px;
-
-        @include for-size(onek) {
-          display: flex;
-          flex-wrap: wrap;
-        }
-
-        &.single {
-          display: flex;
-        }
-      }
-
-      .course_ld {
-        width: 100%;
-
-        display: grid;
-        grid-template-columns: repeat(
-          auto-fill,
-          minmax(#{'min(300px, 100%)'}, 1fr)
-        );
-        grid-gap: 30px;
-
-        .next_cl {
-          width: 100%;
-          height: 100%;
-          overflow: hidden;
-
-          span {
-            &:nth-child(1) {
-              width: 20%;
-            }
-            &:nth-child(2) {
-              width: 100%;
-            }
-            &:nth-child(3) {
-              width: 60%;
-            }
-          }
-        }
-      }
-    }
   }
 }

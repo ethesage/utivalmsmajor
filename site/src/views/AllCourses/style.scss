@@ -1,0 +1,61 @@
+@import '../../media';
+
+.all-courses {
+  .banner_sec {
+    height: 500px;
+    // min-height: 500px;
+    padding-top: 100px;
+
+    @include for-size(tablet-landscape-up) {
+      flex-direction: column;
+      height: auto;
+    }
+
+    .text_sec {
+      width: 45%;
+      padding-right: 30px;
+
+      @include for-size(tablet-landscape-up) {
+        width: 100% !important;
+        margin-bottom: 30px;
+        padding: 0;
+      }
+
+      h1 {
+        color: color(theme);
+        font-size: 2em;
+        margin-bottom: 10px;
+
+        @include for-size(phone-only) {
+          font-size: 1.5em;
+        }
+      }
+
+      p {
+        color: color(text);
+        font-size: 1.2em;
+        margin-bottom: 10px;
+
+        @include for-size(phone-only) {
+          font-size: 1em;
+        }
+      }
+    }
+    .img_sec {
+      width: 55%;
+      height: 100%;
+
+      @include for-size(tablet-landscape-up) {
+        width: 100% !important;
+      }
+    }
+  }
+
+  .course_con {
+    margin-top: 50px;
+
+    .course-sec {
+      margin-bottom: 50px;
+    }
+  }
+}
