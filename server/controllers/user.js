@@ -86,14 +86,6 @@ export const signup = async (req, res) => {
   return successStat(res, 201, 'user', { ...user.userResponse(), message });
 };
 
-/**
- * / @static
- * @description Allows a user to sign up
- * @param {Object} req - Request object
- * @param {Object} res - Response object
- * @returns {Object} object containing user data and access Token
- * @memberof UserController
- */
 export const quickCheckOut = async (req, res) => {
   const { email, fullName } = req.body.user;
   const isExist = await models.User.findOne({ where: { email } });
@@ -103,7 +95,6 @@ export const quickCheckOut = async (req, res) => {
   const userProfile = fullName.split(' ');
 
   const password = await generatePassword(10);
-  console.log(password);
 
   const user = await models.User.create({
     role: 'student',
@@ -256,15 +247,6 @@ export const resetPassword = async (req, res) => {
     'Reset passord link has been sent to your email, clik link to activate your account'
   );
 };
-
-/**
- * @static
- * @description Allows a user to change password
- * @param {Object} req - Request object
- * @param {Object} res - Response object
- * @returns {Object} object containing user data and access Token
- * @memberof UserController
- */
 
 export const changePassword = async (req, res) => {
   const { emailToken, id } = req.query;
