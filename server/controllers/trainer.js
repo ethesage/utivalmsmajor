@@ -56,193 +56,161 @@ export const createTrainer = async (req, res) => {
 export const getAllTrainerCourse = async (req, res) => {
   const { id } = req.session.user;
 
-  try {
-    const trainerCourse = await models.Trainer.findAll({
-      where: { userId: id },
-      attributes: ['id'],
-      include: [
-        {
-          model: models.Cohort,
-          attributes: ['cohort', 'id'],
-        },
-        {
-          model: models.Course,
-          attributes: ['id', 'name', 'thumbnail'],
-        },
-        {
-          model: models.CourseCohort,
-          attributes: ['id', 'cohortId', 'dateRange', 'courseId'],
-        },
-      ],
-    });
+  const trainerCourse = await models.Trainer.findAll({
+    where: { userId: id },
+    attributes: ['id'],
+    include: [
+      {
+        model: models.Cohort,
+        attributes: ['cohort', 'id'],
+      },
+      {
+        model: models.Course,
+        attributes: ['id', 'name', 'thumbnail'],
+      },
+      {
+        model: models.CourseCohort,
+        attributes: ['id', 'cohortId', 'dateRange', 'courseId'],
+      },
+    ],
+  });
 
-    if (!trainerCourse[0]) {
-      return errorStat(res, 404, 'User not assigned to any course ');
-    }
-    return successStat(res, 200, 'data', trainerCourse);
-  } catch (e) {
-    console.log(e);
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
+  if (!trainerCourse[0]) {
+    return errorStat(res, 404, 'User not assigned to any course ');
   }
+  return successStat(res, 200, 'data', trainerCourse);
 };
 
 export const getSingleTrainerCourse = async (req, res) => {
   const { id } = req.session.user;
 
   const { courseCohortId } = req.body.trainer;
-  let resource;
-
-  try {
-    resource = await models.Trainer.findOne({
-      where: { userId: id, courseCohortId },
-      include: [
-        {
-          model: models.Cohort,
-        },
-        {
-          model: models.Course,
-          attributes: ['id', 'name', 'description', 'thumbnail'],
-          include: [
-            {
-              model: models.CourseDescription,
-            },
-            {
-              model: models.CourseProgress,
-              where: { userId: id },
-              required: false,
-            },
-          ],
-        },
-        {
-          model: models.CourseCohort,
-          include: [
-            {
-              model: models.Classes,
-              include: [
-                {
-                  model: models.Trainer,
-                  include: {
-                    model: models.User,
-                    attributes: [
-                      'firstName',
-                      'lastName',
-                      'profilePic',
-                      'occupation',
-                      'bio',
-                    ],
-                  },
+  const resource = await models.Trainer.findOne({
+    where: { userId: id, courseCohortId },
+    include: [
+      {
+        model: models.Cohort,
+      },
+      {
+        model: models.Course,
+        attributes: ['id', 'name', 'description', 'thumbnail'],
+        include: [
+          {
+            model: models.CourseDescription,
+          },
+          {
+            model: models.CourseProgress,
+            where: { userId: id },
+            required: false,
+          },
+        ],
+      },
+      {
+        model: models.CourseCohort,
+        include: [
+          {
+            model: models.Classes,
+            include: [
+              {
+                model: models.Trainer,
+                include: {
+                  model: models.User,
+                  attributes: [
+                    'firstName',
+                    'lastName',
+                    'profilePic',
+                    'occupation',
+                    'bio',
+                  ],
                 },
-                {
-                  model: models.ClassResources,
-                },
-                {
-                  model: models.ClassDays,
-                },
-              ],
-            },
-          ],
-        },
-      ],
+              },
+              {
+                model: models.ClassResources,
+              },
+              {
+                model: models.ClassDays,
+              },
+            ],
+          },
+        ],
+      },
+    ],
 
-      order: [[models.CourseCohort, models.Classes, 'createdAt', 'ASC']],
-    });
+    order: [[models.CourseCohort, models.Classes, 'createdAt', 'ASC']],
+  });
 
-    if (!resource) {
-      return errorStat(res, 404, 'Trainer Course Not Found');
-    }
-
-    // if (!resource.isCompleted && new Date() > resource.duration) {
-    //   resource.update({
-    //     isCompleted: true,
-    //     status: 'finished',
-    //   });
-    // }
-
-    return successStat(res, 200, 'data', resource);
-  } catch (e) {
-    console.log(e);
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
+  if (!resource) {
+    return errorStat(res, 404, 'Trainer Course Not Found');
   }
+
+  // if (!resource.isCompleted && new Date() > resource.duration) {
+  //   resource.update({
+  //     isCompleted: true,
+  //     status: 'finished',
+  //   });
+  // }
+
+  return successStat(res, 200, 'data', resource);
 };
 
 export const getAllTrainer = async (req, res) => {
   const { courseId } = req.body.trainer;
 
-  try {
-    const trainers = await models.Trainer.findAll({
-      where: { courseId },
-    });
+  const trainers = await models.Trainer.findAll({
+    where: { courseId },
+  });
 
-    if (!trainers) {
-      return errorStat(res, 404, 'No Trainer Found');
-    }
-
-    return successStat(res, 200, 'data', trainers);
-  } catch (e) {
-    console.log(e);
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
+  if (!trainers) {
+    return errorStat(res, 404, 'No Trainer Found');
   }
+
+  return successStat(res, 200, 'data', trainers);
 };
 
 export const getSingleTrainer = async (req, res) => {
   const { trainerId } = req.body.trainer;
 
-  try {
-    const trainer = await models.Trainer.findOne({
-      where: { id: trainerId },
-    });
+  const trainer = await models.Trainer.findOne({
+    where: { id: trainerId },
+  });
 
-    if (!trainer) {
-      return errorStat(res, 404, 'Trainer Not Found');
-    }
-
-    return successStat(res, 200, 'data', trainer);
-  } catch (e) {
-    console.log(e);
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
+  if (!trainer) {
+    return errorStat(res, 404, 'Trainer Not Found');
   }
+
+  return successStat(res, 200, 'data', trainer);
 };
 
 export const updateTrainer = async (req, res) => {
   const { trainerId } = req.body.trainer;
 
-  try {
-    const trainer = await models.Trainer.findOne({
-      where: { id: trainerId },
-    });
+  const trainer = await models.Trainer.findOne({
+    where: { id: trainerId },
+  });
 
-    if (!trainer) {
-      return errorStat(res, 404, 'Trainer not found');
-    }
-
-    const update = await trainer.update({
-      ...req.body.trainer,
-    });
-
-    return successStat(res, 200, 'data', update);
-  } catch (e) {
-    console.log(e);
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
+  if (!trainer) {
+    return errorStat(res, 404, 'Trainer not found');
   }
+
+  const update = await trainer.update({
+    ...req.body.trainer,
+  });
+
+  return successStat(res, 200, 'data', update);
 };
 
 export const deleteTrainer = async (req, res) => {
   const { trainerId } = req.body.trainer;
 
-  try {
-    const trainer = await models.Trainer.findOne({
-      where: { id: trainerId },
-    });
+  const trainer = await models.Trainer.findOne({
+    where: { id: trainerId },
+  });
 
-    if (!trainer) {
-      return errorStat(res, 404, 'Trainer not found');
-    }
-
-    await trainer.destroy();
-
-    return successStat(res, 200, 'data', 'Delete Successful');
-  } catch (e) {
-    console.log(e);
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
+  if (!trainer) {
+    return errorStat(res, 404, 'Trainer not found');
   }
+
+  await trainer.destroy();
+
+  return successStat(res, 200, 'data', 'Delete Successful');
 };

@@ -90,7 +90,7 @@ app.get('/api/v1', (req, res) =>
 // Routes(app);
 app.use('/api/v1', Routes);
 
-app.get('*', (req, res) => {
+app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../site/build', 'index.html'));
 });
 

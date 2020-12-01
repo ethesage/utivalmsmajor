@@ -17,7 +17,7 @@ import {
 } from 'g_actions/member';
 import { useToasts } from 'react-toast-notifications';
 import Button from 'components/Button';
-import 'components/Classes/style.scss';
+import 'components/ViewGrade/style.scss';
 import { axiosInstance } from 'helpers';
 import './style.scss';
 
