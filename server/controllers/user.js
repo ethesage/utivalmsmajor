@@ -11,7 +11,6 @@ const {
   comparePassword,
   hashPassword,
   generatePassword,
-  hashPassword,
   uploadImage,
 } = helpers;
 
