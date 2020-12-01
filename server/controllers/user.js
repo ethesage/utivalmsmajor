@@ -60,26 +60,26 @@ export const signup = async (req, res) => {
     ...req.body.user,
   });
 
-  const token = generateToken(
-    { id: user.id, email },
-    { expiresIn: 60 * 60 * 24 * 3 }
-  );
+  // const token = generateToken(
+  //   { id: user.id, email },
+  //   { expiresIn: 60 * 60 * 24 * 3 }
+  // );
 
-  const link = `${req.protocol}://${req.headers.host}/api/v1/user/confirm_email?emailToken=${token}&id=${user.dataValues.id}`;
+  // const link = `${req.protocol}://${req.headers.host}/api/v1/user/confirm_email?emailToken=${token}&id=${user.dataValues.id}`;
 
-  const mail = new Mail({
-    to: email,
-    subject: 'Welcome to Utiva',
-    messageHeader: `Hi, ${user.firstname}!`,
-    messageBody:
-      'We are exicted to get you started. First, you have to verify your account. Just click on the link below',
-    iButton: true,
-  });
-  mail.InitButton({
-    text: 'Verify Email',
-    link,
-  });
-  mail.sendMail();
+  // const mail = new Mail({
+  //   to: email,
+  //   subject: 'Welcome to Utiva',
+  //   messageHeader: `Hi, ${user.firstname}!`,
+  //   messageBody:
+  //     'We are exicted to get you started. First, you have to verify your account. Just click on the link below',
+  //   iButton: true,
+  // });
+  // mail.InitButton({
+  //   text: 'Verify Email',
+  //   link,
+  // });
+  // mail.sendMail();
 
   await req.session.login(user.role, { user: user.dataValues }, res);
   const message = 'Registration is successful';
@@ -116,7 +116,10 @@ export const quickCheckOut = async (req, res) => {
     lastName: userProfile[1],
   });
 
-  const link = `${process.env.FRONTEND_URL}/login`;
+  const link =
+    process.env.NODE_ENV === 'production'
+      ? 'https://app.utiva.io/login'
+      : 'http://localhost:3000/login';
 
   const mail = new Mail({
     to: email,
