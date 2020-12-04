@@ -12,7 +12,7 @@ const StudyPlan = ({ currentCourse }) => {
 
       currentCourse.CourseCohort.Classes.forEach((_class) => {
         if (_class.ClassDays[0]) {
-          tempDays.push(_class.ClassDays[0]);
+          tempDays.push({ ..._class.ClassDays[0], title: _class.title });
         }
       });
 

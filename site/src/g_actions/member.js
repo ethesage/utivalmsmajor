@@ -49,7 +49,14 @@ export const getEnrolledMembers = (id, data) => async (dispatch) => {
 
   dispatch({
     type: 'GET_ALL_ENROLLED_STUDENTS',
-    payload: members.data.data,
+    payload: { members: members.data.data, courseId: id },
+  });
+};
+
+export const enrollStudents = (data) => async (dispatch) => {
+  dispatch({
+    type: 'ENROLL_STUDENTS',
+    payload: data,
   });
 };
 
@@ -169,17 +176,19 @@ export const gradeAssignment = (name, Id, grade) => async (dispatch) => {
   });
 };
 
-export const studentProgress = (courseCohortId, classId) => async (dispatch) => {
+export const studentProgress = (courseCohortId, classId) => async (
+  dispatch
+) => {
   let members;
   const data = {
     courseCohortId,
     classId,
-  }
+  };
 
   try {
     members = await axiosInstance.post('/student/addprogress', data);
     // console.log(members, 'members');
-    return members.data
+    return members.data;
   } catch (error) {
     // console.log(error.message.error)
     return error;
@@ -191,11 +200,11 @@ export const courseProgress = (courseCohortId, classId) => async (dispatch) => {
   const data = {
     courseCohortId,
     classId,
-  }
+  };
   try {
     members = await axiosInstance.post('/course/addprogress', data);
     // console.log(members, 'members');
-    return members.data
+    return members.data;
   } catch (error) {
     return error;
   }

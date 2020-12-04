@@ -221,9 +221,11 @@ export const getCourseCatnames = async (req, res) => {
 };
 
 export const getAllTrainers = async (req, res) => {
+  const { role } = req.params;
+
   const trainers = await models.User.findAll({
     where: {
-      role: 'trainer',
+      role,
     },
     attributes: [
       'id',

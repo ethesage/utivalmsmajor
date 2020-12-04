@@ -58,7 +58,7 @@ const Course = () => {
   return (
     <section className="courses m-150">
       <div className="container">
-        <h2 className="hd middle">Available Courses</h2>
+        <h2 className="hd middle">Technology Learning Tracks</h2>
         <Link to="/all-courses">
           <strong>
             <small className="theme-color">View All {'>'}</small>
