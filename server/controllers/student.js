@@ -207,6 +207,7 @@ export const allCourseStudents = async (req, res) => {
         {
           model: models.User,
           attributes: [
+            'id',
             'firstName',
             'lastName',
             'linkedin',

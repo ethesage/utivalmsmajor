@@ -64,7 +64,7 @@ adminRoutes.get(
   getCourseCohort
 );
 
-adminRoutes.get('/all-trainers', usession.can(''), getAllTrainers);
+adminRoutes.get('/users/:role', usession.can(''), getAllTrainers);
 
 // adminRoutes.get(
 //   '/allstudents/:studentCourseId',
