@@ -9,14 +9,14 @@ const data = [
     desc: 'Learn at your pace',
   },
   {
-    title: 'Make Payment',
+    title: 'Join a structured virtual live class',
     desc:
-      'Join a structured virtual live class (Join and collaborate with other students in our Instructor-led virtual classes for an optimized learning experience)',
+      'Join and collaborate with other students in our Instructor-led virtual classes for an optimized learning experience',
   },
   {
-    title: 'Start Learning',
+    title: 'Hands-on Project-based Internship',
     desc:
-      'Hands-on Project-based Internship (Begin a 3-month remote internship program with our partner companies working on real business projects.',
+      'Begin a 3-month remote internship program with our partner companies working on real business projects.',
   },
 ];
 

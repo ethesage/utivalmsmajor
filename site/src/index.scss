@@ -523,16 +523,25 @@ li {
 }
 
 .spinner1,
-.spinner2 {
+.spinner2,
+.spinner3 {
   @extend %spinner;
 }
 
 .spinner1::before,
-.spinner2::before {
+.spinner2::before,
+.spinner3::before {
   @extend %spinner_before;
 }
 
-.spinner1::after {
+.spinner3 {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.spinner1::after,
+.spinner3::after {
   content: '';
   position: absolute;
   z-index: 60;

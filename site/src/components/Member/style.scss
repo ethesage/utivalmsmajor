@@ -8,6 +8,14 @@
   min-height: 250px;
   max-width: 300px;
   padding: 20px;
+  position: relative;
+
+  .rmv {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+  }
 
   .img_sec {
     width: 120px;

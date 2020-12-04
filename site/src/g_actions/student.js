@@ -8,3 +8,5 @@ export const getAllStudents = () => async (dispatch) => {
     payload: students.data.data,
   });
 };
+
+

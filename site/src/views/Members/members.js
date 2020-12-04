@@ -1,7 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Sekeleton from 'react-skeleton-loader';
-import { getEnrolledMembers, enrollStudents } from 'g_actions/member';
+import {
+  getEnrolledMembers,
+  enrollStudents,
+  deleteStudent,
+} from 'g_actions/member';
 import useFetch from 'Hooks/useFetch';
 import { getAllStudents } from 'g_actions/student';
 import MemberCard from 'components/Member';
@@ -22,6 +26,7 @@ const Members = ({ courseId }) => {
   const inner_modalRef = useRef();
   const course = enrolledStudents?.courseId === courseId && !!enrolledStudents;
   const [filtered, setFiltered] = useState([]);
+  const [filteredMembers, setFilteredMembers] = useState([]);
   const [loading, , fetch] = useFetch(dispatch, !course);
   const [students, setStudents] = useState([]);
   const [s_loading, , s_fetch] = useFetch(dispatch, !!!allStudents);
@@ -112,7 +117,41 @@ const Members = ({ courseId }) => {
       setFiltered([]);
     }
   };
+
+  const handleMembersSearch = ({ target: { name, value } }) => {
+    if (value !== '') {
+      const searchResult = enrolledStudents.members.filter(
+        ({ User: { firstName, lastName, email } }) =>
+          stringSearch(value, firstName) ||
+          stringSearch(value, lastName) ||
+          stringSearch(value, email)
+      );
+
+      setFilteredMembers(searchResult);
+    } else {
+      setFilteredMembers([]);
+    }
+  };
+
+  const removeStudentFromCourse = async (id) => {
+    document.querySelector('body').classList.add('spinner3');
+
+    try {
+      await axiosInstance.patch(`/admin/delete-student`, {
+        courseCohortId: courseId,
+        studentId: id,
+      });
+
+      dispatch(deleteStudent(id));
+      document.querySelector('body').classList.remove('spinner3');
+    } catch (err) {
+      document.querySelector('body').classList.remove('spinner3');
+    }
+  };
+
   const usersToshow = filtered.length > 0 ? filtered : allStudents;
+  const membersToshow =
+    filteredMembers.length > 0 ? filteredMembers : enrolledStudents?.members;
 
   return (
     <>
@@ -131,14 +170,27 @@ const Members = ({ courseId }) => {
           )}
         </nav>
 
+        <div style={{ marginTop: '30px', maxWidth: '300px' }}>
+          <Input
+            placeHolder="Search by name or email"
+            name="search"
+            handleChange={handleMembersSearch}
+          />
+        </div>
+
         <div className="memx_sec">
           {loading ? (
             [1, 2, 3].map((i) => <Loader key={`load_${i}`} />)
           ) : enrolledStudents.members.length === 0 ? (
             <NoClass />
           ) : (
-            enrolledStudents?.members.map((students, i) => (
-              <MemberCard key={`enrolled_students_${i}`} data={students} />
+            membersToshow.map((student, i) => (
+              <MemberCard
+                key={`enrolled_students_${i}`}
+                data={student}
+                isAdmin={isAdmin}
+                onClick={() => removeStudentFromCourse(student.User.id)}
+              />
             ))
           )}
         </div>
@@ -162,13 +214,28 @@ const Members = ({ courseId }) => {
               handleChange={handleSearch}
             />
 
-            {students.length > 0 && (
-              <strong style={{ marginBottom: '10px', cursor: 'pointer' }}>
-                <small className="theme-color" onClick={removeAll}>
-                  Remove All
-                </small>
-              </strong>
-            )}
+            <div className="flex-row img j-space">
+              {students.length > 0 && (
+                <>
+                  <strong
+                    style={{
+                      marginBottom: '10px',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <small className="theme-color" onClick={enroll}>
+                      Enroll Students
+                    </small>
+                  </strong>
+
+                  <strong style={{ marginBottom: '10px', cursor: 'pointer' }}>
+                    <small className="theme-color" onClick={removeAll}>
+                      Remove All
+                    </small>
+                  </strong>
+                </>
+              )}
+            </div>
 
             <div className="selected flex-row j-start">
               {students.map((student, i) => (
@@ -187,20 +254,6 @@ const Members = ({ courseId }) => {
                 </div>
               ))}
             </div>
-
-            {students.length > 0 && (
-              <strong
-                style={{
-                  marginBottom: '10px',
-                  marginTop: '-20px',
-                  cursor: 'pointer',
-                }}
-              >
-                <small className="theme-color" onClick={enroll}>
-                  Enroll Students
-                </small>
-              </strong>
-            )}
 
             <h2>Results</h2>
             {!s_loading ? (

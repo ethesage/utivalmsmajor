@@ -60,6 +60,13 @@ export const enrollStudents = (data) => async (dispatch) => {
   });
 };
 
+export const deleteStudent = (id) => async (dispatch) => {
+  dispatch({
+    type: 'REMOVE_STUDENT',
+    payload: id,
+  });
+};
+
 export const countDetails = () => async (dispatch) => {
   let counts;
   try {

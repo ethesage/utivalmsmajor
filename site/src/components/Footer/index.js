@@ -42,7 +42,7 @@ const links = [
 
 const extras = [
   { title: 'info@utiva.io', img: message, des: 'mailTo:' },
-  { title: '08062111308', img: phone, des: 'tel:' },
+  { title: '+2348062111308', img: phone, des: 'tel:' },
 ];
 
 const Footer = () => {
