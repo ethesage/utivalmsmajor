@@ -1,4 +1,4 @@
-@import "../../../media";
+@import '../../../media';
 
 .home_page .gt_str {
   .gt_str_sec {
@@ -41,6 +41,9 @@
           position: relative;
           height: 100%;
 
+          display: grid;
+          grid-template-columns: 15% 80%;
+
           @include for-size(smaller-desktop) {
             margin-right: 40%;
           }
@@ -65,7 +68,7 @@
               }
 
               &::after {
-                content: "";
+                content: '';
                 display: none;
               }
             }
@@ -108,7 +111,7 @@
             position: relative;
 
             &::before {
-              content: "";
+              content: '';
               position: absolute;
               height: 100%;
               width: 2px;
@@ -120,7 +123,7 @@
             }
 
             &::after {
-              content: "";
+              content: '';
               position: absolute;
               height: 100%;
               width: 20px;
@@ -147,7 +150,7 @@
             }
           }
 
-          @include for-size(tablet-landscape-up) {
+          @include for-size(smaller-desktop) {
             width: 25%;
             font-size: 0.8em;
           }
@@ -158,14 +161,14 @@
 
           h2 {
             width: 40%;
-            @include for-size(tablet-landscape-up) {
+            @include for-size(smaller-desktop) {
               font-size: 1em;
             }
           }
 
           p {
             width: 45%;
-            @include for-size(tablet-landscape-up) {
+            @include for-size(smaller-desktop) {
               font-size: 0.8em;
             }
           }

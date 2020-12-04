@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import logo from 'assets/logo_white.png';
 import fb from 'assets/icons/facebook.png';
 import tw from 'assets/icons/twitter.png';
@@ -43,7 +42,7 @@ const links = [
 
 const extras = [
   { title: 'info@utiva.io', img: message, des: 'mailTo:' },
-  { title: '+1 (202) 931-9842', img: phone, des: 'tel:' },
+  { title: '08062111308', img: phone, des: 'tel:' },
 ];
 
 const Footer = () => {
@@ -82,9 +81,9 @@ const Footer = () => {
               <h3>FOLLOW US</h3>
               <div className="icons flex-row j-space">
                 {sc_links.map((link, i) => (
-                  <Link to={link.link} key={`social_link_${i}`}>
+                  <a href={link.link} key={`social_link_${i}`} target="_">
                     <img src={link.img} alt="" className="img contain" />
-                  </Link>
+                  </a>
                 ))}
               </div>
             </div>

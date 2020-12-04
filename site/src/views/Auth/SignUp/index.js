@@ -173,6 +173,7 @@ function Signup() {
             handleSelect={handleChange}
             showAsterix
             attr={form.attr}
+            useSearch={form.name === 'country' || form.name === 'region'}
           />
         ))}
 

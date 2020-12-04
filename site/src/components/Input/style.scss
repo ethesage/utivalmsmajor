@@ -61,6 +61,35 @@ $distance: 0px;
 
     .select {
       position: relative;
+
+      .search-input {
+        width: 100%;
+        border: 1px solid #c7c7c7;
+        margin-bottom: 5px;
+        position: relative;
+        border-radius: 4px;
+        padding: 10px;
+        position: sticky;
+        top: 10px;
+        background: white;
+        margin-top: 10px;
+        font-size: 16px;
+
+        &::before {
+          content: '';
+          position: absolute;
+          top: -11px;
+          left: -8px;
+          width: calc(100% + 16px);
+          height: 10px;
+          background: white;
+        }
+
+        input {
+          border: none;
+        }
+      }
+
       .currentValue {
         display: flex;
         justify-content: space-between;

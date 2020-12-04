@@ -13,7 +13,7 @@ const index = ({
 }) => {
   return (
     <Nav>
-      <div className="al_nav_sec flex-row j-space">
+      <div className="al_nav_sec flex-row j-space al-start">
         <h3>
           {title ||
             (!!(currentCourse && currentCohort)

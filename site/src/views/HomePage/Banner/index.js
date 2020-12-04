@@ -7,7 +7,7 @@ const Banner = () => {
   return (
     <div className="banner flex-row al-end">
       <div className="contents flex-col">
-        <h1 className="hd middle">Learn a Digital Skill</h1>
+        <h1 className="hd middle">The Future of Work Skills</h1>
         {/* <input className="search-input mx-auto" placeholder="Search course" /> */}
         <img src={house} alt="house" className="img contain" />
       </div>
