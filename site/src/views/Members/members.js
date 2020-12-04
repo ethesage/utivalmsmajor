@@ -10,7 +10,7 @@ import Input from 'components/Input';
 import Button from 'components/Button';
 import user_icon from 'assets/user_icon.png';
 import Close from 'assets/icons/closeX';
-import { stringSearch } from 'helpers';
+import { stringSearch, axiosInstance } from 'helpers';
 import './style.scss';
 
 const Members = ({ courseId }) => {
@@ -61,16 +61,27 @@ const Members = ({ courseId }) => {
   const enroll = async () => {
     inner_modalRef.current.classList.add('spinner1');
 
-    // inner_modalRef.current.classList.remove('spinner1');
+    try {
+      await axiosInstance.post(`/checkout/quickcheckout/${courseId}`, {
+        insertUser: students.map((student) => ({ studentId: student.id })),
+      });
 
-    //add axios call to add students here
+      dispatch(
+        enrollStudents(
+          students.map((student) => ({
+            courseCohortId: courseId,
+            User: student,
+          }))
+        )
+      );
+      setStudents([]);
+      modalRef.current.close();
 
-    dispatch(
-      enrollStudents(
-        students.map((student) => ({ courseCohortId: courseId, User: student }))
-      )
-    );
-    setStudents([]);
+      inner_modalRef.current.classList.remove('spinner1');
+    } catch (err) {
+      inner_modalRef.current.classList.remove('spinner1');
+      return;
+    }
   };
 
   const remove = (id) => {
@@ -107,7 +118,7 @@ const Members = ({ courseId }) => {
     <>
       <section className="members">
         <nav className="nav_sec flex-row j-space">
-          <h3>{loading && enrolledStudents?.members.length} Total Members</h3>
+          <h3>{!loading && enrolledStudents?.members.length} Total Members</h3>
 
           {isAdmin && (
             <Button
