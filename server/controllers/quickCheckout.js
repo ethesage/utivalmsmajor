@@ -17,7 +17,7 @@ const { successStat, errorStat } = helpers;
  */
 
 export const quickCheckout = async (req, res) => {
-  const { courseCohortId, insertUser } = req.body.checkout;
+  const { courseCohortId, insertUser = [] } = req.body.checkout;
   const { id } = req.session.user;
 
   try {
@@ -28,7 +28,7 @@ export const quickCheckout = async (req, res) => {
     if (!cour) {
       return errorStat(res, 404, "Course does not exist");
     }
-    if (!insertUser) {
+    if (!insertUser[0]) {
       const resource = await models.StudentCourse.findOne({
         where: { studentId: id, courseCohortId },
       });
@@ -54,6 +54,8 @@ export const quickCheckout = async (req, res) => {
       //   progress: 0,
       // });
 
+      console.log()
+
       await cour.update({
         totalStudent: cour.totalStudent + 1,
       });
@@ -71,7 +73,7 @@ export const quickCheckout = async (req, res) => {
 
       await insertUser.forEach((user) => {
         var userObject = {
-          ...data,
+          studentId: user.studentId,
           courseCohortId,
           isCompleted: false,
           expiresAt: cour.expiresAt,
