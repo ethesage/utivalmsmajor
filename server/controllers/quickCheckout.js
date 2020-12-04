@@ -54,7 +54,7 @@ export const quickCheckout = async (req, res) => {
       //   progress: 0,
       // });
 
-      console.log()
+      // console.log()
 
       await cour.update({
         totalStudent: cour.totalStudent + 1,

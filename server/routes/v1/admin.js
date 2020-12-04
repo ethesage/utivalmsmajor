@@ -1,5 +1,5 @@
-import express from 'express';
-import 'express-async-errors';
+import express from "express";
+import "express-async-errors";
 import {
   getAdminDashboard,
   getAllCourses,
@@ -8,12 +8,14 @@ import {
   getAllCourseCohorts,
   getCourseCohort,
   getAllTrainers,
-} from '../../controllers/admin';
-import middlewares from '../../middlewares';
+  deleteStudent,
+} from "../../controllers/admin";
+import middlewares from "../../middlewares";
 
 const {
   validate,
   idSchema,
+  deleteStudentSchema,
   //   addStudentSchema,
   //   getStudentSchema,
   // getStudentCourseSchema,
@@ -39,54 +41,38 @@ const adminRoutes = express();
 //   getSingleStudentCourse
 // );
 
-adminRoutes.get('/dashboard', usession.can('course:crud'), getAdminDashboard);
+adminRoutes.get("/dashboard", usession.can("course:crud"), getAdminDashboard);
 
-adminRoutes.get('/courses', usession.can('course:crud'), getAllCourses);
+adminRoutes.get("/courses", usession.can("course:crud"), getAllCourses);
 adminRoutes.get(
-  '/course/:id',
-  usession.can('course:crud'),
+  "/course/:id",
+  usession.can("course:crud"),
   validate(idSchema),
   getCourse
 );
-adminRoutes.get('/cat-names', getCourseCatnames);
+adminRoutes.get("/cat-names", getCourseCatnames);
 
 adminRoutes.get(
-  '/course-cohorts/:id',
-  usession.can(''),
+  "/course-cohorts/:id",
+  usession.can(""),
   validate(idSchema),
   getAllCourseCohorts
 );
 
 adminRoutes.get(
-  '/course-cohort/:id',
-  usession.can(''),
+  "/course-cohort/:id",
+  usession.can(""),
   validate(idSchema),
   getCourseCohort
 );
 
-adminRoutes.get('/users/:role', usession.can(''), getAllTrainers);
+adminRoutes.get("/users/:role", usession.can(""), getAllTrainers);
 
-// adminRoutes.get(
-//   '/allstudents/:studentCourseId',
-//   usession.can(''),
-//   validate(getStudentSchema),
-//   allCourseStudents
-// );
-
-// adminRoutes.get('/all/nextclass', usession.can(''), getStudentNextClass);
-
-// adminRoutes.get(
-//   '/classdays/:studentCourseId',
-//   usession.can(''),
-//   validate(getStudentSchema),
-//   getStudentClassDays
-// );
-
-// adminRoutes.delete(
-//   '/:studentId',
-//   usession.can('course:crud'),
-//   validate(studentSchema),
-//   deletestudent
-// );
+adminRoutes.delete(
+  "/delete-student",
+  usession.can(''),
+  validate(deleteStudentSchema),
+  deleteStudent
+);
 
 export default adminRoutes;
