@@ -17,7 +17,7 @@ const { successStat, errorStat } = helpers;
  */
 
 export const quickCheckout = async (req, res) => {
-  const { courseCohortId } = req.body.checkout;
+  const { courseCohortId, insertUser } = req.body.checkout;
   const { id } = req.session.user;
 
   try {
@@ -28,40 +28,71 @@ export const quickCheckout = async (req, res) => {
     if (!cour) {
       return errorStat(res, 404, "Course does not exist");
     }
+    if (!insertUser) {
+      const resource = await models.StudentCourse.findOne({
+        where: { studentId: id, courseCohortId },
+      });
 
-    const resource = await models.StudentCourse.findOne({
-      where: { studentId: id, courseCohortId },
-    });
+      if (resource) {
+        return errorStat(res, 404, "Student is Already Taking This Course");
+      }
 
-    if (resource) {
-      return errorStat(res, 404, "Student is Already Taking This Course");
+      const studC = await models.StudentCourse.create({
+        ...req.body.checkout,
+        studentId: id,
+        isCompleted: false,
+        expiresAt: cour.expiresAt,
+        cohortId: cour.cohortId,
+        status: "ongoing",
+        courseId: cour.courseId,
+        progress: 0,
+      });
+
+      // await models.CourseProgress.create({
+      //   courseId: cour.courseId,
+      //   userId: id,
+      //   progress: 0,
+      // });
+
+      await cour.update({
+        totalStudent: cour.totalStudent + 1,
+      });
+
+      return successStat(res, 200, "data", {
+        ...studC.dataValues,
+        message: "Student added Successfully",
+      });
+    } else {
+      await cour.update({
+        totalStudent: cour.totalStudent + insertUser.length,
+      });
+
+      var data = [];
+
+      await insertUser.forEach((user) => {
+        var userObject = {
+          ...data,
+          courseCohortId,
+          isCompleted: false,
+          expiresAt: cour.expiresAt,
+          cohortId: cour.cohortId,
+          status: "ongoing",
+          courseId: cour.courseId,
+          progress: 0,
+        };
+
+        data.push(userObject);
+      });
+      const studC = await models.StudentCourse.bulkCreate(data, {
+        returing: true,
+        allowDuplicates: false,
+      });
+
+      return successStat(res, 200, "data", {
+        ...studC.dataValues,
+        message: "Student(s) added Successfully",
+      });
     }
-
-    const studC = await models.StudentCourse.create({
-      ...req.body.checkout,
-      studentId: id,
-      isCompleted: false,
-      expiresAt: cour.expiresAt,
-      cohortId: cour.cohortId,
-      status: "ongoing",
-      courseId: cour.courseId,
-      progress: 0
-    });
-
-    // await models.CourseProgress.create({
-    //   courseId: cour.courseId,
-    //   userId: id,
-    //   progress: 0,
-    // });
-
-    await cour.update({
-      totalStudent: cour.totalStudent + 1,
-    });
-
-    return successStat(res, 200, "data", {
-      ...studC.dataValues,
-      message: "Student added Successfully",
-    });
   } catch (e) {
     errorStat(res, 500, "Operation Failed, Please Try Again");
   }
