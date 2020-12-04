@@ -142,6 +142,7 @@ const Members = ({ courseId }) => {
         studentId: id,
       });
 
+      setFilteredMembers([]);
       dispatch(deleteStudent(id));
       document.querySelector('body').classList.remove('spinner3');
     } catch (err) {

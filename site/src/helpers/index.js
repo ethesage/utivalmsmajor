@@ -110,7 +110,11 @@ export function get_user() {
   const ctoken = Cookies.get('uti_va');
   if (ctoken) {
     const _user = parseJwt(ctoken);
-    user = { ..._user.user, iat: _user.iat };
+    user = {
+      ..._user.user,
+      profilePic: `${_user.user.profilePic}?${Date.now()}`,
+      iat: _user.iat,
+    };
   }
 
   const isAdmin = user && user.role === 'admin';
