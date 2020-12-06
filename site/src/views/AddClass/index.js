@@ -17,6 +17,7 @@ import Close from 'assets/icons/closeX';
 import user_icon from 'assets/user_icon.png';
 import Button from 'components/Button';
 import data from 'data/createClass';
+import { stringSearch } from 'helpers';
 import './style.scss';
 
 const AddAssignment = ({ editedClass, edit, name, courseId, mainCohortId }) => {
@@ -36,11 +37,12 @@ const AddAssignment = ({ editedClass, edit, name, courseId, mainCohortId }) => {
     }
   );
   const { cohortId } = useParams();
+  const [filtered, setFiltered] = useState([]);
 
   useEffect(() => {
     if (allTrainers) return;
 
-    fetch(() => dispatch(() => getAllTrainers()));
+    fetch(() => getAllTrainers());
 
     return () => {};
   }, [fetch, dispatch, allTrainers]);
@@ -126,7 +128,20 @@ const AddAssignment = ({ editedClass, edit, name, courseId, mainCohortId }) => {
     setTrainer(null);
   };
 
-  const handleSearch = ({ target: { name, value } }) => {};
+  const handleSearch = ({ target: { name, value } }) => {
+    if (value !== '') {
+      const searchResult = allTrainers.filter(
+        ({ firstName, lastName, email }) =>
+          stringSearch(value, firstName) ||
+          stringSearch(value, lastName) ||
+          stringSearch(value, email)
+      );
+      setFiltered(searchResult);
+    } else {
+      setFiltered([]);
+    }
+  };
+  const trainersToShow = filtered.length > 0 ? filtered : allTrainers;
 
   return (
     <div className="add_class cx_listnx_con">
@@ -234,9 +249,12 @@ const AddAssignment = ({ editedClass, edit, name, courseId, mainCohortId }) => {
         </div>
       </form>
       <Modal ref={modalRef}>
-        <div className="choose_tnr flex-col j-start al-start">
+        <div className="choose_usr flex-col j-start al-start">
+          <p className="close" onClick={() => modalRef.current.close()}>
+            Close
+          </p>
           <Input
-            placeHolder="Enter a name"
+            placeHolder="Search by name or email"
             name="search"
             handleChange={handleSearch}
           />
@@ -255,13 +273,13 @@ const AddAssignment = ({ editedClass, edit, name, courseId, mainCohortId }) => {
               </div>
             )}
           </div>
+          <h2>Results</h2>
           {!loading ? (
             <div className="trx_con">
-              <h2>Results</h2>
-              {allTrainers?.length === 0 && (
+              {trainersToShow?.length === 0 && (
                 <p>No trainers on the platform yet</p>
               )}
-              {allTrainers?.map((trainer) => (
+              {trainersToShow?.map((trainer) => (
                 <div
                   key={trainer.id}
                   className="trainer flex-row j-start"

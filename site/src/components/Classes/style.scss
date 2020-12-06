@@ -46,7 +46,8 @@
     }
 
     span {
-      width: 90%;
+      width: 85%;
+      white-space: wrap;
       @include for-size(phone-only) {
         font-size: 0.85em;
       }

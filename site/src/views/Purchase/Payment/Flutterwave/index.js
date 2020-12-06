@@ -40,27 +40,45 @@ export default ({ done }) => {
 
               if (response.status === "successful") {
                 dispatch(checkout(courses.checkoutData.CourseCohorts[0].id));
-              dispatch(
-                addStudentCourse(courses.checkoutData, [
-                  { courseCohortId: courses.checkoutData.CourseCohorts[0].id },
-                ])
-              );
-              dispatch(
-                addTransaction({
-                  email: auth.user.email,
-                  name: response.customer.name,
-                  currency: response.currency,
-                  paidAmount: `${response.amount}`,
-                  courseAmount: courses.checkoutData.cost,
-                  status: response.status,
-                  transactionId: `${response.transaction_id}`,
-                  tnxRef: `${response.tx_ref}`,
-                  studentId: auth.user.id,
-                  courseId: courses.checkoutData.id,
-                  courseCohortId: courses.checkoutData.CourseCohorts[0].id,
-                })
-              );
-              done();
+                dispatch(
+                  addStudentCourse(courses.checkoutData, [
+                    {
+                      courseCohortId: courses.checkoutData.CourseCohorts[0].id,
+                    },
+                  ])
+                );
+                dispatch(
+                  addTransaction({
+                    email: auth.user.email,
+                    name: response.customer.name,
+                    currency: response.currency,
+                    paidAmount: `${response.amount}`,
+                    courseAmount: courses.checkoutData.cost,
+                    status: response.status,
+                    transactionId: `${response.transaction_id}`,
+                    tnxRef: `${response.tx_ref}`,
+                    studentId: auth.user.id,
+                    courseId: courses.checkoutData.id,
+                    courseCohortId: courses.checkoutData.CourseCohorts[0].id,
+                  })
+                );
+                done();
+              } else {
+                dispatch(
+                  addTransaction({
+                    email: auth.user.email,
+                    name: response.customer.name || 'No Name' ,
+                    currency: response.currency || '400',
+                    paidAmount: `${0}`,
+                    courseAmount: courses.checkoutData.cost,
+                    status: response.status || 'unsuccesful',
+                    transactionId: `${response.transaction_id || '400'}`,
+                    tnxRef: `${response.tx_ref || '400'}`,
+                    studentId: auth.user.id,
+                    courseId: courses.checkoutData.id,
+                    courseCohortId: courses.checkoutData.CourseCohorts[0].id,
+                  })
+                );
               }
             },
             onClose: () => {},

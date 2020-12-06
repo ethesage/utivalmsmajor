@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import moment from 'moment';
 import Select from '../Select';
 import './style.scss';
@@ -8,6 +9,7 @@ const weekdayshort = moment.weekdaysShort();
 const Calender = ({ data }) => {
   const [dateObject, setDateObj] = useState(moment());
   const [allmonths] = useState(moment.months());
+  const { isAdmin } = useSelector((state) => state.auth);
 
   const firstDayOfMonth = () => {
     return moment(dateObject).startOf('month').format('d');
@@ -79,7 +81,8 @@ const Calender = ({ data }) => {
         {classDay ? (
           <div className="toolTip flex-row">
             <p>
-              You have the class <strong>"{classDay.title}"</strong> Today by{' '}
+              {!isAdmin && `You have the class`}{' '}
+              <strong>"{classDay.title}"</strong> Today by{' '}
               {moment(classDay.time, 'HH:mm').format('hh:mm A')}
             </p>
           </div>

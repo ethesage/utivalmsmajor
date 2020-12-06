@@ -49,7 +49,21 @@ export const getEnrolledMembers = (id, data) => async (dispatch) => {
 
   dispatch({
     type: 'GET_ALL_ENROLLED_STUDENTS',
-    payload: members.data.data,
+    payload: { members: members.data.data, courseId: id },
+  });
+};
+
+export const enrollStudents = (data) => async (dispatch) => {
+  dispatch({
+    type: 'ENROLL_STUDENTS',
+    payload: data,
+  });
+};
+
+export const deleteStudent = (id) => async (dispatch) => {
+  dispatch({
+    type: 'REMOVE_STUDENT',
+    payload: id,
   });
 };
 

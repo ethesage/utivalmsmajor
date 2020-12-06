@@ -1,7 +1,8 @@
 /* eslint-disable import/prefer-default-export */
 // import sequelize from 'sequelize';
-import models, { sequelize } from '../database/models';
-import helpers from '../helpers';
+// import { try } from "bluebird";
+import models, { sequelize } from "../database/models";
+import helpers from "../helpers";
 
 const { successStat, errorStat } = helpers;
 
@@ -24,7 +25,7 @@ export const getAdminDashboard = async (req, res) => {
 
     const trainer = await models.Trainer.count();
 
-    const admins = await models.User.count({ where: { role: 'admin' } });
+    const admins = await models.User.count({ where: { role: "admin" } });
 
     const studentByCourse = await models.sequelize.query(
       `SELECT "Courses"."name", COUNT("studentId") AS 
@@ -50,7 +51,7 @@ export const getAdminDashboard = async (req, res) => {
       return acc;
     }, {});
 
-    return successStat(res, 200, 'data', {
+    return successStat(res, 200, "data", {
       student,
       course,
       trainer,
@@ -61,7 +62,7 @@ export const getAdminDashboard = async (req, res) => {
     });
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
+    errorStat(res, 500, "Operation Failed, Please Try Again");
   }
 };
 
@@ -78,13 +79,13 @@ export const getAllCourses = async (req, res) => {
   const courses = await models.Course.findAll({
     include: {
       model: models.CourseCohort,
-      attributes: ['id'],
+      attributes: ["id"],
     },
 
-    group: ['Course.id', 'CourseCohorts.id'],
+    group: ["Course.id", "CourseCohorts.id"],
   });
 
-  return successStat(res, 200, 'data', courses);
+  return successStat(res, 200, "data", courses);
 };
 
 export const getAllCourseCohorts = async (req, res) => {
@@ -93,25 +94,25 @@ export const getAllCourseCohorts = async (req, res) => {
   const resource = await models.CourseCohort.findAll({
     where: { courseId: id },
     attributes: [
-      'id',
-      'cohortId',
-      'dateRange',
-      'totalStudent',
-      'courseId',
-      'folderId',
+      "id",
+      "cohortId",
+      "dateRange",
+      "totalStudent",
+      "courseId",
+      "folderId",
     ],
     include: [
       {
         model: models.Cohort,
-        attributes: ['cohort', 'id'],
+        attributes: ["cohort", "id"],
       },
       {
         model: models.Classes,
-        attributes: ['id'],
+        attributes: ["id"],
         include: [
           {
             model: models.Trainer,
-            attributes: ['userId'],
+            attributes: ["userId"],
           },
         ],
       },
@@ -119,10 +120,10 @@ export const getAllCourseCohorts = async (req, res) => {
   });
 
   if (!resource[0]) {
-    return successStat(res, 200, 'data', []);
+    return successStat(res, 200, "data", []);
   }
 
-  return successStat(res, 200, 'data', resource);
+  return successStat(res, 200, "data", resource);
 };
 
 export const getCourseCohort = async (req, res) => {
@@ -130,32 +131,32 @@ export const getCourseCohort = async (req, res) => {
 
   const resource = await models.CourseCohort.findOne({
     where: { id },
-    attributes: ['id', 'expiresAt', 'dateRange', 'folderId'],
+    attributes: ["id", "expiresAt", "dateRange", "folderId"],
     include: [
       {
         model: models.Cohort,
-        attributes: ['id', 'cohort'],
+        attributes: ["id", "cohort"],
       },
       {
         model: models.Course,
-        attributes: ['id', 'name', 'description', 'duration', 'thumbnail'],
+        attributes: ["id", "name", "description", "duration", "thumbnail"],
         include: [
           {
             model: models.CourseDescription,
-            attributes: ['id', 'title', 'description'],
+            attributes: ["id", "title", "description"],
           },
         ],
       },
       {
         model: models.Classes,
-        attributes: ['id', 'title', 'description', 'link'],
+        attributes: ["id", "title", "description", "link"],
         include: [
           {
             model: models.Trainer,
-            attributes: ['id', 'userId'],
+            attributes: ["id", "userId"],
             include: {
               model: models.User,
-              attributes: ['firstName', 'lastName', 'profilePic', 'occupation'],
+              attributes: ["firstName", "lastName", "profilePic", "occupation"],
             },
           },
           {
@@ -167,14 +168,14 @@ export const getCourseCohort = async (req, res) => {
         ],
       },
     ],
-    order: [[{ model: models.Classes }, 'createdAt', 'ASC']],
+    order: [[{ model: models.Classes }, "createdAt", "ASC"]],
   });
 
   if (!resource) {
-    return errorStat(res, 404, 'Course not found');
+    return errorStat(res, 404, "Course not found");
   }
 
-  return successStat(res, 200, 'data', resource);
+  return successStat(res, 200, "data", resource);
 };
 
 export const getCourse = async (req, res) => {
@@ -186,7 +187,7 @@ export const getCourse = async (req, res) => {
     },
   });
 
-  return successStat(res, 200, 'data', course);
+  return successStat(res, 200, "data", course);
 };
 
 export const getCourseCatnames = async (req, res) => {
@@ -194,14 +195,14 @@ export const getCourseCatnames = async (req, res) => {
     where: {
       seq: 1,
     },
-    attributes: ['code', 'desc'],
+    attributes: ["code", "desc"],
   });
 
   const levels = await models.codeDesc.findAll({
     where: {
       seq: 2,
     },
-    attributes: ['code', 'desc'],
+    attributes: ["code", "desc"],
   });
 
   const coursecats = categories.map((cat) => ({
@@ -214,29 +215,60 @@ export const getCourseCatnames = async (req, res) => {
     value: cat.desc,
   }));
 
-  return successStat(res, 200, 'data', {
+  return successStat(res, 200, "data", {
     categories: coursecats,
     levels: courseLevels,
   });
 };
 
 export const getAllTrainers = async (req, res) => {
+  const { role } = req.params;
+
   const trainers = await models.User.findAll({
     where: {
-      role: 'trainer',
+      role,
     },
     attributes: [
-      'id',
-      'email',
-      'firstName',
-      'lastName',
-      'occupation',
-      'region',
-      'status',
-      'role',
-      'profilePic',
+      "id",
+      "email",
+      "firstName",
+      "lastName",
+      "occupation",
+      "region",
+      "status",
+      "role",
+      "profilePic",
     ],
   });
 
-  return successStat(res, 200, 'data', trainers);
+  return successStat(res, 200, "data", trainers);
+};
+
+export const deleteStudent = async (req, res) => {
+  const { courseCohortId, studentId } = req.body.admin;
+
+  const { role } = req.session.user;
+
+  try {
+    if (role === "admin") {
+      const isStudent = await models.StudentCourse.findOne({
+        where: { courseCohortId, studentId },
+      });
+
+      if (!isStudent)
+        return errorStat(
+          res,
+          404,
+          "student not enrolled in this course cohort"
+        );
+
+      await isStudent.destroy();
+
+      return successStat(res, 200, "data", "Student Successfully Deleted");
+    } else
+      errorStat(res, 404, "you are not permitted to perform this operation");
+  } catch (e) {
+    console.log(e);
+    errorStat(res, 500, "Operation Failed, Please Try Again");
+  }
 };

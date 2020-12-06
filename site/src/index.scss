@@ -523,22 +523,31 @@ li {
 }
 
 .spinner1,
-.spinner2 {
+.spinner2,
+.spinner3 {
   @extend %spinner;
 }
 
 .spinner1::before,
-.spinner2::before {
+.spinner2::before,
+.spinner3::before {
   @extend %spinner_before;
 }
 
-.spinner1::after {
+.spinner3 {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.spinner1::after,
+.spinner3::after {
   content: '';
   position: absolute;
-  z-index: 0;
+  z-index: 60;
   width: 100%;
   height: 100%;
-  background: rgba(#000, 0.05);
+  background: rgba(#000, 0.2);
   top: 0;
   left: 0;
 }
@@ -627,5 +636,64 @@ li {
         }
       }
     }
+  }
+}
+
+.choose_usr {
+  background: white;
+  width: 90vw;
+  max-width: 400px;
+  min-height: 300px;
+  border-radius: 10px;
+  padding: 30px;
+
+  .close {
+    cursor: pointer;
+    color: color(theme);
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+
+  img {
+    width: 60px;
+    height: 60px;
+    border-radius: 100%;
+    object-fit: cover;
+    margin-right: 20px;
+  }
+
+  .selected {
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+
+    .slx_tr {
+      border-radius: 100%;
+      position: relative;
+
+      .rmv {
+        cursor: pointer;
+        position: absolute;
+        bottom: 10%;
+        right: 25%;
+        color: white;
+      }
+
+      p {
+        line-height: 0;
+        font-weight: 500;
+        font-size: 20px;
+      }
+    }
+  }
+
+  h2 {
+    margin-bottom: 20px;
+    font-weight: 300;
+  }
+
+  .trx_con {
+    max-height: 400px;
+    overflow-x: auto;
+    width: 100%;
   }
 }

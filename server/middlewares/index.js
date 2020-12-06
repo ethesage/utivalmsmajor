@@ -69,7 +69,7 @@ import {
   getStudentSubmitClassAssignmentSchema,
 } from './validators/schemas/assignment';
 
-import { idSchema } from './validators/schemas/general';
+import { idSchema, deleteStudentSchema } from './validators/schemas/general';
 
 import { checkoutSchema } from './validators/schemas/checkout';
 
@@ -130,5 +130,6 @@ export default {
   createClassAssignmentSchema,
   checkoutSchema,
   idSchema,
+  deleteStudentSchema,
   transactionSchema
 };

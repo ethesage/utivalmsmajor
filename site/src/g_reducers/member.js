@@ -25,6 +25,27 @@ const course = (state = initialState, action) => {
         ...state,
         enrolledStudents: action.payload,
       };
+
+    case 'ENROLL_STUDENTS':
+      return {
+        ...state,
+        enrolledStudents: {
+          ...state.enrolledStudents,
+          members: [...state.enrolledStudents.members, ...action.payload],
+        },
+      };
+
+    case 'REMOVE_STUDENT':
+      return {
+        ...state,
+        enrolledStudents: {
+          ...state.enrolledStudents,
+          members: state.enrolledStudents.members.filter(
+            (student) => student.User.id !== action.payload
+          ),
+        },
+      };
+
     case 'GET_ALL_CLASS_DAYS':
       return {
         ...state,

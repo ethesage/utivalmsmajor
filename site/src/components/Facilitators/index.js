@@ -5,13 +5,12 @@ import './style.scss';
 
 const Facilitators = ({ trainers }) => {
   const [currentUser, setCurrentUser] = useState(0);
-  const [trainerMap, setTrainerMap] = useState({});
   const [Utrainers, setTrainers] = useState([]);
 
   useEffect(() => {
     const t = [];
 
-    const mapped = trainers.reduce((acc, trainer, i) => {
+    trainers.reduce((acc, trainer, i) => {
       let name =
         trainer?.Trainer?.User?.firstName + trainer?.Trainer?.User?.lastName;
 
@@ -21,7 +20,6 @@ const Facilitators = ({ trainers }) => {
 
       return { ...acc, [name]: i };
     }, {});
-    setTrainerMap(mapped);
     setTrainers(t);
 
     return () => {};
@@ -55,18 +53,16 @@ const Facilitators = ({ trainers }) => {
         </CSSTransition>
       </TransitionGroup>
       <div className="dots_con flex-row">
-        {Object.keys(trainerMap).map((trainer, i) => {
+        {Object.keys(Utrainers).map((trainer, i) => {
           return (
             <button
               className="dot_button flex-row"
               key={i}
-              onClick={() => setCurrentUser(trainerMap[trainer])}
+              onClick={() => setCurrentUser(i)}
             >
               <span
                 className="dot"
-                data-active={
-                  trainerMap[trainer] === currentUser ? 'active' : null
-                }
+                data-active={i === currentUser ? 'active' : null}
               ></span>
             </button>
           );

@@ -201,6 +201,7 @@ export const allCourseStudents = async (req, res) => {
         {
           model: models.User,
           attributes: [
+            'id',
             'firstName',
             'lastName',
             'linkedin',
@@ -374,3 +375,4 @@ export const addStudentProgress = async (req, res) => {
     errorStat(res, 500, 'Operation Failed Please Try Again');
   }
 };
+
