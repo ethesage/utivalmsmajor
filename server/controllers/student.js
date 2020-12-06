@@ -145,6 +145,7 @@ export const getSingleStudentCourse = async (req, res) => {
       },
       {
         model: models.CourseCohort,
+        //include classdays and trainer
       },
     ],
 
@@ -222,58 +223,54 @@ export const allCourseStudents = async (req, res) => {
 export const getStudentNextClass = async (req, res) => {
   const { id } = req.session.user;
 
-  try {
-    const getClasses = await models.StudentCourse.findAll({
-      where: { studentId: id, isCompleted: false, status: 'ongoing' },
-      attributes: ['studentId'],
-      include: [
-        {
-          model: models.Course,
-          attributes: ['thumbnail', 'name', 'extLink'],
-        },
-        {
-          model: models.CourseCohort,
-          attributes: ['courseId'],
-          include: [
-            {
-              model: models.Classes,
-              attributes: ['link'],
-              include: [
-                {
-                  model: models.ClassDays,
-                  where: { date: { [Op.gte]: new Date() } },
-                  attributes: ['date', 'time'],
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    });
+  const getClasses = await models.StudentCourse.findAll({
+    where: { studentId: id, isCompleted: false, status: 'ongoing' },
+    attributes: ['studentId'],
+    include: [
+      {
+        model: models.Course,
+        attributes: ['thumbnail', 'name', 'extLink'],
+      },
+      {
+        model: models.CourseCohort,
+        attributes: ['courseId'],
+        include: [
+          {
+            model: models.Classes,
+            attributes: ['link'],
+            include: [
+              {
+                model: models.ClassDays,
+                where: { date: { [Op.gte]: new Date() } },
+                attributes: ['date', 'time'],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  });
 
-    // if (!getClasses[0]) return errorStat(res, 400, 'No Available Class');
+  // if (!getClasses[0]) return errorStat(res, 400, 'No Available Class');
 
-    const getAll = getClasses.reduce((acc, item, index) => {
-      const n_item = item.dataValues;
+  const getAll = getClasses.reduce((acc, item, index) => {
+    const n_item = item.dataValues;
 
-      if (n_item && n_item.CourseCohort.Classes[0]) {
-        const course = item.dataValues.Course.dataValues;
-        const link = {
-          link: item.dataValues.CourseCohort.Classes[0].dataValues.link,
-        };
-        const classDays =
-          item.dataValues.CourseCohort.Classes[0].dataValues.ClassDays[0]
-            .dataValues;
-        const all = { ...course, ...link, ...classDays };
-        acc[index] = all;
-      }
-      return acc;
-    }, []);
+    if (n_item && n_item.CourseCohort.Classes[0]) {
+      const course = item.dataValues.Course.dataValues;
+      const link = {
+        link: item.dataValues.CourseCohort.Classes[0].dataValues.link,
+      };
+      const classDays =
+        item.dataValues.CourseCohort.Classes[0].dataValues.ClassDays[0]
+          .dataValues;
+      const all = { ...course, ...link, ...classDays };
+      acc[index] = all;
+    }
+    return acc;
+  }, []);
 
-    return successStat(res, 200, 'data', getAll);
-  } catch (e) {
-    errorStat(res, 500, 'Operation Failed Please Try Again');
-  }
+  return successStat(res, 200, 'data', getAll);
 };
 
 export const getStudentClassDays = async (req, res) => {
@@ -375,4 +372,3 @@ export const addStudentProgress = async (req, res) => {
     errorStat(res, 500, 'Operation Failed Please Try Again');
   }
 };
-
