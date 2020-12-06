@@ -1,22 +1,20 @@
 import React from 'react';
-import girl from '../../../assets/homepage/girl.png';
-import Image from '../../../components/Image';
+import girl from 'assets/homepage/girl.png';
+import Image from 'components/Image';
 import './style.scss';
 
 const data = [
   {
-    title: 'Select Course',
-    desc: 'Learn at your pace',
+    title: 'Self-paced Learning',
+    desc: 'At your convenience',
   },
   {
-    title: 'Join a structured virtual live class',
-    desc:
-      'Join and collaborate with other students in our Instructor-led virtual classes for an optimized learning experience',
+    title: 'Live classes',
+    desc: 'Learn with Others',
   },
   {
-    title: 'Hands-on Project-based Internship',
-    desc:
-      'Begin a 3-month remote internship program with our partner companies working on real business projects.',
+    title: 'Virtual Internship',
+    desc: 'Hands-on Project-based Internship',
   },
 ];
 

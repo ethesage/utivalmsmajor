@@ -9,7 +9,6 @@ import './style.scss';
 import useFetch from 'Hooks/useFetch';
 import Load from 'components/Loading';
 import NavBar from 'components/NavBar';
-import Footer from 'components/Footer';
 import no_course from 'assets/dashboard/no_course.png';
 
 const Loader = ({ height }) => <Skeleton width="100%" height={height} />;

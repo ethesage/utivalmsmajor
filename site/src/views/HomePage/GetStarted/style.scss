@@ -60,7 +60,7 @@
         }
 
         &:nth-child(1) {
-          background: #6dcb84;
+          background: #fbaf1b;
           .num {
             span {
               &::before {
@@ -73,15 +73,15 @@
               }
             }
             .num-con {
-              background: #6dcb84;
+              background: #fbaf1b;
             }
           }
         }
 
         &:nth-child(2) {
-          background: #1d3d79;
+          background: #120c64;
           .num .num-con {
-            background: #1d3d79;
+            background: #120c64;
           }
         }
 
@@ -95,10 +95,10 @@
               }
             }
             .num-con {
-              background: #09ac23;
+              background: #fbaf1b;
             }
           }
-          background: #09ac23;
+          background: #fbaf1b;
         }
 
         .num {
