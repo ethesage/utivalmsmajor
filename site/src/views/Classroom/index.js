@@ -24,7 +24,7 @@ const Classroom = ({ full = false, gapi }) => {
     !!currentCourse
   );
 
-  console.log(currentCourse?.CourseCohort?.folderId);
+  console.log(currentCourse);
 
   return (
     <>
@@ -37,6 +37,7 @@ const Classroom = ({ full = false, gapi }) => {
             {currentCourse.Course.Classes.map((class_room, i) => (
               <Classes
                 key={`cx_listnx_${i}`}
+                trainers={``}
                 data={class_room}
                 courseId={courseId}
                 full={full}

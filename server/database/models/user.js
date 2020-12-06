@@ -52,7 +52,7 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   User.associate = (models) => {
-    User.hasMany(models.Trainer, {
+    User.hasMany(models.CohortTrainer, {
       foreignKey: 'userId',
       onDelete: 'CASCADE',
     });

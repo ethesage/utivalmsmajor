@@ -36,10 +36,10 @@ const Classroom = ({ full = false, gapi }) => {
       <section className="cx_listnx img">
         {loading ? (
           <Loader tempLoad={true} full={false} />
-        ) : currentCohort?.Classes?.length > 0 || create ? (
+        ) : currentCohort?.Course?.Classes?.length > 0 || create ? (
           !create ? (
             <div>
-              {currentCohort.Classes.map((class_room, i) => (
+              {currentCohort.Course.Classes.map((class_room, i) => (
                 <Classes
                   key={`cx_listnx_${i}`}
                   data={class_room}

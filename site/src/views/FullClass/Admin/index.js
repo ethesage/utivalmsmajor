@@ -29,9 +29,20 @@ function FullClass({ gapi }) {
     return () => {};
   }, [classroom, currentCourse]);
 
-  const data = currentCohort?.Classes.find(
+  const data = currentCohort?.Course?.Classes.find(
     (classrum) => classrum.id === classroom
   );
+
+  const classDay = currentCohort?.CohortClassDays.find(
+    (classday) => classday.classId === classroom
+  );
+
+  const classTrainer =
+    currentCohort?.CohortTrainers.find(
+      (classtrainer) => classtrainer.classId === classroom
+    ) || [];
+
+  console.log(classDay, classTrainer);
 
   if (error) {
     return (
@@ -40,6 +51,8 @@ function FullClass({ gapi }) {
       </div>
     );
   }
+
+  console.log(currentCohort);
 
   return (
     <>
@@ -56,7 +69,7 @@ function FullClass({ gapi }) {
         ) : (
           <Layout
             subClassName="fl-ass"
-            links={currentCohort?.Classes.map((classrm, i) => (
+            links={currentCohort?.Course?.Classes.map((classrm, i) => (
               <li key={`side_link_courses_${i}`}>
                 <NavLink
                   className="side_link"
@@ -85,6 +98,7 @@ function FullClass({ gapi }) {
                     }}
                     editClass={() => setEditClass(!editClass)}
                     cohortId={cohortId}
+                    trainers={currentCohort?.CohortTrainers}
                   />
 
                   <div className="prev_courses"></div>

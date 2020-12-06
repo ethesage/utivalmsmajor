@@ -13,6 +13,8 @@ const Overview = () => {
   const { pathname } = useLocation();
   const edit = pathname.includes('edit') || pathname.includes('create');
 
+  // console.log(currentCohort, currentCourse);
+
   return (
     <>
       <Nav currentCohort={currentCohort} currentCourse={currentCourse} />

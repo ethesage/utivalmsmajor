@@ -94,7 +94,7 @@ export const getCurrentCourseCohort = (courseCohortId, name) => async (
 
   const useObject = courses.data.data;
 
-  const data_ = useObject?.Classes.reduce(
+  const data_ = useObject?.Course?.Classes.reduce(
     (acc, cur) => ({
       ...acc,
       [cur.title]: {

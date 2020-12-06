@@ -40,6 +40,7 @@ function Classes({
   setOpenedRef,
   addAssignment,
   editClass,
+  trainers,
 }) {
   const { title, description, link, courseCohortId } = data;
   const { isStudent, isAdmin, isTrainer } = useSelector((state) => state.auth);
@@ -408,7 +409,7 @@ function Classes({
                       Trainer
                     </h4>
 
-                    {data?.Trainer?.User ? (
+                    {trainers?.User ? (
                       <div className="trainer flex-row j-start">
                         <img
                           src={data?.Trainer?.User?.profilePic || user_icon}
