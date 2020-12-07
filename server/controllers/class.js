@@ -59,6 +59,7 @@ export const createClass = async (req, res) => {
       cohortId,
     });
 
+
     trainer = await models.Trainer.findOne({
       where: { [Op.and]: [{ userId }, { courseCohortId }] },
       include: {
@@ -89,6 +90,18 @@ export const createClass = async (req, res) => {
 
   await courseCohort.update({
     totalClasses: courseCohort.totalClasses + 1,
+  });
+
+  await model.CohortTrainer.create({
+    userId,
+    courseCohortId,
+    classId: classCreate.id,
+  })
+
+  await models.CohortClassDays.create({
+    ...req.body.class,
+    classId: classCreate.id,
+    // time: '16:17:03.084+01:00'
   });
 
   return successStat(res, 201, 'data', {
@@ -209,7 +222,7 @@ export const getAllTrainerClass = async (req, res) => {
 };
 
 export const updateClass = async (req, res) => {
-  const { userId, courseCohortId, courseId, classId, cohortId } = req.body;
+  const { userId, courseCohortId, courseId, classId, cohortId, cohortClassDaysId } = req.body;
 
   let trainer = await models.Trainer.findOne({
     where: { [Op.and]: [{ userId }, { courseCohortId }, { cohortId }] },
@@ -234,8 +247,14 @@ export const updateClass = async (req, res) => {
         attributes: ['id', 'firstName', 'lastName', 'profilePic'],
       },
     });
-  }
 
+    await model.CohortTrainer.create({
+      userId,
+      courseCohortId,
+      classId,
+    })
+  }
+if(cohortClassDaysId){
   await models.Classes.update(
     {
       ...req.body,
@@ -252,6 +271,8 @@ export const updateClass = async (req, res) => {
 
   await models.ClassDays.update(req.body, { where: { classId } });
 
+  await models.CohortClassDays.update({...req.body}, { where: { classId } });
+
   const updateClassdays = await models.ClassDays.findAll({
     where: { classId },
   });
@@ -262,6 +283,29 @@ export const updateClass = async (req, res) => {
     ClassDays: updateClassdays,
     Trainer: trainer,
   });
+} else {
+
+  const editClass = await models.Classes.findOne(
+    { where: { id: classId } }
+  );
+
+  const resource = await models.ClassResources.findAll({
+    where: { classId },
+  });
+
+  const days = await models.CohortClassDays.create({
+    ...req.body.class,
+    classId: classCreate.id,
+    // time: '16:17:03.084+01:00'
+  });
+
+  return successStat(res, 200, 'data', {
+    ...editClass.dataValues,
+    ClassResources: resource || [],
+    ClassDays: days,
+    Trainer: trainer,
+  });
+}
 };
 
 export const deleteClass = async (req, res) => {
