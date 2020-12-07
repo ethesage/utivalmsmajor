@@ -12,6 +12,7 @@
 
     @include for-size(tablet-landscape-up) {
       height: 70vw;
+      margin-top: 50px;
     }
 
     @include for-size(mid-phone) {
@@ -60,7 +61,7 @@
         }
 
         &:nth-child(1) {
-          background: #fbaf1b;
+          background: #120c64;
           .num {
             span {
               &::before {
@@ -73,15 +74,15 @@
               }
             }
             .num-con {
-              background: #fbaf1b;
+              background: #120c64;
             }
           }
         }
 
         &:nth-child(2) {
-          background: #120c64;
+          background: #fbaf1b;
           .num .num-con {
-            background: #120c64;
+            background: #fbaf1b;
           }
         }
 
@@ -95,10 +96,10 @@
               }
             }
             .num-con {
-              background: #fbaf1b;
+              background: #120c64;
             }
           }
-          background: #fbaf1b;
+          background: #120c64;
         }
 
         .num {
@@ -161,6 +162,7 @@
 
           h2 {
             width: 40%;
+            font-size: 1.5em;
             @include for-size(smaller-desktop) {
               font-size: 1em;
             }
@@ -168,6 +170,7 @@
 
           p {
             width: 45%;
+            font-size: 1.3em;
             @include for-size(smaller-desktop) {
               font-size: 0.8em;
             }
@@ -175,6 +178,8 @@
 
           @include for-size(mid-phone) {
             flex-direction: column;
+            justify-content: center;
+            margin-left: 20px;
             h2,
             p {
               width: 100%;
