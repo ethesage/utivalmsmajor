@@ -10,18 +10,19 @@ const ClassesSec = ({
     dateRange,
     totalStudent,
     Cohort: { cohort },
+    Course,
     CohortTrainers,
   },
   thumbnail,
 }) => {
   const countedtrainers = {};
-  const trainers = CohortTrainers.reduce((acc, cur) => {
-    if (!cur.Trainer) {
+  const trainers = CohortTrainers?.reduce((acc, cur) => {
+    if (!cur.userId) {
       return acc;
     }
 
-    if (!countedtrainers[cur?.Trainer?.userId]) {
-      countedtrainers[cur?.Trainer?.userId] = 1;
+    if (!countedtrainers[CohortTrainers?.userId]) {
+      countedtrainers[CohortTrainers?.userId] = 1;
       return acc + 1;
     }
     return acc;

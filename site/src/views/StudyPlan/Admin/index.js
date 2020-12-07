@@ -19,7 +19,7 @@ const StudyPlan = () => {
     <>
       <NavBar />
 
-      <Plan currentCourse={{ CourseCohort: currentCohort, ...currentCohort }} />
+      <Plan currentCourse={currentCohort} />
     </>
   );
 };

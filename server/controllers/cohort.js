@@ -1,8 +1,8 @@
 /* eslint-disable import/prefer-default-export */
 // import sequelize from "sequelize";
-import { paginate, calculateLimitAndOffset } from "paginate-info";
-import models from "../database/models";
-import helpers from "../helpers";
+import { paginate, calculateLimitAndOffset } from 'paginate-info';
+import models from '../database/models';
+import helpers from '../helpers';
 // import { createCourse } from "../middlewares/validators/schemas/course";
 // import  from "../helpers"
 
@@ -27,18 +27,18 @@ export const cohort = async (req, res) => {
 
     console.log(isCohort);
 
-    if (isCohort) return errorStat(res, 404, "Cohort already exist");
+    if (isCohort) return errorStat(res, 404, 'Cohort already exist');
 
     const createCohort = await models.Cohort.create({
       ...req.body.cohort,
-      status: "ongoing",
+      status: 'ongoing',
       totalCourse: 0,
     });
 
-    return successStat(res, 201, "data", createCohort);
+    return successStat(res, 201, 'data', createCohort);
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
@@ -51,7 +51,7 @@ export const addCohortCourse = async (req, res) => {
     where: { id: courseId },
   });
 
-  if (!course) return errorStat(res, 404, "Course does not exist");
+  if (!course) return errorStat(res, 404, 'Course does not exist');
 
   let cohortGet = await models.Cohort.findOne({
     where: { cohort: req.body.cohort.cohort },
@@ -68,12 +68,12 @@ export const addCohortCourse = async (req, res) => {
   });
 
   if (courseCohort) {
-    return errorStat(res, 404, "Course already exist in this cohort");
+    return errorStat(res, 404, 'Course already exist in this cohort');
   }
 
   const createdCohort = await models.CourseCohort.create({
     ...req.body.cohort,
-    status: "ongoing",
+    status: 'ongoing',
     totalStudent: 0,
     cohortId: cohortGet.id,
   });
@@ -102,33 +102,33 @@ export const addCohortCourse = async (req, res) => {
           {
             model: models.CourseDescription,
           },
-        ],
-      },
-      {
-        model: models.Classes,
-        include: [
           {
-            model: models.Trainer,
-            include: {
-              model: models.User,
-              attributes: [
-                "firstName",
-                "lastName",
-                "profilePic",
-                "occupation",
-                "bio",
-              ],
-            },
-          },
-          {
-            model: models.ClassResources,
+            model: models.Classes,
+            include: [
+              {
+                model: models.CohortTrainer,
+                include: {
+                  model: models.User,
+                  attributes: [
+                    'firstName',
+                    'lastName',
+                    'profilePic',
+                    'occupation',
+                    'bio',
+                  ],
+                },
+              },
+              {
+                model: models.ClassResources,
+              },
+            ],
           },
         ],
       },
     ],
   });
 
-  return successStat(res, 201, "data", course_cohort);
+  return successStat(res, 201, 'data', course_cohort);
 };
 
 export const getCohort = async (req, res) => {
@@ -146,12 +146,12 @@ export const getCohort = async (req, res) => {
       ],
     });
 
-    if (!cohortGet) return errorStat(res, 404, "Cohort does not exist");
+    if (!cohortGet) return errorStat(res, 404, 'Cohort does not exist');
 
-    return successStat(res, 201, "data", cohortGet);
+    return successStat(res, 201, 'data', cohortGet);
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
@@ -174,14 +174,14 @@ export const getAllCohort = async (req, res) => {
       ],
     });
 
-    if (!rows[0]) return errorStat(res, 404, "Cohort does not exist");
+    if (!rows[0]) return errorStat(res, 404, 'Cohort does not exist');
 
     const paginationMeta = paginate(currentPage, count, rows, pageLimit);
 
-    return successStat(res, 200, "data", { paginationMeta, rows });
+    return successStat(res, 200, 'data', { paginationMeta, rows });
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
@@ -198,16 +198,16 @@ export const updateCohort = async (req, res) => {
       // ]
     });
 
-    if (!cohortGet) return errorStat(res, 404, "Cohort does not exist");
+    if (!cohortGet) return errorStat(res, 404, 'Cohort does not exist');
 
     await cohortGet.update({
       ...req.body.cohort,
     });
 
-    return successStat(res, 201, "data", cohortGet);
+    return successStat(res, 201, 'data', cohortGet);
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
@@ -224,16 +224,16 @@ export const updateCourseCohort = async (req, res) => {
       // ]
     });
 
-    if (!cohortGet) return errorStat(res, 404, "Cohort does not exist");
+    if (!cohortGet) return errorStat(res, 404, 'Cohort does not exist');
 
     await cohortGet.update({
       ...req.body.cohort,
     });
 
-    return successStat(res, 201, "data", cohortGet);
+    return successStat(res, 201, 'data', cohortGet);
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
@@ -251,14 +251,14 @@ export const deleteCohort = async (req, res) => {
     });
 
     if (!cohortGet) {
-      return errorStat(res, 404, "cohort not found");
+      return errorStat(res, 404, 'cohort not found');
     }
 
     await cohortGet.destroy();
 
-    return successStat(res, 200, "data", "Delete Successful");
+    return successStat(res, 200, 'data', 'Delete Successful');
   } catch (e) {
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
@@ -276,13 +276,13 @@ export const deleteCourseCohort = async (req, res) => {
     });
 
     if (!cohortGet) {
-      return errorStat(res, 404, "cohort not found");
+      return errorStat(res, 404, 'cohort not found');
     }
 
     await cohortGet.destroy();
 
-    return successStat(res, 200, "data", "Delete Successful");
+    return successStat(res, 200, 'data', 'Delete Successful');
   } catch (e) {
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };

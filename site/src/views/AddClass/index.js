@@ -28,12 +28,12 @@ const AddAssignment = ({ editedClass, edit, name, courseId, mainCohortId }) => {
   const allTrainers = useSelector((state) => state.trainers);
   const [loading, , fetch] = useFetch(dispatch, !!!allTrainers);
   const [trainer, setTrainer] = useState(
-    editedClass?.Trainer?.User && {
-      id: editedClass?.Trainer?.userId,
-      firstName: editedClass?.Trainer?.User?.firstName,
-      lastName: editedClass?.Trainer?.User?.lastName,
-      occupation: editedClass?.Trainer?.User?.occupation,
-      profilePic: editedClass?.Trainer?.User?.profilePic,
+    editedClass?.CohortTrainer?.User && {
+      id: editedClass?.CohortTrainer?.userId,
+      firstName: editedClass?.CohortTrainer?.User?.firstName,
+      lastName: editedClass?.CohortTrainer?.User?.lastName,
+      occupation: editedClass?.CohortTrainer?.User?.occupation,
+      profilePic: editedClass?.CohortTrainer?.User?.profilePic,
     }
   );
   const { cohortId } = useParams();
@@ -64,9 +64,9 @@ const AddAssignment = ({ editedClass, edit, name, courseId, mainCohortId }) => {
       ? {
           ...editedClass,
           date:
-            editedClass?.ClassDays[0]?.date &&
-            moment(editedClass?.ClassDays[0]?.date).format('YYYY-MM-DD'),
-          time: editedClass?.ClassDays[0]?.time,
+            editedClass?.CohortClassDays[0]?.date &&
+            moment(editedClass?.CohortClassDays[0]?.date).format('YYYY-MM-DD'),
+          time: editedClass?.CohortClassDays[0]?.time,
         } || {}
       : {},
     btnText: text,
@@ -91,6 +91,7 @@ const AddAssignment = ({ editedClass, edit, name, courseId, mainCohortId }) => {
             courseId,
             classId: editedClass.id,
             cohortId: mainCohortId,
+            cohortClassDaysId: editedClass?.CohortClassDays[0]?.id,
           }
         : {
             ...inputs,

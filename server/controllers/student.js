@@ -119,8 +119,10 @@ export const getSingleStudentCourse = async (req, res) => {
             required: false,
             include: [
               {
-                model: models.Trainer,
-                // where: { courseCohortId },
+                model: models.CohortTrainer,
+                where: { courseCohortId },
+                attributes: ['id', 'userId'],
+                required: false,
                 include: {
                   model: models.User,
                   attributes: [
@@ -135,17 +137,17 @@ export const getSingleStudentCourse = async (req, res) => {
               {
                 model: models.ClassResources,
               },
-              // {
-              //   model: models.ClassDays,
-              //   where: { courseCohortId },
-              // },
+              {
+                model: models.CohortClassDays,
+                where: { courseCohortId },
+                required: false,
+              },
             ],
           },
         ],
       },
       {
         model: models.CourseCohort,
-        //include classdays and trainer
       },
     ],
 
@@ -230,17 +232,14 @@ export const getStudentNextClass = async (req, res) => {
       {
         model: models.Course,
         attributes: ['thumbnail', 'name', 'extLink'],
-      },
-      {
-        model: models.CourseCohort,
-        attributes: ['courseId'],
+
         include: [
           {
             model: models.Classes,
             attributes: ['link'],
             include: [
               {
-                model: models.ClassDays,
+                model: models.CohortClassDays,
                 where: { date: { [Op.gte]: new Date() } },
                 attributes: ['date', 'time'],
               },
@@ -248,21 +247,27 @@ export const getStudentNextClass = async (req, res) => {
           },
         ],
       },
+      {
+        model: models.CourseCohort,
+        attributes: ['courseId'],
+      },
     ],
   });
 
   // if (!getClasses[0]) return errorStat(res, 400, 'No Available Class');
 
+  console.log(getClasses);
+
   const getAll = getClasses.reduce((acc, item, index) => {
     const n_item = item.dataValues;
 
-    if (n_item && n_item.CourseCohort.Classes[0]) {
+    if (n_item && n_item.Course.Classes[0]) {
       const course = item.dataValues.Course.dataValues;
       const link = {
-        link: item.dataValues.CourseCohort.Classes[0].dataValues.link,
+        link: item.dataValues.Course.Classes[0].dataValues.link,
       };
       const classDays =
-        item.dataValues.CourseCohort.Classes[0].dataValues.ClassDays[0]
+        item.dataValues.Course.Classes[0].dataValues.CohortClassDays[0]
           .dataValues;
       const all = { ...course, ...link, ...classDays };
       acc[index] = all;
@@ -294,7 +299,7 @@ export const getStudentClassDays = async (req, res) => {
       attributes: ['title'],
       include: [
         {
-          model: models.ClassDays,
+          model: models.CohortClassDays,
           attributes: ['date', 'time'],
         },
       ],
@@ -303,11 +308,11 @@ export const getStudentClassDays = async (req, res) => {
     if (!getClassDays[0]) return errorStat(res, 400, 'No Available Class Day');
 
     const getAll = getClassDays.reduce((acc, item, index) => {
-      if (item.ClassDays[0]) {
+      if (item.CohortClassDays[0]) {
         // console.log(item, "===> item");
         const all = {
           title: item.dataValues.title,
-          ...item.ClassDays[0].dataValues,
+          ...item.CohortClassDays[0].dataValues,
         };
 
         acc[index] = all;

@@ -14,6 +14,11 @@ module.exports = (sequelize, DataTypes) => {
     {}
   );
   CohortTrainer.associate = (models) => {
+    CohortTrainer.belongsTo(models.Classes, {
+      foreignKey: 'classId',
+      onDelete: 'CASCADE',
+    });
+
     CohortTrainer.belongsTo(models.CourseCohort, {
       foreignKey: 'courseCohortId',
       onDelete: 'CASCADE',

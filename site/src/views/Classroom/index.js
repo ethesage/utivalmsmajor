@@ -24,8 +24,6 @@ const Classroom = ({ full = false, gapi }) => {
     !!currentCourse
   );
 
-  console.log(currentCourse);
-
   return (
     <>
       <NavBar />

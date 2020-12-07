@@ -16,22 +16,23 @@ module.exports = (sequelize, DataTypes) => {
       description: DataTypes.TEXT,
       link: DataTypes.STRING,
       dateRange: DataTypes.STRING,
-      started: DataTypes.BOOLEAN
+      started: DataTypes.BOOLEAN,
     },
     {}
   );
   Classes.associate = (models) => {
     // associations can be defined here
-    Classes.hasMany(models.ClassDays, {
+    Classes.hasMany(models.CohortClassDays, {
       foreignKey: 'classId',
       onDelete: 'CASCADE',
     });
+
     Classes.hasMany(models.ClassResources, {
       foreignKey: 'classId',
       onDelete: 'CASCADE',
     });
-    Classes.belongsTo(models.Trainer, {
-      foreignKey: 'trainerId',
+    Classes.hasOne(models.CohortTrainer, {
+      foreignKey: 'classId',
       onDelete: 'CASCADE',
     });
     Classes.hasMany(models.Assignment, {

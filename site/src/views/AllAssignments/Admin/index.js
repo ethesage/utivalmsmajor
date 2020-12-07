@@ -23,7 +23,7 @@ const AllAssignmnets = ({ gapi }) => {
 
       <AllAssignments
         gapi={gapi}
-        currentCourse={{ CourseCohort: currentCohort, ...currentCohort }}
+        currentCourse={currentCohort}
         cohortId={cohortId}
         isAdmin
       />

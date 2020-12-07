@@ -103,16 +103,18 @@ export const getSingleTrainerCourse = async (req, res) => {
             where: { userId: id },
             required: false,
           },
-        ],
-      },
-      {
-        model: models.CourseCohort,
-        include: [
+          {
+            model: models.CourseDescription,
+          },
           {
             model: models.Classes,
+            required: false,
             include: [
               {
-                model: models.Trainer,
+                model: models.CohortTrainer,
+                where: { courseCohortId },
+                attributes: ['id', 'userId'],
+                required: false,
                 include: {
                   model: models.User,
                   attributes: [
@@ -128,15 +130,20 @@ export const getSingleTrainerCourse = async (req, res) => {
                 model: models.ClassResources,
               },
               {
-                model: models.ClassDays,
+                model: models.CohortClassDays,
+                where: { courseCohortId },
+                required: false,
               },
             ],
           },
         ],
       },
+      {
+        model: models.CourseCohort,
+      },
     ],
 
-    order: [[models.CourseCohort, models.Classes, 'createdAt', 'ASC']],
+    order: [[models.Course, models.Classes, 'createdAt', 'ASC']],
   });
 
   if (!resource) {

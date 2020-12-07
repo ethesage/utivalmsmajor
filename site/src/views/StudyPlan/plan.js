@@ -6,13 +6,13 @@ const StudyPlan = ({ currentCourse }) => {
   const [classdays, setClassdays] = useState();
 
   useEffect(() => {
-    if (!currentCourse?.CourseCohort) return;
+    if (!currentCourse) return;
     if (!classdays) {
       const tempDays = [];
 
-      currentCourse.CourseCohort.Classes.forEach((_class) => {
-        if (_class.ClassDays[0]) {
-          tempDays.push({ ..._class.ClassDays[0], title: _class.title });
+      currentCourse.Course.Classes.forEach((_class) => {
+        if (_class.CohortClassDays[0]) {
+          tempDays.push({ ..._class.CohortClassDays[0], title: _class.title });
         }
       });
 

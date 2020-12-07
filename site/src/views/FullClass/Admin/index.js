@@ -33,17 +33,6 @@ function FullClass({ gapi }) {
     (classrum) => classrum.id === classroom
   );
 
-  const classDay = currentCohort?.CohortClassDays.find(
-    (classday) => classday.classId === classroom
-  );
-
-  const classTrainer =
-    currentCohort?.CohortTrainers.find(
-      (classtrainer) => classtrainer.classId === classroom
-    ) || [];
-
-  console.log(classDay, classTrainer);
-
   if (error) {
     return (
       <div>
@@ -51,8 +40,6 @@ function FullClass({ gapi }) {
       </div>
     );
   }
-
-  console.log(currentCohort);
 
   return (
     <>
@@ -98,7 +85,6 @@ function FullClass({ gapi }) {
                     }}
                     editClass={() => setEditClass(!editClass)}
                     cohortId={cohortId}
-                    trainers={currentCohort?.CohortTrainers}
                   />
 
                   <div className="prev_courses"></div>

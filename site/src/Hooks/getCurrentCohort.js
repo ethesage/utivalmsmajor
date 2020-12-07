@@ -13,7 +13,9 @@ const GetCurrentCohort = () => {
   const { currentCohort } = useSelector((state) => state.admin);
 
   let course = currentCohort[currentCourse?.name];
+
   const existingCourse = course?.id === cohortId;
+
   if (!existingCourse) {
     course = null;
   }

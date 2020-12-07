@@ -29,7 +29,9 @@ const AllAssignmnets = ({ gapi, currentCourse, isAdmin, cohortId }) => {
   const [viewGrade, setViewGrade] = useState(false);
   const [currentSubmitted, setCurrentSubmitted] = useState();
 
-  const currentClassdata = currentCourse?.CourseCohort?.Classes.filter(
+  const classesToUse = currentCourse?.Course?.Classes;
+
+  const currentClassdata = classesToUse?.filter(
     (class_) => class_.id === classroom
   );
 
@@ -49,10 +51,10 @@ const AllAssignmnets = ({ gapi, currentCourse, isAdmin, cohortId }) => {
     if (!currentCourse) return;
     if (classes) return;
 
-    setClasses(currentCourse?.CourseCohort?.Classes);
+    setClasses(classesToUse);
 
     return () => {};
-  }, [classes, currentCourse, history, courseId, classroom]);
+  }, [classes, currentCourse, history, courseId, classroom, classesToUse]);
 
   // useEffect(() => {
   //   if (!currentCourse) return;

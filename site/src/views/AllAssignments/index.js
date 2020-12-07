@@ -26,6 +26,7 @@ const AllAssignmnets = ({ gapi }) => {
     ],
     !!currentCourse
   );
+
   return (
     <>
       <NavBar />

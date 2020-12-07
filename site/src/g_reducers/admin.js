@@ -85,14 +85,17 @@ const course = (state = initialState, action) => {
           ...state.currentCohort,
           [action.payload.name]: {
             ...state.currentCohort[action.payload.name],
-            Classes: state.currentCohort[action.payload.name].Classes.map(
-              (e_class) => {
+            Course: {
+              ...state.currentCohort[action.payload.name].Course,
+              Classes: state.currentCohort[
+                action.payload.name
+              ].Course.Classes.map((e_class) => {
                 if (e_class.id === action.payload.newClass.id) {
                   return action.payload.newClass;
                 }
                 return e_class;
-              }
-            ),
+              }),
+            },
           },
         },
       };

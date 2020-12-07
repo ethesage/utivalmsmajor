@@ -16,8 +16,8 @@ module.exports = (sequelize, DataTypes) => {
   );
   CohortClassDays.associate = (models) => {
     // associations can be defined here
-    CohortClassDays.belongsTo(models.CourseCohort, {
-      foreignKey: 'courseCohortId',
+    CohortClassDays.belongsTo(models.Classes, {
+      foreignKey: 'classId',
       onDelete: 'CASCADE',
     });
   };

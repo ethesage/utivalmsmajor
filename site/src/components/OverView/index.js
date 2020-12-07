@@ -22,8 +22,6 @@ const Overview = () => {
     !!currentCourse
   );
 
-  console.log(currentCourse, error);
-
   return (
     <>
       <NavBar />

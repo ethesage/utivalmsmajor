@@ -40,7 +40,6 @@ function Classes({
   setOpenedRef,
   addAssignment,
   editClass,
-  trainers,
 }) {
   const { title, description, link, courseCohortId } = data;
   const { isStudent, isAdmin, isTrainer } = useSelector((state) => state.auth);
@@ -334,18 +333,20 @@ function Classes({
                       )}
                       {isTrainer &&
                         Array.isArray(classResources[title].assignment) && (
-                          <Link
-                            to=""
-                            className="edit"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              addAssignment();
-                            }}
-                          >
-                            {classResources[title].assignment.length === 0
-                              ? 'Add Assignment'
-                              : 'Edit Assignment'}
-                          </Link>
+                          <div className="edit_btns">
+                            <Link
+                              to=""
+                              className="edit"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                addAssignment();
+                              }}
+                            >
+                              {classResources[title].assignment.length === 0
+                                ? 'Add Assignment'
+                                : 'Edit Assignment'}
+                            </Link>
+                          </div>
                         )}
                     </>
                   ) : null}
@@ -409,21 +410,23 @@ function Classes({
                       Trainer
                     </h4>
 
-                    {trainers?.User ? (
+                    {data?.CohortTrainer?.User ? (
                       <div className="trainer flex-row j-start">
                         <img
-                          src={data?.Trainer?.User?.profilePic || user_icon}
+                          src={
+                            data?.CohortTrainer?.User?.profilePic || user_icon
+                          }
                           alt="userimage"
                           onError={handleImgError}
                         />
                         <div>
                           <strong>
                             <p>
-                              {data.Trainer.User.firstName}{' '}
-                              {data.Trainer.User.lastName}
+                              {data.CohortTrainer.User.firstName}{' '}
+                              {data.CohortTrainer.User.lastName}
                             </p>
                           </strong>
-                          <small>{data.Trainer.User.occupation}</small>
+                          <small>{data.CohortTrainer.User.occupation}</small>
                         </div>
                       </div>
                     ) : (

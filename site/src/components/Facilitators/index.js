@@ -12,7 +12,8 @@ const Facilitators = ({ trainers }) => {
 
     trainers.reduce((acc, trainer, i) => {
       let name =
-        trainer?.Trainer?.User?.firstName + trainer?.Trainer?.User?.lastName;
+        trainer?.CohortTrainer?.User?.firstName +
+        trainer?.CohortTrainer?.User?.lastName;
 
       if (!name) return acc;
       if (acc.hasOwnProperty(name)) return acc;
@@ -28,30 +29,35 @@ const Facilitators = ({ trainers }) => {
 
   return (
     <div className="fac_xc flex-col">
-      <TransitionGroup className="fac_xc_con flex-row ">
-        <CSSTransition
-          classNames="slide"
-          key={`fac_sec_${currentUser}`}
-          timeout={500}
-        >
-          <div className="fac_xc_sec flex-row j-start">
-            <div className="img-sec">
-              <img
-                src={
-                  Utrainers[currentUser]?.Trainer?.User?.profilePic || user_icon
-                }
-                alt=""
-                className="img cover"
-              />
+      {Utrainers[currentUser]?.CohortTrainer?.User?.firstName && (
+        <TransitionGroup className="fac_xc_con flex-row ">
+          <CSSTransition
+            classNames="slide"
+            key={`fac_sec_${currentUser}`}
+            timeout={500}
+          >
+            <div className="fac_xc_sec flex-row j-start">
+              <div className="img-sec">
+                <img
+                  src={
+                    Utrainers[currentUser]?.CohortTrainer?.User?.profilePic ||
+                    user_icon
+                  }
+                  alt=""
+                  className="img cover"
+                />
+              </div>
+              <div className="text_sec">
+                <p>Instructors</p>
+                <h2>{`${Utrainers[currentUser]?.CohortTrainer?.User?.firstName} ${Utrainers[currentUser]?.CohortTrainer?.User?.lastName}`}</h2>
+                <h3>
+                  {Utrainers[currentUser]?.CohortTrainer?.User?.occupation}
+                </h3>
+              </div>
             </div>
-            <div className="text_sec">
-              <p>Instructors</p>
-              <h2>{`${Utrainers[currentUser]?.Trainer?.User?.firstName} ${Utrainers[currentUser]?.Trainer?.User?.lastName}`}</h2>
-              <h3>{Utrainers[currentUser]?.Trainer?.User?.occupation}</h3>
-            </div>
-          </div>
-        </CSSTransition>
-      </TransitionGroup>
+          </CSSTransition>
+        </TransitionGroup>
+      )}
       <div className="dots_con flex-row">
         {Object.keys(Utrainers).map((trainer, i) => {
           return (

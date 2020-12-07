@@ -36,10 +36,10 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'CASCADE',
     });
 
-    CourseCohort.hasMany(models.CohortClassDays, {
-      foreignKey: 'courseCohortId',
-      onDelete: 'CASCADE',
-    });
+    // CourseCohort.hasMany(models.CohortClassDays, {
+    //   foreignKey: 'courseCohortId',
+    //   onDelete: 'CASCADE',
+    // });
 
     CourseCohort.belongsTo(models.Course, {
       foreignKey: 'courseId',

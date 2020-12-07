@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 // import sequelize from 'sequelize';
 // import { try } from "bluebird";
-import models, { sequelize } from '../database/models';
+import models from '../database/models';
 import helpers from '../helpers';
 
 const { successStat, errorStat } = helpers;
@@ -18,52 +18,47 @@ const { successStat, errorStat } = helpers;
  */
 
 export const getAdminDashboard = async (req, res) => {
-  try {
-    const student = await models.StudentCourse.count();
+  const student = await models.StudentCourse.count();
 
-    const course = await models.Course.count();
+  const course = await models.Course.count();
 
-    const trainer = await models.Trainer.count();
+  const trainer = await models.Trainer.count();
 
-    const admins = await models.User.count({ where: { role: 'admin' } });
+  const admins = await models.User.count({ where: { role: 'admin' } });
 
-    const studentByCourse = await models.sequelize.query(
-      `SELECT "Courses"."name", COUNT("studentId") AS 
+  const studentByCourse = await models.sequelize.query(
+    `SELECT "Courses"."name", COUNT("studentId") AS 
         value FROM "Courses" LEFT JOIN "StudentCourses" ON "Courses"."id" = "StudentCourses"."courseId" 
         WHERE "Courses"."id" IS NOT NULL GROUP BY "Courses"."id"`
-    );
-    const trainerByCourse = await models.sequelize.query(
-      `SELECT "Courses"."name", COUNT("courseId") AS 
+  );
+  const trainerByCourse = await models.sequelize.query(
+    `SELECT "Courses"."name", COUNT("courseId") AS 
         value FROM "Courses" LEFT JOIN "Trainers" ON "Courses"."id" = "Trainers"."courseId" 
         WHERE "Courses"."id" IS NOT NULL GROUP BY "Courses"."id"`
-    );
+  );
 
-    const date = await models.sequelize.query(
-      `SELECT EXTRACT(YEAR FROM "createdAt") AS YEAR, to_char("createdAt", 'Mon') AS MONTH, COUNT(*) AS COUNT FROM "StudentCourses" GROUP BY "StudentCourses"."createdAt", EXTRACT(MONTH FROM "createdAt")`
-    );
+  const date = await models.sequelize.query(
+    `SELECT EXTRACT(YEAR FROM "createdAt") AS YEAR, to_char("createdAt", 'Mon') AS MONTH, COUNT(*) AS COUNT FROM "StudentCourses" GROUP BY "StudentCourses"."createdAt", EXTRACT(MONTH FROM "createdAt")`
+  );
 
-    const getAll = date[0].reduce((acc, item) => {
-      if (item) {
-        acc[item.month] = acc[item.month]
-          ? acc[item.month] + Number(item.count)
-          : Number(item.count);
-      }
-      return acc;
-    }, {});
+  const getAll = date[0].reduce((acc, item) => {
+    if (item) {
+      acc[item.month] = acc[item.month]
+        ? acc[item.month] + Number(item.count)
+        : Number(item.count);
+    }
+    return acc;
+  }, {});
 
-    return successStat(res, 200, 'data', {
-      student,
-      course,
-      trainer,
-      admins,
-      studentByCourse: studentByCourse[0],
-      trainerByCourse: trainerByCourse[0],
-      studentByMonth: getAll,
-    });
-  } catch (e) {
-    console.log(e);
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
-  }
+  return successStat(res, 200, 'data', {
+    student,
+    course,
+    trainer,
+    admins,
+    studentByCourse: studentByCourse[0],
+    trainerByCourse: trainerByCourse[0],
+    studentByMonth: getAll,
+  });
 };
 
 /**
@@ -111,6 +106,13 @@ export const getAllCourseCohorts = async (req, res) => {
         include: {
           model: models.Classes,
           attributes: ['id'],
+          // include: {
+          //   model: models.CohortTrainer,
+          //   where: {
+          //     '$CohortTrainer.courseCohortId$': '$Classes.courseCohortId$',
+          //   },
+          //   attributes: ['userId'],
+          // },
         },
       },
       {
@@ -153,21 +155,29 @@ export const getCourseCohort = async (req, res) => {
               {
                 model: models.ClassResources,
               },
+              {
+                model: models.CohortClassDays,
+                where: { courseCohortId: id },
+                required: false,
+              },
+              {
+                model: models.CohortTrainer,
+                where: { courseCohortId: id },
+                attributes: ['id', 'userId'],
+                required: false,
+                include: {
+                  model: models.User,
+                  attributes: [
+                    'firstName',
+                    'lastName',
+                    'profilePic',
+                    'occupation',
+                  ],
+                },
+              },
             ],
           },
         ],
-      },
-      {
-        model: models.CohortTrainer,
-        attributes: ['id', 'userId'],
-        required: false,
-        include: {
-          model: models.User,
-          attributes: ['firstName', 'lastName', 'profilePic', 'occupation'],
-        },
-      },
-      {
-        model: models.CohortClassDays,
       },
     ],
     order: [[models.Course, models.Classes, 'createdAt', 'ASC']],
@@ -251,26 +261,19 @@ export const deleteStudent = async (req, res) => {
 
   const { role } = req.session.user;
 
-  try {
-    if (role === 'admin') {
-      const isStudent = await models.StudentCourse.findOne({
-        where: { courseCohortId, studentId },
-      });
+  if (role === 'admin') {
+    const isStudent = await models.StudentCourse.findOne({
+      where: { courseCohortId, studentId },
+    });
 
-      if (!isStudent)
-        return errorStat(
-          res,
-          404,
-          'student not enrolled in this course cohort'
-        );
+    if (!isStudent) {
+      return errorStat(res, 404, 'student not enrolled in this course cohort');
+    }
 
-      await isStudent.destroy();
+    await isStudent.destroy();
 
-      return successStat(res, 200, 'data', 'Student Successfully Deleted');
-    } else
-      errorStat(res, 404, 'you are not permitted to perform this operation');
-  } catch (e) {
-    console.log(e);
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
+    successStat(res, 200, 'data', 'Student Successfully Deleted');
+  } else {
+    errorStat(res, 404, 'you are not permitted to perform this operation');
   }
 };
