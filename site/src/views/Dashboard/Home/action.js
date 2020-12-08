@@ -31,7 +31,7 @@ export const getSingleCourse = (slug) => async (dispatch) => {
 export const getNextClasses = () => async (dispatch) => {
   let course;
   try {
-    course = await axiosInstance.get('/student/all/nextclass');
+    course = await axiosInstance.get('/trainer/all/nextclass');
   } catch (error) {
     return error;
   }
