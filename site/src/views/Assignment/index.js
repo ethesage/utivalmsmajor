@@ -49,8 +49,6 @@ const Assignment = ({ gapi }) => {
     return () => {};
   }, [enrolledcourses, courseId, currentCourse, dispatch]);
 
-  console.log(currentCourse);
-
   const currentClass = currentCourse?.Course?.Classes.find(
     (classrum) => classrum.id === classroom
   );

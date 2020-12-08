@@ -34,7 +34,7 @@ const CousreCard = ({ data }) => {
       dispatch(deleteCourse(data));
     } catch (e) {
       el.current.classList.remove('spinner1');
-      console.log(e);
+      
       addToast('An error occured', {
         appearance: 'error',
         autoDismiss: true,

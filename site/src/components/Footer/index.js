@@ -36,7 +36,7 @@ const sc_links = [
 
 const links = [
   { title: 'About Us', link: 'https://utiva.io/about', ext: true },
-  { title: 'Why', link: 'https://utiva.io', ext: true },
+  { title: 'Enterprise', link: 'http://utiva.io/corporate-training', ext: true },
   { title: 'Blog', link: 'https://utiva.io/blog', ext: true },
 ];
 
