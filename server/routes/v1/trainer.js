@@ -8,6 +8,7 @@ import {
   deleteTrainer,
   getSingleTrainer,
   getSingleTrainerCourse,
+  getTrainerNextClass,
 } from "../../controllers/trainer";
 import middlewares from "../../middlewares";
 
@@ -65,4 +66,10 @@ trainerRoutes.delete(
   deleteTrainer
 );
 
+trainerRoutes.get(
+  "/all/nextclass",
+  usession.can(""),
+  // validate(trainerSchema),
+  getTrainerNextClass
+);
 export default trainerRoutes;
