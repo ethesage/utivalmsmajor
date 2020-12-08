@@ -54,23 +54,27 @@ export default [
     info: [
       {
         title: 'What device should I use for the class?',
-        desc:
+        desc: [
           'Before you enrol for a course at Utiva, you need to have a working laptop and a stable internet connection for the best learning experience.',
+        ],
       },
       {
-        title: 'What device should I use for the class?',
-        desc:
-          'Before you enrol for a course at Utiva, you need to have a working laptop and a stable internet connection for the best learning experience.',
+        title: 'How do I submit my projects/assignments?',
+        desc: [
+          'All assignments and projects are to be submitted via the platform to allow easy grading for the facilitator.',
+        ],
       },
       {
         title: 'Do I get access to the course materials after class?',
-        desc:
+        desc: [
           'Yes, all course materials are uploaded before your class commences and are available to you during and after your learning has ended. ',
+        ],
       },
       {
         title: 'What happens if I miss a class due to an emergency?',
-        desc:
+        desc: [
           'We provide recordings to our students at least 12 hours after each class. However, always ensure you notify the Program team early of your absence',
+        ],
       },
     ],
   },
@@ -81,18 +85,21 @@ export default [
     info: [
       {
         title: 'When do I get my certificate?',
-        desc:
+        desc: [
           'The Utiva certificate is usually given to the students within two weeks of completing their capstone project.',
+        ],
       },
       {
         title: 'What kind of certificate do I get? (Soft/hard copy)',
-        desc:
+        desc: [
           'Your certificate is an electronic document shared with you. However, you can download it as you deem necessary. ',
+        ],
       },
       {
         title: 'Is Utiva certificates globally recognized?',
-        desc:
-          'The Utiva certificate is accredited by our global partner in the UK; Royal bank of scotland thus, it is internationally recognized. ',
+        desc: [
+          'The Utiva certificate is accredited by our global partner in the UK; Royal bank of scotland thus, it is internationally recognized.',
+        ],
       },
     ],
   },

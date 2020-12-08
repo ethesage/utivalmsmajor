@@ -18,6 +18,8 @@ const FAQ = () => {
 
   const newdata = {
     payment: data[0],
+    lectures: data[1],
+    certificate: data[2],
   };
 
   useEffect(() => {
