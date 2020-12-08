@@ -484,8 +484,8 @@ function Classes({
                 <Files
                   files={
                     dropType === 'resource'
-                      ? classResources[title].files
-                      : classResources[title].assignment
+                      ? classResources[title]?.files
+                      : classResources[title]?.assignment
                   }
                   showdrag={
                     dropType === 'resource' ? true : false

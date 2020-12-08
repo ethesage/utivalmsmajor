@@ -8,18 +8,16 @@ import './style.scss';
 const FAQ = () => {
   const { info } = useParams();
   const [currentSection, setCurrentection] = useState(
-    info === '' || !info ? 'general' : info
+    info === '' || !info ? 'payment' : info
   );
 
   useEffect(() => {
-    setCurrentection(info === '' || !info ? 'general' : info);
+    setCurrentection(info === '' || !info ? 'payment' : info);
     return () => {};
   }, [info]);
 
   const newdata = {
-    general: data[0],
-    lectures: data[1],
-    certificate: data[2],
+    payment: data[0],
   };
 
   useEffect(() => {
@@ -59,7 +57,10 @@ const FAQ = () => {
           >
             <div className="inf_x">
               {faq.desc.map((de, i) => (
-                <p key={`faq_desc+${i}`}>{de}</p>
+                <div
+                  key={`faq_desc+${i}`}
+                  dangerouslySetInnerHTML={{ __html: de }}
+                ></div>
               ))}
             </div>
           </RevielDrop>

@@ -256,8 +256,6 @@ export const getStudentNextClass = async (req, res) => {
 
   // if (!getClasses[0]) return errorStat(res, 400, 'No Available Class');
 
-  console.log(getClasses);
-
   const getAll = getClasses.reduce((acc, item, index) => {
     const n_item = item.dataValues;
 

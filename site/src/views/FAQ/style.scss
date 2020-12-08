@@ -32,8 +32,21 @@
       margin: 0;
 
       .inf_x {
-        p + p {
+        div + div {
           margin-top: 20px;
+        }
+
+        div {
+          line-height: 1.5;
+          li {
+            margin-left: 30px;
+            list-style: disc;
+          }
+
+          a {
+            color: color(theme);
+            font-weight: bold;
+          }
         }
       }
 
