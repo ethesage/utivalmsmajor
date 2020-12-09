@@ -23,7 +23,6 @@
     "react-flutterwave": "^1.0.4",
     "react-helmet": "^5.2.1",
     "react-hot-loader": "^4.12.21",
-    "react-https-redirect": "^1.1.0",
     "react-intersection-observer": "^8.26.1",
     "react-js-pagination": "^3.0.3",
     "react-moment": "^0.9.7",

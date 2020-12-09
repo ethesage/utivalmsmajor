@@ -17,15 +17,13 @@ const Appz = () => {
 };
 
 ReactDOM.render(
-  <HttpsRedirect>
     <Provider store={store}>
       <ToastProvider>
         <ParallaxProvider>
           <Appz />
         </ParallaxProvider>
       </ToastProvider>
-    </Provider>
-  </HttpsRedirect>,
+    </Provider>,
   document.getElementById('root')
 );
 
