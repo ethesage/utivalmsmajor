@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import HttpsRedirect from 'react-https-redirect';
 import { ParallaxProvider } from 'react-scroll-parallax';
 import { ToastProvider } from 'react-toast-notifications';
 import { Provider, useDispatch } from 'react-redux';
