@@ -52,7 +52,7 @@ const Classes = () => {
   useEffect(() => {
     if (!nextclasses) {
       (async () => {
-        await dispatch(getNextClasses());
+        await dispatch(getNextClasses('trainer'));
       })();
     }
     return () => {};

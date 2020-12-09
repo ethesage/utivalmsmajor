@@ -28,10 +28,10 @@ export const getSingleCourse = (slug) => async (dispatch) => {
   });
 };
 
-export const getNextClasses = () => async (dispatch) => {
+export const getNextClasses = (type) => async (dispatch) => {
   let course;
   try {
-    course = await axiosInstance.get('/trainer/all/nextclass');
+    course = await axiosInstance.get(`${type}/all/nextclass`);
   } catch (error) {
     return error;
   }

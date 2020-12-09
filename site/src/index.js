@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import HttpsRedirect from 'react-https-redirect';
 import { ParallaxProvider } from 'react-scroll-parallax';
 import { ToastProvider } from 'react-toast-notifications';
 import { Provider, useDispatch } from 'react-redux';
@@ -16,13 +17,15 @@ const Appz = () => {
 };
 
 ReactDOM.render(
-  <Provider store={store}>
-    <ToastProvider>
-      <ParallaxProvider>
-        <Appz />
-      </ParallaxProvider>
-    </ToastProvider>
-  </Provider>,
+  <HttpsRedirect>
+    <Provider store={store}>
+      <ToastProvider>
+        <ParallaxProvider>
+          <Appz />
+        </ParallaxProvider>
+      </ToastProvider>
+    </Provider>
+  </HttpsRedirect>,
   document.getElementById('root')
 );
 
