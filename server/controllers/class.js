@@ -265,6 +265,12 @@ export const updateClass = async (req, res) => {
       courseCohortId,
       classId,
     });
+  } else {
+    await models.CohortTrainer.update({
+      userId,
+      courseCohortId,
+      classId
+    }, { where: { classId } });
   }
 
   await models.Classes.update(
