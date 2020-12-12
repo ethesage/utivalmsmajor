@@ -268,9 +268,7 @@ export const updateClass = async (req, res) => {
   } else {
     await models.CohortTrainer.update({
       userId,
-      courseCohortId,
-      classId
-    }, { where: { classId } });
+    }, { where: { [Op.and]: [{ classId }, { courseCohortId }] } });
   }
 
   await models.Classes.update(
