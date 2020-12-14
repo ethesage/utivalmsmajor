@@ -25,7 +25,7 @@ const Google = ({ updateSignInStatus = () => {} }) => {
             discoveryDocs: [
               'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest',
             ],
-            scope: 'https://www.googleapis.com/auth/drive',
+            scope: 'https://www.googleapis.com/auth/drive.file',
           })
           .then(function () {
             setG_api(gapi);
