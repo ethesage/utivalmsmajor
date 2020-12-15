@@ -152,7 +152,7 @@ export const getAllCourses = async (req, res) => {
       {
         model: models.CourseCohort,
         required: false,
-        order: [['createdAt']],
+        order: [['createdAt', 'DESC']],
         limit: 1,
         attributes: [
           'id',
@@ -289,7 +289,7 @@ export const Courses = async (req, res) => {
     ? [
         {
           model: models.CourseCohort,
-          order: [['createdAt']],
+          order: [['createdAt', 'DESC']],
           limit: 1,
           attributes: ['id'],
         },
@@ -306,7 +306,7 @@ export const Courses = async (req, res) => {
     : [
         {
           model: models.CourseCohort,
-          order: [['createdAt']],
+          order: [['createdAt', 'DESC']],
           limit: 1,
           attributes: ['id'],
         },
@@ -378,8 +378,11 @@ export const addCourseCohortProgress = async (req, res) => {
 
     await course.update({
       progress: Math.floor((find.length / count.length) * 100),
+      status: Math.floor((find.length / count.length) * 100) === 100 ? 'finished' : 'ongoing'
     });
   }
+
+  if (Math.floor((find.length / count.length) * 100))
 
   await models.Classes.update({ started: true }, { where: { id: classId } });
 
