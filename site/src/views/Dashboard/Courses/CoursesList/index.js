@@ -9,18 +9,11 @@ import './style.scss';
 
 const CousreCard = ({ data }) => {
   const { isStudent } = useSelector((state) => state.auth);
-
-  const {
-    isCompleted,
-    CourseCohort: { id, dateRange },
-    Course,
-    Cohort,
-    progress,
-  } = data;
+  const { isCompleted, CourseCohort, Course, Cohort, progress } = data;
 
   return (
     <div className="p_cx_cd">
-      <Link className="img-sec" to={`/courses/overview/${id}`}>
+      <Link className="img-sec" to={`/courses/overview/${CourseCohort?.id}`}>
         <Image image={Course.thumbnail} imgClass="img cover" lazyLoad={true} />
       </Link>
       <div className="txt-sec">
@@ -67,7 +60,7 @@ const CousreCard = ({ data }) => {
         {!isStudent ? (
           <div className="chx flex-row j-space">
             <strong>{<p>{Cohort?.cohort} Cohort</p>}</strong>
-            <small>{dateRange}</small>
+            <small>{CourseCohort?.dateRange}</small>
           </div>
         ) : null}
       </div>

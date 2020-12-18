@@ -57,11 +57,11 @@ function Classes({
   const { addToast } = useToasts();
   const classRef = useRef();
 
-  // console.log(data, 'data')
-
   const classId = data.id;
 
   // const courseCohortId = data.courseCohortId
+
+  console.log(folderId);
 
   const resources = data.ClassResources.filter(
     (res) => res.type === 'resource'
@@ -94,13 +94,22 @@ function Classes({
   }, [openedRef]);
 
   useEffect(() => {
+    console.log('==> this');
+
     if (!classResources[title].files) {
       if (resources.length === 0) {
         dispatch(getResources(title, null));
       }
 
+      console.log('here');
+
       resources.forEach(async (resource) => {
         const file = await getFiles(resource.link);
+
+        console.log('each');
+
+        console.log(file);
+
         dispatch(
           getResources(title, {
             ...resource,
