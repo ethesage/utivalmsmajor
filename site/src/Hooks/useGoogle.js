@@ -26,6 +26,7 @@ const Google = ({ updateSignInStatus = () => {} }) => {
               'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest',
             ],
             scope: 'https://www.googleapis.com/auth/drive.file',
+            // 'https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive',
           })
           .then(function () {
             setG_api(gapi);
@@ -39,6 +40,7 @@ const Google = ({ updateSignInStatus = () => {} }) => {
   const signIn = async () => {
     try {
       const response = await g_api.auth2.getAuthInstance().signIn();
+      // window.location.reload();
 
       return !!response.rt;
     } catch (err) {
