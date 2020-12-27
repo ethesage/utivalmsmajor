@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import cred from './credentials.json';
+import test_cred from './test_credentials.json';
 import axios from 'axios';
 
 const Google = ({ updateSignInStatus = () => {} }) => {
@@ -21,7 +22,10 @@ const Google = ({ updateSignInStatus = () => {} }) => {
         gapi.client
           .init({
             // apiKey: API_KEY,
-            clientId: cred.installed.client_id,
+            clientId:
+              process.env.NODE_ENV === 'production'
+                ? cred.installed.client_id
+                : test_cred.installed.client_id,
             discoveryDocs: [
               'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest',
             ],

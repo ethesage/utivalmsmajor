@@ -64,6 +64,39 @@ export const addClass = (newClass, name) => async (dispatch) => {
   });
 };
 
+export const addPrevVideoFn = (
+  link,
+  courseName,
+  classId,
+  courseCohortId
+) => async (dispatch) => {
+  let video;
+
+  try {
+    video = await axiosInstance.post('admin/add-prev-videos', {
+      link,
+      classId,
+      courseCohortId,
+    });
+  } catch (err) {}
+
+  dispatch({
+    type: courseName ? 'ADD_NEW_VIDEO' : 'MEMBER_ADD_NEW_VIDEO',
+    payload: { video: video.data.data, courseName, classId },
+  });
+};
+
+export const removePrevVideoFn = (courseName, classId, videoId) => async (
+  dispatch
+) => {
+  await axiosInstance.delete(`admin/prev-videos/${videoId}`);
+
+  dispatch({
+    type: courseName ? 'REMOVE_VIDEO' : 'MEMBER_REMOVE_VIDEO',
+    payload: { courseName, classId, videoId },
+  });
+};
+
 export const editClass = (newClass, name) => async (dispatch) => {
   dispatch({
     type: 'EDIT_CLASS',

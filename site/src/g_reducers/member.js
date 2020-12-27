@@ -9,21 +9,23 @@ export const initialState = {
 };
 
 const course = (state = initialState, action) => {
+  const payload = action.payload;
+
   switch (action.type) {
     case 'GET_ENROLLED_COURSES':
       return {
         ...state,
-        enrolledcourses: action.payload,
+        enrolledcourses: payload,
       };
     case 'GET_CURRENT_COURSE':
       return {
         ...state,
-        currentCourse: action.payload,
+        currentCourse: payload,
       };
     case 'GET_ALL_ENROLLED_STUDENTS':
       return {
         ...state,
-        enrolledStudents: action.payload,
+        enrolledStudents: payload,
       };
 
     case 'ENROLL_STUDENTS':
@@ -31,7 +33,52 @@ const course = (state = initialState, action) => {
         ...state,
         enrolledStudents: {
           ...state.enrolledStudents,
-          members: [...state.enrolledStudents.members, ...action.payload],
+          members: [...state.enrolledStudents.members, ...payload],
+        },
+      };
+
+    case 'MEMBER_ADD_NEW_VIDEO':
+      return {
+        ...state,
+        currentCourse: {
+          ...state.currentCourse,
+          Course: {
+            ...state.currentCourse.Course,
+            Classes: state.currentCourse.Course.Classes.map((e_class) => {
+              if (e_class.id === payload.classId) {
+                return {
+                  ...e_class,
+                  CohortClassVideos: [
+                    ...e_class.CohortClassVideos,
+                    payload.video,
+                  ],
+                };
+              }
+              return e_class;
+            }),
+          },
+        },
+      };
+
+    case 'MEMBER_REMOVE_VIDEO':
+      return {
+        ...state,
+        currentCourse: {
+          ...state.currentCourse,
+          Course: {
+            ...state.currentCourse.Course,
+            Classes: state.currentCourse.Course.Classes.map((e_class) => {
+              if (e_class.id === payload.classId) {
+                return {
+                  ...e_class,
+                  CohortClassVideos: e_class.CohortClassVideos.filter(
+                    (vid) => vid.id !== payload.videoId
+                  ),
+                };
+              }
+              return e_class;
+            }),
+          },
         },
       };
 
@@ -41,7 +88,7 @@ const course = (state = initialState, action) => {
         enrolledStudents: {
           ...state.enrolledStudents,
           members: state.enrolledStudents.members.filter(
-            (student) => student.User.id !== action.payload
+            (student) => student.User.id !== payload
           ),
         },
       };
@@ -49,43 +96,42 @@ const course = (state = initialState, action) => {
     case 'GET_ALL_CLASS_DAYS':
       return {
         ...state,
-        classdays: action.payload,
+        classdays: payload,
       };
     case 'COUNTS':
       return {
         ...state,
-        counts: action.payload,
+        counts: payload,
       };
     case 'CREATE_CLASS_RESOURCES':
       return {
         ...state,
-        classResources: action.payload,
+        classResources: payload,
       };
     case 'GET_RESOURCES':
-      const prevRes = state.classResources[action.payload.name].files;
-      const file = action.payload.file;
+      const prevRes = state.classResources[payload.name].files;
+      const file = payload.file;
       return {
         ...state,
         classResources: {
           ...state.classResources,
-          [action.payload.name]: {
-            ...state.classResources[action.payload.name],
+          [payload.name]: {
+            ...state.classResources[payload.name],
             files: prevRes ? [...prevRes, file] : file ? [file] : [],
           },
         },
       };
 
     case 'UPDATE_RESOURCE_NAME':
-      // const prevRes = state.classResources[action.payload.name].files;
-      // const file = action.payload.file;
+      // const prevRes = state.classResources[payload.name].files;
+      // const file = payload.file;
 
       const newClassResoures = Object.keys(state.classResources).reduce(
         (acc, cur) => {
-          if (cur === action.payload.oldname) {
+          if (cur === payload.oldname) {
             return {
               ...acc,
-              [action.payload.newname]:
-                state.classResources[action.payload.oldname],
+              [payload.newname]: state.classResources[payload.oldname],
             };
           }
           return { ...acc, [cur]: state.classResources[cur] };
@@ -105,7 +151,7 @@ const course = (state = initialState, action) => {
         ...state,
         classResources: {
           ...state.classResources,
-          [action.payload]: {
+          [payload]: {
             files: [],
             assignment: [],
             allSubmittedAssignment: null,
@@ -118,28 +164,27 @@ const course = (state = initialState, action) => {
         ...state,
         classResources: {
           ...state.classResources,
-          [action.payload.name]: {
-            ...state.classResources[action.payload.name],
-            assignment: action.payload.file ? [action.payload.file] : [],
+          [payload.name]: {
+            ...state.classResources[payload.name],
+            assignment: payload.file ? [payload.file] : [],
           },
         },
       };
 
     case 'SUBMIT_ASSIGNMENT':
-      const prevAss =
-        state.classResources[action.payload.name].submittedAssignment;
+      const prevAss = state.classResources[payload.name].submittedAssignment;
       return {
         ...state,
         classResources: {
           ...state.classResources,
-          [action.payload.name]: {
-            ...state.classResources[action.payload.name],
+          [payload.name]: {
+            ...state.classResources[payload.name],
             submittedAssignment: prevAss
-              ? action.payload.file
-                ? [...prevAss, action.payload.file]
+              ? payload.file
+                ? [...prevAss, payload.file]
                 : prevAss
-              : action.payload.file
-              ? [action.payload.file]
+              : payload.file
+              ? [payload.file]
               : [],
           },
         },
@@ -147,24 +192,24 @@ const course = (state = initialState, action) => {
 
     case 'GET_ALL_SUBMITTED_ASSIGNMENTS':
       // const prevAss =
-      //   state.classResources[action.payload.name].submittedAssignment;
+      //   state.classResources[payload.name].submittedAssignment;
       return {
         ...state,
         classResources: {
           ...state.classResources,
-          [action.payload.name]: {
-            ...state.classResources[action.payload.name],
-            allSubmittedAssignment: action.payload.data,
+          [payload.name]: {
+            ...state.classResources[payload.name],
+            allSubmittedAssignment: payload.data,
           },
         },
       };
 
     case 'GRADE_ASSIGNMENT':
       const updated = state.classResources[
-        action.payload.name
+        payload.name
       ].allSubmittedAssignment.map((ass) => {
-        if (ass.id === action.payload.Id) {
-          return { ...ass, grade: action.payload.grade };
+        if (ass.id === payload.Id) {
+          return { ...ass, grade: payload.grade };
         }
         return ass;
       });
@@ -173,52 +218,49 @@ const course = (state = initialState, action) => {
         ...state,
         classResources: {
           ...state.classResources,
-          [action.payload.name]: {
-            ...state.classResources[action.payload.name],
+          [payload.name]: {
+            ...state.classResources[payload.name],
             allSubmittedAssignment: updated,
           },
         },
       };
 
     case 'DELETE_SUBMITTED_ASSIGNMENT':
-      const prevAs =
-        state.classResources[action.payload.name].submittedAssignment;
+      const prevAs = state.classResources[payload.name].submittedAssignment;
       return {
         ...state,
         classResources: {
           ...state.classResources,
-          [action.payload.name]: {
-            ...state.classResources[action.payload.name],
-            submittedAssignment: prevAs.filter(
-              (ass) => ass.id !== action.payload.id
-            ),
+          [payload.name]: {
+            ...state.classResources[payload.name],
+            submittedAssignment: prevAs.filter((ass) => ass.id !== payload.id),
           },
         },
       };
 
     case 'DELETE_ASSIGNMENT':
-      // const prevAss_tr = state.classResources[action.payload.name].assignment;
+      // const prevAss_tr = state.classResources[payload.name].assignment;
       return {
         ...state,
         classResources: {
           ...state.classResources,
-          [action.payload.name]: {
-            ...state.classResources[action.payload.name],
+          [payload.name]: {
+            ...state.classResources[payload.name],
             assignment: [],
           },
         },
       };
 
     case 'DELETE_RESOURCE':
-      const prevAss_re = state.classResources[action.payload.name].files;
+      const prevAss_re = state.classResources[payload.name].files;
 
       return {
         ...state,
         classResources: {
           ...state.classResources,
-          [action.payload.name]: {
-            ...state.classResources[action.payload.name],
-            files: prevAss_re.filter((file) => file.id !== action.payload.id),
+          [payload.name]: {
+            ...state.classResources[payload.name],
+            files: prevAss_re.filter((file) => file.id !== payload.id),
           },
         },
       };

@@ -507,7 +507,7 @@ li {
 
 %spinner_before {
   content: '';
-  z-index: 60;
+  z-index: 62;
   box-sizing: border-box;
   position: absolute;
   top: 50%;
@@ -547,7 +547,7 @@ li {
   z-index: 60;
   width: 100%;
   height: 100%;
-  background: rgba(#000, 0.2);
+  background: rgba(#000, 0.1);
   top: 0;
   left: 0;
 }

@@ -10,18 +10,24 @@ import {
   studentProgress,
   courseProgress,
 } from 'g_actions/member';
+import { addPrevVideoFn, removePrevVideoFn } from 'g_actions/admin';
 import ProgressBar from 'components/ProgressBar';
+import Button from 'components/Button';
+import Input from 'components/Input';
 import { weeks, axiosInstance } from 'helpers';
 import Confirm from 'components/Confirm';
 import play from 'assets/icons/course/play.png';
 import material from 'assets/icons/course/material.png';
 import assignment from 'assets/icons/course/assignment.png';
 import class_icon from 'assets/icons/class_icon.png';
+import Plus from 'assets/icons/plus';
+import Remove from 'assets/icons/remove';
 import Modal from '../Modal';
 import user_icon from 'assets/user_icon.png';
 import Files from 'components/Files';
 import ResourceBtn from '../ResourceButton';
 import RevielDrop from '../RevielDrop';
+
 import './style.scss';
 
 function Classes({
@@ -48,7 +54,12 @@ function Classes({
   const [wait, setWait] = useState(false);
   const [progress, setProgress] = useState(0);
   const [dropType, setDropType] = useState();
-  const { classResources } = useSelector((state) => state.member);
+  const [addPrevVideo, setAddPrevVideo] = useState(false);
+  const [prevVideo, setPrevVideo] = useState('');
+  const { classResources, currentCourse } = useSelector(
+    (state) => state.member
+  );
+  const { currentCohort } = useSelector((state) => state.admin);
   const dispatch = useDispatch();
   const modalRef = useRef();
   const deleteDialog = useRef();
@@ -56,12 +67,10 @@ function Classes({
   const progressDialog = useRef();
   const { addToast } = useToasts();
   const classRef = useRef();
+  const vidrefs = {};
 
   const classId = data.id;
-
-  // const courseCohortId = data.courseCohortId
-
-  console.log(folderId);
+  const courseName = currentCohort && Object.keys(currentCohort)[0];
 
   const resources = data.ClassResources.filter(
     (res) => res.type === 'resource'
@@ -94,21 +103,13 @@ function Classes({
   }, [openedRef]);
 
   useEffect(() => {
-    console.log('==> this');
-
     if (!classResources[title].files) {
       if (resources.length === 0) {
         dispatch(getResources(title, null));
       }
 
-      console.log('here');
-
       resources.forEach(async (resource) => {
         const file = await getFiles(resource.link);
-
-        console.log('each');
-
-        console.log(file);
 
         dispatch(
           getResources(title, {
@@ -198,6 +199,50 @@ function Classes({
       }
     }
   };
+
+  const handleChange = ({ target: { value } }) => {
+    setPrevVideo(value);
+  };
+
+  console.log('===>', courseName);
+
+  const addVideo = async (e) => {
+    if (!prevVideo || !prevVideo.match(/vimeo\.com\/(\d+)/)) {
+      console.log('incorrect value');
+      return;
+    }
+
+    const courseCohortId = currentCohort[courseName]?.id || data.courseCohortId;
+
+    document.querySelector('body').classList.add('spinner1');
+
+    await dispatch(
+      addPrevVideoFn(
+        prevVideo.split('.com/')[1],
+        courseName,
+        classId,
+        courseCohortId
+      )
+    );
+
+    document.querySelector('body').classList.remove('spinner1');
+
+    setPrevVideo('');
+    setAddPrevVideo(false);
+  };
+
+  const removeVideo = async (id) => {
+    vidrefs[id].classList.add('spinner1');
+    vidrefs[id].classList.remove('allowHover');
+
+    try {
+      await dispatch(removePrevVideoFn(courseName, classId, id));
+    } catch (err) {
+      vidrefs[id].classList.remove('spinner1');
+      vidrefs[id].classList.add('allowHover');
+    }
+  };
+
   // const viewFile = async (contentLink) => {
   //   window.open(contentLink, '_blank');
   // };
@@ -475,6 +520,78 @@ function Classes({
                 View full outline
               </Link>
             ) : null}
+
+            {full && (data.CohortClassVideos.length > 0 || !isStudent) && (
+              <div className="prev_vid_cn reg_text">
+                <nav className="flex-row j-space">
+                  <h4 className="theme-color">
+                    Previous class video
+                    {data.CohortClassVideos.length <= 1 ? '' : 's'}
+                  </h4>
+
+                  {!isStudent && (
+                    <div
+                      onClick={() => {
+                        setAddPrevVideo(!addPrevVideo);
+                        setPrevVideo('');
+                      }}
+                    >
+                      {!addPrevVideo ? <Plus /> : <Remove />}
+                    </div>
+                  )}
+                </nav>
+
+                <div className="prevForm" data-active={addPrevVideo}>
+                  {addPrevVideo && (
+                    <div className="flex-row j-start al-start form_sec">
+                      <Input
+                        handleChange={handleChange}
+                        name="vimeo"
+                        value={prevVideo}
+                        placeHolder="Enter your video url"
+                        errorMsg="enter a valid video url"
+                      />
+
+                      <Button
+                        text="Add"
+                        className="flex-row"
+                        onClick={addVideo}
+                      />
+                    </div>
+                  )}
+                </div>
+
+                {data.CohortClassVideos.length === 0 && (
+                  <div className="flex-row" style={{ marginTop: '50px' }}>
+                    <p>No videos yet</p>
+                  </div>
+                )}
+
+                <div className="frame_sec">
+                  {data.CohortClassVideos.map((prevVideo, i) => (
+                    <div
+                      className={`frame_con ${!isStudent ? 'allowHover' : ''}`}
+                      key={`prev_vid_data_${prevVideo.id.split('-')[0]}`}
+                      ref={(ref) => (vidrefs[prevVideo.id] = ref)}
+                    >
+                      <div
+                        className="rm"
+                        onClick={() => removeVideo(prevVideo.id)}
+                      >
+                        <Remove />
+                      </div>
+                      <iframe
+                        title={`${data.id}_previous_video_${i}`}
+                        src={`https://player.vimeo.com/video/${prevVideo.link}`}
+                        frameBorder="0"
+                        allow="autoplay; fullscreen"
+                        allowFullScreen
+                      ></iframe>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </RevielDrop>
         {/** For  a student show the modal pop up for the class materails and assignments

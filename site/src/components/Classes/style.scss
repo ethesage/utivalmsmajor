@@ -147,4 +147,93 @@
       padding: 20px;
     }
   }
+
+  .prev_vid_cn {
+    nav {
+      svg {
+        width: 30px;
+        height: 30px;
+        fill: color(theme);
+        cursor: pointer;
+      }
+    }
+
+    .prevForm {
+      max-height: 0;
+      overflow: hidden;
+      transition: 0.1s ease;
+      &[data-active='true'] {
+        max-height: 400px;
+      }
+
+      .form_sec {
+        flex-wrap: wrap;
+        margin-top: 20px;
+      }
+
+      .input-div {
+        max-width: 500px;
+        min-width: 250px;
+        margin-right: 5px;
+      }
+
+      .btn {
+        min-width: unset;
+        width: auto;
+        box-shadow: 0px 2px 5px rgba(160, 121, 0, 0.2);
+        height: 42px;
+      }
+    }
+
+    .frame_sec {
+      display: grid;
+      grid-template-columns: repeat(
+        auto-fill,
+        minmax(#{'min(250px, 100%)'}, 1fr)
+      );
+      width: 100%;
+      grid-gap: 30px;
+      margin-top: 20px;
+
+      .frame_con {
+        width: 100%;
+        padding-bottom: 56.25%;
+        position: relative;
+        transition: 0.3s ease;
+
+        &:hover {
+          &.allowHover {
+            padding-top: 15px;
+
+            .rm {
+              top: -20px;
+            }
+          }
+        }
+
+        .rm {
+          position: absolute;
+          top: 10%;
+          right: 0%;
+          width: 30px;
+          height: 30px;
+          transition: 0.1s ease;
+          cursor: pointer;
+        }
+
+        svg {
+          width: 30px;
+          height: 30px;
+          fill: color(theme);
+        }
+      }
+
+      iframe {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: black;
+      }
+    }
+  }
 }

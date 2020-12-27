@@ -34,7 +34,7 @@ const CousreCard = ({ data }) => {
       dispatch(deleteCourse(data));
     } catch (e) {
       el.current.classList.remove('spinner1');
-      
+
       addToast('An error occured', {
         appearance: 'error',
         autoDismiss: true,
@@ -87,7 +87,7 @@ const CourseList = () => {
         />
       </div>
       <section className="course_list">
-        {allCourses.map((course, i) => (
+        {allCourses?.map((course, i) => (
           <CousreCard data={course} key={`enrolled_c_${i}`} />
         ))}
       </section>
