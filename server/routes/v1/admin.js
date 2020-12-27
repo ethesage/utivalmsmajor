@@ -1,5 +1,5 @@
-import express from "express";
-import "express-async-errors";
+import express from 'express';
+import 'express-async-errors';
 import {
   getAdminDashboard,
   getAllCourses,
@@ -9,8 +9,10 @@ import {
   getCourseCohort,
   getAllTrainers,
   deleteStudent,
-} from "../../controllers/admin";
-import middlewares from "../../middlewares";
+  addpreviousVideo,
+  removepreviousVideo,
+} from '../../controllers/admin';
+import middlewares from '../../middlewares';
 
 const {
   validate,
@@ -41,35 +43,48 @@ const adminRoutes = express();
 //   getSingleStudentCourse
 // );
 
-adminRoutes.get("/dashboard", usession.can("course:crud"), getAdminDashboard);
+adminRoutes.get('/dashboard', usession.can('course:crud'), getAdminDashboard);
 
-adminRoutes.get("/courses", usession.can("course:crud"), getAllCourses);
+adminRoutes.post(
+  '/add-prev-videos',
+  usession.can('class:crud'),
+  addpreviousVideo
+);
+
+adminRoutes.delete(
+  '/prev-videos/:id',
+  usession.can('class:crud'),
+  removepreviousVideo
+);
+
+adminRoutes.get('/courses', usession.can('course:crud'), getAllCourses);
+
 adminRoutes.get(
-  "/course/:id",
-  usession.can("course:crud"),
+  '/course/:id',
+  usession.can('course:crud'),
   validate(idSchema),
   getCourse
 );
-adminRoutes.get("/cat-names", getCourseCatnames);
+adminRoutes.get('/cat-names', getCourseCatnames);
 
 adminRoutes.get(
-  "/course-cohorts/:id",
-  usession.can(""),
+  '/course-cohorts/:id',
+  usession.can(''),
   validate(idSchema),
   getAllCourseCohorts
 );
 
 adminRoutes.get(
-  "/course-cohort/:id",
-  usession.can(""),
+  '/course-cohort/:id',
+  usession.can(''),
   validate(idSchema),
   getCourseCohort
 );
 
-adminRoutes.get("/users/:role", usession.can(""), getAllTrainers);
+adminRoutes.get('/users/:role', usession.can(''), getAllTrainers);
 
 adminRoutes.patch(
-  "/delete-student",
+  '/delete-student',
   usession.can(''),
   validate(deleteStudentSchema),
   deleteStudent

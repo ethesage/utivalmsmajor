@@ -27,6 +27,11 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'CASCADE',
     });
 
+    Classes.hasMany(models.CohortClassVideo, {
+      foreignKey: 'classId',
+      onDelete: 'CASCADE',
+    });
+
     Classes.hasMany(models.ClassResources, {
       foreignKey: 'classId',
       onDelete: 'CASCADE',

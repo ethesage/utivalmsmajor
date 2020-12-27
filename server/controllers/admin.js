@@ -161,6 +161,12 @@ export const getCourseCohort = async (req, res) => {
                 required: false,
               },
               {
+                model: models.CohortClassVideo,
+                attributes: ['id', 'link'],
+                where: { courseCohortId: id },
+                required: false,
+              },
+              {
                 model: models.CohortTrainer,
                 where: { courseCohortId: id },
                 attributes: ['id', 'userId'],
@@ -200,6 +206,27 @@ export const getCourse = async (req, res) => {
   });
 
   return successStat(res, 200, 'data', course);
+};
+
+export const addpreviousVideo = async (req, res) => {
+  const prevVideo = await models.CohortClassVideo.create(
+    {
+      ...req.body,
+    },
+    { returning: ['id', 'link'] }
+  );
+
+  return successStat(res, 200, 'data', prevVideo);
+};
+
+export const removepreviousVideo = async (req, res) => {
+  const { id } = req.params;
+
+  await models.CohortClassVideo.destroy({
+    where: { id },
+  });
+
+  return successStat(res, 200, 'message', 'deleted');
 };
 
 export const getCourseCatnames = async (req, res) => {

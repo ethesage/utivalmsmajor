@@ -133,6 +133,12 @@ export const getSingleTrainerCourse = async (req, res) => {
                 model: models.ClassResources,
               },
               {
+                model: models.CohortClassVideo,
+                attributes: ['id', 'link'],
+                where: { courseCohortId },
+                required: false,
+              },
+              {
                 model: models.CohortClassDays,
                 where: { courseCohortId },
                 required: false,
