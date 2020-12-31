@@ -41,6 +41,7 @@ export const getCourseSchema = Joi.object().keys({
   cost: Joi.number(),
   dateRange: Joi.string(),
   level: Joi.string(),
+  list_desc: Joi.string(),
   //   status: Joi.string(),
   extLink: Joi.string(),
   thumbnail: Joi.alternatives(Joi.string(), Joi.object()),
