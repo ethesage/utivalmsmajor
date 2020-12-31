@@ -142,7 +142,7 @@ export const getCourseCohort = async (req, res) => {
       },
       {
         model: models.Course,
-        attributes: ['id', 'name', 'description', 'duration', 'thumbnail'],
+        attributes: ['id', 'name', 'description', 'duration', 'thumbnail', 'list_desc'],
         include: [
           {
             model: models.CourseDescription,
