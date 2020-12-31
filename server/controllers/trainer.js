@@ -96,7 +96,7 @@ export const getSingleTrainerCourse = async (req, res) => {
       },
       {
         model: models.Course,
-        attributes: ['id', 'name', 'description', 'thumbnail'],
+        attributes: ['id', 'name', 'description', 'thumbnail', 'list_desc'],
         include: [
           {
             model: models.CourseDescription,
@@ -233,53 +233,48 @@ export const deleteTrainer = async (req, res) => {
 
 export const getTrainerNextClass = async (req, res) => {
   const { id } = req.session.user;
-  try {
-    const trainerClass = await models.CohortTrainer.findAll({
-      where: { userId: id },
-      include: [
-        {
-          model: models.Classes,
-          attributes: ['link'],
-          include: [
-            {
-              model: models.CohortClassDays,
-              where: { date: { [Op.gte]: new Date() } },
-              attributes: ['date', 'time'],
-            },
-          ],
-          //  attributes: ['thumbnail', 'name', 'extLink'],
-        },
-        {
-          model: models.CourseCohort,
-          attributes: ['courseId'],
-          include: [
-            {
-              model: models.Course,
-            },
-          ],
-        },
-      ],
-    });
 
-    const getAll = trainerClass.reduce((acc, item, index) => {
-      const n_item = item.dataValues;
+  const trainerClass = await models.CohortTrainer.findAll({
+    where: { userId: id },
+    include: [
+      {
+        model: models.Classes,
+        attributes: ['link'],
+        include: [
+          {
+            model: models.CohortClassDays,
+            where: { date: { [Op.gte]: new Date() } },
+            attributes: ['date', 'time'],
+          },
+        ],
+        //  attributes: ['thumbnail', 'name', 'extLink'],
+      },
+      {
+        model: models.CourseCohort,
+        attributes: ['courseId'],
+        include: [
+          {
+            model: models.Course,
+          },
+        ],
+      },
+    ],
+  });
 
-      if (n_item && n_item.Class) {
-        const course =
-          item.dataValues.CourseCohort.dataValues.Course.dataValues;
-        const link = {
-          link: item.dataValues.Class.dataValues.link,
-        };
-        const classDays = item.dataValues.Class.CohortClassDays[0].dataValues;
-        const all = { ...course, ...link, ...classDays };
-        acc[index] = all;
-      }
-      return acc;
-    }, []);
+  const getAll = trainerClass.reduce((acc, item, index) => {
+    const n_item = item.dataValues;
 
-    return successStat(res, 200, 'data', getAll);
-  } catch (e) {
-    console.log(e);
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
-  }
+    if (n_item && n_item.Class) {
+      const course = item.dataValues.CourseCohort.dataValues.Course.dataValues;
+      const link = {
+        link: item.dataValues.Class.dataValues.link,
+      };
+      const classDays = item.dataValues.Class.CohortClassDays[0].dataValues;
+      const all = { ...course, ...link, ...classDays };
+      acc[index] = all;
+    }
+    return acc;
+  }, []);
+
+  return successStat(res, 200, 'data', getAll);
 };

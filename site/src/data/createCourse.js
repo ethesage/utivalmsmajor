@@ -61,6 +61,13 @@ export default [
     required: true,
   },
   {
+    label: 'Class list descriptor',
+    name: 'list_desc',
+    placeHolder: '',
+    errorMsg: '',
+    required: true,
+  },
+  {
     name: 'type',
     placeHolder: 'Free Course',
     errorMsg: '',

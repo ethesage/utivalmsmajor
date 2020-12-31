@@ -46,6 +46,7 @@ const patterns = {
   link: shortText,
   search: shortText,
   vimeo: /vimeo\.com\/(\d+)/,
+  list_desc: shortText,
 };
 
 export const validate = (field, Regex) => {

@@ -109,7 +109,7 @@ export const getSingleStudentCourse = async (req, res) => {
       },
       {
         model: models.Course,
-        attributes: ['id', 'name', 'description', 'thumbnail'],
+        attributes: ['id', 'name', 'description', 'thumbnail', 'list_desc'],
         include: [
           {
             model: models.CourseDescription,
