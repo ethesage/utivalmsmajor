@@ -17,7 +17,7 @@ import {
   getAllCourseSchema,
   getCourseDescriptionSchema,
   getAllMainCourseSchema,
-  addCourseCohortProgressSchema
+  addCourseCohortProgressSchema,
 } from './validators/schemas/course';
 
 import {
@@ -32,7 +32,7 @@ import {
   addStudentSchema,
   getStudentSchema,
   getStudentCourseSchema,
-  addStudentProgressSchema
+  addStudentProgressSchema,
 } from './validators/schemas/student';
 
 import {
@@ -73,7 +73,7 @@ import { idSchema, deleteStudentSchema } from './validators/schemas/general';
 
 import { checkoutSchema } from './validators/schemas/checkout';
 
-import {transactionSchema} from './validators/schemas/transaction';
+import { transactionSchema } from './validators/schemas/transaction';
 
 import { isLoggedIn } from './auth';
 import { checkInvitation } from './checker';
@@ -131,5 +131,5 @@ export default {
   checkoutSchema,
   idSchema,
   deleteStudentSchema,
-  transactionSchema
+  transactionSchema,
 };

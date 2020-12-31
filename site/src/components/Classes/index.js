@@ -72,6 +72,8 @@ function Classes({
   const classId = data.id;
   const courseName = currentCohort && Object.keys(currentCohort)[0];
 
+  const list_desc = currentCourse.list_desc || currentCourse?.Course?.list_desc;
+
   const resources = data.ClassResources.filter(
     (res) => res.type === 'resource'
   );
@@ -203,8 +205,6 @@ function Classes({
   const handleChange = ({ target: { value } }) => {
     setPrevVideo(value);
   };
-
-  console.log('===>', courseName);
 
   const addVideo = async (e) => {
     if (!prevVideo || !prevVideo.match(/vimeo\.com\/(\d+)/)) {
@@ -354,7 +354,9 @@ function Classes({
                 <img src={class_icon} alt="class" />{' '}
                 <div className="flex-row j-space img">
                   <span>
-                    {Number(index + 1) ? `Day ${weeks[index + 1]} - ` : ''}{' '}
+                    {Number(index + 1)
+                      ? `${list_desc} ${weeks[index + 1]} - `
+                      : ''}{' '}
                     {title}
                   </span>
                   {(isAdmin || isTrainer) && full ? (

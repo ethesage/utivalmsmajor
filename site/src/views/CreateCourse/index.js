@@ -57,7 +57,9 @@ const CreateCourse = ({ edit }) => {
   ] = useInput({
     inputs: data,
     submitButton,
-    initials: courseId ? currentCourse || {} : {},
+    initials: courseId
+      ? currentCourse || { list_desc: 'Day' }
+      : { list_desc: 'Day' },
     btnText: text,
     cb: async (inputs) => {
       const formData = new FormData();

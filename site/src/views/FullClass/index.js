@@ -43,6 +43,9 @@ function FullClass({ gapi }) {
     !!currentCourse
   );
 
+  const list_desc =
+    currentCourse?.list_desc || currentCourse?.Course?.list_desc;
+
   // scroll the appropraite button clicked into view during a rerender
   useEffect(() => {
     const el = document.querySelector('.side_link[data-active="true"]');
@@ -73,7 +76,7 @@ function FullClass({ gapi }) {
                   to={`/courses/classroom/${courseId}/${classrm.id}`}
                   data-active={classroom === classrm.id}
                 >
-                  Day {i + 1}
+                  {list_desc} {i + 1}
                 </NavLink>
               </li>
             ))}
