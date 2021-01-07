@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 // import sequelize from "sequelize";
-import models from "../database/models";
-import helpers from "../helpers";
+import models from '../database/models';
+import helpers from '../helpers';
 
 const { successStat, errorStat } = helpers;
 
@@ -26,7 +26,7 @@ export const quickCheckout = async (req, res) => {
     });
 
     if (!cour) {
-      return errorStat(res, 404, "Course does not exist");
+      return errorStat(res, 404, 'Course does not exist');
     }
     if (!insertUser[0]) {
       const resource = await models.StudentCourse.findOne({
@@ -34,7 +34,7 @@ export const quickCheckout = async (req, res) => {
       });
 
       if (resource) {
-        return errorStat(res, 404, "Student is Already Taking This Course");
+        return errorStat(res, 404, 'Student is Already Taking This Course');
       }
 
       const studC = await models.StudentCourse.create({
@@ -43,7 +43,7 @@ export const quickCheckout = async (req, res) => {
         isCompleted: false,
         expiresAt: cour.expiresAt,
         cohortId: cour.cohortId,
-        status: "ongoing",
+        status: 'ongoing',
         courseId: cour.courseId,
         progress: 0,
       });
@@ -60,9 +60,9 @@ export const quickCheckout = async (req, res) => {
         totalStudent: cour.totalStudent + 1,
       });
 
-      return successStat(res, 200, "data", {
+      return successStat(res, 200, 'data', {
         ...studC.dataValues,
-        message: "Student added Successfully",
+        message: 'Student added Successfully',
       });
     } else {
       await cour.update({
@@ -78,7 +78,7 @@ export const quickCheckout = async (req, res) => {
           isCompleted: false,
           expiresAt: cour.expiresAt,
           cohortId: cour.cohortId,
-          status: "ongoing",
+          status: 'ongoing',
           courseId: cour.courseId,
           progress: 0,
         };
@@ -90,13 +90,13 @@ export const quickCheckout = async (req, res) => {
         allowDuplicates: false,
       });
 
-      return successStat(res, 200, "data", {
+      return successStat(res, 200, 'data', {
         ...studC.dataValues,
-        message: "Student(s) added Successfully",
+        message: 'Student(s) added Successfully',
       });
     }
   } catch (e) {
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
@@ -110,7 +110,7 @@ export const checkStatus = async (req, res) => {
     });
 
     if (!cour) {
-      return errorStat(res, 404, "Course does not exist");
+      return errorStat(res, 404, 'Course does not exist');
     }
 
     const resource = await models.StudentCourse.findOne({
@@ -118,14 +118,14 @@ export const checkStatus = async (req, res) => {
     });
 
     if (resource) {
-      return errorStat(res, 404, "Student is Already Taking This Course");
+      return errorStat(res, 404, 'Student is Already Taking This Course');
     }
 
-    return successStat(res, 200, "data", {
-      message: "Not Enrolled",
+    return successStat(res, 200, 'data', {
+      message: 'Not Enrolled',
     });
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };

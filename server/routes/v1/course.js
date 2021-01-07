@@ -11,7 +11,7 @@ import {
   getAllCoursesAdmin,
   Courses,
   addCourseCohortProgress,
-  getCohortCourse
+  getCohortCourse,
 } from '../../controllers/course';
 import middlewares from '../../middlewares';
 
@@ -37,7 +37,7 @@ courseRoutes.post(
 
 courseRoutes.get(
   '/getCohortCourse/:courseCohortId',
-  usession.can(''),
+  // usession.can(''),
   // validate(createCourse),
   getCohortCourse
 );

@@ -356,6 +356,9 @@ export const addCourseCohortProgress = async (req, res) => {
     where: { type: 'course', classId },
   });
 
+  let find = 0;
+  let count = 0;
+
   if (!findclassProgress[0]) {
     const course = await models.CourseCohort.findOne({
       where: { id: courseCohortId },
@@ -368,23 +371,26 @@ export const addCourseCohortProgress = async (req, res) => {
       type: 'course',
     });
 
-    const find = await models.CourseProgress.findAll({
+    find = await models.CourseProgress.findAll({
       where: { type: 'course', courseCohortId },
     });
 
-    const count = await models.Classes.findAll({
+    count = await models.Classes.findAll({
       where: { courseCohortId },
     });
 
     await course.update({
       progress: Math.floor((find.length / count.length) * 100),
-      status: Math.floor((find.length / count.length) * 100) === 100 ? 'finished' : 'ongoing'
+      status:
+        Math.floor((find.length / count.length) * 100) === 100
+          ? 'finished'
+          : 'ongoing',
     });
   }
 
-  if (Math.floor((find.length / count.length) * 100))
-
-  await models.Classes.update({ started: true }, { where: { id: classId } });
+  if (Math.floor((find.length / count.length) * 100)) {
+    await models.Classes.update({ started: true }, { where: { id: classId } });
+  }
 
   return successStat(res, 200, 'data', 'update successful');
 };
@@ -394,7 +400,7 @@ export const getCohortCourse = async (req, res) => {
   // console.log()
   // const { offset, limit } = calculateLimitAndOffset(currentPage, pageLimit);
   // const id = req?.session?.user?.id ;
-  let user = true;
+  let user;
 
   if (req.session.user) user = req.session.user.id;
 
