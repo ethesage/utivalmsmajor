@@ -697,3 +697,12 @@ li {
     width: 100%;
   }
 }
+
+.backdrop {
+  background-color: rgba(#000, 0.2);
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+}

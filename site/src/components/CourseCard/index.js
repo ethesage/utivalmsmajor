@@ -48,11 +48,7 @@ const CourseCard = ({ data, size = '' }) => {
   const handleClick = (e) => {
     e.preventDefault();
     dispatch(purchaseCourse(data));
-    user
-      ? data.StudentCourses?.length > 0
-        ? history.push(`/courses/overview/${CourseCohorts[0].id}`)
-        : history.push(`/purchase/${CourseCohorts[0].id}`)
-      : history.push(`/auth/quickcheckout/${CourseCohorts[0].id}`);
+    history.push(`/purchase/${CourseCohorts[0].id}`);
   };
 
   return (

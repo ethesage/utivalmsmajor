@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import dialogPolyfill from 'dialog-polyfill';
 // import category from 'data/categories';
 // import card from 'assets/icons/card.png';
 // import paystack from 'assets/icons/paystack.png';
@@ -45,6 +46,10 @@ const Payment = ({ back, id }) => {
   };
 
   function done() {
+    typeof disRef?.current?.showModal !== 'function' &&
+      dialogPolyfill.registerDialog(disRef.current);
+
+    if (disRef.current.open) return;
     disRef.current.showModal();
   }
 
