@@ -81,6 +81,8 @@ function Classes({
     (res) => res.type === 'assignment'
   );
 
+  // console.log(data);
+
   const getFiles = useCallback(
     async (id) => {
       if (!gapi) return;
@@ -463,28 +465,31 @@ function Classes({
                       style={{ margin: '40px 0 10px' }}
                       className="theme-color"
                     >
-                      Trainer
+                      Trainer{data?.CohortTrainers.length > 1 ? 's' : ''}
                     </h4>
 
-                    {data?.CohortTrainer?.User ? (
-                      <div className="trainer flex-row j-start">
-                        <img
-                          src={
-                            data?.CohortTrainer?.User?.profilePic || user_icon
-                          }
-                          alt="userimage"
-                          onError={handleImgError}
-                        />
-                        <div>
-                          <strong>
-                            <p>
-                              {data.CohortTrainer.User.firstName}{' '}
-                              {data.CohortTrainer.User.lastName}
-                            </p>
-                          </strong>
-                          <small>{data.CohortTrainer.User.occupation}</small>
+                    {data?.CohortTrainers.length > 0 ? (
+                      data.CohortTrainers.map((trainer) => (
+                        <div
+                          className="trainer flex-row j-start"
+                          key={trainer.id}
+                        >
+                          <img
+                            src={trainer.User?.profilePic || user_icon}
+                            alt="userimage"
+                            onError={handleImgError}
+                          />
+                          <div>
+                            <strong>
+                              <p>
+                                {trainer.User.firstName}
+                                {trainer.User.lastName}
+                              </p>
+                            </strong>
+                            <small>{trainer.User.occupation}</small>
+                          </div>
                         </div>
-                      </div>
+                      ))
                     ) : (
                       <p>No Trainer has been assigned to this class</p>
                     )}

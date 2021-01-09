@@ -200,7 +200,7 @@ const Calender = ({ data }) => {
         currentText={year()}
         inputs={getDates('2019', (new Date().getFullYear() + 2).toString())}
         handleSelect={setYear}
-        value={new Date().getFullYear().toString()}
+        value={year()}
       />
       <div className="calendar flex-row">
         <div className="calendar-date">

@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import dialogPolyfill from 'dialog-polyfill';
+import QuickCheckout from 'views/Auth/QuickCheckout';
 // import category from 'data/categories';
 // import card from 'assets/icons/card.png';
 // import paystack from 'assets/icons/paystack.png';
@@ -24,6 +25,7 @@ const Payment = ({ back, id }) => {
 
   const dispatch = useDispatch();
   const { courses } = useSelector((state) => state);
+  const { user } = useSelector((state) => state.auth);
 
   // const dispatch = useDispatch();
 
@@ -77,8 +79,9 @@ const Payment = ({ back, id }) => {
           </button>
         </div>
       </dialog>
-      <div className="payment_con mx-auto txt-center">
-        {/* <nav className="nav-sec flex-row j-space">
+      {user ? (
+        <div className="payment_con mx-auto txt-center">
+          {/* <nav className="nav-sec flex-row j-space">
           <div className="nav-item">
             <img src={card} alt="card" />
           </div>
@@ -90,20 +93,27 @@ const Payment = ({ back, id }) => {
           </div>
         </nav> */}
 
-        {/* <div className="flex-row card-sec"> */}
-        {/* <Card done={done} /> */}
+          {/* <div className="flex-row card-sec"> */}
+          {/* <Card done={done} /> */}
 
-        {/* <Paystack done={done} /> */}
-        <p>Pay using</p>
-        {courses.purchaseCourse.type !== 'free' && <Flutterwave done={done} />}
-        {/* <Paypal done={done} /> */}
+          {/* <Paystack done={done} /> */}
+          <p>Congratulations! Continue your paymant using</p>
+          {courses.purchaseCourse.type !== 'free' && (
+            <Flutterwave done={done} />
+          )}
+          {/* <Paypal done={done} /> */}
 
-        {/* </div> */}
+          {/* </div> */}
 
-        <button className="back" onClick={goBack}>
-          Back
-        </button>
-      </div>
+          <button className="back" onClick={goBack}>
+            Back
+          </button>
+        </div>
+      ) : (
+        <div className="flex-row">
+          <QuickCheckout />
+        </div>
+      )}
     </div>
   );
 };

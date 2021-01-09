@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import Input from 'components/Input';
 import useInput from 'Hooks/useInput';
@@ -10,6 +9,7 @@ import { Link } from 'react-router-dom';
 import { axiosInstance } from 'helpers';
 import { login } from 'g_actions/user';
 import Social from '../SocialSec';
+import './style.scss';
 import '../style.scss';
 
 function QuickCheckout({ match }) {
@@ -18,7 +18,6 @@ function QuickCheckout({ match }) {
   const [reviel, setReviel] = useState(false);
   const [pass, setPass] = useState(false);
   const { addToast } = useToasts();
-  const { push } = useHistory();
 
   const [handleSubmit, handleChange, inputTypes, validateSelf] = useInput({
     inputs: data,
@@ -59,12 +58,7 @@ function QuickCheckout({ match }) {
           autoDismiss: true,
         });
         dispatch(login());
-        push(`/purchase/${match.params.courseCohortId}`);
       }
-      // console.log(response.data.user.message);
-
-      // console.log(response);
-      // push("/");
     },
     btnText: {
       loading: 'Submitting...',
@@ -79,8 +73,10 @@ function QuickCheckout({ match }) {
   return (
     <div className="auth_section">
       <div className="reg_text">
-        <h2>Quick Check Out</h2>
-        <p>
+        <h2>Hi there</h2>
+        <h2>One last step before you can pay. </h2>
+
+        <p style={{ fontSize: '.9em' }}>
           Already have an account?{' '}
           <Link to="/signin">
             <strong className="theme-color">Sign in</strong>

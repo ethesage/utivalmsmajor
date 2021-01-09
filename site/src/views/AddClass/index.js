@@ -27,15 +27,17 @@ const AddAssignment = ({ editedClass, edit, name, courseId, mainCohortId }) => {
   const modalRef = useRef();
   const allTrainers = useSelector((state) => state.trainers);
   const [loading, , fetch] = useFetch(dispatch, !!!allTrainers);
-  const [trainer, setTrainer] = useState(
-    editedClass?.CohortTrainer?.User && {
-      id: editedClass?.CohortTrainer?.userId,
-      firstName: editedClass?.CohortTrainer?.User?.firstName,
-      lastName: editedClass?.CohortTrainer?.User?.lastName,
-      occupation: editedClass?.CohortTrainer?.User?.occupation,
-      profilePic: editedClass?.CohortTrainer?.User?.profilePic,
-    }
+  const [trainers, setTrainers] = useState(
+    editedClass?.CohortTrainers &&
+      editedClass.CohortTrainers.map((trainer) => ({
+        id: trainer.userId,
+        firstName: trainer.User.firstName,
+        lastName: trainer.User.lastName,
+        occupation: trainer.User.occupation,
+        profilePic: trainer.User.profilePic,
+      }))
   );
+
   const { cohortId } = useParams();
   const [filtered, setFiltered] = useState([]);
 
@@ -71,11 +73,11 @@ const AddAssignment = ({ editedClass, edit, name, courseId, mainCohortId }) => {
       : {},
     btnText: text,
     cb: async (inputs) => {
-      if (!trainer) {
+      if (!trainers) {
         submitButton.current.children[0].innerHTML = text.reg;
         submitButton.current.classList.remove('loader');
 
-        return addToast('Please select a trainer', {
+        return addToast('Please select a trainers', {
           appearance: 'warning',
           autoDismiss: true,
         });
@@ -86,7 +88,7 @@ const AddAssignment = ({ editedClass, edit, name, courseId, mainCohortId }) => {
       const s_data = edit
         ? {
             ...inputs,
-            userId: trainer.id,
+            users: trainers.map((trainer) => ({ userId: trainer.id })),
             courseCohortId: cohortId,
             courseId,
             classId: editedClass.id,
@@ -95,7 +97,7 @@ const AddAssignment = ({ editedClass, edit, name, courseId, mainCohortId }) => {
           }
         : {
             ...inputs,
-            userId: trainer.id,
+            users: trainers.map((trainer) => ({ userId: trainer.id })),
             courseCohortId: cohortId,
             courseId,
             cohortId: mainCohortId,
@@ -125,8 +127,14 @@ const AddAssignment = ({ editedClass, edit, name, courseId, mainCohortId }) => {
     e.target.src = user_icon;
   };
 
-  const remove = () => {
-    setTrainer(null);
+  const remove = (id) => {
+    setTrainers(trainers.filter((trainer) => trainer.id !== id));
+  };
+
+  const addTrainers = (trainer) => {
+    if (trainers.includes(trainer)) return;
+
+    setTrainers([...trainers, trainer]);
   };
 
   const handleSearch = ({ target: { name, value } }) => {
@@ -224,27 +232,28 @@ const AddAssignment = ({ editedClass, edit, name, courseId, mainCohortId }) => {
             </div>
 
             <div className="trx_con">
-              {trainer && (
-                <div
-                  key={trainer.id}
-                  className="trainer flex-row j-start"
-                  onClick={() => setTrainer(trainer)}
-                >
-                  <img
-                    src={trainer.profilePic || user_icon}
-                    alt="userimage"
-                    onError={handleImgError}
-                  />
-                  <div>
-                    <strong>
-                      <p>
-                        {trainer.firstName} {trainer.lastName}
-                      </p>
-                    </strong>
-                    <small>{trainer.occupation}</small>
+              {trainers &&
+                trainers.map((trainer) => (
+                  <div
+                    key={trainer.id}
+                    className="trainer flex-row j-start"
+                    onClick={() => addTrainers(trainer)}
+                  >
+                    <img
+                      src={trainer.profilePic || user_icon}
+                      alt="userimage"
+                      onError={handleImgError}
+                    />
+                    <div>
+                      <strong>
+                        <p>
+                          {trainer.firstName} {trainer.lastName}
+                        </p>
+                      </strong>
+                      <small>{trainer.occupation}</small>
+                    </div>
                   </div>
-                </div>
-              )}
+                ))}
             </div>
           </div>
         </div>
@@ -261,18 +270,22 @@ const AddAssignment = ({ editedClass, edit, name, courseId, mainCohortId }) => {
           />
 
           <div className="selected flex-row j-start">
-            {trainer && (
-              <div className="slx_tr">
-                <img
-                  src={trainer?.profilePic || user_icon}
-                  alt=""
-                  onError={handleImgError}
-                />
-                <div className="rmv flex-row" onClick={remove}>
-                  <Close />
+            {trainers &&
+              trainers.map((trainer) => (
+                <div className="slx_tr" key={`modal_${trainer.id}`}>
+                  <img
+                    src={trainer?.profilePic || user_icon}
+                    alt=""
+                    onError={handleImgError}
+                  />
+                  <div
+                    className="rmv flex-row"
+                    onClick={() => remove(trainer.id)}
+                  >
+                    <Close />
+                  </div>
                 </div>
-              </div>
-            )}
+              ))}
           </div>
           <h2>Results</h2>
           {!loading ? (
@@ -284,7 +297,7 @@ const AddAssignment = ({ editedClass, edit, name, courseId, mainCohortId }) => {
                 <div
                   key={trainer.id}
                   className="trainer flex-row j-start"
-                  onClick={() => setTrainer(trainer)}
+                  onClick={() => addTrainers(trainer)}
                 >
                   <img
                     src={trainer.profilePic || user_icon}

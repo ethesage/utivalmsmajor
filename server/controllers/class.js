@@ -1,15 +1,13 @@
 /* eslint-disable indent */
 /* eslint-disable no-console */
 /* eslint-disable import/prefer-default-export */
-import sequelize from "sequelize";
+import sequelize from 'sequelize';
 // import { paginate, calculateLimitAndOffset } from 'paginate-info';
-import models from "../database/models";
-import helpers from "../helpers";
+import models from '../database/models';
+import helpers from '../helpers';
 // import  from "../helpers"
 
 const { successStat, errorStat } = helpers;
-
-const { Op } = sequelize;
 
 /**
  * / @static
@@ -25,65 +23,21 @@ export const createClass = async (req, res) => {
     resourceLink,
     users,
     courseCohortId,
-    courseId,
-    cohortId,
+    classId,
+    date,
+    time,
   } = req.body.class;
-
-  // const course = await models.Course.findOne({
-  //   where: { id: courseId }
-  // });
-
-  // if (!course) return errorStat(res, 404, 'Course does not exist');
 
   const courseCohort = await models.CourseCohort.findOne({
     where: { id: courseCohortId },
   });
 
-  if (users) {
-    const descVals = users.map((desc) => ({
-      userId: desc.userId,
-      courseCohortId,
-      courseId,
-      cohortId,
-    }));
-
-    trainer = await models.Trainer.bulkCreate(descVals, {
-      ignoreDuplicates: true,
-    });
-  }
-
   if (!courseCohort) {
-    return errorStat(res, 404, "Course Cohort does not exist");
+    return errorStat(res, 404, 'Course Cohort does not exist');
   }
-
-  // let trainer = await models.Trainer.findOne({
-  //   where: { [Op.and]: [{ userId }, { courseCohortId }, { cohortId }] },
-  //   include: {
-  //     model: models.User,
-  //     attributes: ['id', 'firstName', 'lastName', 'profilePic'],
-  //   },
-  // });
-
-  // if (!trainer) {
-  //   trainer = await models.Trainer.create({
-  //     userId,
-  //     courseCohortId,
-  //     courseId,
-  //     cohortId,
-  //   });
-
-  //   trainer = await models.Trainer.findOne({
-  //     where: { [Op.and]: [{ userId }, { courseCohortId }] },
-  //     include: {
-  //       model: models.User,
-  //       attributes: ['id', 'firstName', 'lastName', 'profilePic'],
-  //     },
-  //   });
-  // }
 
   const classCreate = await models.Classes.create({
     ...req.body.class,
-    // trainerId: trainer.id,
   });
 
   const resource = resourceLink
@@ -94,17 +48,13 @@ export const createClass = async (req, res) => {
       })
     : [];
 
-  const day = await models.ClassDays.create({
-    ...req.body.class,
-    classId: classCreate.id,
-    // time: '16:17:03.084+01:00'
-  });
-
   await courseCohort.update({
     totalClasses: courseCohort.totalClasses + 1,
   });
 
   // await models.CohortTrainer.destroy({ where: { classId: classCreate.id } })
+
+  let trainers = [];
 
   if (users) {
     const descVals = users.map((desc) => ({
@@ -113,28 +63,23 @@ export const createClass = async (req, res) => {
       classId: classCreate.id,
     }));
 
-    resource = await models.CohortTrainer.bulkCreate(descVals, {
+    trainers = await models.CohortTrainer.bulkCreate(descVals, {
       ignoreDuplicates: true,
     });
   }
 
-  // await models.CohortTrainer.create({
-  //   userId,
-  //   courseCohortId,
-  //   classId: classCreate.id,
-  // });
-
-  await models.CohortClassDays.create({
-    ...req.body.class,
-    classId: classCreate.id,
-    // time: '16:17:03.084+01:00'
+  const day = await models.CohortClassDays.create({
+    classId,
+    courseCohortId,
+    date,
+    time,
   });
 
-  return successStat(res, 201, "data", {
+  return successStat(res, 201, 'data', {
     ...classCreate.dataValues,
     ClassResources: resource,
     ClassDays: [day],
-    Trainer: trainer,
+    Trainer: trainers,
   });
 };
 
@@ -154,12 +99,12 @@ export const getClass = async (req, res) => {
       ],
     });
 
-    if (!allClass) return errorStat(res, 404, "Class Not Found");
+    if (!allClass) return errorStat(res, 404, 'Class Not Found');
 
-    return successStat(res, 200, "data", allClass);
+    return successStat(res, 200, 'data', allClass);
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
@@ -180,13 +125,13 @@ export const getAllClass = async (req, res) => {
     });
 
     if (!allClass[0]) {
-      return errorStat(res, 404, "No class Found for this course");
+      return errorStat(res, 404, 'No class Found for this course');
     }
 
-    return successStat(res, 200, "data", allClass);
+    return successStat(res, 200, 'data', allClass);
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
@@ -207,17 +152,17 @@ export const getAllStudentClass = async (req, res) => {
           ],
         },
       ],
-      order: [["createdAt", "DESC"]],
+      order: [['createdAt', 'DESC']],
     });
 
     if (!resource[0]) {
-      return errorStat(res, 404, "No Course Found");
+      return errorStat(res, 404, 'No Course Found');
     }
 
-    return successStat(res, 200, "data", resource);
+    return successStat(res, 200, 'data', resource);
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
@@ -233,102 +178,77 @@ export const getAllTrainerClass = async (req, res) => {
           where: { userId: id },
         },
       ],
-      order: [["createdAt", "DESC"]],
+      order: [['createdAt', 'DESC']],
     });
 
     if (!resource[0]) {
-      return errorStat(res, 404, "No Course Found");
+      return errorStat(res, 404, 'No Course Found');
     }
 
-    return successStat(res, 200, "data", resource);
+    return successStat(res, 200, 'data', resource);
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
 export const updateClass = async (req, res) => {
   const {
-    user,
     courseCohortId,
-    courseId,
     classId,
-    cohortId,
     cohortClassDaysId,
+    date,
+    time,
+    users,
   } = req.body;
 
-  let trainer;
+  let trainers = [];
 
-  await models.CohortTrainer.destroy({ where: { classId } });
+  await models.CohortTrainer.destroy({ where: { classId, courseCohortId } });
+
+  await models.Classes.update(
+    {
+      ...req.body,
+    },
+    { where: { id: classId } }
+  );
+
+  const resource = await models.ClassResources.findAll({
+    where: { classId },
+  });
 
   if (users) {
     const descVals = users.map((desc) => ({
       userId: desc.userId,
       courseCohortId,
-      classId: classCreate.id,
+      classId,
     }));
 
-    trainer = await models.CohortTrainer.bulkCreate(descVals, {
+    trainers = await models.CohortTrainer.bulkCreate(descVals, {
       ignoreDuplicates: true,
-      returning: "*",
     });
   }
 
-  // let trainer = await models.Trainer.findOne({
-  //   where: { [Op.and]: [{ userId }, { courseCohortId }, { cohortId }] },
-  //   include: {
-  //     model: models.User,
-  //     attributes: ['id', 'firstName', 'lastName', 'profilePic'],
-  //   },
-  // });
-
-  // if (!trainer) {
-  //   trainer = await models.Trainer.create({
-  //     userId,
-  //     courseCohortId,
-  //     courseId,
-  //     cohortId,
-  //   });
-
-  //   trainer = await models.Trainer.findOne({
-  //     where: { [Op.and]: [{ userId }, { courseCohortId }] },
-  //     include: {
-  //       model: models.User,
-  //       attributes: ['id', 'firstName', 'lastName', 'profilePic'],
-  //     },
-  //   });
-  // }
-
-  // const classTrainer = await models.CohortTrainer.findOne({
-  //   where: { [Op.and]: [{ userId }, { courseCohortId }, { classId }] },
-  // });
-
-  // if (!classTrainer) {
-  //   await models.CohortTrainer.create({
-  //     userId,
-  //     courseCohortId,
-  //     classId,
-  //   });
-  // } else {
-  //   await models.CohortTrainer.update({
-  //     userId,
-  //   }, { where: { [Op.and]: [{ classId }, { courseCohortId }] } });
-  // }
-
-  await models.Classes.update(
-    {
-      ...req.body,
-      // trainerId: trainer.id,
-    },
-    { where: { id: classId } }
-  );
-
   const updatedClass = await models.Classes.findOne({
     where: { id: classId },
-  });
-
-  const resource = await models.ClassResources.findAll({
-    where: { classId },
+    include: [
+      {
+        model: models.CohortTrainer,
+        where: { courseCohortId },
+        attributes: ['id', 'userId'],
+        required: false,
+        include: {
+          model: models.User,
+          attributes: ['firstName', 'lastName', 'profilePic', 'occupation'],
+        },
+      },
+      {
+        model: models.CohortClassVideo,
+        attributes: ['id', 'link'],
+        where: { courseCohortId },
+        required: false,
+      },
+    ],
   });
 
   if (cohortClassDaysId) {
@@ -341,23 +261,23 @@ export const updateClass = async (req, res) => {
       where: { classId },
     });
 
-    successStat(res, 200, "data", {
+    successStat(res, 200, 'data', {
       ...updatedClass.dataValues,
       ClassResources: resource || [],
       CohortClassDays: updateClassdays,
-      CohortTrainer: trainer,
     });
   } else {
     const days = await models.CohortClassDays.create({
-      ...req.body.class,
-      returning: "*",
+      classId,
+      courseCohortId,
+      date,
+      time,
     });
 
-    return successStat(res, 200, "data", {
+    return successStat(res, 200, 'data', {
       ...updatedClass.dataValues,
       ClassResources: resource || [],
       CohortClassDays: days,
-      CohortTrainer: trainer,
     });
   }
 };
@@ -379,15 +299,15 @@ export const deleteClass = async (req, res) => {
     });
 
     if (!foundClass) {
-      return errorStat(res, 404, "Class not found");
+      return errorStat(res, 404, 'Class not found');
     }
 
     await foundClass.destroy();
 
-    return successStat(res, 201, "data", "Delete Successful");
+    return successStat(res, 201, 'data', 'Delete Successful');
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
@@ -399,19 +319,19 @@ export const classAssignment = async (req, res) => {
       where: { id: classId },
     });
 
-    if (!findClass) return errorStat(res, 404, "Class not found");
+    if (!findClass) return errorStat(res, 404, 'Class not found');
 
     const createAssignment = await models.ClassResources.create({
       ...req.body.class,
-      type: "assignment",
+      type: 'assignment',
     });
-    return successStat(res, 201, "data", {
+    return successStat(res, 201, 'data', {
       ...createAssignment.dataValues,
-      message: "Class Assignment created successfully",
+      message: 'Class Assignment created successfully',
     });
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
@@ -424,20 +344,20 @@ export const editClassAssignment = async (req, res) => {
     });
 
     if (!findAssignment) {
-      return errorStat(res, 404, "Class Assignment not found");
+      return errorStat(res, 404, 'Class Assignment not found');
     }
 
     await findAssignment.update({
       ...req.body.class,
     });
 
-    return successStat(res, 201, "data", {
+    return successStat(res, 201, 'data', {
       ...findAssignment.dataValues,
-      message: "Class Assignment created successfully",
+      message: 'Class Assignment created successfully',
     });
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
@@ -449,7 +369,7 @@ export const deleteClassAssignment = async (req, res) => {
     });
 
     if (!findAssignment) {
-      return errorStat(res, 404, "Class Assignment not found");
+      return errorStat(res, 404, 'Class Assignment not found');
     }
 
     await findAssignment.destroy();
@@ -457,12 +377,12 @@ export const deleteClassAssignment = async (req, res) => {
     return successStat(
       res,
       201,
-      "data",
-      "Class Assignment deleted successfully"
+      'data',
+      'Class Assignment deleted successfully'
     );
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
@@ -473,18 +393,18 @@ export const addClassResources = async (req, res) => {
       where: { id: classId },
     });
 
-    if (!findClass) return errorStat(res, 404, "Class not found");
+    if (!findClass) return errorStat(res, 404, 'Class not found');
 
     const createResource = await models.ClassResources.create({
       ...req.body.class,
-      type: "resource",
+      type: 'resource',
     });
-    return successStat(res, 201, "data", {
+    return successStat(res, 201, 'data', {
       ...createResource.dataValues,
-      message: "Class Resource created successfully",
+      message: 'Class Resource created successfully',
     });
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
