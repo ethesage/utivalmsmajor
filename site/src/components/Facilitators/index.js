@@ -10,10 +10,10 @@ const Facilitators = ({ trainers }) => {
   useEffect(() => {
     const t = [];
 
-    trainers.reduce((acc, trainer, i) => {
-      let name =
-        trainer?.CohortTrainer?.User?.firstName +
-        trainer?.CohortTrainer?.User?.lastName;
+    const n_t = trainers.map((trainer) => trainer.CohortTrainers).flat();
+
+    n_t.reduce((acc, trainer, i) => {
+      let name = trainer?.User?.firstName + trainer?.User?.lastName;
 
       if (!name) return acc;
       if (acc.hasOwnProperty(name)) return acc;
@@ -29,7 +29,7 @@ const Facilitators = ({ trainers }) => {
 
   return (
     <div className="fac_xc flex-col">
-      {Utrainers[currentUser]?.CohortTrainer?.User?.firstName && (
+      {Utrainers[currentUser]?.User?.firstName && (
         <TransitionGroup className="fac_xc_con flex-row ">
           <CSSTransition
             classNames="slide"
@@ -39,20 +39,15 @@ const Facilitators = ({ trainers }) => {
             <div className="fac_xc_sec flex-row j-start">
               <div className="img-sec">
                 <img
-                  src={
-                    Utrainers[currentUser]?.CohortTrainer?.User?.profilePic ||
-                    user_icon
-                  }
+                  src={Utrainers[currentUser]?.User?.profilePic || user_icon}
                   alt=""
                   className="img cover"
                 />
               </div>
               <div className="text_sec">
                 <p>Instructors</p>
-                <h2>{`${Utrainers[currentUser]?.CohortTrainer?.User?.firstName} ${Utrainers[currentUser]?.CohortTrainer?.User?.lastName}`}</h2>
-                <h3>
-                  {Utrainers[currentUser]?.CohortTrainer?.User?.occupation}
-                </h3>
+                <h2>{`${Utrainers[currentUser]?.User?.firstName} ${Utrainers[currentUser]?.User?.lastName}`}</h2>
+                <h3>{Utrainers[currentUser]?.User?.occupation}</h3>
               </div>
             </div>
           </CSSTransition>
