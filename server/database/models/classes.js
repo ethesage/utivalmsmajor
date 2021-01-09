@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'classId',
       onDelete: 'CASCADE',
     });
-    Classes.hasOne(models.CohortTrainer, {
+    Classes.hasMany(models.CohortTrainer, {
       foreignKey: 'classId',
       onDelete: 'CASCADE',
     });

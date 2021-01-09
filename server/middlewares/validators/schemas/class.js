@@ -5,7 +5,7 @@ export const createClassroom = Joi.object().keys({
   //   studentId: Joi.string().uuid().trim().required(),
   courseCohortId: Joi.string().uuid().trim().required(),
   cohortId: Joi.string().uuid().trim().required(),
-  userId: Joi.string().uuid().trim().required(),
+  // userId: Joi.string().uuid().trim().required(),
   courseId: Joi.string().uuid().trim().required(),
   title: Joi.string().trim().required(),
   description: Joi.string().required(),
@@ -15,6 +15,11 @@ export const createClassroom = Joi.object().keys({
   type: Joi.string().trim().valid('video', 'pdf', 'doc', 'xlx', 'ppt'),
   date: Joi.string().required(),
   time: Joi.string().required(),
+  users: Joi.array().items(
+    Joi.object({
+      userId: Joi.string().uuid().trim().required(),
+    })
+  ),
 });
 
 export const getClassAssignmentSchema = Joi.object().keys({
