@@ -4,13 +4,7 @@ import user_icon from 'assets/user_icon.png';
 import linkedinPic from 'assets/icons/linkedin.png';
 import './style.scss';
 
-const Member = ({
-  data: {
-    User: { profilePic, firstName, lastName, linkedin, occupation },
-  },
-  onClick,
-  isAdmin,
-}) => {
+const Member = ({ data, onClick, isAdmin }) => {
   return (
     <div className="snx_mem flex-col al-start">
       {isAdmin && (
@@ -19,13 +13,17 @@ const Member = ({
         </div>
       )}
 
-      <img src={profilePic || user_icon} alt="name" className="img_sec cover" />
+      <img
+        src={data?.User?.profilePic || user_icon}
+        alt="name"
+        className="img_sec cover"
+      />
       <div className="text_sec">
         <p className="theme-color">
-          {firstName} {lastName}
+          {data?.User?.firstName} {data?.User?.lastName}
         </p>
-        <small>{occupation}</small>
-        <a href={linkedin} target="_">
+        <small>{data?.User?.occupation}</small>
+        <a href={data?.User?.linkedin} target="_">
           <img src={linkedinPic} alt="linkedIn" />
         </a>
       </div>
