@@ -264,22 +264,22 @@ const Members = ({ courseId }) => {
                 )}
                 {usersToshow?.map((student) => (
                   <div
-                    key={student.id}
+                    key={student?.id}
                     className="trainer flex-row j-start"
                     onClick={() => addStudent(student)}
                   >
                     <img
-                      src={student.profilePic || user_icon}
+                      src={student?.profilePic || user_icon}
                       alt="userimage"
                       onError={handleImgError}
                     />
                     <div>
                       <strong>
                         <p>
-                          {student.firstName} {student.lastName}
+                          {student?.firstName} {student?.lastName}
                         </p>
                       </strong>
-                      <small>{student.occupation}</small>
+                      <small>{student?.occupation}</small>
                     </div>
                   </div>
                 ))}
