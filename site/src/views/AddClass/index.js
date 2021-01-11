@@ -8,6 +8,7 @@ import { getAllTrainers } from 'g_actions/trainer';
 import { addClass, editClass } from 'g_actions/admin';
 import { updateResourceName, createResourceName } from 'g_actions/member';
 import TrainerIcon from 'assets/icons/addTrainer';
+import Editor from 'components/Editor';
 import Modal from 'components/Modal';
 import Input from 'components/Input';
 import useInput from 'Hooks/useInput';
@@ -158,7 +159,27 @@ const AddAssignment = ({ editedClass, edit, name, courseId, mainCohortId }) => {
         <div className="desc_se">
           <div className={`in_sec`}>
             <div className="sub_fm">
-              {data.slice(0, 3).map((form, i) => (
+              {data.slice(0, 1).map((form, i) => (
+                <Input
+                  key={`login_form_${i}`}
+                  name={form.name}
+                  type={form.type}
+                  itype={form.itype}
+                  placeHolder={form.placeHolder}
+                  value={inputTypes[form.name]}
+                  errorMsg={form.errorMsg}
+                  required={form.required}
+                  handleChange={handleChange}
+                  validateSelf={validateSelf}
+                  inputs={form.select}
+                  label={form.label}
+                  showAsterix={false}
+                />
+              ))}
+
+              <Editor readOnly={false} mode="edit" />
+
+              {data.slice(2, 3).map((form, i) => (
                 <Input
                   key={`login_form_${i}`}
                   name={form.name}

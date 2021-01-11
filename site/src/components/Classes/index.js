@@ -10,6 +10,7 @@ import {
   studentProgress,
   courseProgress,
 } from 'g_actions/member';
+import Editor from 'components/Editor';
 import { addPrevVideoFn, removePrevVideoFn } from 'g_actions/admin';
 import ProgressBar from 'components/ProgressBar';
 import Button from 'components/Button';
@@ -421,7 +422,13 @@ function Classes({
               </div>
             ) : (
               <div className="inf_x">
-                <p>{description}</p>
+                {/* <p>{title}</p> */}
+                <Editor
+                  key={description}
+                  readOnly={true}
+                  data={description}
+                  mode="edit"
+                />
               </div>
             )}
 

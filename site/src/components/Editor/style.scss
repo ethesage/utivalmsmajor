@@ -1,0 +1,64 @@
+@import '../../media';
+
+.edit,
+.no-edit {
+  position: relative;
+
+  .currentValue {
+    p {
+      color: color(theme) !important;
+      padding: 5px;
+    }
+  }
+
+  @include for-size(tablet-landscape-up) {
+    padding: 90px 30px 0;
+  }
+
+  .btn-sec {
+    justify-content: space-between;
+    height: 50px;
+    padding: 0 5%;
+  }
+}
+
+.edit {
+  .publish {
+    display: flex;
+    justify-content: space-between;
+    // margin: 0 50px 20px;
+
+    button {
+      border: 1px solid color(theme);
+      padding: 5px 15px;
+      border-radius: 40px;
+      margin-left: 20px;
+    }
+  }
+}
+
+.no-edit {
+  .codex-editor {
+    display: none;
+  }
+
+  [contenteditable='true'],
+  .ce-block--focused {
+    background: none;
+  }
+
+  .ce-toolbar__plus,
+  .ce-toolbar__actions {
+    display: none;
+  }
+}
+
+.ce-block__content {
+  margin: unset;
+  font-size: 0.9em;
+}
+
+/**
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Some days we glow while on other days we save lives <a href="https://t.co/UAFCYuYgrV">pic.twitter.com/UAFCYuYgrV</a></p>&mdash; Phill (@divaphillins) <a href="https://twitter.com/divaphillins/status/1348329547511590912?ref_src=twsrc%5Etfw">January 10, 2021</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+*/
