@@ -70,7 +70,7 @@ const Editor = ({ data, readOnly }) => {
 
   return (
     <div className={`${mode ? 'no-edit' : 'edit'}`}>
-      {!readOnly && <div>Btn</div>}
+      {/* {!readOnly && <div>Btn</div>} */}
 
       <EditorJs
         key={!mode ? '' : data.slug}

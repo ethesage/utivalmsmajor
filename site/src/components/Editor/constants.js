@@ -15,10 +15,8 @@ import CheckList from '@editorjs/checklist';
 import Delimiter from '@editorjs/delimiter';
 import InlineCode from '@editorjs/inline-code';
 import SimpleImage from '@editorjs/simple-image';
-import HTML from './Html';
 
 export const EDITOR_JS_TOOLS = {
-  html: HTML,
   embed: {
     class: Embed,
     inlineToolbar: false,
@@ -26,20 +24,8 @@ export const EDITOR_JS_TOOLS = {
       services: {
         youtube: true,
         coub: true,
-        twitter: {
-          regex: /^https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(?:es)?\/(\d+)(?:\/.*)?$/,
-          embedUrl:
-            'url=https://twitter.com/<%= remote_id %>',
-          html: '<iframe class="embed-tool__content--twitter"></iframe>',
-          id: (ids) => ids.join('/status/'),
-        },
-        vimeo: {
-          regex: /https?:\/\/vimeo.com/,
-          embedUrl: '',
-          html: "<iframe title='vimeo-player' frameborder='0'><iframe>",
-          height: 300,
-          width: 600,
-        },
+        twitter: true,
+        vimeo: true,
       },
     },
   },

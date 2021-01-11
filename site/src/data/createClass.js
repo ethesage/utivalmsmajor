@@ -6,14 +6,7 @@ export default [
     required: true,
     label: 'Title',
   },
-  {
-    name: 'description',
-    placeHolder: '',
-    errorMsg: 'enter text longer than 2 letters',
-    required: true,
-    label: 'Description',
-    type: 'textarea',
-  },
+
   {
     name: 'link',
     placeHolder: '',

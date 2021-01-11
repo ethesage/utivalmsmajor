@@ -179,7 +179,7 @@ const AddAssignment = ({ editedClass, edit, name, courseId, mainCohortId }) => {
 
               <Editor readOnly={false} mode="edit" />
 
-              {data.slice(2, 3).map((form, i) => (
+              {data.slice(1, 2).map((form, i) => (
                 <Input
                   key={`login_form_${i}`}
                   name={form.name}

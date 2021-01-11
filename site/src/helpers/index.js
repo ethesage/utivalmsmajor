@@ -1,11 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-import EmbedJS from 'embed-js';
-import twitter from 'embed-plugin-twitter';
-import facebook from 'embed-plugin-facebook';
-import instagram from 'embed-plugin-instagram';
-
 let text = /[^\n]{2,}/;
 let shortText = /[^\n]{2,}/;
 let number = /^[0-9]{1,}$/;
@@ -169,34 +164,4 @@ export const weeks = {
 
 export const stringSearch = (val, string) => {
   return string && string.toLowerCase().search(val.toLowerCase()) !== -1;
-};
-
-export const embedlink = (tag, production = true) => {
-  const x = new EmbedJS({
-    input: tag,
-    plugins: [
-      twitter({
-        regex: /https:\/\/twitter\.com\/\w+\/\w+\/\d+/gi,
-        maxWidth: 550,
-        hideMedia: false,
-        hideThread: false,
-        align: 'none',
-        lang: 'en',
-        theme: 'light',
-        linkColor: '#355acee',
-        widgetType: '',
-        template(args, options, pluginOptions, { html }) {
-          return html;
-        },
-        onLoad() {},
-      }),
-      facebook({
-        height: 550,
-      }),
-      instagram({}),
-    ],
-  });
-
-  x.options.replaceUrl = production;
-  return x;
 };

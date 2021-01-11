@@ -1,22 +1,4 @@
-import React, { useRef, useEffect } from 'react';
-import { embedlink } from '../../helpers';
-
-const Embed = ({ data }) => {
-  const ref = useRef(null);
-
-  useEffect(() => {
-    if (data.includes('iframe')) ref.current.innerHTML = data;
-    else {
-      ref.current.textContent = data;
-      const x = embedlink(ref.current);
-
-      x.render();
-    }
-    return () => {};
-  }, [data]);
-
-  return <div id="load-html" ref={ref}></div>;
-};
+import React from 'react';
 
 function ReadOnly({ data }) {
   const renderBlock = ({ type, data }, index) => {
@@ -31,13 +13,7 @@ function ReadOnly({ data }) {
           />
         );
         break;
-      case 'html':
-        content = (
-          <div style={{ height: 'fit-content' }}>
-            <Embed data={data.url} />
-          </div>
-        );
-        break;
+
       case 'list':
         content = (
           <ul className={`"cdx-block" "cdx-list" "cdx-list--${data.style}"`}>
