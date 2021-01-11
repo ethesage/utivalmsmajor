@@ -160,6 +160,16 @@ export const weeks = {
   18: 'Eighteen',
   19: 'Nineteen',
   20: 'Twenty',
+  21: 'Twenty One',
+  22: 'Twenty Two',
+  23: 'Twenty Three',
+  24: 'Twenty Four',
+  25: 'Twenty Five',
+  26: 'Twenty Six',
+  27: 'Twenty Seven',
+  28: 'Twenty Eight',
+  29: 'Twenty Nine',
+  30: 'Thirty',
 };
 
 export const stringSearch = (val, string) => {
