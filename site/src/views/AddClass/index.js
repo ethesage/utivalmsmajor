@@ -132,9 +132,9 @@ const AddAssignment = ({ editedClass, edit, name, courseId, mainCohortId }) => {
   };
 
   const addTrainers = (trainer) => {
-    if (trainers.includes(trainer)) return;
+    if (trainers?.includes(trainer)) return;
 
-    setTrainers([...trainers, trainer]);
+    setTrainers([...(trainers ? trainers : []), trainer]);
   };
 
   const handleSearch = ({ target: { name, value } }) => {
