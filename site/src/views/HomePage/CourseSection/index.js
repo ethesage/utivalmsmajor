@@ -106,7 +106,7 @@ const Course = () => {
                 courses?.length === 1 ? 'single' : ''
               }`}
             >
-              {courses?.slice(0, 4)?.map((course, i) => (
+              {courses?.map((course, i) => (
                 <CourseCard
                   data={course}
                   // size="small"
