@@ -1,4 +1,4 @@
-import { axiosInstance, toBase64, baseurl } from '../../helpers';
+import { axiosInstance, toBase64 } from '../../helpers';
 
 import Embed from '@editorjs/embed';
 import Table from '@editorjs/table';
@@ -54,20 +54,11 @@ export const EDITOR_JS_TOOLS = {
 
           const data = await toBase64(file);
 
-          axiosInstance.defaults.baseURL =
-            'https://api.cloudinary.com/v1_1/agromall/upload';
-          axiosInstance.defaults.headers = {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          };
-          axiosInstance.defaults.withCredentials = false;
-
           return axiosInstance
-            .post(`/`, { file: data, upload_preset: 'ml_default' })
+            .post(`/upload`, { data, title: file.name })
             .then((data) => {
-              const uri = data.data.secure_url;
+              const uri = data.data.url;
 
-              axiosInstance.defaults.baseURL = `${baseurl}/api/v1`;
               return {
                 success: 1,
                 file: {

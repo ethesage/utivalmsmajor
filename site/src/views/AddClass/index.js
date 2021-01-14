@@ -38,6 +38,7 @@ const AddAssignment = ({ editedClass, edit, name, courseId, mainCohortId }) => {
         profilePic: trainer.User.profilePic,
       }))
   );
+  const desRef = useRef();
 
   const { cohortId } = useParams();
   const [filtered, setFiltered] = useState([]);
@@ -84,11 +85,23 @@ const AddAssignment = ({ editedClass, edit, name, courseId, mainCohortId }) => {
         });
       }
 
+      let description = await desRef.current.getDesc();
+
+      if (description.blocks.length === 0) {
+        return addToast('Please select a trainers', {
+          appearance: 'warning',
+          autoDismiss: true,
+        });
+      }
+
+      description = JSON.stringify(description);
+
       const slug = edit ? `/class/update/${editedClass.id}` : '/class/create';
       const method = edit ? 'patch' : 'post';
       const s_data = edit
         ? {
             ...inputs,
+            description,
             users: trainers.map((trainer) => ({ userId: trainer.id })),
             courseCohortId: cohortId,
             courseId,
@@ -98,6 +111,7 @@ const AddAssignment = ({ editedClass, edit, name, courseId, mainCohortId }) => {
           }
         : {
             ...inputs,
+            description,
             users: trainers.map((trainer) => ({ userId: trainer.id })),
             courseCohortId: cohortId,
             courseId,
@@ -177,7 +191,13 @@ const AddAssignment = ({ editedClass, edit, name, courseId, mainCohortId }) => {
                 />
               ))}
 
-              <Editor readOnly={false} mode="edit" />
+              <label>Description</label>
+              <Editor
+                readOnly={false}
+                data={editedClass.description}
+                mode="edit-desc"
+                ref={desRef}
+              />
 
               {data.slice(1, 2).map((form, i) => (
                 <Input

@@ -427,7 +427,7 @@ function Classes({
                   key={description}
                   readOnly={true}
                   data={description}
-                  mode="edit"
+                  mode="no-edit"
                 />
               </div>
             )}
