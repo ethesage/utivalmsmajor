@@ -195,7 +195,7 @@ export const reset = async (req, res) => {
     return errorStat(res, 401, 'Password is Incorrect please try again');
   }
 
-  await exixtingUser.update({ password });
+  await exixtingUser.update({ password: hashPassword(password) });
 
   return successStat(res, 200, 'message', 'reset Successful');
 };
