@@ -489,8 +489,7 @@ function Classes({
                           <div>
                             <strong>
                               <p>
-                                {trainer.User.firstName}
-                                {trainer.User.lastName}
+                                {trainer.User.firstName} {trainer.User.lastName}
                               </p>
                             </strong>
                             <small>{trainer.User.occupation}</small>

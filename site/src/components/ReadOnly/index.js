@@ -18,9 +18,11 @@ function ReadOnly({ data }) {
         content = (
           <ul className={`cdx-block cdx-list cdx-list--${data.style}`}>
             {data.items.map((item) => (
-              <li className="cdx-list__item" key={item}>
-                {item}
-              </li>
+              <li
+                className="cdx-list__item"
+                key={item}
+                dangerouslySetInnerHTML={{ __html: item }}
+              />
             ))}
           </ul>
         );
@@ -75,9 +77,10 @@ function ReadOnly({ data }) {
       default:
         // content = <div className='ce-paragraph cdx-block'>{data.text}</div>;
         content = (
-          <div>
-            <div className="ce-paragraph cdx-block">{data.text}</div>
-          </div>
+          <div
+            className="ce-paragraph cdx-block"
+            dangerouslySetInnerHTML={{ __html: data.text }}
+          />
         );
 
         break;
