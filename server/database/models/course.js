@@ -23,6 +23,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       coupon: DataTypes.STRING,
       list_desc: DataTypes.STRING,
+      initialSplitAmount: DataTypes.BIGINT,
+      finalSplitAmount: DataTypes.BIGINT,
     },
     {}
   );
