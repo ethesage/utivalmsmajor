@@ -1,4 +1,5 @@
 // import Sequelize from 'sequelize';
+import { paginate, calculateLimitAndOffset } from 'paginate-info';
 import models from '../database/models';
 import helpers from '../helpers';
 import Mail from '../services/mail/email';
@@ -71,7 +72,8 @@ export const signup = async (req, res) => {
   //   subject: 'Welcome to Utiva',
   //   messageHeader: `Hi, ${user.firstname}!`,
   //   messageBody:
-  //     'We are exicted to get you started. First, you have to verify your account. Just click on the link below',
+  // 'We are exicted to get you started. First,
+  // you have to verify your account. Just click on the link below',
   //   iButton: true,
   // });
   // mail.InitButton({
@@ -337,13 +339,15 @@ export const adminCreate = async (req, res) => {
       message: 'User Created',
     });
   } catch (e) {
-    console.log(e);
     return errorStat(res, 409, 'Operation Failed, Please try again later');
   }
 };
 
 export const getAllUsers = async (req, res) => {
-  const users = await models.User.findAll({
+  const { pageLimit, currentPage } = req.query;
+  const { offset, limit } = calculateLimitAndOffset(currentPage, pageLimit);
+
+  const { rows, count } = await models.User.findAndCountAll({
     attributes: [
       'id',
       'email',
@@ -355,9 +359,13 @@ export const getAllUsers = async (req, res) => {
       'role',
       'profilePic',
     ],
+    limit,
+    offset,
   });
 
-  return successStat(res, 200, 'users', users);
+  const paginationMeta = paginate(currentPage, count, rows, pageLimit);
+
+  return successStat(res, 200, 'users', { paginationMeta, rows });
 };
 
 export const activateUser = async (req, res) => {
