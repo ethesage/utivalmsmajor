@@ -1,9 +1,24 @@
-export const initialState = [];
+export const initialState = {
+  users: [],
+  currentPage: 0,
+  pageCount: 0,
+  pageSize: 0,
+  count: 0,
+};
 
 const user = (state = initialState, action) => {
   switch (action.type) {
     case 'GET_ALL_USERS':
-      return action.payload;
+      return {
+        users: action.payload.rows,
+        ...action.payload.paginationMeta,
+      };
+
+    case 'GET_MORE_USERS':
+      return {
+        users: [...state.users, ...action.payload.rows],
+        ...action.payload.paginationMeta,
+      };
 
     case 'DELETE_USER':
       return state.filter((user) => user.id !== action.payload);
