@@ -4,23 +4,23 @@ module.exports = {
       Promise.all([
         queryInterface.addColumn(
           'Courses',
-          'currency_type',
+          'list_desc',
           {
             type: Sequelize.STRING,
             allowNull: true,
             defaultValue: false,
           },
           { transaction: t }
-        ),
+        )
       ])
     ),
 
   down: (queryInterface) =>
     queryInterface.sequelize.transaction((t) =>
       Promise.all([
-        queryInterface.removeColumn('Courses', 'currency_type', {
+        queryInterface.removeColumn('Courses', 'list_desc', {
           transaction: t,
-        }),
+        })
       ])
     ),
 };
