@@ -22,7 +22,10 @@ function Login() {
     inputs: data,
     submitButton,
     cb: async (inputs) => {
-      const response = await axiosInstance.post('/user/login', inputs);
+      const response = await axiosInstance.post('/user/login', {
+        ...inputs,
+        email: inputs.email.toLowerCase(),
+      });
       addToast(`Welcome back ${response.data.user.firstName}`, {
         appearance: 'success',
         autoDismiss: true,

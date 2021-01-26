@@ -17,7 +17,7 @@ const HomePage = () => {
           <meta name="description" content="" />
         </Helmet>
         <Navbar />
-
+        
         <Banner />
         <Course />
         <Started />

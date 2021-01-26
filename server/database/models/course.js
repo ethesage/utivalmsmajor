@@ -23,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       coupon: DataTypes.STRING,
       list_desc: DataTypes.STRING,
+      currency_type: DataTypes.STRING,
     },
     {}
   );

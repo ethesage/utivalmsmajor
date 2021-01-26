@@ -27,7 +27,7 @@ function QuickCheckout({ match }) {
         try {
           const response = await axiosInstance.post('/user/quickcheckout', {
             fullName: inputs.fullName,
-            email: inputs.email,
+            email: inputs.email.toLowerCase(),
           });
           if (response.data.user.message === 'Registration is successful')
             setPass(true);

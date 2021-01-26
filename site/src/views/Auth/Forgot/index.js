@@ -17,10 +17,10 @@ function QuickCheckout() {
     inputs: data,
     submitButton,
     cb: async (inputs) => {
-      const response = await axiosInstance.post(
-        '/user/reset_password_link',
-        inputs
-      );
+      const response = await axiosInstance.post('/user/reset_password_link', {
+        ...inputs,
+        email: inputs.email.toLowerCase(),
+      });
       if (response) {
         addToast(`A password reset link has been sent to your email`, {
           appearance: 'success',
