@@ -8,7 +8,7 @@ module.exports = {
           {
             type: Sequelize.STRING,
             allowNull: true,
-            defaultValue: false,
+            defaultValue: 'local',
           },
           { transaction: t }
         ),

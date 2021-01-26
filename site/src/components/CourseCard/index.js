@@ -1,11 +1,11 @@
-import React, { useEffect, useRef } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Link, useHistory } from 'react-router-dom';
-import Image from '../../components/Image';
-import { purchaseCourse } from '../../g_actions/courses';
-import './style.scss';
+import React, { useEffect, useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Link, useHistory } from "react-router-dom";
+import Image from "../../components/Image";
+import { purchaseCourse } from "../../g_actions/courses";
+import "./style.scss";
 
-const CourseCard = ({ data, size = '' }) => {
+const CourseCard = ({ data, size = "" }) => {
   const {
     thumbnail,
     name,
@@ -16,8 +16,9 @@ const CourseCard = ({ data, size = '' }) => {
     level,
     learnMore,
     CourseCohorts,
-    classname = '',
+    classname = "",
     type,
+    currency_type,
   } = data;
 
   const cousrecard = useRef();
@@ -27,21 +28,21 @@ const CourseCard = ({ data, size = '' }) => {
 
   useEffect(() => {
     const position = () => {
-      const smallerScreen = window.matchMedia('(max-width: 1000px)');
+      const smallerScreen = window.matchMedia("(max-width: 1000px)");
 
       if (smallerScreen.matches) {
-        cousrecard.current.classList.add('smaller');
+        cousrecard.current.classList.add("smaller");
       } else {
-        cousrecard.current.classList.remove('smaller');
+        cousrecard.current.classList.remove("smaller");
       }
     };
 
     position();
 
-    window.addEventListener('resize', position);
+    window.addEventListener("resize", position);
 
     return () => {
-      window.removeEventListener('resize', position);
+      window.removeEventListener("resize", position);
     };
   }, []);
 
@@ -66,13 +67,13 @@ const CourseCard = ({ data, size = '' }) => {
       <div className="text_cont flex-col al-start">
         <div className="text-sec">
           <h2>{name}</h2>
-          <p className="clipped-text" style={{ '--number': 4 }}>
+          <p className="clipped-text" style={{ "--number": 4 }}>
             {description}
           </p>
           <div className="c_inf flex-row j-space">
             <small>{duration} Weeks</small>
             <small>
-              {'> '}
+              {"> "}
               {level}
             </small>
             <small>{value}</small>
@@ -83,15 +84,26 @@ const CourseCard = ({ data, size = '' }) => {
         </div>
         <div className="en_rl flex-row j-space">
           <div className="cst">
-            <p>{type === 'free' ? 'Free' : `₦ ${cost.toLocaleString()}`}</p>{' '}
-            {type !== 'free' && <small>${Math.round(cost / 380)}</small>}
+            {currency_type === "local" ? (
+              <>
+                <p>{type === "free" ? "Free" : `₦ ${cost.toLocaleString()}`}</p>
+                {type !== "free" && <small>${Math.round(cost / 380)}</small>}
+              </>
+            ) : (
+              <>
+                {type !== "free" && <p>${Math.round(cost / 380)}</p>}
+                <small>
+                  {type === "free" ? "Free" : `₦ ${cost.toLocaleString()}`}
+                </small>
+              </>
+            )}
           </div>
 
           <div className="link btn">
             <Link to="/" onClick={handleClick}>
               {user && data?.StudentCourses?.length > 0
-                ? 'View Course'
-                : 'Enroll Now'}
+                ? "View Course"
+                : "Enroll Now"}
             </Link>
           </div>
         </div>
