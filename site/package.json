@@ -23,6 +23,7 @@
     "@editorjs/table": "^1.2.2",
     "@editorjs/warning": "^1.1.1",
     "@hot-loader/react-dom": "^16.13.0",
+    "@stripe/stripe-js": "^1.11.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.1.2",
@@ -52,6 +53,7 @@
     "react-scripts": "3.4.1",
     "react-scroll-parallax": "^2.3.4",
     "react-skeleton-loader": "^1.0.4",
+    "react-stripe-checkout": "^2.6.3",
     "react-sweet-progress": "^1.1.2",
     "react-toast-notifications": "^2.4.0",
     "react-transition-group": "^4.3.0",
@@ -63,7 +65,7 @@
   },
   "scripts": {
     "start": "serve -s build",
-    "dev": "cross-env HTTPS=true react-app-rewired start",
+    "dev": "cross-env react-app-rewired start",
     "build": "rimraf ./build && cross-env GENERATE_SOURCEMAP=false  react-app-rewired build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

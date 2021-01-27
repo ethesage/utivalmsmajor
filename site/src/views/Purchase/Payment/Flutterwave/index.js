@@ -9,6 +9,8 @@ export default ({ done }) => {
   const dispatch = useDispatch();
   const { auth, courses } = useSelector((state) => state);
 
+  console.log(courses.checkoutData)
+
   const config = {
     public_key: "FLWPUBK-e836e7b389eda0faa7c37b9c12fb4119-X",
     // public_key: "FLWPUBK_TEST-676fa99372c8af0bcb924e15ad1de6d6-X",

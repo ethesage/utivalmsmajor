@@ -9,6 +9,7 @@ import QuickCheckout from 'views/Auth/QuickCheckout';
 // import Paystack from './Paystack';
 // import Paypal from './Paypal';
 import Flutterwave from './Flutterwave';
+import Stripe from './Stripe'
 // import paypal from 'assets/icons/paypal.png';
 import approved from 'assets/approved.png';
 import { checkout } from 'g_actions/courses';
@@ -99,7 +100,11 @@ const Payment = ({ back, id }) => {
           {/* <Paystack done={done} /> */}
           <p>Congratulations! Continue your paymant using</p>
           {courses.purchaseCourse.type !== 'free' && (
+            <>
             <Flutterwave done={done} />
+            {/* <div>amos</div> */}
+            <Stripe done={done}/>
+            </>
           )}
           {/* <Paypal done={done} /> */}
 

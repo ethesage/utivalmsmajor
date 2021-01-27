@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { axiosInstance } from "../helpers";
 
 export const loading = () => async (dispatch) => {
@@ -80,6 +81,18 @@ export const checkout = (courseCohortId) => async (dispatch) => {
     return error;
   }
   return checkout;
+};
+
+export const chargeCard = (data) => async (dispatch) => {
+  let checkout;
+  try {
+    checkout = await axiosInstance.post(
+      `/stripe/create-checkout-session`, data
+    );
+  } catch (error) {
+    return error;
+  }
+  return checkout.data;
 };
 
 export const checkoutCourse = (course) => async (dispatch) => {
