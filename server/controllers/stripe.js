@@ -1,6 +1,6 @@
 const Stripe = require("stripe");
 const stripe = Stripe(
-  "sk_test_51HMu8PBTQeyb7oqx3maE80RrJRfghUAMaMIlEqypwY6kaqlsK80s742frlKENvi94Z61lXn3Ne3V4DdZcrg4x7Us00aampSQd5"
+  "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"
 );
 import models from "../database/models";
 import helpers from "../helpers";
@@ -27,7 +27,9 @@ export const createSession = async (req, res) => {
       },
     ],
     mode: "payment",
-    success_url: `http://localhost:4000/api/v1/stripe/retrieve-checkout-session?userId=${id}`,
+    success_url: `${
+      req.headers.host.includes("localhost") ? "http://" : "https://"
+    }${req.headers.host}/api/v1/stripe/retrieve-checkout-session?userId=${id}`,
     cancel_url: req.body.success_url,
   });
 
@@ -99,7 +101,11 @@ export const retrieveSession = async (req, res) => {
         Number(coursee.cost / 380) - Number(session.amount_total / 100),
     });
 
-    return res.redirect(`http://localhost:3000/payment/${courseCohortId}`);
+    return res.redirect(
+      `${req.headers.host.includes("localhost") ? "http://" : "https://"}${
+        req.headers.host
+      }/payment/${courseCohortId}`
+    );
   }
 
   details.destroy();
