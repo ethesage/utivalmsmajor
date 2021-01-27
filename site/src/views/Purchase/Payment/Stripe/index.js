@@ -8,7 +8,7 @@ import sstripe from "assets/icons/stripe.svg";
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.
 const stripePromise = loadStripe(
-  "pk_test_51HMu8PBTQeyb7oqxefol5NlYhlpANxW9bOrpy3plih95Z5pnQpGvs6nzlg0VdGoHI5qVh8GJjd7BjX04mgNxvXsD00AtjasRti"
+  "pk_live_51ICgkbH3G7vtRYUD1igswPEjIObTImp67prwicwZLHzlgA6g5tXxZAHJjGVOXa5B5VcASnsfUJtdq96xhn6lfC2u00TOgG4GJE"
 );
 
 const Stripe = () => {
@@ -40,14 +40,14 @@ const Stripe = () => {
 
     // When the customer clicks on the button, redirect them to Checkout.
     const result =
-      response &&
+      response && response.data.id &&
       (await stripe.redirectToCheckout({
         sessionId: response.data.id,
       }));
 
-    console.log(result, "......");
+    // console.log(result, "......");
 
-    if (result.error) {
+    if (result?.error) {
       // If `redirectToCheckout` fails due to a browser or network
       // error, display the localized error message to your customer
       // using `result.error.message`.
