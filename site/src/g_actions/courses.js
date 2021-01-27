@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { axiosInstance } from "../helpers";
 
 export const loading = () => async (dispatch) => {

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
+import getCurrencyRate from "Hooks/getConvertionRate";
 import Image from "../../components/Image";
 import { purchaseCourse } from "../../g_actions/courses";
 import "./style.scss";
@@ -25,6 +26,8 @@ const CourseCard = ({ data, size = "" }) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const { user } = useSelector((state) => state.auth);
+
+  const [loading, rate] = getCurrencyRate();
 
   useEffect(() => {
     const position = () => {
@@ -83,21 +86,27 @@ const CourseCard = ({ data, size = "" }) => {
           </a>
         </div>
         <div className="en_rl flex-row j-space">
-          <div className="cst">
-            {currency_type === "local" ? (
-              <>
-                <p>{type === "free" ? "Free" : `₦ ${cost.toLocaleString()}`}</p>
-                {type !== "free" && <small>${Math.round(cost / 380)}</small>}
-              </>
-            ) : (
-              <>
-                {type !== "free" && <p>${Math.round(cost / 380)}</p>}
-                <small>
-                  {type === "free" ? "Free" : `₦ ${cost.toLocaleString()}`}
-                </small>
-              </>
-            )}
-          </div>
+          {!loading && (
+            <div className="cst">
+              {currency_type === "local" ? (
+                <>
+                  <p>
+                    {type === "free" ? "Free" : `₦ ${cost.toLocaleString()}`}
+                  </p>
+                  {type !== "free" && (
+                    <small>${Math.round(cost / rate.USD_NGN)}</small>
+                  )}
+                </>
+              ) : (
+                <>
+                  {type !== "free" && <p>${Math.round(cost / rate.USD_NGN)}</p>}
+                  <small>
+                    {type === "free" ? "Free" : `₦ ${cost.toLocaleString()}`}
+                  </small>
+                </>
+              )}
+            </div>
+          )}
 
           <div className="link btn">
             <Link to="/" onClick={handleClick}>

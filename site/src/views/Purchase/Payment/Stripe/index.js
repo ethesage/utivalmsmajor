@@ -1,43 +1,51 @@
-import React, { useRef } from 'react';
-import ReactDOM from 'react-dom';
-import { loadStripe } from '@stripe/stripe-js';
-import { useDispatch, useSelector } from 'react-redux';
-import { chargeCard } from 'g_actions/courses';
-import Modal from '../../../../components/Modal';
+import React, { useRef } from "react";
+import { loadStripe } from "@stripe/stripe-js";
+import { useDispatch, useSelector } from "react-redux";
+import getCurrencyRate from "Hooks/getConvertionRate";
+import { chargeCard } from "g_actions/courses";
+import Modal from "components/Modal";
 import sstripe from "assets/icons/stripe.svg";
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.
-const stripePromise = loadStripe('pk_test_51HMu8PBTQeyb7oqxefol5NlYhlpANxW9bOrpy3plih95Z5pnQpGvs6nzlg0VdGoHI5qVh8GJjd7BjX04mgNxvXsD00AtjasRti');
+const stripePromise = loadStripe(
+  "pk_test_51HMu8PBTQeyb7oqxefol5NlYhlpANxW9bOrpy3plih95Z5pnQpGvs6nzlg0VdGoHI5qVh8GJjd7BjX04mgNxvXsD00AtjasRti"
+);
 
-const Stripe = () =>  {
+const Stripe = () => {
   const dispatch = useDispatch();
   const loadsstripe = useRef();
-  const { auth, courses } = useSelector((state) => state);
+  const { courses } = useSelector((state) => state);
+
+  const [, rate] = getCurrencyRate();
 
   const handleClick = async (event) => {
-    loadsstripe.current.open()
+    loadsstripe.current.open();
     // Get Stripe.js instance
     const stripe = await stripePromise;
 
     // Call your backend to create the Checkout Session
-    const response = await dispatch(chargeCard({
-      amount: Math.round((Number(courses.checkoutData.cost) * 100) / 380),
-      image: courses.checkoutData.thumbnail,
-      courseTitle: courses.checkoutData.name,
-      success_url: window.location.href,
-      courseCohortId: courses.checkoutData.CourseCohorts[0].id
-    }))
-
-    console.log(response, 'popop')
+    const response = await dispatch(
+      chargeCard({
+        amount: Math.round(
+          (Number(courses.checkoutData.cost) * 100) / rate.USD_NGN
+        ),
+        image: courses.checkoutData.thumbnail,
+        courseTitle: courses.checkoutData.name,
+        success_url: window.location.href,
+        courseCohortId: courses.checkoutData.CourseCohorts[0].id,
+      })
+    );
 
     // const session = await response.json();
 
     // When the customer clicks on the button, redirect them to Checkout.
-    const result = response && await stripe.redirectToCheckout({
-      sessionId: response.data.id,
-    });
+    const result =
+      response &&
+      (await stripe.redirectToCheckout({
+        sessionId: response.data.id,
+      }));
 
-    console.log(result, '......')
+    console.log(result, "......");
 
     if (result.error) {
       // If `redirectToCheckout` fails due to a browser or network
@@ -48,32 +56,37 @@ const Stripe = () =>  {
 
   return (
     <>
-    <div className="flutter_btn">
-    <button type="button" role="link" onClick={handleClick}>
-    <img
-          src={sstripe}
-          style={{ marginBottom: "20px", marginTop: "5px",width: "200px", height: '40px' }}
-          alt="paystack button"
-        />
-    </button>
-    </div>
-    <Modal ref={loadsstripe} useButton={false}>
+      <div className="flutter_btn">
+        <button type="button" role="link" onClick={handleClick}>
+          <img
+            src={sstripe}
+            style={{
+              marginBottom: "20px",
+              marginTop: "5px",
+              width: "200px",
+              height: "40px",
+            }}
+            alt="paystack button"
+          />
+        </button>
+      </div>
+      <Modal ref={loadsstripe} useButton={false}>
         <div
           style={{
-            background: 'white',
-            width: '400px',
-            height: '300px',
-            textAlign: 'center',
-            margin: 'auto',
-            borderRadius: '10px',
+            background: "white",
+            width: "400px",
+            height: "300px",
+            textAlign: "center",
+            margin: "auto",
+            borderRadius: "10px",
           }}
           className="s_btn flex-row loader"
         >
-            <p className="loader_con_main">Loading...</p>
+          <p className="loader_con_main">Loading...</p>
         </div>
       </Modal>
     </>
   );
-}
+};
 
 export default Stripe;
