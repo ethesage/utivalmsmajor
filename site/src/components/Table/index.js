@@ -5,8 +5,6 @@ const Table = ({ children, keys, usedefaultTh }) => {
   let tbody;
   let thead;
 
-  console.log("rerendered")
-
   if (Array.isArray(children)) {
     if (children.length > 2) throw new Error("Only 2 children are allowed");
   }
