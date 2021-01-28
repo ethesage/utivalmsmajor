@@ -1,6 +1,6 @@
 const Stripe = require("stripe");
 const stripe = Stripe(
-  "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"
+  process.env.STRIPE_SECRET_API_KEY,
 );
 import models from "../database/models";
 import helpers from "../helpers";
