@@ -8,7 +8,7 @@ import sstripe from "assets/icons/stripe.svg";
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.
 const stripePromise = loadStripe(
-  "pk_live_51ICgkbH3G7vtRYUD1igswPEjIObTImp67prwicwZLHzlgA6g5tXxZAHJjGVOXa5B5VcASnsfUJtdq96xhn6lfC2u00TOgG4GJE"
+  process.env.REACT_APP_STRIPE_API_KEY
 );
 
 const Stripe = () => {
