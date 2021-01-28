@@ -11,6 +11,7 @@ import assignment from './assignment';
 import admin from './admin';
 import checkout from './checkout';
 import transaction from './transaction';
+import stripe from './stripe';
 import upload from './upload';
 import helpers from '../../helpers';
 
@@ -44,5 +45,6 @@ router.use('/admin', admin);
 router.use('/checkout', checkout);
 router.use('/transaction', transaction);
 router.use('/upload', upload);
+router.use('/stripe', stripe)
 
 export default router;

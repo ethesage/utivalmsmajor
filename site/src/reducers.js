@@ -11,6 +11,7 @@ import students from './g_reducers/student';
 import users from './g_reducers/users';
 import adminHome from 'views/Admin/Home/reducer';
 import homepage from './g_reducers/mainCourse';
+import generals from './g_reducers/generals'
 
 const reducers = combineReducers({
   load,
@@ -25,6 +26,7 @@ const reducers = combineReducers({
   adminHome,
   homepage,
   students,
+  generals
 });
 
 export default reducers;

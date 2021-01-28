@@ -9,6 +9,7 @@ import './App.css';
 const HomePage = lazy(() => import('./views/HomePage'));
 const Auth = lazy(() => import('./views/Auth'));
 const Purchase = lazy(() => import('./views/Purchase'));
+const Payment = lazy(() => import('./views/Payment'));
 const Dashboard = lazy(() => import('./views/Dashboard'));
 const Admin = lazy(() => import('./views/Admin'));
 const Courses = lazy(() => import('./views/AllCourses'));
@@ -23,6 +24,7 @@ function App() {
             <Route path="/home" component={HomePage} />
             <Route path="/auth" component={Auth} />
             <Route path="/purchase/:courseCohortId" component={Purchase} />
+            <Route path="/payment/:courseCohortId" component={Payment} />
             <AProtected path="/admin" component={Admin} type="admin" />
             <Route path="/all-courses" component={Courses} />
             <Protected path="/" component={Dashboard} />

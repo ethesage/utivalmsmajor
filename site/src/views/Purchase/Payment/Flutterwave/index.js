@@ -67,13 +67,13 @@ export default ({ done }) => {
                 dispatch(
                   addTransaction({
                     email: auth.user.email,
-                    name: response.customer.name || 'No Name' ,
-                    currency: response.currency || '400',
+                    name: response.customer.name || "No Name",
+                    currency: response.currency || "400",
                     paidAmount: `${0}`,
                     courseAmount: courses.checkoutData.cost,
-                    status: response.status || 'unsuccesful',
-                    transactionId: `${response.transaction_id || '400'}`,
-                    tnxRef: `${response.tx_ref || '400'}`,
+                    status: response.status || "unsuccesful",
+                    transactionId: `${response.transaction_id || "400"}`,
+                    tnxRef: `${response.tx_ref || "400"}`,
                     studentId: auth.user.id,
                     courseId: courses.checkoutData.id,
                     courseCohortId: courses.checkoutData.CourseCohorts[0].id,

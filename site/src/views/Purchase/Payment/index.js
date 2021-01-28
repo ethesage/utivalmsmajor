@@ -1,20 +1,21 @@
-import React, { useRef, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import dialogPolyfill from 'dialog-polyfill';
-import QuickCheckout from 'views/Auth/QuickCheckout';
+import React, { useRef, useEffect } from "react";
+import { useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import dialogPolyfill from "dialog-polyfill";
+import QuickCheckout from "views/Auth/QuickCheckout";
 // import category from 'data/categories';
 // import card from 'assets/icons/card.png';
 // import paystack from 'assets/icons/paystack.png';
 // import Paystack from './Paystack';
 // import Paypal from './Paypal';
-import Flutterwave from './Flutterwave';
+import Flutterwave from "./Flutterwave";
+import Stripe from "./Stripe";
 // import paypal from 'assets/icons/paypal.png';
-import approved from 'assets/approved.png';
-import { checkout } from 'g_actions/courses';
-import { addStudentCourse } from 'g_actions/mainCourse';
+import approved from "assets/approved.png";
+import { checkout } from "g_actions/courses";
+import { addStudentCourse } from "g_actions/mainCourse";
 // import Card from './Card';
-import './style.scss';
+import "./style.scss";
 
 // const course = category[0].data[0];
 
@@ -30,7 +31,7 @@ const Payment = ({ back, id }) => {
   // const dispatch = useDispatch();
 
   useEffect(() => {
-    if (courses?.purchaseCourse?.type === 'free') {
+    if (courses?.purchaseCourse?.type === "free") {
       // if (courses?.purchaseCourse?.type !== 'free') {
       dispatch(checkout(courses.purchaseCourse.CourseCohorts[0].id));
       dispatch(
@@ -48,14 +49,12 @@ const Payment = ({ back, id }) => {
   };
 
   function done() {
-    typeof disRef?.current?.showModal !== 'function' &&
+    typeof disRef?.current?.showModal !== "function" &&
       dialogPolyfill.registerDialog(disRef.current);
 
     if (disRef.current.open) return;
     disRef.current.showModal();
   }
-
-  // const handleClick = () => {};
 
   return (
     <div className="payment container">
@@ -81,29 +80,15 @@ const Payment = ({ back, id }) => {
       </dialog>
       {user ? (
         <div className="payment_con mx-auto txt-center">
-          {/* <nav className="nav-sec flex-row j-space">
-          <div className="nav-item">
-            <img src={card} alt="card" />
-          </div>
-          <div className="nav-item">
-            <img src={paystack} alt="paystack" />
-          </div>
-          <div className="nav-item">
-            <img src={paypal} alt="paypal" />
-          </div>
-        </nav> */}
-
-          {/* <div className="flex-row card-sec"> */}
-          {/* <Card done={done} /> */}
-
-          {/* <Paystack done={done} /> */}
           <p>Congratulations! Continue your paymant using</p>
-          {courses.purchaseCourse.type !== 'free' && (
-            <Flutterwave done={done} />
+          {courses.purchaseCourse.type !== "free" && (
+            <>
+              {courses.purchaseCourse.currency_type === "local" && (
+                <Flutterwave done={done} />
+              )}
+              <Stripe done={done} />
+            </>
           )}
-          {/* <Paypal done={done} /> */}
-
-          {/* </div> */}
 
           <button className="back" onClick={goBack}>
             Back

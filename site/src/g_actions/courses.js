@@ -82,6 +82,18 @@ export const checkout = (courseCohortId) => async (dispatch) => {
   return checkout;
 };
 
+export const chargeCard = (data) => async (dispatch) => {
+  let checkout;
+  try {
+    checkout = await axiosInstance.post(
+      `/stripe/create-checkout-session`, data
+    );
+  } catch (error) {
+    return error;
+  }
+  return checkout.data;
+};
+
 export const checkoutCourse = (course) => async (dispatch) => {
   // console.log(course, '...//')
   dispatch({
