@@ -61,7 +61,7 @@
     "redux-thunk": "^2.3.0",
     "serve": "^11.3.0",
     "tiny-slider-react": "^0.4.0",
-    "use-debounce": "^5.0.1"
+    "use-debounce": "^5.2.0"
   },
   "scripts": {
     "start": "serve -s build",

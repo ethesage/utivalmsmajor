@@ -1,9 +1,11 @@
-import React from "react";
+import React, { memo } from "react";
 import "./style.scss";
 
 const Table = ({ children, keys, usedefaultTh }) => {
   let tbody;
   let thead;
+
+  console.log("rerendered")
 
   if (Array.isArray(children)) {
     if (children.length > 2) throw new Error("Only 2 children are allowed");
@@ -83,4 +85,9 @@ const Trow = ({ values, keys, attr = {} }) => {
   );
 };
 
-export default { Table: Table, Head: TableHead, Body: TableBody, Trow: Trow };
+export default {
+  Table: memo(Table),
+  Head: memo(TableHead),
+  Body: memo(TableBody),
+  Trow: memo(Trow),
+};

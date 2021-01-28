@@ -1,10 +1,11 @@
 /* eslint-disable no-unused-expressions */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, memo } from "react";
 // import { useHistory } from 'react-router-dom';
 import { useToasts } from "react-toast-notifications";
 import { useDispatch, useSelector } from "react-redux";
 import Pagination from "react-js-pagination";
-import { axiosInstance, stringSearch } from "helpers";
+import { useDebounce } from "use-debounce";
+import { axiosInstance } from "helpers";
 import { getAllUsers, updateUser, getMoreUsers } from "g_actions/users";
 import useFetch from "Hooks/useFetch";
 import Select from "components/Select";
@@ -16,24 +17,20 @@ import Loader from "components/Loading";
 import "./style.scss";
 
 const Users = () => {
-  let initialState = {
-    nameFilter: "",
-    searchUsers: null,
-    select: "reset",
-  };
-
   const dispatch = useDispatch();
-  const { users, count, pageCount, currentPage } = useSelector(
-    (state) => state.users
-  );
+  const { users, count, currentPage } = useSelector((state) => state.users);
 
   const [displayUsers, setdisplayedUsers] = useState([...users]);
   const { addToast } = useToasts();
-  const [state, setState] = useState(initialState);
+  const [nameFilter, setNameFilter] = useState(null);
+  const [searchUsers, setSearchUsers] = useState(null);
+  const [select, setSelect] = useState("reset");
   const [loading, error, fetch] = useFetch(dispatch, !users.length, true);
-  const [loadMore, setloadMore] = useState(false);
   const [pageNo, setPageNo] = useState(1);
+  const [usersToRender, setUsersToRender] = useState(displayUsers);
   const imgref = [];
+
+  const [searchQuery] = useDebounce(nameFilter, 800);
 
   useEffect(() => {
     (async () => {
@@ -52,9 +49,7 @@ const Users = () => {
 
     document.querySelector(".g_tbl").classList.add("spinner1");
 
-    setloadMore(true);
     await dispatch(getMoreUsers(num));
-    setloadMore(false);
 
     document.querySelector(".g_tbl").classList.remove("spinner1");
   };
@@ -63,16 +58,42 @@ const Users = () => {
     <p>An Error ocurred</p>;
   }
 
+  const getSearchUsers = useCallback(async () => {
+    document.querySelector(".g_tbl").classList.add("spinner1");
+    if (searchQuery !== "") {
+      const searchResult = await axiosInstance.get(
+        `user/search_users/${searchQuery}`
+      );
+
+      setSearchUsers(searchResult.data.data);
+    } else {
+      setSearchUsers(null);
+    }
+
+    document.querySelector(".g_tbl").classList.remove("spinner1");
+  }, [searchQuery]);
+
+  useEffect(() => {
+    if (typeof searchQuery !== "string") return;
+    getSearchUsers();
+
+    return () => {};
+  }, [searchQuery, getSearchUsers]);
+
+  useEffect(() => {
+    setUsersToRender(searchUsers ? searchUsers : displayUsers);
+
+    return () => {};
+  }, [searchUsers, displayUsers]);
+
   const handleSelect = ({ target: { value } }) => {
     const results =
       value === "reset"
         ? []
         : displayUsers.filter((user) => user.status === value);
-    setState({
-      ...state,
-      searchUsers: results,
-      select: value,
-    });
+
+    setSearchUsers(results);
+    setSelect(value);
   };
 
   const updateUserStatus = async (id, status, user, role) => {
@@ -94,28 +115,26 @@ const Users = () => {
     } catch (error) {
       const stat = status === "active" ? "inactive" : "active";
 
-      dispatch(
-        updateUser({
-          ...user,
-          status: stat,
-        })
-      );
+      if (findUser(user))
+        dispatch(
+          updateUser({
+            ...user,
+            status: stat,
+          })
+        );
 
-      if (state.select) {
+      if (select) {
         const name = role ? "role" : "status";
         const value = role ? user.role : stat;
 
-        const newState = state.searchUsers.map((s_user) => {
+        const newState = searchUsers.map((s_user) => {
           if (s_user.id === user.id) {
             return { ...user, [name]: value };
           }
           return s_user;
         });
 
-        setState({
-          ...state,
-          searchUsers: newState,
-        });
+        setSearchUsers(newState);
       }
 
       document.querySelector("body").classList.remove("spinner1");
@@ -128,54 +147,24 @@ const Users = () => {
     }
   };
 
-  const handleChange = ({ target: { value } }) => {
-    setState({ ...state, nameFilter: value });
-
-    document.querySelector(".g_tbl").classList.add("spinner1");
-    if (state.nameFilter !== "") {
-      const searchResult = displayUsers.filter(
-        ({ firstName, lastName, location, email, occupation, role }) =>
-          stringSearch(value, firstName) ||
-          stringSearch(value, lastName) ||
-          stringSearch(value, location) ||
-          stringSearch(value, email) ||
-          stringSearch(value, occupation) ||
-          stringSearch(value, role)
-      );
-
-      setState({
-        ...state,
-        nameFilter: value,
-        searchUsers: searchResult || [],
-      });
-    } else {
-      setState({
-        ...state,
-        searchUsers: [],
-        nameFilter: value,
-      });
-    }
-
-    document.querySelector(".g_tbl").classList.remove("spinner1");
+  const handleChange = async ({ target: { value } }) => {
+    setNameFilter(value);
   };
 
   const handleUserStatusChange = (user) => {
     document.querySelector("body").classList.add("spinner1");
     const status = user.status === "active" ? "inactive" : "active";
-    dispatch(updateUser({ ...user, status }));
+    if (findUser(user)) dispatch(updateUser({ ...user, status }));
 
-    if (state.searchUsers.length > 0) {
-      const newState = state.searchUsers.map((s_user) => {
+    if (searchUsers?.length > 0) {
+      const newState = searchUsers.map((s_user) => {
         if (s_user.id === user.id) {
           return { ...user, status };
         }
         return s_user;
       });
 
-      setState({
-        ...state,
-        searchUsers: newState,
-      });
+      setSearchUsers(newState);
     }
 
     updateUserStatus(user.id, status, user);
@@ -185,30 +174,26 @@ const Users = () => {
     document.querySelector("body").classList.add("spinner1");
 
     await updateUserStatus(user.id, "", user, value);
-    if (state.searchUsers.length > 0) {
-      const newState = state.searchUsers.map((s_user) => {
+    if (searchUsers?.length > 0) {
+      const newState = searchUsers.map((s_user) => {
         if (s_user.id === user.id) {
-          return { ...user, role: user };
+          return { ...user, role: value };
         }
         return s_user;
       });
 
-      setState({
-        ...state,
-        searchUsers: newState,
-      });
+      setSearchUsers(newState);
     }
 
-    dispatch(updateUser({ ...user, role: value }));
+    if (findUser(user)) dispatch(updateUser({ ...user, role: value }));
   };
-
-  let usersToRender = state.searchUsers
-    ? state.searchUsers
-    : // : displayUsers.slice(300 * (currentPage - 1), 300 * currentPage);
-      displayUsers;
 
   const onError = (ref) => {
     ref.src = user_icon;
+  };
+
+  const findUser = (e_user) => {
+    return users.find((user) => user.id === e_user.id);
   };
 
   return (
@@ -220,7 +205,7 @@ const Users = () => {
               <Input
                 inputValidate={false}
                 placeHolder="Search"
-                value={state.nameFilter || ""}
+                value={nameFilter || ""}
                 handleChange={handleChange}
                 name="search"
                 label="Search"
@@ -233,7 +218,7 @@ const Users = () => {
                   { name: "Inactive", value: "inactive" },
                 ]}
                 placeHolder="Status"
-                value={state.select}
+                value={select}
                 handleSelect={handleSelect}
                 label="Status"
               />
@@ -342,5 +327,5 @@ const Users = () => {
   );
 };
 
-export default Users;
+export default memo(Users);
 //Add Staff ID

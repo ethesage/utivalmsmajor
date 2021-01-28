@@ -26,10 +26,13 @@ const Select = ({
   const parent = React.createRef();
 
   useEffect(() => {
+
     const val = innerInputs.find(
       (input) =>
         input.value === value ||
-        input.value.toUpperCase() === value.toUpperCase()
+        (typeof input.value === "string" &&
+          typeof value === "string" &&
+          input.value.toUpperCase() === value.toUpperCase())
     );
 
     setPresentValue(value);

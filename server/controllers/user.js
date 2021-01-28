@@ -1,9 +1,11 @@
-// import Sequelize from 'sequelize';
-import { paginate, calculateLimitAndOffset } from 'paginate-info';
-import models from '../database/models';
-import helpers from '../helpers';
-import Mail from '../services/mail/email';
-import { generateToken, verifyToken } from '../helpers/auth';
+import Sequelize from "sequelize";
+import { paginate, calculateLimitAndOffset } from "paginate-info";
+import models from "../database/models";
+import helpers from "../helpers";
+import Mail from "../services/mail/email";
+import { generateToken, verifyToken } from "../helpers/auth";
+
+const { Op } = Sequelize;
 
 // const userRepository = new dbRepository(models.User);
 const {
@@ -27,18 +29,18 @@ export const login = async (req, res) => {
   const { email, password } = req.body.user;
   const user = await models.User.findOne({ where: { email } });
 
-  if (!user) return errorStat(res, 401, 'Incorrect Login information');
+  if (!user) return errorStat(res, 401, "Incorrect Login information");
 
   const matchPasswords = await comparePassword(password, user.password);
 
   if (!matchPasswords) {
-    return errorStat(res, 401, 'Incorrect Login information');
+    return errorStat(res, 401, "Incorrect Login information");
   }
 
   await req.session.login(user.role, { user: user.dataValues }, res);
-  const message = 'Login successful';
+  const message = "Login successful";
 
-  return successStat(res, 200, 'user', { ...user.userResponse(), message });
+  return successStat(res, 200, "user", { ...user.userResponse(), message });
 };
 
 /**
@@ -53,10 +55,10 @@ export const signup = async (req, res) => {
   const { email } = req.body.user;
   const isExist = await models.User.findOne({ where: { email } });
 
-  if (isExist) return errorStat(res, 409, 'User Already Exist');
+  if (isExist) return errorStat(res, 409, "User Already Exist");
 
   const user = await models.User.create({
-    role: 'student',
+    role: "student",
     ...req.body.user,
   });
 
@@ -83,23 +85,23 @@ export const signup = async (req, res) => {
   // mail.sendMail();
 
   await req.session.login(user.role, { user: user.dataValues }, res);
-  const message = 'Registration is successful';
+  const message = "Registration is successful";
 
-  return successStat(res, 201, 'user', { ...user.userResponse(), message });
+  return successStat(res, 201, "user", { ...user.userResponse(), message });
 };
 
 export const quickCheckOut = async (req, res) => {
   const { email, fullName } = req.body.user;
   const isExist = await models.User.findOne({ where: { email } });
 
-  if (isExist) return errorStat(res, 409, 'User Already Exist');
+  if (isExist) return errorStat(res, 409, "User Already Exist");
 
-  const userProfile = fullName.split(' ');
+  const userProfile = fullName.split(" ");
 
   const password = await generatePassword(10);
 
   const user = await models.User.create({
-    role: 'student',
+    role: "student",
     firstentry: true,
     updated: false,
     email,
@@ -109,13 +111,13 @@ export const quickCheckOut = async (req, res) => {
   });
 
   const link =
-    process.env.NODE_ENV === 'production'
-      ? 'https://app.utiva.io/login'
-      : 'http://localhost:3000/login';
+    process.env.NODE_ENV === "production"
+      ? "https://app.utiva.io/login"
+      : "http://localhost:3000/login";
 
   const mail = new Mail({
     to: email,
-    subject: 'Welcome to Utiva',
+    subject: "Welcome to Utiva",
     messageHeader: `Hi, ${user.firstName}!`,
     messageBody: `
       'We are exicted to get you started. Below are your login details' 
@@ -126,16 +128,16 @@ export const quickCheckOut = async (req, res) => {
     iButton: true,
   });
   mail.InitButton({
-    text: 'Login',
+    text: "Login",
     link,
   });
 
   mail.sendMail();
 
   // await req.session.login(user.role, { user: user.dataValues }, res);
-  const message = 'Registration is successful';
+  const message = "Registration is successful";
 
-  return successStat(res, 201, 'user', { ...user.userResponse(), message });
+  return successStat(res, 201, "user", { ...user.userResponse(), message });
 };
 
 /**
@@ -155,12 +157,12 @@ export const updateUser = async (req, res) => {
 
   const data = req.body.user;
 
-  if (data.profilePic && !data.profilePic.includes('media')) {
+  if (data.profilePic && !data.profilePic.includes("media")) {
     let fileName =
       user.profilePic &&
-      user.profilePic.split('https://utiva-app.s3.amazonaws.com/media/')[1];
+      user.profilePic.split("https://utiva-app.s3.amazonaws.com/media/")[1];
 
-    fileName = fileName || `${user.email.split('@')[0]}`;
+    fileName = fileName || `${user.email.split("@")[0]}`;
 
     const image = await uploadImage(data.profilePic, `media/${fileName}`);
 
@@ -173,7 +175,7 @@ export const updateUser = async (req, res) => {
   await user.update(updatedUser);
   await req.session.login(user.role, { user: user.userResponse() }, res);
 
-  return successStat(res, 200, 'user', { ...user.userResponse() });
+  return successStat(res, 200, "user", { ...user.userResponse() });
 };
 
 /**
@@ -194,12 +196,12 @@ export const reset = async (req, res) => {
   const matchPasswords = comparePassword(oldPassword, exixtingUser.password);
 
   if (!matchPasswords) {
-    return errorStat(res, 401, 'Password is Incorrect please try again');
+    return errorStat(res, 401, "Password is Incorrect please try again");
   }
 
   await exixtingUser.update({ password: hashPassword(password) });
 
-  return successStat(res, 200, 'message', 'reset Successful');
+  return successStat(res, 200, "message", "reset Successful");
 };
 
 /**
@@ -215,7 +217,7 @@ export const resetPassword = async (req, res) => {
 
   const findUser = await models.User.findOne({ where: { email } });
 
-  if (!findUser) return errorStat(res, 404, 'User does not exist');
+  if (!findUser) return errorStat(res, 404, "User does not exist");
 
   const token = await generateToken(
     { id: findUser.id, email },
@@ -223,21 +225,21 @@ export const resetPassword = async (req, res) => {
   );
 
   const domain =
-    process.env.NODE_ENV === 'production'
-      ? 'https://app.utiva.io'
-      : 'http://localhost:3000';
+    process.env.NODE_ENV === "production"
+      ? "https://app.utiva.io"
+      : "http://localhost:3000";
 
   const link = `${domain}/auth/reset-password?emailToken=${token}&id=${findUser.id}`;
 
   const mail = new Mail({
     to: email,
-    subject: 'Reset Password',
+    subject: "Reset Password",
     messageHeader: `Hi!`,
-    messageBody: 'Please Click on the link below to reset your password',
+    messageBody: "Please Click on the link below to reset your password",
     iButton: true,
   });
   mail.InitButton({
-    text: 'Reset password',
+    text: "Reset password",
     link,
   });
   mail.sendMail();
@@ -245,8 +247,8 @@ export const resetPassword = async (req, res) => {
   return successStat(
     res,
     200,
-    'Message',
-    'Reset passord link has been sent to your email, clik link to activate your account'
+    "Message",
+    "Reset passord link has been sent to your email, clik link to activate your account"
   );
 };
 
@@ -257,19 +259,19 @@ export const changePassword = async (req, res) => {
 
   const findUser = await await models.User.findOne({ where: { id } });
 
-  if (!findUser) return errorStat(res, 401, 'Password reset unsuccesful');
+  if (!findUser) return errorStat(res, 401, "Password reset unsuccesful");
 
   try {
     verifyToken(emailToken);
   } catch (err) {
-    if (!findUser) return errorStat(res, 401, 'Link expired');
+    if (!findUser) return errorStat(res, 401, "Link expired");
   }
 
   await findUser.update({
     password: await hashPassword(password),
   });
 
-  return successStat(res, 200, 'Message', 'Your password has been changed');
+  return successStat(res, 200, "Message", "Your password has been changed");
 };
 
 /**
@@ -285,34 +287,34 @@ export const confirmEmail = async (req, res) => {
   if (resend) {
     const user = await models.User.findOne({ where: { id } });
 
-    if (!user) return errorStat(res, 400, 'Unable to send verification email');
+    if (!user) return errorStat(res, 400, "Unable to send verification email");
     const mail = new Mail({
       to: user.email,
-      subject: 'Welcome email',
+      subject: "Welcome email",
       messageHeader: `Hi, ${user.firstname}!`,
       messageBody:
-        'We are exicted to get you started. First, you have to verify your account. Just click on the link below',
+        "We are exicted to get you started. First, you have to verify your account. Just click on the link below",
       iButton: true,
     });
     mail.InitButton({
-      text: 'Verify Email',
+      text: "Verify Email",
       link: `${process.env.APP_URL}/api/v1/users/confirmEmail?token=${token}&id=${user.id}`,
     });
     mail.sendMail();
     return successStat(
       res,
       200,
-      'message',
-      'Verification link has been sent to your email'
+      "message",
+      "Verification link has been sent to your email"
     );
   }
   try {
     const verify = await verifyToken(emailToken, (err, decoded) => decoded);
     await models.User.update({ verified: true }, { where: { id: verify.id } });
     res.redirect(process.env.FRONTEND_URL);
-    return successStat(res, 200, 'message', 'Email verified successfully');
+    return successStat(res, 200, "message", "Email verified successfully");
   } catch (err) {
-    return errorStat(res, 400, 'Unable to verifiy email');
+    return errorStat(res, 400, "Unable to verifiy email");
   }
 };
 
@@ -322,7 +324,7 @@ export const adminCreate = async (req, res) => {
   try {
     const isExist = await models.User.findOne({ where: { email } });
 
-    if (isExist) return errorStat(res, 409, 'User Already Exist');
+    if (isExist) return errorStat(res, 409, "User Already Exist");
 
     const password = await generatePassword(10);
 
@@ -334,12 +336,12 @@ export const adminCreate = async (req, res) => {
       firstentry: true,
     });
 
-    return successStat(res, 201, 'user', {
+    return successStat(res, 201, "user", {
       ...user.userResponse(),
-      message: 'User Created',
+      message: "User Created",
     });
   } catch (e) {
-    return errorStat(res, 409, 'Operation Failed, Please try again later');
+    return errorStat(res, 409, "Operation Failed, Please try again later");
   }
 };
 
@@ -349,15 +351,15 @@ export const getAllUsers = async (req, res) => {
 
   const { rows, count } = await models.User.findAndCountAll({
     attributes: [
-      'id',
-      'email',
-      'firstName',
-      'lastName',
-      'occupation',
-      'region',
-      'status',
-      'role',
-      'profilePic',
+      "id",
+      "email",
+      "firstName",
+      "lastName",
+      "occupation",
+      "region",
+      "status",
+      "role",
+      "profilePic",
     ],
     limit,
     offset,
@@ -365,7 +367,7 @@ export const getAllUsers = async (req, res) => {
 
   const paginationMeta = paginate(currentPage, count, rows, pageLimit);
 
-  return successStat(res, 200, 'users', { paginationMeta, rows });
+  return successStat(res, 200, "users", { paginationMeta, rows });
 };
 
 export const activateUser = async (req, res) => {
@@ -375,12 +377,12 @@ export const activateUser = async (req, res) => {
     where: { id },
   });
 
-  await User.update({ status: 'active' });
+  await User.update({ status: "active" });
 
   return successStat(
     res,
     200,
-    'message',
+    "message",
     `${User.firstName} ${User.lastName} succesfully activated`
   );
 };
@@ -392,12 +394,12 @@ export const deactivateUser = async (req, res) => {
     where: { id },
   });
 
-  await User.update({ status: 'inactive' });
+  await User.update({ status: "inactive" });
 
   return successStat(
     res,
     200,
-    'message',
+    "message",
     `${User.firstName} ${User.lastName} succesfully deactivated`
   );
 };
@@ -415,5 +417,24 @@ export const updateAccount = async (req, res) => {
 
   await exixtingUser.update({ role });
 
-  return successStat(res, 200, 'message', 'Successful Updated');
+  return successStat(res, 200, "message", "Successful Updated");
+};
+
+export const searchUsers = async (req, res) => {
+  const { search_query } = req.params;
+
+  const users = await models.User.findAll({
+    where: {
+      [Op.or]: [
+        { firstName: { [Op.iLike]: `%${search_query}%` } },
+        { lastName: { [Op.iLike]: `%${search_query}%` } },
+        { region: { [Op.iLike]: `%${search_query}%` } },
+        { email: { [Op.iLike]: `%${search_query}%` } },
+        { occupation: { [Op.iLike]: `%${search_query}%` } },
+        { role: { [Op.iLike]: `%${search_query}%` } },
+      ],
+    },
+  });
+
+  return successStat(res, 200, "data", users);
 };

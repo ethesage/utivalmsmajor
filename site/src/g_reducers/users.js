@@ -21,18 +21,27 @@ const user = (state = initialState, action) => {
       };
 
     case "DELETE_USER":
-      return state.filter((user) => user.id !== action.payload);
+      return {
+        users: state.users.filter((user) => user.id !== action.payload),
+        ...action.payload.paginationMeta,
+      };
 
     case "ADD_USER":
-      return [...state, action.payload];
+      return {
+        users: [...state.users, action.payload],
+        ...action.payload.paginationMeta,
+      };
 
     case "UPDATE_USER":
-      return state.map((user) => {
-        if (user.id === action.payload.id) {
-          return action.payload;
-        }
-        return user;
-      });
+      return {
+        users: state.users.map((user) => {
+          if (user.id === action.payload.id) {
+            return action.payload;
+          }
+          return user;
+        }),
+        ...action.payload.paginationMeta,
+      };
 
     case "RESET":
       return initialState;
