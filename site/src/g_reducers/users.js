@@ -8,25 +8,25 @@ export const initialState = {
 
 const user = (state = initialState, action) => {
   switch (action.type) {
-    case 'GET_ALL_USERS':
+    case "GET_ALL_USERS":
       return {
         users: action.payload.rows,
         ...action.payload.paginationMeta,
       };
 
-    case 'GET_MORE_USERS':
+    case "GET_MORE_USERS":
       return {
-        users: [...state.users, ...action.payload.rows],
+        users: action.payload.rows,
         ...action.payload.paginationMeta,
       };
 
-    case 'DELETE_USER':
+    case "DELETE_USER":
       return state.filter((user) => user.id !== action.payload);
 
-    case 'ADD_USER':
+    case "ADD_USER":
       return [...state, action.payload];
 
-    case 'UPDATE_USER':
+    case "UPDATE_USER":
       return state.map((user) => {
         if (user.id === action.payload.id) {
           return action.payload;
@@ -34,7 +34,7 @@ const user = (state = initialState, action) => {
         return user;
       });
 
-    case 'RESET':
+    case "RESET":
       return initialState;
 
     default:

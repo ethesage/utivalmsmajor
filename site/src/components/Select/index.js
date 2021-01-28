@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import '../Input/style.scss';
-import { stringSearch } from 'helpers';
+import React, { useState, useEffect } from "react";
+import "../Input/style.scss";
+import { stringSearch } from "helpers";
 
 const Select = ({
   name,
-  placeHolder = '',
+  placeHolder = "",
   inputs,
-  label = '',
+  label = "",
   handleSelect = () => {},
   required,
-  value = '',
+  value = "",
   useSearch = false,
   useArrow = true,
   index,
@@ -18,9 +18,9 @@ const Select = ({
 }) => {
   const [openDrop, setOpenDrop] = useState(false);
   const [presentValue, setPresentValue] = useState(value);
-  const [presentText, setPresentText] = useState('');
+  const [presentText, setPresentText] = useState("");
   const [innerInputs, setInnerInputs] = useState(inputs);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
 
   const selectRef = React.createRef();
   const parent = React.createRef();
@@ -37,7 +37,7 @@ const Select = ({
       `${
         val
           ? val.name
-          : `${placeHolder}${required ? (showAsterix ? ' *' : '') : ''}`
+          : `${placeHolder}${required ? (showAsterix ? " *" : "") : ""}`
       }`
     );
 
@@ -45,7 +45,7 @@ const Select = ({
   }, [label, required, innerInputs, value, placeHolder, showAsterix]);
 
   useEffect(() => {
-    if (searchQuery !== '') {
+    if (searchQuery !== "") {
       setInnerInputs(
         inputs.filter((input) => stringSearch(searchQuery, input.name))
       );
@@ -84,7 +84,7 @@ const Select = ({
   const options = innerInputs.map((input, index) => {
     return (
       <button
-        className={`options ${input.value === presentValue ? 'selected' : ''}`}
+        className={`options ${input.value === presentValue ? "selected" : ""}`}
         type="button"
         key={index}
         value={input.value}
@@ -109,25 +109,25 @@ const Select = ({
         {/* <div className="input-type"> */}
         <div
           className={`select ${
-            openDrop || presentValue !== '' ? 'open-drop' : ''
+            openDrop || presentValue !== "" ? "open-drop" : ""
           }`}
           ref={selectRef}
           style={{ zIndex: openDrop ? 50 : 10 }}
           tabIndex={-1}
         >
           <button
-            className={`currentValue ${openDrop ? 'open-drop' : ''}${
-              useArrow ? ' arrow' : ''
+            className={`currentValue ${openDrop ? "open-drop" : ""}${
+              useArrow ? " arrow" : ""
             }`}
             type="button"
             onClick={revileDropDown}
           >
-            <p className="clipped-text" style={{ '--number': 1 }}>
+            <p className="clipped-text" style={{ "--number": 1 }}>
               {presentValue ? presentText : placeHolder}
             </p>
           </button>
           <div
-            className={`dropDownButtons ${openDrop ? 'open-drop' : 'close'}`}
+            className={`dropDownButtons ${openDrop ? "open-drop" : "close"}`}
           >
             {useSearch ? (
               <div className="search-input">
