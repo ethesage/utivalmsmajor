@@ -21,7 +21,7 @@ export default function Input({
         }),
         {}
       )
-  );
+  ); 
   const { addToast } = useToasts();
 
   const handleSubmit = async (e) => {
