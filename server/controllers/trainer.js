@@ -59,7 +59,7 @@ export const createTrainer = async (req, res) => {
 export const getAllTrainerCourse = async (req, res) => {
   const { id } = req.session.user;
 
-  const trainerCourse = await models.Trainer.findAll({
+  const trainerCourse = await models.CohortTrainer.findAll({
     where: { userId: id },
     attributes: ['id'],
     include: [
@@ -88,7 +88,7 @@ export const getSingleTrainerCourse = async (req, res) => {
   const { id } = req.session.user;
 
   const { courseCohortId } = req.body.trainer;
-  const resource = await models.Trainer.findOne({
+  const resource = await models.CohortTrainer.findOne({
     where: { userId: id, courseCohortId },
     include: [
       {
@@ -172,7 +172,7 @@ export const getSingleTrainerCourse = async (req, res) => {
 export const getAllTrainer = async (req, res) => {
   const { courseId } = req.body.trainer;
 
-  const trainers = await models.Trainer.findAll({
+  const trainers = await models.CohortTrainer.findAll({
     where: { courseId },
   });
 
@@ -186,7 +186,7 @@ export const getAllTrainer = async (req, res) => {
 export const getSingleTrainer = async (req, res) => {
   const { trainerId } = req.body.trainer;
 
-  const trainer = await models.Trainer.findOne({
+  const trainer = await models.CohortTrainer.findOne({
     where: { id: trainerId },
   });
 
@@ -200,7 +200,7 @@ export const getSingleTrainer = async (req, res) => {
 export const updateTrainer = async (req, res) => {
   const { trainerId } = req.body.trainer;
 
-  const trainer = await models.Trainer.findOne({
+  const trainer = await models.CohortTrainer.findOne({
     where: { id: trainerId },
   });
 
@@ -218,7 +218,7 @@ export const updateTrainer = async (req, res) => {
 export const deleteTrainer = async (req, res) => {
   const { trainerId } = req.body.trainer;
 
-  const trainer = await models.Trainer.findOne({
+  const trainer = await models.CohortTrainer.findOne({
     where: { id: trainerId },
   });
 
