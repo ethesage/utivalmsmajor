@@ -21,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       totalClasses: DataTypes.INTEGER,
       folderId: DataTypes.STRING,
       progress: DataTypes.INTEGER,
+      paymentType: DataTypes.STRING,
     },
     {}
   );

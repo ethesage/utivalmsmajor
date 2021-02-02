@@ -18,6 +18,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       values: ['ongoing', 'finished']
     },
+    courseAmount: DataTypes.BIGINT,
+    amountPaid: DataTypes.BIGINT,
+    paymentComplete: DataTypes.BOOLEAN,
   }, {});
   StudentCourse.associate = (models) => {
     // associations can be defined here

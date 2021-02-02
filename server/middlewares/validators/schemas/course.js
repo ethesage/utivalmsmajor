@@ -16,6 +16,8 @@ export const createCourse = Joi.object().keys({
   dateRange: Joi.string(),
   level: Joi.string(),
   list_desc: Joi.string(),
+  initialSplitAmount: Joi.number(),
+  finialSplitAmount: Joi.number(),
   //   status: Joi.string(),
   // extLink: Joi.string().required(),
   // totalClasses: Joi.number().required(),
@@ -48,6 +50,8 @@ export const getCourseSchema = Joi.object().keys({
   type: Joi.string().required(),
   //   link: Joi.string().required(),
   category: Joi.string().required(),
+  initialSplitAmount: Joi.number(),
+  finialSplitAmount: Joi.number(),
 });
 
 export const getCourseDescriptionSchema = Joi.object().keys({
