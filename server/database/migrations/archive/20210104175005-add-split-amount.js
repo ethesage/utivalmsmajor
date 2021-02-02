@@ -3,8 +3,8 @@ module.exports = {
     queryInterface.sequelize.transaction((t) =>
       Promise.all([
         queryInterface.addColumn(
-          'Courses',
-          'initialSplitAmount',
+          "Courses",
+          "initialSplitAmount",
           {
             type: Sequelize.BIGINT,
             allowNull: true,
@@ -13,27 +13,27 @@ module.exports = {
           { transaction: t }
         ),
         queryInterface.addColumn(
-          'Courses',
-          'finialSplitAmount',
+          "Courses",
+          "finalSplitAmount",
           {
             type: Sequelize.BIGINT,
             allowNull: true,
             defaultValue: 0,
           },
           { transaction: t }
-        )
+        ),
       ])
     ),
 
   down: (queryInterface) =>
     queryInterface.sequelize.transaction((t) =>
       Promise.all([
-        queryInterface.removeColumn('Courses', 'initialSplitAmount', {
+        queryInterface.removeColumn("Courses", "initialSplitAmount", {
           transaction: t,
         }),
-        queryInterface.removeColumn('Courses', 'finialSplitAmount', {
+        queryInterface.removeColumn("Courses", "finalSplitAmount", {
           transaction: t,
-        })
+        }),
       ])
     ),
 };
