@@ -90,7 +90,16 @@ const AllAssignmnets = ({ gapi, currentCourse, isAdmin, cohortId }) => {
     )
       return;
     // console.log(currentClassdata[0], classroom);
-    dispatch(getAllsubmittedAssignment(currentClassdata[0].title, classroom, cohortId));
+
+    const s_cohort_id = cohortId || currentCourse.CourseCohort.id;
+
+    dispatch(
+      getAllsubmittedAssignment(
+        currentClassdata[0].title,
+        classroom,
+        s_cohort_id
+      )
+    );
 
     return () => {};
   }, [
@@ -100,7 +109,7 @@ const AllAssignmnets = ({ gapi, currentCourse, isAdmin, cohortId }) => {
     classResources,
     currentClassdata,
     loading,
-    cohortId
+    cohortId,
   ]);
 
   useEffect(() => {
