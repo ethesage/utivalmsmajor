@@ -7,7 +7,7 @@ const ProfileCheck = ({ user }) => {
 
   return (
     <>
-      {!(user.bio && user.linkedIn && user.profilePic) ? (
+      {!(user.bio && user.linkedin && user.profilePic) ? (
         <div className="com-profile flex-row j-space">
           <p>Your profile is incomplete. Please update your profile</p>
 

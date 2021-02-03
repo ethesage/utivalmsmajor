@@ -276,6 +276,10 @@ export const allCourseStudents = async (req, res) => {
             "linkedin",
             "profilePic",
             "occupation",
+            "email",
+            "phoneNumber",
+            "company",
+            "occupation"
           ],
         },
       ],

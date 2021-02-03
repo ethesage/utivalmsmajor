@@ -1,21 +1,21 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import Sekeleton from 'react-skeleton-loader';
+import React, { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Sekeleton from "react-skeleton-loader";
 import {
   getEnrolledMembers,
   enrollStudents,
   deleteStudent,
-} from 'g_actions/member';
-import useFetch from 'Hooks/useFetch';
-import { getAllStudents } from 'g_actions/student';
-import MemberCard from 'components/Member';
-import Modal from 'components/Modal';
-import Input from 'components/Input';
-import Button from 'components/Button';
-import user_icon from 'assets/user_icon.png';
-import Close from 'assets/icons/closeX';
-import { stringSearch, axiosInstance } from 'helpers';
-import './style.scss';
+} from "g_actions/member";
+import useFetch from "Hooks/useFetch";
+import { getAllStudents } from "g_actions/student";
+import MemberCard from "components/Member";
+import Modal from "components/Modal";
+import Input from "components/Input";
+import Button from "components/Button";
+import user_icon from "assets/user_icon.png";
+import Close from "assets/icons/closeX";
+import { stringSearch, axiosInstance } from "helpers";
+import "./style.scss";
 
 const Members = ({ courseId }) => {
   const dispatch = useDispatch();
@@ -30,6 +30,8 @@ const Members = ({ courseId }) => {
   const [loading, , fetch] = useFetch(dispatch, !course);
   const [students, setStudents] = useState([]);
   const [s_loading, , s_fetch] = useFetch(dispatch, !!!allStudents);
+  const single_student_modal = useRef();
+  const [currentStudent, setCurrentStudent] = useState();
 
   useEffect(() => {
     if (allStudents) return;
@@ -64,7 +66,7 @@ const Members = ({ courseId }) => {
   };
 
   const enroll = async () => {
-    inner_modalRef.current.classList.add('spinner1');
+    inner_modalRef.current.classList.add("spinner1");
 
     try {
       await axiosInstance.post(`/checkout/quickcheckout/${courseId}`, {
@@ -82,9 +84,9 @@ const Members = ({ courseId }) => {
       setStudents([]);
       modalRef.current.close();
 
-      inner_modalRef.current.classList.remove('spinner1');
+      inner_modalRef.current.classList.remove("spinner1");
     } catch (err) {
-      inner_modalRef.current.classList.remove('spinner1');
+      inner_modalRef.current.classList.remove("spinner1");
       return;
     }
   };
@@ -105,7 +107,7 @@ const Members = ({ courseId }) => {
   };
 
   const handleSearch = ({ target: { name, value } }) => {
-    if (value !== '') {
+    if (value !== "") {
       const searchResult = allStudents.filter(
         ({ firstName, lastName, email }) =>
           stringSearch(value, firstName) ||
@@ -119,7 +121,7 @@ const Members = ({ courseId }) => {
   };
 
   const handleMembersSearch = ({ target: { name, value } }) => {
-    if (value !== '') {
+    if (value !== "") {
       const searchResult = enrolledStudents.members.filter(
         ({ User: { firstName, lastName, email } }) =>
           stringSearch(value, firstName) ||
@@ -134,7 +136,7 @@ const Members = ({ courseId }) => {
   };
 
   const removeStudentFromCourse = async (id) => {
-    document.querySelector('body').classList.add('spinner3');
+    document.querySelector("body").classList.add("spinner3");
 
     try {
       await axiosInstance.patch(`/admin/delete-student`, {
@@ -144,15 +146,24 @@ const Members = ({ courseId }) => {
 
       setFilteredMembers([]);
       dispatch(deleteStudent(id));
-      document.querySelector('body').classList.remove('spinner3');
+      document.querySelector("body").classList.remove("spinner3");
     } catch (err) {
-      document.querySelector('body').classList.remove('spinner3');
+      document.querySelector("body").classList.remove("spinner3");
     }
   };
 
   const usersToshow = filtered.length > 0 ? filtered : allStudents;
   const membersToshow =
     filteredMembers.length > 0 ? filteredMembers : enrolledStudents?.members;
+
+  console.log(membersToshow);
+
+  const showCurrentUserProfile = (data) => {
+    setCurrentStudent(data);
+    single_student_modal.current.open();
+  };
+
+  console.log(currentStudent);
 
   return (
     <>
@@ -171,7 +182,7 @@ const Members = ({ courseId }) => {
           )}
         </nav>
 
-        <div style={{ marginTop: '30px', maxWidth: '300px' }}>
+        <div style={{ marginTop: "30px", maxWidth: "300px" }}>
           <Input
             placeHolder="Search by name or email"
             name="search"
@@ -191,6 +202,7 @@ const Members = ({ courseId }) => {
                 data={student}
                 isAdmin={isAdmin}
                 onClick={() => removeStudentFromCourse(student.User.id)}
+                setCurrentStudent={showCurrentUserProfile}
               />
             ))
           )}
@@ -220,8 +232,8 @@ const Members = ({ courseId }) => {
                 <>
                   <strong
                     style={{
-                      marginBottom: '10px',
-                      cursor: 'pointer',
+                      marginBottom: "10px",
+                      cursor: "pointer",
                     }}
                   >
                     <small className="theme-color" onClick={enroll}>
@@ -229,7 +241,7 @@ const Members = ({ courseId }) => {
                     </small>
                   </strong>
 
-                  <strong style={{ marginBottom: '10px', cursor: 'pointer' }}>
+                  <strong style={{ marginBottom: "10px", cursor: "pointer" }}>
                     <small className="theme-color" onClick={removeAll}>
                       Remove All
                     </small>
@@ -287,8 +299,58 @@ const Members = ({ courseId }) => {
             ) : (
               <div
                 className="spinner2"
-                style={{ height: '100px', width: '100%' }}
+                style={{ height: "100px", width: "100%" }}
               ></div>
+            )}
+          </div>
+        </Modal>
+
+        <Modal
+          ref={single_student_modal}
+          runOnClose={() => setCurrentStudent(null)}
+        >
+          <div className="profile_modal">
+            <h3>User Profile</h3>
+
+            {currentStudent && (
+              <ul>
+                <li className="flex-row j-space al-start">
+                  <span className="key">Full Name :</span>
+                  <span className="val">{`${currentStudent.User.firstName} ${currentStudent.User.lastName}`}</span>
+                </li>
+                <li className="flex-row j-space al-start">
+                  <span className="key">Email :</span>
+                  <span className="val">
+                    <a href={`mailTo: ${currentStudent.User.email}`}>
+                      {currentStudent.User.email}
+                    </a>
+                  </span>
+                </li>
+                <li className="flex-row j-space al-start">
+                  <span className="key">Phone Number:</span>
+                  <span className="val">
+                    <a href={`tel: ${currentStudent.User.phoneNumber}`}>
+                      {currentStudent.User.phoneNumber}
+                    </a>
+                  </span>
+                </li>
+                <li className="flex-row j-space al-start">
+                  <span className="key">LinkedIn :</span>
+                  <span className="val">
+                    <a href={currentStudent.User.linkedin}>
+                      {currentStudent.User.linkedin}
+                    </a>
+                  </span>
+                </li>
+                <li className="flex-row j-space al-start">
+                  <span className="key">Occupation :</span>
+                  <span className="val">{currentStudent.User.occupation}</span>
+                </li>
+                <li className="flex-row j-space al-start">
+                  <span className="key">Company :</span>
+                  <span className="val">{currentStudent.User.company}</span>
+                </li>
+              </ul>
             )}
           </div>
         </Modal>

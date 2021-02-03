@@ -1,10 +1,10 @@
-import React from 'react';
-import Close from 'assets/icons/closeX';
-import user_icon from 'assets/user_icon.png';
-import linkedinPic from 'assets/icons/linkedin.png';
-import './style.scss';
+import React from "react";
+import Close from "assets/icons/closeX";
+import user_icon from "assets/user_icon.png";
+import linkedinPic from "assets/icons/linkedin.png";
+import "./style.scss";
 
-const Member = ({ data, onClick, isAdmin }) => {
+const Member = ({ data, onClick, isAdmin, setCurrentStudent }) => {
   return (
     <div className="snx_mem flex-col al-start">
       {isAdmin && (
@@ -23,9 +23,13 @@ const Member = ({ data, onClick, isAdmin }) => {
           {data?.User?.firstName} {data?.User?.lastName}
         </p>
         <small>{data?.User?.occupation}</small>
-        <a href={data?.User?.linkedin} target="_">
-          <img src={linkedinPic} alt="linkedIn" />
-        </a>
+        <div className="flex-row j-space ln">
+          <a href={data?.User?.linkedin} target="_">
+            <img src={linkedinPic} alt="linkedIn" className="img" />
+          </a>
+
+          <small className='hidden' onClick={() => setCurrentStudent(data)}>View</small>
+        </div>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-@import '../../media';
+@import "../../media";
 
 .snx_mem {
   width: 100%;
@@ -9,6 +9,12 @@
   max-width: 300px;
   padding: 20px;
   position: relative;
+
+  &:hover {
+    .hidden {
+      opacity: 1 !important;
+    }
+  }
 
   .rmv {
     position: absolute;
@@ -27,6 +33,7 @@
   }
 
   .text_sec {
+    width: 100%;
     p {
       font-weight: bold;
       margin-bottom: 5px;
@@ -40,8 +47,52 @@
 
     a {
       display: block;
-      img {
-        width: 25px;
+      width: 25px;
+      height: 25px;
+    }
+
+    .ln {
+      width: 100%;
+
+      .hidden {
+        margin: 0 !important;
+        color: color(theme);
+        cursor: pointer;
+        opacity: 0;
+        transition: 0.3s ease;
+      }
+    }
+  }
+}
+
+.profile_modal {
+  background: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(#000, 0.1);
+  width: 90%;
+  max-width: 400px;
+  min-width: 230px;
+  margin: auto;
+
+  h3 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  a {
+    color: color(theme);
+  }
+
+  ul {
+    li {
+      margin-bottom: 10px;
+      color: color(text_fade);
+      font-size: 0.8em;
+
+      .val {
+        width: 70%;
+        text-align: right;
       }
     }
   }

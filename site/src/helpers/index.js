@@ -113,7 +113,8 @@ export function get_user() {
     const _user = parseJwt(ctoken);
     user = {
       ..._user.user,
-      profilePic: user?.profilePic && `${_user.user.profilePic}?${Date.now()}`,
+      profilePic:
+        _user?.user.profilePic && `${_user.user.profilePic}?${Date.now()}`,
       iat: _user.iat,
     };
   }
