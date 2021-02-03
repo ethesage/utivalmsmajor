@@ -1,13 +1,13 @@
-import React from 'react';
-import Button from '../Button';
-import './style.scss';
+import React from "react";
+import Button from "../Button";
+import "./style.scss";
 
 const ProfileCheck = ({ user }) => {
-  const link = user.role === 'admin' ? 'admin/settings' : 'settings';
+  const link = user.role === "admin" ? "admin/settings" : "settings";
 
   return (
     <>
-      {true ? (
+      {!(user.bio && user.linkedIn && user.profilePic) ? (
         <div className="com-profile flex-row j-space">
           <p>Your profile is incomplete. Please update your profile</p>
 

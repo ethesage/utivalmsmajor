@@ -3,43 +3,43 @@ import React, {
   forwardRef,
   useImperativeHandle,
   useEffect,
-} from 'react';
-import dialogPolyfill from 'dialog-polyfill';
-import Close from '../../assets/icons/close';
-import './style.scss';
+} from "react";
+import dialogPolyfill from "dialog-polyfill";
+import Close from "../../assets/icons/close";
+import "./style.scss";
 
 const Modal = forwardRef(({ children, useButton = true }, ref) => {
   const disRef = useRef();
 
   useEffect(() => {
     return () => {
-      document.querySelector('body').classList.remove('no-scroll');
+      document.querySelector("body").classList.remove("no-scroll");
     };
   }, []);
 
   useImperativeHandle(ref, () => ({
     open: () => {
-      typeof disRef?.current?.showModal !== 'function' &&
+      typeof disRef?.current?.showModal !== "function" &&
         dialogPolyfill.registerDialog(disRef.current);
 
       if (disRef.current.open) return;
       disRef.current.showModal();
-      document.querySelector('body').classList.add('no-scroll');
+      document.querySelector("body").classList.add("no-scroll");
     },
 
     close: () => {
-      document.querySelector('body').classList.remove('no-scroll');
+      document.querySelector("body").classList.remove("no-scroll");
       close();
     },
   }));
 
   const close = () => {
-    document.querySelector('body').classList.remove('no-scroll');
+    document.querySelector("body").classList.remove("no-scroll");
     disRef.current.close();
   };
 
   return (
-    <dialog ref={disRef} className="apx_mod">
+    <dialog ref={disRef} className="apx_mod flex-row">
       <div className="apx_in">
         {useButton && (
           <button className="apx_close" onClick={close}>

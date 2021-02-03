@@ -3,12 +3,11 @@ module.exports = {
     queryInterface.sequelize.transaction((t) =>
       Promise.all([
         queryInterface.addColumn(
-          "Courses",
-          "list_desc",
+          "Assignments",
+          "courseCohortId",
           {
-            type: Sequelize.STRING,
+            type: Sequelize.UUID,
             allowNull: true,
-            defaultValue: false,
           },
           { transaction: t }
         ),
@@ -18,7 +17,7 @@ module.exports = {
   down: (queryInterface) =>
     queryInterface.sequelize.transaction((t) =>
       Promise.all([
-        queryInterface.removeColumn("Courses", "list_desc", {
+        queryInterface.removeColumn("Assignments", "courseCohortId", {
           transaction: t,
         }),
       ])

@@ -1,49 +1,90 @@
-import React, { useRef, useEffect } from 'react';
-import './style.scss';
+import React, { useRef } from "react";
+import "./style.scss";
 
 const RevielDrop = ({
   header,
   children,
   open = false,
+  revielType = "click",
+  className = "",
+  containerClassName = "",
+  openClassName = "",
   showArrow = true,
-  className = '',
+  closeOthers = true,
+  style = {},
   runOnOpen = () => {},
   runOnClose = () => {},
 }) => {
+  const mainRef = useRef();
   const headRef = useRef();
 
-  useEffect(() => {
-    const classes = showArrow ? ' showArrow' : '';
-    if (header) headRef.current.className = `rx_header ${classes} ${className}`;
-    return () => {};
-  }, [showArrow, className, header]);
-
   function handleClick(e) {
-    if (!e.target.className.includes('rx_hd')) return;
-    const elements = document.querySelectorAll('.rx_hd');
+    e.preventDefault();
+    e.stopPropagation();
 
-    elements.forEach((element) => {
-      if (e.target === element) return;
-      element.classList.remove('active');
-      element.nextElementSibling.classList.remove('show');
-    });
+    if (closeOthers) {
+      const elements = document.querySelectorAll(".rx_header ");
 
-    // if (!e.target.className.includes('rx_hd')) return;
-    e.target.classList.toggle('active');
-    e.target.nextElementSibling.classList.toggle('show');
+      elements.forEach((element) => {
+        if (headRef.current === element) return;
+        element.classList.remove("active");
 
-    if (e.target.classList.contains('active')) runOnOpen();
+        element.nextElementSibling.classList.remove("open");
+        openClassName &&
+          element.nextElementSibling.classList.remove(openClassName);
+      });
+    }
+
+    headRef.current.classList.toggle("active");
+    mainRef.current.classList.toggle("open");
+    openClassName && mainRef.current.classList.toggle(openClassName);
+
+    if (e.target.classList.contains("active")) runOnOpen();
     else runOnClose();
   }
 
+  const openDrop = (e) => {
+    // e.target.classList.add("active");
+    mainRef.current.classList.add("open");
+    openClassName && mainRef.current.classList.add(openClassName);
+  };
+
+  const close = (e) => {
+    // e.target.classList.remove("remove");
+    mainRef.current.classList.remove("open");
+    openClassName && mainRef.current.classList.remove(openClassName);
+  };
+
+  const functionToUse =
+    revielType === "click"
+      ? {
+          onClick: handleClick,
+        }
+      : {
+          onMouseOver: openDrop,
+          onMouseLeave: close,
+        };
+
   return (
-    <div className="rx_drop">
-      {header && (
-        <div className="rx_hd" onClick={handleClick}>
-          {React.cloneElement(header, { ref: headRef })}
-        </div>
-      )}
-      <div className={`rx_con ${open ? 'open' : ''}`}>{children}</div>
+    <div className={`drop-rev ${containerClassName}`}>
+      {header &&
+        React.cloneElement(header, {
+          ...functionToUse,
+          ref: headRef,
+          className: `rx_header ${header.props.className}${
+            showArrow ? " showArrow" : ""
+          }`,
+        })}
+
+      <div
+        ref={mainRef}
+        style={style}
+        className={`${className}${
+          revielType === "click" ? " click-type" : ""
+        } drop-open${open ? " open" : ""}`}
+      >
+        {children}
+      </div>
     </div>
   );
 };

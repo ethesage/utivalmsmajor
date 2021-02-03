@@ -1,4 +1,4 @@
-@import '../../media';
+@import "../../media";
 
 .faq {
   @include for-size(phone-only) {
@@ -10,16 +10,17 @@
     border-radius: 20px;
     overflow: hidden;
 
-    .rx_hd {
+    .rx_header {
       padding: 20px;
       margin: 0;
       border-bottom: 0.5px solid rgba(29, 61, 121, 0.17);
       font-weight: normal;
       background: #f8fafd;
+      cursor: pointer;
 
       h2 {
         &:after {
-          content: '';
+          content: "";
         }
       }
 
@@ -30,7 +31,7 @@
       }
     }
 
-    .rx_con {
+    .drop-open {
       margin: 0;
 
       .inf_x {
@@ -52,7 +53,7 @@
         }
       }
 
-      &.show {
+      &.open {
         padding: 20px;
       }
     }

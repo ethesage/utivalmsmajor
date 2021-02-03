@@ -1,5 +1,5 @@
-import express from 'express';
-import 'express-async-errors';
+import express from "express";
+import "express-async-errors";
 import {
   submitAssignment,
   gradeStudentAssignment,
@@ -12,8 +12,8 @@ import {
   getStudentCourseCohortAssignment,
   getStudentSubmitClassAssignment,
   getAllSubmitClassAssignment,
-} from '../../controllers/assignment';
-import middlewares from '../../middlewares';
+} from "../../controllers/assignment";
+import middlewares from "../../middlewares";
 
 const {
   validate,
@@ -33,78 +33,78 @@ const {
 const assignmentRoutes = express();
 
 assignmentRoutes.post(
-  '/submit',
-  usession.can(''),
+  "/submit",
+  usession.can(""),
   validate(submitAssignmentSchema),
   submitAssignment
 );
 
 assignmentRoutes.patch(
-  '/grade',
-  usession.can(''),
+  "/grade",
+  usession.can(""),
   validate(gradeAssignmentSchema),
   gradeStudentAssignment
 );
 
 assignmentRoutes.patch(
-  '/edit/:assignmentId',
-  usession.can(''),
+  "/edit/:assignmentId",
+  usession.can(""),
   validate(editAssignmentSchema),
   editSubmittedAssignment
 );
 
 assignmentRoutes.delete(
-  '/:assignmentId',
-  usession.can(''),
+  "/:assignmentId",
+  usession.can(""),
   validate(deleteAssignmentSchema),
   deleteAssignment
 );
 
 assignmentRoutes.post(
-  '/comment/:assignmentId',
-  usession.can(''),
+  "/comment/:assignmentId",
+  usession.can(""),
   validate(assignmentCommentSchema),
   createAssignmentComment
 );
 
 assignmentRoutes.get(
-  '/comment/:assignmentId',
-  usession.can(''),
+  "/comment/:assignmentId",
+  usession.can(""),
   validate(getCommentSchema),
   getAssignmentComment
 );
 
 assignmentRoutes.get(
-  '/class/student/:classId',
-  usession.can(''),
+  "/class/student/:classId/:courseCohortId",
+  usession.can(""),
   validate(getStudentSubmitClassAssignmentSchema),
   getStudentSubmitClassAssignment
 );
 
 assignmentRoutes.get(
-  '/class/submitted/all/:classId',
-  usession.can(''),
+  "/class/submitted/all/:classId/:courseCohortId",
+  usession.can(""),
   validate(getStudentSubmitClassAssignmentSchema),
   getAllSubmitClassAssignment
 );
 
 assignmentRoutes.get(
-  '/cohort/student/:courseCohortId',
-  usession.can(''),
+  "/cohort/student/:courseCohortId",
+  usession.can(""),
   validate(getStudentCourseCohortAssignmentSchema),
   getStudentCourseCohortAssignment
 );
 
 assignmentRoutes.patch(
-  '/comment/:assignmentCommentId',
-  usession.can(''),
+  "/comment/:assignmentCommentId",
+  usession.can(""),
   validate(editCommentSchema),
   editAssignmentComment
 );
 
 assignmentRoutes.delete(
-  '/comment/:assignmentCommentId',
-  usession.can(''),
+  "/comment/:assignmentCommentId",
+  usession.can(""),
   validate(deleteCommentSchema),
   deleteAssignmentComment
 );

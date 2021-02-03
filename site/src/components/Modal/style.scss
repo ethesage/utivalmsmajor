@@ -1,33 +1,29 @@
-@import '../../media';
+@import "../../media";
 
 .apx_mod {
   border: 0;
   position: fixed;
-  //   width: 80%;
-  //   max-width: 400px;
-  //   min-width: 300px;
+  width: 100vw;
   height: 100vh;
-  top: 0%;
-  left: 50%;
-  transform: translate(-50%, 0%) scale(1);
+  transform: scale(1);
   transition: 0.3s cubic-bezier(0.5, 0.05, 0.28, 1.45);
-  // border-radius: 20px;
   background: transparent;
-  display: flex;
-  align-items: center;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 
   .apx_in {
     position: relative;
   }
 
   &:not([open]) {
-    transform: translate(-50%, 0%) scale(0);
+    transform: scale(0);
     display: flex;
   }
 
   &::backdrop {
     background: rgba(black, 0.2);
-
     z-index: 1;
   }
 
@@ -53,7 +49,5 @@
     // position: fixed;
     // width: 100vw;
     // height: 100vh;
+  }
 }
-}
-
-

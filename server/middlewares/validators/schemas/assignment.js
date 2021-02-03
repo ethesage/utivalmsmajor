@@ -5,6 +5,7 @@ export const submitAssignmentSchema = Joi.object().keys({
   classResourcesId: Joi.string().uuid().trim().required(),
   classId: Joi.string().uuid().trim().required(),
   resourceLink: Joi.string().trim().required(),
+  courseCohortId: Joi.string().uuid().trim().required(),
 });
 
 export const gradeAssignmentSchema = Joi.object().keys({
@@ -42,6 +43,7 @@ export const deleteCommentSchema = Joi.object().keys({
 
 export const getStudentSubmitClassAssignmentSchema = Joi.object().keys({
   classId: Joi.string().uuid().trim().required(),
+  courseCohortId: Joi.string().uuid().trim().required(),
 });
 
 export const getStudentCourseCohortAssignmentSchema = Joi.object().keys({
