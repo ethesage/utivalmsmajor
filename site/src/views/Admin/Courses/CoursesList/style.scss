@@ -1,4 +1,4 @@
-@import '../../../../media';
+@import "../../../../media";
 
 .cx_list_con {
   height: 100%;
@@ -53,67 +53,5 @@
 
   @include for-size(phone-only) {
     grid-template-columns: 1fr;
-  }
-
-  .p_cx_cd {
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
-    padding: 10px 0;
-    width: 100%;
-    border-radius: 10px;
-
-    .img-sec {
-      height: 250px;
-      margin-bottom: 20px;
-      border-radius: 10px;
-      position: relative;
-      display: block;
-
-      img {
-        border-radius: 10px;
-      }
-    }
-
-    .txt-sec {
-      padding: 20px;
-
-      .title_sec {
-        margin-bottom: 20px;
-
-        img {
-          width: 30px;
-        }
-      }
-
-      .slim {
-        height: 2px;
-        margin: 2px 0 20px;
-
-        .react-sweet-progress-line {
-          height: 100%;
-
-          .react-sweet-progress-line-inner {
-            height: 100%;
-            min-height: unset;
-          }
-        }
-
-        .react-sweet-progress-symbol {
-          display: none;
-        }
-      }
-
-      .chx {
-        @include for-size(tablet-portrait-up) {
-          flex-direction: column;
-          align-items: start;
-        }
-      }
-
-      .grade {
-        button {
-          color: color(secondary);
-        }
-      }
-    }
   }
 }

@@ -1,4 +1,4 @@
-@import '../../../media';
+@import "../../../media";
 
 .file_card {
   width: 100%;
@@ -20,6 +20,8 @@
   }
 
   .left {
+    flex-shrink: 0;
+    flex-grow: 1;
     width: 80%;
     cursor: pointer;
     @include for-size(phone-only) {

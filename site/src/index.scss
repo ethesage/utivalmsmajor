@@ -1,5 +1,5 @@
-@import './media';
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap');
+@import "./media";
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap");
 
 *,
 *::before,
@@ -9,7 +9,7 @@
   box-sizing: border-box;
   outline: none;
   -webkit-tap-highlight-color: transparent;
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
 }
 
 body,
@@ -506,7 +506,7 @@ li {
 }
 
 %spinner_before {
-  content: '';
+  content: "";
   z-index: 62;
   box-sizing: border-box;
   position: absolute;
@@ -542,7 +542,7 @@ li {
 
 .spinner1::after,
 .spinner3::after {
-  content: '';
+  content: "";
   position: absolute;
   z-index: 60;
   width: 100%;
@@ -595,7 +595,7 @@ li {
     display: grid;
     grid-template-columns: repeat(
       auto-fill,
-      minmax(#{'min(300px, 100%)'}, 1fr)
+      minmax(#{"min(300px, 100%)"}, 1fr)
     );
     grid-gap: 30px;
 
@@ -615,7 +615,7 @@ li {
     display: grid;
     grid-template-columns: repeat(
       auto-fill,
-      minmax(#{'min(300px, 100%)'}, 1fr)
+      minmax(#{"min(300px, 100%)"}, 1fr)
     );
     grid-gap: 30px;
 
@@ -765,4 +765,67 @@ li {
   background-color: color(theme);
   border-color: color(theme);
   cursor: default;
+}
+
+.p_cx_cd {
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 10px 0;
+  width: 100%;
+  border-radius: 10px;
+  max-height: 401px;
+
+  .img-sec {
+    height: 250px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    position: relative;
+    display: block;
+
+    img {
+      border-radius: 10px;
+    }
+  }
+
+  .txt-sec {
+    padding: 20px;
+
+    .title_sec {
+      margin-bottom: 20px;
+
+      img {
+        width: 30px;
+      }
+    }
+
+    .slim {
+      height: 2px;
+      margin: 2px 0 20px;
+
+      .react-sweet-progress-line {
+        height: 100%;
+
+        .react-sweet-progress-line-inner {
+          height: 100%;
+          min-height: unset;
+        }
+      }
+
+      .react-sweet-progress-symbol {
+        display: none;
+      }
+    }
+
+    .chx {
+      @include for-size(tablet-portrait-up) {
+        flex-direction: column;
+        align-items: start;
+      }
+    }
+
+    .grade {
+      button {
+        color: color(secondary);
+      }
+    }
+  }
 }
