@@ -1,6 +1,6 @@
-import sequelize from 'sequelize';
-import models from '../database/models';
-import helpers from '../helpers';
+import sequelize, { Sequelize } from "sequelize";
+import models from "../database/models";
+import helpers from "../helpers";
 
 const { successStat, errorStat } = helpers;
 
@@ -23,7 +23,7 @@ export const createTrainer = async (req, res) => {
     });
 
     if (!isUser) {
-      return errorStat(res, 404, 'User does not exist');
+      return errorStat(res, 404, "User does not exist");
     }
 
     const course = await models.Course.findOne({
@@ -31,7 +31,7 @@ export const createTrainer = async (req, res) => {
     });
 
     if (!course) {
-      return errorStat(res, 404, 'Course not found');
+      return errorStat(res, 404, "Course not found");
     }
 
     const isExist = await models.Trainer.findOne({
@@ -39,7 +39,7 @@ export const createTrainer = async (req, res) => {
     });
 
     if (isExist) {
-      return errorStat(res, 404, 'Trainer is Already Assigned To This Course');
+      return errorStat(res, 404, "Trainer is Already Assigned To This Course");
     }
 
     const trainer = await models.Trainer.create({
@@ -47,12 +47,12 @@ export const createTrainer = async (req, res) => {
       courseId,
     });
 
-    return successStat(res, 201, 'data', {
+    return successStat(res, 201, "data", {
       ...trainer.dataValues,
-      message: 'Trainer Created',
+      message: "Trainer Created",
     });
   } catch (e) {
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
+    errorStat(res, 500, "Operation Failed, Please Try Again");
   }
 };
 
@@ -61,27 +61,47 @@ export const getAllTrainerCourse = async (req, res) => {
 
   const trainerCourse = await models.CohortTrainer.findAll({
     where: { userId: id },
-    attributes: ['id'],
+    attributes: ["id"],
     include: [
       {
         model: models.Cohort,
-        attributes: ['cohort', 'id'],
+        attributes: ["cohort", "id"],
       },
       {
         model: models.Course,
-        attributes: ['id', 'name', 'thumbnail'],
+        attributes: ["id", "name", "thumbnail"],
       },
       {
         model: models.CourseCohort,
-        attributes: ['id', 'cohortId', 'dateRange', 'courseId'],
+        attributes: ["id", "cohortId", "dateRange", "courseId"],
       },
     ],
   });
 
+
+  // const trainerCourse = await models.sequelize.query(
+  //   `
+  //     select "CohortTrainers".id,
+  //     "Cohort".cohort as "Cohort.cohort", "Cohort".id as "Cohort.id",
+  //     "Course".id as "Course.id", "Course".name as "Course.name", "Course".thumbnail as "Course.thumbnail",
+  //     "CourseCohort".id as "CourseCohort.id", "CourseCohort"."cohortId" as "CourseCohort.cohortId",
+  //     "CourseCohort"."dateRange" as "CourseCohort.dateRange", "CourseCohort"."courseId" as "CourseCohort.courseId"
+  //     from "CohortTrainers"
+  //     join "CourseCohorts" as "CourseCohort" on "CourseCohort".id = "CohortTrainers"."courseCohortId"
+  //     join "Courses" as "Course" on "CourseCohort"."courseId" = "Course".id
+  //     join "Cohorts" as "Cohort" on "Cohort".id = "CourseCohort"."cohortId"
+  //     where "CohortTrainers"."userId"= '${id}'
+  // `,
+  //   {
+  //     nest: true,
+  //     type: QueryTypes.SELECT,
+  //   }
+  // );
+
   // if (!trainerCourse[0]) {
   //   return errorStat(res, 404, "User not assigned to any course ");
   // }
-  return successStat(res, 200, 'data', trainerCourse);
+  return successStat(res, 200, "data", trainerCourse);
 };
 
 export const getSingleTrainerCourse = async (req, res) => {
@@ -96,7 +116,7 @@ export const getSingleTrainerCourse = async (req, res) => {
       },
       {
         model: models.Course,
-        attributes: ['id', 'name', 'description', 'thumbnail', 'list_desc'],
+        attributes: ["id", "name", "description", "thumbnail", "list_desc"],
         include: [
           {
             model: models.CourseDescription,
@@ -116,16 +136,16 @@ export const getSingleTrainerCourse = async (req, res) => {
               {
                 model: models.CohortTrainer,
                 where: { courseCohortId },
-                attributes: ['id', 'userId'],
+                attributes: ["id", "userId"],
                 required: false,
                 include: {
                   model: models.User,
                   attributes: [
-                    'firstName',
-                    'lastName',
-                    'profilePic',
-                    'occupation',
-                    'bio',
+                    "firstName",
+                    "lastName",
+                    "profilePic",
+                    "occupation",
+                    "bio",
                   ],
                 },
               },
@@ -134,7 +154,7 @@ export const getSingleTrainerCourse = async (req, res) => {
               },
               {
                 model: models.CohortClassVideo,
-                attributes: ['id', 'link'],
+                attributes: ["id", "link"],
                 where: { courseCohortId },
                 required: false,
               },
@@ -152,11 +172,11 @@ export const getSingleTrainerCourse = async (req, res) => {
       },
     ],
 
-    order: [[models.Course, models.Classes, 'createdAt', 'ASC']],
+    order: [[models.Course, models.Classes, "createdAt", "ASC"]],
   });
 
   if (!resource) {
-    return errorStat(res, 404, 'Trainer Course Not Found');
+    return errorStat(res, 404, "Trainer Course Not Found");
   }
 
   // if (!resource.isCompleted && new Date() > resource.duration) {
@@ -166,7 +186,7 @@ export const getSingleTrainerCourse = async (req, res) => {
   //   });
   // }
 
-  return successStat(res, 200, 'data', resource);
+  return successStat(res, 200, "data", resource);
 };
 
 export const getAllTrainer = async (req, res) => {
@@ -177,10 +197,10 @@ export const getAllTrainer = async (req, res) => {
   });
 
   if (!trainers) {
-    return errorStat(res, 404, 'No Trainer Found');
+    return errorStat(res, 404, "No Trainer Found");
   }
 
-  return successStat(res, 200, 'data', trainers);
+  return successStat(res, 200, "data", trainers);
 };
 
 export const getSingleTrainer = async (req, res) => {
@@ -191,10 +211,10 @@ export const getSingleTrainer = async (req, res) => {
   });
 
   if (!trainer) {
-    return errorStat(res, 404, 'Trainer Not Found');
+    return errorStat(res, 404, "Trainer Not Found");
   }
 
-  return successStat(res, 200, 'data', trainer);
+  return successStat(res, 200, "data", trainer);
 };
 
 export const updateTrainer = async (req, res) => {
@@ -205,14 +225,14 @@ export const updateTrainer = async (req, res) => {
   });
 
   if (!trainer) {
-    return errorStat(res, 404, 'Trainer not found');
+    return errorStat(res, 404, "Trainer not found");
   }
 
   const update = await trainer.update({
     ...req.body.trainer,
   });
 
-  return successStat(res, 200, 'data', update);
+  return successStat(res, 200, "data", update);
 };
 
 export const deleteTrainer = async (req, res) => {
@@ -223,12 +243,12 @@ export const deleteTrainer = async (req, res) => {
   });
 
   if (!trainer) {
-    return errorStat(res, 404, 'Trainer not found');
+    return errorStat(res, 404, "Trainer not found");
   }
 
   await trainer.destroy();
 
-  return successStat(res, 200, 'data', 'Delete Successful');
+  return successStat(res, 200, "data", "Delete Successful");
 };
 
 export const getTrainerNextClass = async (req, res) => {
@@ -239,19 +259,19 @@ export const getTrainerNextClass = async (req, res) => {
     include: [
       {
         model: models.Classes,
-        attributes: ['link'],
+        attributes: ["link"],
         include: [
           {
             model: models.CohortClassDays,
             where: { date: { [Op.gte]: new Date() } },
-            attributes: ['date', 'time'],
+            attributes: ["date", "time"],
           },
         ],
         //  attributes: ['thumbnail', 'name', 'extLink'],
       },
       {
         model: models.CourseCohort,
-        attributes: ['courseId'],
+        attributes: ["courseId"],
         include: [
           {
             model: models.Course,
@@ -276,5 +296,5 @@ export const getTrainerNextClass = async (req, res) => {
     return acc;
   }, []);
 
-  return successStat(res, 200, 'data', getAll);
+  return successStat(res, 200, "data", getAll);
 };
