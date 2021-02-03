@@ -1,10 +1,10 @@
 /* eslint-disable indent */
 /* eslint-disable no-console */
 /* eslint-disable import/prefer-default-export */
-import sequelize from 'sequelize';
+// import sequelize from "sequelize";
 // import { paginate, calculateLimitAndOffset } from 'paginate-info';
-import models from '../database/models';
-import helpers from '../helpers';
+import models from "../database/models";
+import helpers from "../helpers";
 // import  from "../helpers"
 
 const { successStat, errorStat } = helpers;
@@ -26,6 +26,8 @@ export const createClass = async (req, res) => {
     classId,
     date,
     time,
+    courseId,
+    cohortId,
   } = req.body.class;
 
   const courseCohort = await models.CourseCohort.findOne({
@@ -33,7 +35,7 @@ export const createClass = async (req, res) => {
   });
 
   if (!courseCohort) {
-    return errorStat(res, 404, 'Course Cohort does not exist');
+    return errorStat(res, 404, "Course Cohort does not exist");
   }
 
   const classCreate = await models.Classes.create({
@@ -61,6 +63,8 @@ export const createClass = async (req, res) => {
       userId: desc.userId,
       courseCohortId,
       classId: classCreate.id,
+      courseId,
+      cohortId,
     }));
 
     trainers = await models.CohortTrainer.bulkCreate(descVals, {
@@ -75,7 +79,7 @@ export const createClass = async (req, res) => {
     time,
   });
 
-  return successStat(res, 201, 'data', {
+  return successStat(res, 201, "data", {
     ...classCreate.dataValues,
     ClassResources: resource,
     ClassDays: [day],
@@ -99,12 +103,12 @@ export const getClass = async (req, res) => {
       ],
     });
 
-    if (!allClass) return errorStat(res, 404, 'Class Not Found');
+    if (!allClass) return errorStat(res, 404, "Class Not Found");
 
-    return successStat(res, 200, 'data', allClass);
+    return successStat(res, 200, "data", allClass);
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
+    errorStat(res, 500, "Operation Failed, Please Try Again");
   }
 };
 
@@ -125,13 +129,13 @@ export const getAllClass = async (req, res) => {
     });
 
     if (!allClass[0]) {
-      return errorStat(res, 404, 'No class Found for this course');
+      return errorStat(res, 404, "No class Found for this course");
     }
 
-    return successStat(res, 200, 'data', allClass);
+    return successStat(res, 200, "data", allClass);
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
+    errorStat(res, 500, "Operation Failed, Please Try Again");
   }
 };
 
@@ -152,17 +156,17 @@ export const getAllStudentClass = async (req, res) => {
           ],
         },
       ],
-      order: [['createdAt', 'DESC']],
+      order: [["createdAt", "DESC"]],
     });
 
     if (!resource[0]) {
-      return errorStat(res, 404, 'No Course Found');
+      return errorStat(res, 404, "No Course Found");
     }
 
-    return successStat(res, 200, 'data', resource);
+    return successStat(res, 200, "data", resource);
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
+    errorStat(res, 500, "Operation Failed, Please Try Again");
   }
 };
 
@@ -178,17 +182,17 @@ export const getAllTrainerClass = async (req, res) => {
           where: { userId: id },
         },
       ],
-      order: [['createdAt', 'DESC']],
+      order: [["createdAt", "DESC"]],
     });
 
     if (!resource[0]) {
-      return errorStat(res, 404, 'No Course Found');
+      return errorStat(res, 404, "No Course Found");
     }
 
-    return successStat(res, 200, 'data', resource);
+    return successStat(res, 200, "data", resource);
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
+    errorStat(res, 500, "Operation Failed, Please Try Again");
   }
 };
 
@@ -200,9 +204,9 @@ export const updateClass = async (req, res) => {
     date,
     time,
     users,
+    courseId,
+    cohortId,
   } = req.body;
-
-  let trainers = [];
 
   await models.CohortTrainer.destroy({ where: { classId, courseCohortId } });
 
@@ -222,9 +226,11 @@ export const updateClass = async (req, res) => {
       userId: desc.userId,
       courseCohortId,
       classId,
+      courseId,
+      cohortId,
     }));
 
-    trainers = await models.CohortTrainer.bulkCreate(descVals, {
+    await models.CohortTrainer.bulkCreate(descVals, {
       ignoreDuplicates: true,
     });
   }
@@ -235,16 +241,16 @@ export const updateClass = async (req, res) => {
       {
         model: models.CohortTrainer,
         where: { courseCohortId },
-        attributes: ['id', 'userId'],
+        attributes: ["id", "userId"],
         required: false,
         include: {
           model: models.User,
-          attributes: ['firstName', 'lastName', 'profilePic', 'occupation'],
+          attributes: ["firstName", "lastName", "profilePic", "occupation"],
         },
       },
       {
         model: models.CohortClassVideo,
-        attributes: ['id', 'link'],
+        attributes: ["id", "link"],
         where: { courseCohortId },
         required: false,
       },
@@ -261,7 +267,7 @@ export const updateClass = async (req, res) => {
       where: { classId },
     });
 
-    successStat(res, 200, 'data', {
+    successStat(res, 200, "data", {
       ...updatedClass.dataValues,
       ClassResources: resource || [],
       CohortClassDays: updateClassdays,
@@ -274,7 +280,7 @@ export const updateClass = async (req, res) => {
       time,
     });
 
-    return successStat(res, 200, 'data', {
+    return successStat(res, 200, "data", {
       ...updatedClass.dataValues,
       ClassResources: resource || [],
       CohortClassDays: days,
@@ -299,15 +305,15 @@ export const deleteClass = async (req, res) => {
     });
 
     if (!foundClass) {
-      return errorStat(res, 404, 'Class not found');
+      return errorStat(res, 404, "Class not found");
     }
 
     await foundClass.destroy();
 
-    return successStat(res, 201, 'data', 'Delete Successful');
+    return successStat(res, 201, "data", "Delete Successful");
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
+    errorStat(res, 500, "Operation Failed, Please Try Again");
   }
 };
 
@@ -319,19 +325,19 @@ export const classAssignment = async (req, res) => {
       where: { id: classId },
     });
 
-    if (!findClass) return errorStat(res, 404, 'Class not found');
+    if (!findClass) return errorStat(res, 404, "Class not found");
 
     const createAssignment = await models.ClassResources.create({
       ...req.body.class,
-      type: 'assignment',
+      type: "assignment",
     });
-    return successStat(res, 201, 'data', {
+    return successStat(res, 201, "data", {
       ...createAssignment.dataValues,
-      message: 'Class Assignment created successfully',
+      message: "Class Assignment created successfully",
     });
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
+    errorStat(res, 500, "Operation Failed, Please Try Again");
   }
 };
 
@@ -344,20 +350,20 @@ export const editClassAssignment = async (req, res) => {
     });
 
     if (!findAssignment) {
-      return errorStat(res, 404, 'Class Assignment not found');
+      return errorStat(res, 404, "Class Assignment not found");
     }
 
     await findAssignment.update({
       ...req.body.class,
     });
 
-    return successStat(res, 201, 'data', {
+    return successStat(res, 201, "data", {
       ...findAssignment.dataValues,
-      message: 'Class Assignment created successfully',
+      message: "Class Assignment created successfully",
     });
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
+    errorStat(res, 500, "Operation Failed, Please Try Again");
   }
 };
 
@@ -369,7 +375,7 @@ export const deleteClassAssignment = async (req, res) => {
     });
 
     if (!findAssignment) {
-      return errorStat(res, 404, 'Class Assignment not found');
+      return errorStat(res, 404, "Class Assignment not found");
     }
 
     await findAssignment.destroy();
@@ -377,12 +383,12 @@ export const deleteClassAssignment = async (req, res) => {
     return successStat(
       res,
       201,
-      'data',
-      'Class Assignment deleted successfully'
+      "data",
+      "Class Assignment deleted successfully"
     );
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
+    errorStat(res, 500, "Operation Failed, Please Try Again");
   }
 };
 
@@ -393,18 +399,18 @@ export const addClassResources = async (req, res) => {
       where: { id: classId },
     });
 
-    if (!findClass) return errorStat(res, 404, 'Class not found');
+    if (!findClass) return errorStat(res, 404, "Class not found");
 
     const createResource = await models.ClassResources.create({
       ...req.body.class,
-      type: 'resource',
+      type: "resource",
     });
-    return successStat(res, 201, 'data', {
+    return successStat(res, 201, "data", {
       ...createResource.dataValues,
-      message: 'Class Resource created successfully',
+      message: "Class Resource created successfully",
     });
   } catch (e) {
     console.log(e);
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
+    errorStat(res, 500, "Operation Failed, Please Try Again");
   }
 };

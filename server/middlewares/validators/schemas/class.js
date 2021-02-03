@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-import Joi from '@hapi/joi';
+import Joi from "@hapi/joi";
 
 export const createClassroom = Joi.object().keys({
   //   studentId: Joi.string().uuid().trim().required(),
@@ -12,7 +12,7 @@ export const createClassroom = Joi.object().keys({
   link: Joi.string().trim().required(),
   dateRange: Joi.string(),
   resourceLink: Joi.string().trim(),
-  type: Joi.string().trim().valid('video', 'pdf', 'doc', 'xlx', 'ppt'),
+  type: Joi.string().trim().valid("video", "pdf", "doc", "xlx", "ppt"),
   date: Joi.string().required(),
   time: Joi.string().required(),
   users: Joi.array().items(
