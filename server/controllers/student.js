@@ -137,15 +137,15 @@ export const getSingleStudentCourse = async (req, res) => {
 
   const { courseCohortId } = req.body.student;
 
-  const isSort = (array) => {
-    const sort = array.sort((a, b) => {
-      // console.log(a.dataValues.CohortClassDays[0].dataValues.date);
-      const c = new Date(a.dataValues.CohortClassDays[0].dataValues.date);
-      const d = new Date(b.dataValues.CohortClassDays[0].dataValues.date);
-      return c - d;
-    });
-    return sort;
-  };
+  // const isSort = (array) => {
+  //   const sort = array.sort((a, b) => {
+  //     // console.log(a.dataValues.CohortClassDays[0].dataValues.date);
+  //     const c = new Date(a.dataValues.CohortClassDays[0].dataValues.date);
+  //     const d = new Date(b.dataValues.CohortClassDays[0].dataValues.date);
+  //     return c - d;
+  //   });
+  //   return sort;
+  // };
 
   const resource = await models.StudentCourse.findOne({
     where: { courseCohortId, studentId: id },
@@ -162,8 +162,7 @@ export const getSingleStudentCourse = async (req, res) => {
           },
           {
             model: models.Classes,
-            // required: false,
-            where: { courseCohortId },
+            required: false,
             include: [
               {
                 model: models.CohortTrainer,
@@ -204,7 +203,9 @@ export const getSingleStudentCourse = async (req, res) => {
       },
     ],
 
-    order: [[models.Course, models.Classes, "createdAt", "ASC"]],
+    order: [
+      [models.Course, models.Classes, models.CohortClassDays, "date", "ASC"],
+    ],
   });
 
   if (!resource) {
@@ -218,7 +219,8 @@ export const getSingleStudentCourse = async (req, res) => {
     });
   }
 
-  isSort(resource.Course.Classes);
+  // isSort(resource.Course.Classes);
+  // console.log(resource.Course.Classes);
 
   if (
     resource.CourseCohort.dataValues.paymentType === "split" &&
