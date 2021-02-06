@@ -177,7 +177,7 @@ const CreateCourse = ({ edit }) => {
             />
           ))}
         </div>
-        <div className="sub_fm sec_3">
+        <div className="sub_fm sec_2">
           {data.slice(5, 8).map((form, i) => (
             <Input
               key={`login_form_${i}`}

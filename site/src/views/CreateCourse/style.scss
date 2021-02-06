@@ -14,17 +14,6 @@
 
     .sec_2 {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      grid-template-columns: repeat(
-        auto-fill,
-        minmax(#{'min(200px, 100%)'}, 1fr)
-      );
-      column-gap: 30px;
-      align-items: flex-end;
-    }
-
-    .sec_3 {
-      display: grid;
       grid-template-columns: repeat(
         auto-fill,
         minmax(#{'min(200px, 100%)'}, 1fr)

@@ -67,6 +67,7 @@ export default [
     errorMsg: '',
     required: true,
   },
+  
   {
     name: 'type',
     placeHolder: 'Free Course',

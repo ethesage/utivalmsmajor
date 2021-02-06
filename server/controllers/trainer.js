@@ -78,7 +78,6 @@ export const getAllTrainerCourse = async (req, res) => {
     ],
   });
 
-
   // const trainerCourse = await models.sequelize.query(
   //   `
   //     select "CohortTrainers".id,
@@ -172,7 +171,9 @@ export const getSingleTrainerCourse = async (req, res) => {
       },
     ],
 
-    order: [[models.Course, models.Classes, "createdAt", "ASC"]],
+    order: [
+      [models.Course, models.Classes, models.CohortClassDays, "date", "ASC"],
+    ],
   });
 
   if (!resource) {
