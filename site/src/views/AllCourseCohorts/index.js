@@ -152,8 +152,6 @@ const CourseCohorts = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentCohort]);
 
-  console.log(currentCohort);
-
   if (loading || c_loading) {
     return (
       <section className="al_clx">

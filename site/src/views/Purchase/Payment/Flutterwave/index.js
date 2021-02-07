@@ -36,7 +36,6 @@ export default ({ done, paymentAmount }) => {
         onClick={() => {
           handleFlutterPayment({
             callback: (response) => {
-              console.log(paymentAmount, '=====paymentAmount');
 
               if (response.status === "successful") {
                 dispatch(checkout(courses.checkoutData.CourseCohorts[0].id, paymentAmount));

@@ -136,8 +136,6 @@ const CreateCourse = ({ edit }) => {
     );
   }
 
-  console.log(inputTypes);
-
   return (
     <section className="cre_cx">
       <Nav>

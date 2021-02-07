@@ -53,8 +53,6 @@ const Assignment = ({ gapi }) => {
     (classrum) => classrum.id === classroom
   );
 
-  console.log(currentClass?.courseCohortId);
-
   const getFiles = useCallback(
     async (id) => {
       if (!gapi) return;
@@ -75,8 +73,6 @@ const Assignment = ({ gapi }) => {
       const response = await axiosInstance.get(
         `assignment/class/student/${currentClass.id}/${currentClass?.courseCohortId}`
       );
-
-      console.log(response);
 
       const submitted = response.data.data;
       if (typeof submitted !== Array && submitted?.length === 0) {

@@ -156,14 +156,10 @@ const Members = ({ courseId }) => {
   const membersToshow =
     filteredMembers.length > 0 ? filteredMembers : enrolledStudents?.members;
 
-  console.log(membersToshow);
-
   const showCurrentUserProfile = (data) => {
     setCurrentStudent(data);
     single_student_modal.current.open();
   };
-
-  console.log(currentStudent);
 
   return (
     <>
