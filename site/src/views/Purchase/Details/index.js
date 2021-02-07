@@ -43,6 +43,14 @@ const Details = ({ proceed, match, set, setPaymentAmount }) => {
   }, [paymentType, purchaseCourse]);
 
   useEffect(() => {
+    if (!purchaseCourse) return;
+
+    if (purchaseCourse?.CourseCohorts[0].paymentType === "full")
+      setAmountToPay(purchaseCourse.cost);
+  
+  }, [purchaseCourse]);
+
+  useEffect(() => {
     (async () => {
       if (!checkoutData) {
         await dispatch(checkoutCourse(purchaseCourse));
