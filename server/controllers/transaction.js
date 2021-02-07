@@ -21,19 +21,11 @@ export const addTransction = async (req, res) => {
   const { id } = req.session.user;
 
   try {
-    const cour = await models.TransactionHistory.findOne({
-      where: { courseCohortId, studentId: id },
-    });
-
-    if (cour) {
-      ''
-      // return errorStat(res, 404, "Course does not exist");
-    } else(
       await models.TransactionHistory.create({
         ...req.body.transaction,
         remainingBalance: Number(courseAmount) - Number(paidAmount)
       })
-    )
+    // )
 
     return successStat(res, 200, "message",
       // ...studC.dataValues,
