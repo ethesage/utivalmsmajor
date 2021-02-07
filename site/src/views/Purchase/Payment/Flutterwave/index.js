@@ -24,7 +24,7 @@ export default ({ done, paymentAmount }) => {
     customizations: {
       // title: 'My store',
       description: "Course Payment",
-      logo: `${window.location.origin}/assets/logo.png`,
+      logo: "https://utiva-app.s3.amazonaws.com/media/utiva-icon.png",
     },
   };
 
@@ -36,9 +36,13 @@ export default ({ done, paymentAmount }) => {
         onClick={() => {
           handleFlutterPayment({
             callback: (response) => {
-
               if (response.status === "successful") {
-                dispatch(checkout(courses.checkoutData.CourseCohorts[0].id, paymentAmount));
+                dispatch(
+                  checkout(
+                    courses.checkoutData.CourseCohorts[0].id,
+                    paymentAmount
+                  )
+                );
                 dispatch(
                   addStudentCourse(courses.checkoutData, [
                     {
