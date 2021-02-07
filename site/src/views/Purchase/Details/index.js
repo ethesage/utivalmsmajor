@@ -36,10 +36,14 @@ const Details = ({ proceed, match, set, setPaymentAmount }) => {
 
     if (paymentType === "split") {
       setAmountToPay(purchaseCourse.initialSplitAmount);
+      document.querySelector(".summary").scrollIntoView();
       return;
     }
 
     setAmountToPay(purchaseCourse.cost);
+    document.querySelector(".summary").scrollIntoView();
+
+    return () => {};
   }, [paymentType, purchaseCourse]);
 
   useEffect(() => {
@@ -50,11 +54,17 @@ const Details = ({ proceed, match, set, setPaymentAmount }) => {
   }, [purchaseCourse]);
 
   useEffect(() => {
+    document.querySelector("body").classList.add("smooth-scroll");
+
     (async () => {
       if (!checkoutData) {
         await dispatch(checkoutCourse(purchaseCourse));
       }
     })();
+
+    return () => {
+      document.querySelector("body").classList.remove("smooth-scroll");
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

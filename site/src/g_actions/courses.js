@@ -87,7 +87,8 @@ export const chargeCard = (data) => async (dispatch) => {
   let checkout;
   try {
     checkout = await axiosInstance.post(
-      `/stripe/create-checkout-session`, data
+      `/stripe/create-checkout-session`,
+      data
     );
   } catch (error) {
     return error;
