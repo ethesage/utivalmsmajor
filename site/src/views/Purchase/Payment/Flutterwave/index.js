@@ -10,8 +10,8 @@ export default ({ done, paymentAmount }) => {
   const { auth, courses } = useSelector((state) => state);
 
   const config = {
-    public_key: "FLWPUBK-e836e7b389eda0faa7c37b9c12fb4119-X",
-    // public_key: "FLWPUBK_TEST-676fa99372c8af0bcb924e15ad1de6d6-X",
+    // public_key: "FLWPUBK-e836e7b389eda0faa7c37b9c12fb4119-X",
+    public_key: "FLWPUBK_TEST-676fa99372c8af0bcb924e15ad1de6d6-X",
     tx_ref: Date.now(),
     amount: Number(paymentAmount),
     currency: "NGN",
@@ -36,10 +36,10 @@ export default ({ done, paymentAmount }) => {
         onClick={() => {
           handleFlutterPayment({
             callback: (response) => {
-              // console.log(response);
+              console.log(paymentAmount, '=====paymentAmount');
 
               if (response.status === "successful") {
-                dispatch(checkout(courses.checkoutData.CourseCohorts[0].id));
+                dispatch(checkout(courses.checkoutData.CourseCohorts[0].id, paymentAmount));
                 dispatch(
                   addStudentCourse(courses.checkoutData, [
                     {

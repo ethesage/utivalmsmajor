@@ -70,11 +70,12 @@ export const check = (courseCohortId) => async (dispatch) => {
   return isCheck.data.data;
 };
 
-export const checkout = (courseCohortId) => async (dispatch) => {
+export const checkout = (courseCohortId, amount) => async (dispatch) => {
   let checkout;
   try {
     checkout = await axiosInstance.post(
-      `/checkout/quickcheckout/${courseCohortId}`
+      `/checkout/quickcheckout/${courseCohortId}`,
+      {amount}
     );
   } catch (error) {
     return error;

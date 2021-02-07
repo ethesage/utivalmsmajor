@@ -20,7 +20,7 @@ const Payment = ({ back, paymentAmount }) => {
 
   useEffect(() => {
     if (courses?.purchaseCourse?.type === "free") {
-      dispatch(checkout(courses.purchaseCourse.CourseCohorts[0].id));
+      dispatch(checkout(courses.purchaseCourse.CourseCohorts[0].id), paymentAmount);
       dispatch(
         addStudentCourse(courses.purchaseCourse, [
           { courseCohortId: courses.purchaseCourse.CourseCohorts[0].id },
