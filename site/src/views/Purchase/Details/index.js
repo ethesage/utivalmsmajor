@@ -83,6 +83,8 @@ const Details = ({ proceed, match, set, setPaymentAmount }) => {
       : `$ ${Math.round(amount / rate.USD_NGN)}`;
   };
 
+  console.log(purchaseCourse);
+
   return purchaseCourse && !loading ? (
     <>
       <Helmet>

@@ -308,7 +308,7 @@ export const Courses = async (req, res) => {
           model: models.CourseCohort,
           order: [["createdAt", "DESC"]],
           limit: 1,
-          attributes: ["id"],
+          attributes: ["id", "paymentType"],
         },
         {
           model: models.CourseDescription,
