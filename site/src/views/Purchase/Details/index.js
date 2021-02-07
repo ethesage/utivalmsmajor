@@ -47,7 +47,6 @@ const Details = ({ proceed, match, set, setPaymentAmount }) => {
 
     if (purchaseCourse?.CourseCohorts[0].paymentType === "full")
       setAmountToPay(purchaseCourse.cost);
-  
   }, [purchaseCourse]);
 
   useEffect(() => {
@@ -134,7 +133,7 @@ const Details = ({ proceed, match, set, setPaymentAmount }) => {
                   <p>
                     You will pay{" "}
                     <strong className="theme-color">
-                      {purchaseCourse?.cost}
+                      {chooseCurrency(purchaseCourse?.cost)}
                     </strong>{" "}
                     now
                   </p>
@@ -148,11 +147,11 @@ const Details = ({ proceed, match, set, setPaymentAmount }) => {
                   <p>
                     You will pay{" "}
                     <strong className="theme-color">
-                      {purchaseCourse?.initialSplitAmount}
+                      {chooseCurrency(purchaseCourse?.initialSplitAmount)}
                     </strong>{" "}
                     now and{" "}
                     <strong className="theme-color">
-                      {purchaseCourse?.finalSplitAmount}
+                      {chooseCurrency(purchaseCourse?.finalSplitAmount)}
                     </strong>{" "}
                     later
                   </p>
