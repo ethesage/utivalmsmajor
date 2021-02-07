@@ -226,6 +226,11 @@ const CourseCohorts = () => {
                 label={form.label}
                 showAsterix={false}
                 types={form.types}
+                attr={
+                  form.name === "cohort" && currentCohort
+                    ? { disabled: true }
+                    : {}
+                }
               />
             ))}
 
