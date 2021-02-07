@@ -1,4 +1,4 @@
-@import '../../media';
+@import "../../media";
 
 .p_sec_admin {
   margin-bottom: 100px;
@@ -7,7 +7,7 @@
     align-items: flex-start;
   }
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(#{'min(400px, 100%)'}, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(#{"min(400px, 100%)"}, 1fr));
   grid-gap: 30px;
   margin-bottom: 100px;
 
@@ -18,6 +18,28 @@
     border-radius: 5px;
     overflow: hidden;
     max-width: 500px;
+    position: relative;
+    cursor: pointer;
+
+    &:hover {
+      .edit {
+        opacity: 1 !important;
+      }
+    }
+
+    .edit {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      opacity: 0;
+      transition: 0.3s ease;
+
+      svg {
+        width: 20px;
+        height: 20px;
+        fill: color(theme);
+      }
+    }
 
     .main_img {
       width: 50%;

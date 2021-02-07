@@ -5,7 +5,7 @@ import { checkout } from "g_actions/courses";
 import paystack from "assets/icons/Flutterwave.png";
 import { addStudentCourse, addTransaction } from "g_actions/mainCourse";
 
-export default ({ done }) => {
+export default ({ done, paymentAmount }) => {
   const dispatch = useDispatch();
   const { auth, courses } = useSelector((state) => state);
 
@@ -13,7 +13,7 @@ export default ({ done }) => {
     public_key: "FLWPUBK-e836e7b389eda0faa7c37b9c12fb4119-X",
     // public_key: "FLWPUBK_TEST-676fa99372c8af0bcb924e15ad1de6d6-X",
     tx_ref: Date.now(),
-    amount: Number(courses.checkoutData.cost),
+    amount: Number(paymentAmount),
     currency: "NGN",
     payment_options: "card,mobilemoney,ussd",
     customer: {

@@ -7,11 +7,9 @@ import Modal from "components/Modal";
 import sstripe from "assets/icons/stripe.svg";
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.
-const stripePromise = loadStripe(
-  process.env.REACT_APP_STRIPE_API_KEY
-);
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_API_KEY);
 
-const Stripe = () => {
+const Stripe = ({ paymentAmount }) => {
   const dispatch = useDispatch();
   const loadsstripe = useRef();
   const { courses } = useSelector((state) => state);
@@ -26,9 +24,7 @@ const Stripe = () => {
     // Call your backend to create the Checkout Session
     const response = await dispatch(
       chargeCard({
-        amount: Math.round(
-          (Number(courses.checkoutData.cost) * 100) / rate.USD_NGN
-        ),
+        amount: Math.round((Number(paymentAmount) * 100) / rate.USD_NGN),
         image: courses.checkoutData.thumbnail,
         courseTitle: courses.checkoutData.name,
         success_url: window.location.href,
@@ -40,7 +36,8 @@ const Stripe = () => {
 
     // When the customer clicks on the button, redirect them to Checkout.
     const result =
-      response && response.data.id &&
+      response &&
+      response.data.id &&
       (await stripe.redirectToCheckout({
         sessionId: response.data.id,
       }));

@@ -1,6 +1,7 @@
-@import '../../../media';
+@import "../../../media";
 
 .details {
+  margin-bottom: 50px;
   .container {
     .details_con {
       display: grid;
@@ -53,7 +54,7 @@
       height: 100%;
       h2 {
         font-size: 1.1em;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
         color: color(theme);
         @include for-size(phone-only) {
           font-size: 1em;
@@ -70,7 +71,7 @@
       }
 
       .c_inf {
-        margin: 10px 0;
+        margin: 10px 0 30px;
         flex-wrap: wrap;
         max-width: 300px;
 
@@ -132,6 +133,24 @@
 
         .btn {
           width: 100%;
+        }
+      }
+
+      &.split_sec {
+        h3 {
+          margin-bottom: 10px;
+        }
+
+        .sel-p-type {
+          border: 1px solid rgba(#000, 0.1);
+          margin-bottom: 10px;
+          border-radius: 5px;
+          padding: 10px;
+          cursor: pointer;
+
+          &[data-active="true"] {
+            border-color: rgba(color(theme), 0.4);
+          }
         }
       }
     }

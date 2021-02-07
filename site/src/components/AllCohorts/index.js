@@ -1,20 +1,20 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import not_found from 'assets/not_found.png';
-import './style.scss';
+import React from "react";
+import { useHistory } from "react-router-dom";
+import not_found from "assets/not_found.png";
+import Edit from "assets/icons/edit";
+import "./style.scss";
 
-const ClassesSec = ({
-  data: {
+const ClassesSec = ({ data, setCurrentCohort, thumbnail, history }) => {
+  const {
     id,
     courseId,
     dateRange,
     totalStudent,
     Cohort: { cohort },
-    Course,
     CohortTrainers,
-  },
-  thumbnail,
-}) => {
+    paymentType,
+  } = data;
+
   const countedtrainers = {};
   const trainers = CohortTrainers?.reduce((acc, cur) => {
     if (!cur.userId) {
@@ -28,11 +28,21 @@ const ClassesSec = ({
     return acc;
   }, 0);
 
+  const showCourse = () => {
+    history.push(`/admin/courses/overview/${courseId}/${id}`);
+  };
+
+  const editCohortDetails = (e) => {
+    e.stopPropagation();
+    setCurrentCohort(data);
+  };
+
   return (
-    <Link
-      to={`/admin/courses/overview/${courseId}/${id}`}
-      className="next_class flex-row al-start j-space"
-    >
+    <div className="next_class flex-row al-start j-space" onClick={showCourse}>
+      <button className="edit" onClick={editCohortDetails}>
+        <Edit />
+      </button>
+
       <img src={thumbnail} alt="" className="main_img cover" />
       <div className="text-sec flex-col j-space al-start">
         <div>
@@ -41,20 +51,28 @@ const ClassesSec = ({
         </div>
 
         <div className="info_sec ">
+          <div style={{ marginBottom: "5px" }}>
+            <small style={{ textTransform: "capitalize" }}>
+              Payment type:{" "}
+              <strong className="theme-color">{paymentType}</strong>
+            </small>
+          </div>
           <div className="info">
             <strong className="flex-row j-start">
               <small>{trainers} Trainers</small>
-              <small style={{ margin: '0 10px' }}>|</small>
+              <small style={{ margin: "0 10px" }}>|</small>
               <small>{totalStudent} Students</small>
             </strong>
           </div>
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
 
-const Classes = ({ data, thumbnail }) => {
+const Classes = ({ data, thumbnail, setCurrentCohort }) => {
+  const history = useHistory();
+
   if (!data || data?.length === 0) {
     return (
       <div className="nt_found img flex-col">
@@ -71,6 +89,8 @@ const Classes = ({ data, thumbnail }) => {
           key={`next_classes_${i}`}
           data={nextclass}
           thumbnail={thumbnail}
+          setCurrentCohort={setCurrentCohort}
+          history={history}
         />
       ))}
     </div>

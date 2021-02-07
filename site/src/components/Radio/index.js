@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
-import './style.scss';
+import React, { useState, useEffect } from "react";
+import "./style.scss";
 
-const Select = ({ name, types, handleSelect, value }) => {
+const Select = ({ name, types, handleSelect, value, label }) => {
   const [presentValue, setPresentValue] = useState(value);
+
+  useEffect(() => {
+    setPresentValue(value);
+  }, [value]);
 
   const parent = React.createRef();
 
@@ -16,7 +20,7 @@ const Select = ({ name, types, handleSelect, value }) => {
     return (
       <button
         className={`rad_options ${
-          input.value === presentValue ? 'selected' : ''
+          input.value === presentValue ? "selected" : ""
         }`}
         type="button"
         key={index}
@@ -30,7 +34,8 @@ const Select = ({ name, types, handleSelect, value }) => {
 
   return (
     <div className="input-div radx" ref={parent}>
-      {options}
+      {label && <label className="t_label">{label}</label>}
+      <div>{options}</div>
       <span></span>
     </div>
   );

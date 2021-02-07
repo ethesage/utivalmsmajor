@@ -103,6 +103,7 @@ export const getAllCourseCohorts = async (req, res) => {
       "totalStudent",
       "courseId",
       "folderId",
+      "paymentType",
     ],
     include: [
       {
@@ -114,13 +115,6 @@ export const getAllCourseCohorts = async (req, res) => {
         include: {
           model: models.Classes,
           attributes: ["id"],
-          // include: {
-          //   model: models.CohortTrainer,
-          //   where: {
-          //     '$CohortTrainer.courseCohortId$': '$Classes.courseCohortId$',
-          //   },
-          //   attributes: ['userId'],
-          // },
         },
       },
       {
@@ -142,7 +136,7 @@ export const getCourseCohort = async (req, res) => {
 
   const resource = await models.CourseCohort.findOne({
     where: { id },
-    attributes: ["id", "expiresAt", "dateRange", "folderId"],
+    attributes: ["id", "expiresAt", "dateRange", "folderId", "paymentType"],
     include: [
       {
         model: models.Cohort,

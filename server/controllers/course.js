@@ -1,9 +1,9 @@
 /* eslint-disable indent */
 /* eslint-disable import/prefer-default-export */
 // import sequelize from "sequelize";
-import { paginate, calculateLimitAndOffset } from 'paginate-info';
-import models from '../database/models';
-import helpers from '../helpers';
+import { paginate, calculateLimitAndOffset } from "paginate-info";
+import models from "../database/models";
+import helpers from "../helpers";
 // import  from "../helpers"
 
 const { successStat, errorStat, uploadImage } = helpers;
@@ -31,7 +31,7 @@ export const create = async (req, res) => {
   });
 
   if (exixtingCourse) {
-    return errorStat(res, 409, 'This Course already exists');
+    return errorStat(res, 409, "This Course already exists");
   }
 
   const thumbnail = req.body.course.thumbnail
@@ -62,7 +62,7 @@ export const create = async (req, res) => {
     });
   }
 
-  return successStat(res, 201, 'data', {
+  return successStat(res, 201, "data", {
     course,
     courseDescription: resource,
   });
@@ -106,30 +106,30 @@ export const getCourse = async (req, res) => {
     include: [
       {
         model: models.CourseDescription,
-        attributes: ['id', 'courseId', 'title', 'description', 'trainerId'],
+        attributes: ["id", "courseId", "title", "description", "trainerId"],
       },
       {
         model: models.Cohort,
         where: { courseId },
-        order: [['createdAt', 'DESC']],
+        order: [["createdAt", "DESC"]],
         limit: 1,
         attributes: [
-          'id',
-          'courseId',
-          'cohort',
-          'expiresAt',
-          'dateRange',
-          'status',
-          'totalStudent',
-          'totalClasses',
+          "id",
+          "courseId",
+          "cohort",
+          "expiresAt",
+          "dateRange",
+          "status",
+          "totalStudent",
+          "totalClasses",
         ],
       },
     ],
   });
 
-  if (!course) return errorStat(res, 404, 'Course Not Found');
+  if (!course) return errorStat(res, 404, "Course Not Found");
 
-  return successStat(res, 200, 'data', course);
+  return successStat(res, 200, "data", course);
 };
 
 export const getAllCourses = async (req, res) => {
@@ -147,22 +147,22 @@ export const getAllCourses = async (req, res) => {
     include: [
       {
         model: models.CourseDescription,
-        attributes: ['id', 'courseId', 'title', 'description', 'trainerId'],
+        attributes: ["id", "courseId", "title", "description", "trainerId"],
       },
       {
         model: models.CourseCohort,
         required: false,
-        order: [['createdAt', 'DESC']],
+        order: [["createdAt", "DESC"]],
         limit: 1,
         attributes: [
-          'id',
-          'courseId',
+          "id",
+          "courseId",
           // "cohort",
-          'expiresAt',
-          'dateRange',
-          'status',
-          'totalStudent',
-          'totalClasses',
+          "expiresAt",
+          "dateRange",
+          "status",
+          "totalStudent",
+          "totalClasses",
         ],
       },
       {
@@ -174,11 +174,11 @@ export const getAllCourses = async (req, res) => {
     ],
   });
 
-  if (!rows[0]) return errorStat(res, 404, 'Course Not Found');
+  if (!rows[0]) return errorStat(res, 404, "Course Not Found");
 
   const paginationMeta = paginate(currentPage, count, rows, pageLimit);
 
-  return successStat(res, 200, 'data', { paginationMeta, rows });
+  return successStat(res, 200, "data", { paginationMeta, rows });
 };
 
 export const updateCourse = async (req, res) => {
@@ -192,11 +192,11 @@ export const updateCourse = async (req, res) => {
 
   if (
     req.body.course.thumbnail &&
-    !req.body.course.thumbnail.includes('media')
+    !req.body.course.thumbnail.includes("media")
   ) {
     let fileName =
       course.thumbnail &&
-      course.thumbnail.split('https://utiva-app.s3.amazonaws.com/media/')[1];
+      course.thumbnail.split("https://utiva-app.s3.amazonaws.com/media/")[1];
 
     fileName = fileName || `thumbnail-${req.body.course.name}`;
 
@@ -209,14 +209,14 @@ export const updateCourse = async (req, res) => {
     thumbnail = image.Location;
   } else thumbnail = req.body.course.thumbnail;
 
-  if (!course) return errorStat(res, 404, 'Course Description not found');
+  if (!course) return errorStat(res, 404, "Course Description not found");
 
   await course.update({
     ...req.body.course,
     thumbnail,
   });
 
-  return successStat(res, 200, 'data', course);
+  return successStat(res, 200, "data", course);
 };
 
 export const updateCourseDescription = async (req, res) => {
@@ -227,14 +227,14 @@ export const updateCourseDescription = async (req, res) => {
   });
 
   if (!courseDescription) {
-    return errorStat(res, 404, 'Course Description not found');
+    return errorStat(res, 404, "Course Description not found");
   }
 
   await courseDescription.update({
     ...req.body.course,
   });
 
-  return successStat(res, 200, 'data', courseDescription);
+  return successStat(res, 200, "data", courseDescription);
 };
 
 export const createCourseDescription = async (req, res) => {
@@ -242,7 +242,7 @@ export const createCourseDescription = async (req, res) => {
     req.body.course
   );
 
-  return successStat(res, 201, 'data', courseDescription);
+  return successStat(res, 201, "data", courseDescription);
 };
 
 export const deleteCourse = async (req, res) => {
@@ -253,12 +253,12 @@ export const deleteCourse = async (req, res) => {
   });
 
   if (!course) {
-    return errorStat(res, 404, 'Course not found');
+    return errorStat(res, 404, "Course not found");
   }
 
   await course.destroy();
 
-  return successStat(res, 200, 'data', 'Delete Successful');
+  return successStat(res, 200, "data", "Delete Successful");
 };
 
 export const getAllCoursesAdmin = async (req, res) => {
@@ -269,7 +269,7 @@ export const getAllCoursesAdmin = async (req, res) => {
  WHERE "Courses"."id" IS NOT NULL GROUP BY "Courses"."id"`
   );
 
-  return successStat(res, 200, 'data', studentByCourse);
+  return successStat(res, 200, "data", studentByCourse);
 };
 
 export const Courses = async (req, res) => {
@@ -289,13 +289,13 @@ export const Courses = async (req, res) => {
     ? [
         {
           model: models.CourseCohort,
-          order: [['createdAt', 'DESC']],
+          order: [["createdAt", "DESC"]],
           limit: 1,
-          attributes: ['id'],
+          attributes: ["id", "paymentType"],
         },
         {
           model: models.CourseDescription,
-          attributes: ['courseId', 'title', 'description'],
+          attributes: ["courseId", "title", "description"],
         },
         {
           model: models.StudentCourse,
@@ -306,13 +306,13 @@ export const Courses = async (req, res) => {
     : [
         {
           model: models.CourseCohort,
-          order: [['createdAt', 'DESC']],
+          order: [["createdAt", "DESC"]],
           limit: 1,
-          attributes: ['id'],
+          attributes: ["id"],
         },
         {
           model: models.CourseDescription,
-          attributes: ['courseId', 'title', 'description'],
+          attributes: ["courseId", "title", "description"],
         },
       ];
 
@@ -326,7 +326,7 @@ export const Courses = async (req, res) => {
 
   const paginationMeta = paginate(currentPage, count, rows, pageLimit);
 
-  return successStat(res, 200, 'data', { paginationMeta, rows });
+  return successStat(res, 200, "data", { paginationMeta, rows });
 };
 
 export const addCourseCohortProgress = async (req, res) => {
@@ -335,7 +335,7 @@ export const addCourseCohortProgress = async (req, res) => {
   const { id, role } = req.session.user;
 
   const getClass = await models.CourseProgress.findOne({
-    where: { classId, type: 'course' },
+    where: { classId, type: "course" },
   });
 
   const checkStudent = await models.Classes.findOne({
@@ -348,12 +348,12 @@ export const addCourseCohortProgress = async (req, res) => {
     ],
   });
 
-  if (!getClass && !checkStudent && role !== 'admin') {
-    return errorStat(res, 400, 'Not Allowed');
+  if (!getClass && !checkStudent && role !== "admin") {
+    return errorStat(res, 400, "Not Allowed");
   }
 
   const findclassProgress = await models.CourseProgress.findAll({
-    where: { type: 'course', classId },
+    where: { type: "course", classId },
   });
 
   let find = 0;
@@ -368,11 +368,11 @@ export const addCourseCohortProgress = async (req, res) => {
       courseCohortId,
       userId: id,
       classId,
-      type: 'course',
+      type: "course",
     });
 
     find = await models.CourseProgress.findAll({
-      where: { type: 'course', courseCohortId },
+      where: { type: "course", courseCohortId },
     });
 
     count = await models.Classes.findAll({
@@ -383,8 +383,8 @@ export const addCourseCohortProgress = async (req, res) => {
       progress: Math.floor((find.length / count.length) * 100),
       status:
         Math.floor((find.length / count.length) * 100) === 100
-          ? 'finished'
-          : 'ongoing',
+          ? "finished"
+          : "ongoing",
     });
   }
 
@@ -392,7 +392,7 @@ export const addCourseCohortProgress = async (req, res) => {
     await models.Classes.update({ started: true }, { where: { id: classId } });
   }
 
-  return successStat(res, 200, 'data', 'update successful');
+  return successStat(res, 200, "data", "update successful");
 };
 
 export const getCohortCourse = async (req, res) => {
@@ -416,11 +416,11 @@ export const getCohortCourse = async (req, res) => {
           // order: [['createdAt']],
           // limit: 1,
           where: { id: courseCohortId },
-          attributes: ['id'],
+          attributes: ["id", "paymentType"],
         },
         {
           model: models.CourseDescription,
-          attributes: ['courseId', 'title', 'description'],
+          attributes: ["courseId", "title", "description"],
         },
         {
           model: models.StudentCourse,
@@ -434,11 +434,11 @@ export const getCohortCourse = async (req, res) => {
           where: { id: courseCohortId },
           // order: [['createdAt']],
           // limit: 1,
-          attributes: ['id'],
+          attributes: ["id", "paymentType"],
         },
         {
           model: models.CourseDescription,
-          attributes: ['courseId', 'title', 'description'],
+          attributes: ["courseId", "title", "description"],
         },
       ];
 
@@ -452,5 +452,5 @@ export const getCohortCourse = async (req, res) => {
 
   // const paginationMeta = paginate(currentPage, count, rows, pageLimit);
 
-  return successStat(res, 200, 'data', rows);
+  return successStat(res, 200, "data", rows);
 };

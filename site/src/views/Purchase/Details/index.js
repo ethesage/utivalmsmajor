@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Helmet from "react-helmet";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -7,7 +7,7 @@ import Input from "components/Input";
 import { check, checkoutCourse, addPurchaseCourse } from "g_actions/courses";
 import "./style.scss";
 
-const Details = ({ proceed, match, set }) => {
+const Details = ({ proceed, match, set, setPaymentAmount }) => {
   const { checkoutData, purchaseCourse } = useSelector(
     (state) => state.courses
   );
@@ -16,6 +16,8 @@ const Details = ({ proceed, match, set }) => {
   const btnRef = useRef();
 
   const [loading, rate] = getCurrencyRate();
+  const [paymentType, setPaymentType] = useState();
+  const [amountToPay, setAmountToPay] = useState();
 
   const checkout = async () => {
     btnRef.current.classList.add("loader");
@@ -23,10 +25,22 @@ const Details = ({ proceed, match, set }) => {
 
     if (value.message === "Not Enrolled") {
       set(match.params.courseCohortId);
+      setPaymentAmount(amountToPay);
       proceed(1);
     } else push(`/courses/overview/${match.params.courseCohortId}`);
     // /
   };
+
+  useEffect(() => {
+    if (!paymentType) return;
+
+    if (paymentType === "split") {
+      setAmountToPay(purchaseCourse.initialSplitAmount);
+      return;
+    }
+
+    setAmountToPay(purchaseCourse.cost);
+  }, [paymentType, purchaseCourse]);
 
   useEffect(() => {
     (async () => {
@@ -46,6 +60,11 @@ const Details = ({ proceed, match, set }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [purchaseCourse]);
 
+  const chooseCurrency = (amount) => {
+    return purchaseCourse.currency_type === "local"
+      ? `₦ ${Math.round(amount)}`
+      : `$ ${Math.round(amount / rate.USD_NGN)}`;
+  };
 
   return purchaseCourse && !loading ? (
     <>
@@ -69,73 +88,110 @@ const Details = ({ proceed, match, set }) => {
               />
             </div>
             <div className="text-sec flex-col j-space al-start">
-              <h2>{purchaseCourse?.name}</h2>
-              <p className="clipped-text" style={{ "--number": 4 }}>
-                {purchaseCourse?.description}
-              </p>
-              <div className="c_inf flex-row j-space">
-                <small>{purchaseCourse?.duration} Weeks</small>
-                <small>
-                  {"> "}
-                  {purchaseCourse?.level}
-                </small>
-                <small>{purchaseCourse?.value}</small>
+              <div>
+                <h2>{purchaseCourse?.name}</h2>
+                <p className="clipped-text" style={{ "--number": 4 }}>
+                  {purchaseCourse?.description}
+                </p>
               </div>
-              <a
-                href={purchaseCourse?.learnMore}
-                className="ext btn theme centered"
-                target="_"
-              >
-                <p>Learn More</p>
-              </a>
+              <div>
+                <div className="c_inf flex-row j-space">
+                  <small>{purchaseCourse?.duration} Weeks</small>
+                  <small>
+                    {"> "}
+                    {purchaseCourse?.level}
+                  </small>
+                  <small>{purchaseCourse?.value}</small>
+                </div>
+                <a
+                  href={purchaseCourse?.learnMore}
+                  className="ext btn theme centered"
+                  target="_"
+                >
+                  <p>Learn More</p>
+                </a>
+              </div>
               {/* <Button /> */}
             </div>
-            <div className="summary flex-row j-start">
-              <div className="contents">
-                <div className="cost-analysis">
-                  <div className="flex-row j-space">
-                    <p>Price</p>
-                    <p>
-                      {purchaseCourse?.type === "free"
-                        ? "Free"
-                        : purchaseCourse.currency_type === "local"
-                        ? `₦ ${Math.round(purchaseCourse?.cost)}`
-                        : `$ ${Math.round(
-                            purchaseCourse?.cost / rate.USD_NGN
-                          )}`}
-                    </p>
-                  </div>
-                  <div className="flex-row j-space">
-                    <p>Discount</p>
-                    <p>-</p>
-                  </div>
-                  <div className="flex-row j-space theme-color strong">
-                    <p>Total</p>
-                    <p>
-                      {purchaseCourse?.type === "free"
-                        ? "Free"
-                        : purchaseCourse.currency_type === "local"
-                        ? `₦ ${Math.round(purchaseCourse?.cost)}`
-                        : `$ ${Math.round(
-                            purchaseCourse?.cost / rate.USD_NGN
-                          )}`}
-                    </p>
-                  </div>
-                </div>
-                <div className="checkout">
-                  <p className="cx-hdx">Apply Coupon Code</p>
 
-                  <Input name="coupon" placeHolder="" />
-                  <button
-                    className="btn centered"
-                    onClick={checkout}
-                    ref={btnRef}
-                  >
-                    <p>Checkout</p>
-                  </button>
+            {purchaseCourse?.CourseCohorts[0].paymentType === "split" && (
+              <div className="summary split_sec">
+                <h3 className="theme-color">How do you want to Pay</h3>
+                <div
+                  className="sel-p-type"
+                  data-active={paymentType === "full"}
+                  onClick={() => setPaymentType("full")}
+                >
+                  <small>Full Payment</small>
+                  <p>
+                    You will pay{" "}
+                    <strong className="theme-color">
+                      {purchaseCourse?.cost}
+                    </strong>{" "}
+                    now
+                  </p>
+                </div>
+                <div
+                  className="sel-p-type"
+                  data-active={paymentType === "split"}
+                  onClick={() => setPaymentType("split")}
+                >
+                  <small>Part Payment</small>
+                  <p>
+                    You will pay{" "}
+                    <strong className="theme-color">
+                      {purchaseCourse?.initialSplitAmount}
+                    </strong>{" "}
+                    now and{" "}
+                    <strong className="theme-color">
+                      {purchaseCourse?.finalSplitAmount}
+                    </strong>{" "}
+                    later
+                  </p>
                 </div>
               </div>
-            </div>
+            )}
+
+            {amountToPay && (
+              <div className="summary flex-row j-start">
+                <div className="contents">
+                  <div className="cost-analysis">
+                    <div className="flex-row j-space">
+                      <p>Price</p>
+                      <p>
+                        {purchaseCourse?.type === "free"
+                          ? "Free"
+                          : chooseCurrency(amountToPay)}
+                      </p>
+                    </div>
+                    <div className="flex-row j-space">
+                      <p>Discount</p>
+                      <p>-</p>
+                    </div>
+                    <div className="flex-row j-space theme-color strong">
+                      <p>Total</p>
+                      <p>
+                        {purchaseCourse?.type === "free"
+                          ? "Free"
+                          : chooseCurrency(amountToPay)}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="checkout">
+                    <p className="cx-hdx">Apply Coupon Code</p>
+
+                    <Input name="coupon" placeHolder="" />
+                    <button
+                      className="btn centered"
+                      onClick={checkout}
+                      ref={btnRef}
+                    >
+                      <p>Checkout</p>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

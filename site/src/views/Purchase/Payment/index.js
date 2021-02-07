@@ -3,24 +3,14 @@ import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import dialogPolyfill from "dialog-polyfill";
 import QuickCheckout from "views/Auth/QuickCheckout";
-// import category from 'data/categories';
-// import card from 'assets/icons/card.png';
-// import paystack from 'assets/icons/paystack.png';
-// import Paystack from './Paystack';
-// import Paypal from './Paypal';
 import Flutterwave from "./Flutterwave";
 import Stripe from "./Stripe";
-// import paypal from 'assets/icons/paypal.png';
 import approved from "assets/approved.png";
 import { checkout } from "g_actions/courses";
 import { addStudentCourse } from "g_actions/mainCourse";
-// import Card from './Card';
 import "./style.scss";
 
-// const course = category[0].data[0];
-
-const Payment = ({ back, id }) => {
-  // const [current, setPage] = useState(0);
+const Payment = ({ back, paymentAmount }) => {
   const { push } = useHistory();
   const disRef = useRef();
 
@@ -28,11 +18,8 @@ const Payment = ({ back, id }) => {
   const { courses } = useSelector((state) => state);
   const { user } = useSelector((state) => state.auth);
 
-  // const dispatch = useDispatch();
-
   useEffect(() => {
     if (courses?.purchaseCourse?.type === "free") {
-      // if (courses?.purchaseCourse?.type !== 'free') {
       dispatch(checkout(courses.purchaseCourse.CourseCohorts[0].id));
       dispatch(
         addStudentCourse(courses.purchaseCourse, [
@@ -80,15 +67,22 @@ const Payment = ({ back, id }) => {
       </dialog>
       {user ? (
         <div className="payment_con mx-auto txt-center">
-          <p>Congratulations! Continue your paymant using</p>
+          <p className="con_msg">
+            Congratulations! Continue your paymant using
+          </p>
+
           {courses.purchaseCourse.type !== "free" && (
             <>
-              {courses.purchaseCourse.currency_type === "local" && (
-                <Flutterwave done={done} />
-              )}
-              <Stripe done={done} />
+              <Flutterwave done={done} paymentAmount={paymentAmount} />
+
+              <Stripe done={done} paymentAmount={paymentAmount} />
             </>
           )}
+
+          <small className="theme-color">
+            Please note that we recommend using Flutterwave if you are using a
+            naira card
+          </small>
 
           <button className="back" onClick={goBack}>
             Back

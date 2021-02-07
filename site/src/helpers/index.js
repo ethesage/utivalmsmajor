@@ -47,6 +47,10 @@ const patterns = {
   search: shortText,
   vimeo: /vimeo\.com\/(\d+)/,
   list_desc: shortText,
+  finalSplitAmount: number,
+  initialSplitAmount: number,
+  paymentType: shortText,
+  currency_type: shortText,
 };
 
 export const validate = (field, Regex) => {
