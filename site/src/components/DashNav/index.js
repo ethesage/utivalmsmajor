@@ -13,7 +13,7 @@ const NavBar = ({ open, grow }) => {
 
   const logout = async () => {
     dispatch(log_out());
-    history.push('/home');
+    history.push('/auth/signin');
   };
 
   return (

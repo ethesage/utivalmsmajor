@@ -12,12 +12,12 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
       render={(props) =>
         loading ? (
           <Loader tempLoad={true} full={true} />
-        ) : !!user && isAdmin ?  (
+        ) : !!user && isAdmin ? (
           <Component {...props} />
         ) : (
           <Redirect
             to={{
-              pathname: '/home',
+              pathname: `/auth/signin?redirect=${window.location.pathname}`,
             }}
           />
         )

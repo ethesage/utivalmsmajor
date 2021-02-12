@@ -1,6 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import { useToasts } from 'react-toast-notifications';
-import { log_out } from 'g_actions/user';
 
 const useFetch = (dispatch, initailLoadingState, reload) => {
   const [loading, setLoading] = useState(initailLoadingState);
@@ -9,7 +7,6 @@ const useFetch = (dispatch, initailLoadingState, reload) => {
   const [error, setError] = useState();
   const [cb, fetch] = useState();
   const [running, setRunning] = useState(false);
-  const { addToast } = useToasts();
   const mounted = useRef(true);
 
   useEffect(() => {
@@ -36,15 +33,6 @@ const useFetch = (dispatch, initailLoadingState, reload) => {
         setError(null);
         // }
       } catch (err) {
-        if (err.response && err.response.status === 401) {
-          addToast('Session expired, please login again', {
-            appearance: 'error',
-            autoDismiss: true,
-          });
-          dispatch(log_out());
-          return;
-        }
-
         if ((!err.response || err.response.status === 500) && reload) {
           if (running) return;
           setRunning(true);
@@ -74,7 +62,7 @@ const useFetch = (dispatch, initailLoadingState, reload) => {
     return () => {
       clearTimeout(timeOutID);
     };
-  }, [cb, started, timeOut, reload, dispatch, running, addToast]);
+  }, [cb, started, timeOut, reload, dispatch, running]);
 
   const restart = () => {
     setLoading(true);

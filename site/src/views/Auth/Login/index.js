@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { useToasts } from 'react-toast-notifications';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import useInput from 'Hooks/useInput';
 import Input from 'components/Input';
@@ -17,6 +17,7 @@ function Login() {
   const { addToast } = useToasts();
   const dispatch = useDispatch();
   const history = useHistory();
+  const location = useLocation();
 
   const [handleSubmit, handleChange, inputTypes, validateSelf] = useInput({
     inputs: data,
@@ -31,8 +32,12 @@ function Login() {
         autoDismiss: true,
       });
 
+      const redirectUrl = location?.search?.split('redirect=')[1];
+
       dispatch(login());
-      response.data.user.role === 'admin'
+      redirectUrl
+        ? history.push(redirectUrl)
+        : response.data.user.role === 'admin'
         ? history.push('/admin')
         : history.push('/');
     },

@@ -53,7 +53,7 @@ const Auth = () => {
             />
             <Route exact path={`${path}/forgot`} component={Forgot} />
             <Route exact path={`${path}/reset-password`} component={Reset} />
-            <Route component={SignUp} />
+            <Route component={SignIn} />
           </Switch>
           {/* {pages[page]} */}
         </div>
