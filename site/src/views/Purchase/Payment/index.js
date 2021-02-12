@@ -1,14 +1,14 @@
-import React, { useRef, useEffect } from "react";
-import { useHistory } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import dialogPolyfill from "dialog-polyfill";
-import QuickCheckout from "views/Auth/QuickCheckout";
-import Flutterwave from "./Flutterwave";
-import Stripe from "./Stripe";
-import approved from "assets/approved.png";
-import { checkout } from "g_actions/courses";
-import { addStudentCourse } from "g_actions/mainCourse";
-import "./style.scss";
+import React, { useRef, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import QuickCheckout from 'views/Auth/QuickCheckout';
+import Flutterwave from './Flutterwave';
+import Stripe from './Stripe';
+import approved from 'assets/approved.png';
+import { checkout } from 'g_actions/courses';
+import { addStudentCourse } from 'g_actions/mainCourse';
+import Modal from 'components/Modal';
+import './style.scss';
 
 const Payment = ({ back, paymentAmount }) => {
   const { push } = useHistory();
@@ -19,8 +19,11 @@ const Payment = ({ back, paymentAmount }) => {
   const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (courses?.purchaseCourse?.type === "free") {
-      dispatch(checkout(courses.purchaseCourse.CourseCohorts[0].id), paymentAmount);
+    if (courses?.purchaseCourse?.type === 'free') {
+      dispatch(
+        checkout(courses.purchaseCourse.CourseCohorts[0].id),
+        paymentAmount
+      );
       dispatch(
         addStudentCourse(courses.purchaseCourse, [
           { courseCohortId: courses.purchaseCourse.CourseCohorts[0].id },
@@ -36,17 +39,15 @@ const Payment = ({ back, paymentAmount }) => {
   };
 
   function done() {
-    typeof disRef?.current?.showModal !== "function" &&
-      dialogPolyfill.registerDialog(disRef.current);
-
     if (disRef.current.open) return;
-    disRef.current.showModal();
+    disRef.current.open();
   }
 
   return (
     <div className="payment container">
-      <dialog ref={disRef} className="d_s_c">
-        <div className="content flex-col">
+      {/* <dialog ref={disRef} className="d_s_c"> */}
+      <Modal ref={disRef}>
+        <div className="d_content flex-col">
           <img src={approved} alt="approved" />
           <div className="reg_text">
             <h2 className="hd">Successful</h2>
@@ -64,14 +65,14 @@ const Payment = ({ back, paymentAmount }) => {
             Start Learning
           </button>
         </div>
-      </dialog>
+      </Modal>
       {user ? (
         <div className="payment_con mx-auto txt-center">
           <p className="con_msg">
             Congratulations! Continue your paymant using
           </p>
 
-          {courses.purchaseCourse.type !== "free" && (
+          {courses.purchaseCourse.type !== 'free' && (
             <>
               <Flutterwave done={done} paymentAmount={paymentAmount} />
 
