@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useToasts } from 'react-toast-notifications';
 import google from 'assets/icons/google.png';
 import { login } from 'g_actions/user';
-// import linkedin from 'assets/icons/linkedin.png';
+// import linkedin from 'assets/icons/linkedin.png';git 
 import { auth, googleProvider, facebookProvider } from 'helpers/firebase';
 import { axiosInstance } from 'helpers';
 import './style.scss';

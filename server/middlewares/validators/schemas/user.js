@@ -27,8 +27,15 @@ export const signUpSchema = Joi.object().keys({
 
 export const loginSchema = Joi.object({
   email: Joi.string().trim().lowercase().required(),
-  password: Joi.string().min(8).required(),
+  password: Joi.string().min(8),
   inviteToken: Joi.string().trim().optional(),
+  providerId: Joi.string(),
+  socialUid: Joi.string(),
+  firstName: Joi.string(),
+  lastName: Joi.string(),
+  phoneNumber: Joi.string(),
+  profilePic: Joi.string(),
+  type: Joi.string(),
 });
 
 export const updateUserSchema = Joi.object().keys({
