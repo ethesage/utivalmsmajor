@@ -29,6 +29,8 @@ module.exports = (sequelize, DataTypes) => {
       verifiedEmail: DataTypes.BOOLEAN,
       byadmin: DataTypes.BOOLEAN,
       status: DataTypes.STRING,
+      providerId: DataTypes.STRING,
+      socialUid: DataTypes.STRING,
     },
     {
       getterMethods: {
