@@ -1,7 +1,7 @@
-import { useEffect } from "react";
-import useFetch from "Hooks/useFetch";
-import { useDispatch, useSelector } from "react-redux";
-import { getNgnConversionRate } from "g_actions/generals";
+import { useEffect } from 'react';
+import useFetch from 'Hooks/useFetch';
+import { useDispatch, useSelector } from 'react-redux';
+import { getNgnConversionRate } from 'g_actions/generals';
 
 export default () => {
   const dispatch = useDispatch();
@@ -18,5 +18,5 @@ export default () => {
     return () => {};
   }, [exchange_rate_ngn, fetch, loading]);
 
-  return [loading, exchange_rate_ngn];
+  return [loading, { USD_NGN: 400 }];
 };
