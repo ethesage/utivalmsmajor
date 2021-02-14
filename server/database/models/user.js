@@ -31,6 +31,7 @@ module.exports = (sequelize, DataTypes) => {
       status: DataTypes.STRING,
       providerId: DataTypes.STRING,
       socialUid: DataTypes.STRING,
+      jobRole: DataTypes.STRING,
     },
     {
       getterMethods: {
@@ -99,6 +100,7 @@ module.exports = (sequelize, DataTypes) => {
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       status: this.status,
+      jobRole: this.jobRole,
     };
 
     return userData;

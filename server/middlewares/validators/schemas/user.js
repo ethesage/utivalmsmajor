@@ -22,6 +22,7 @@ export const signUpSchema = Joi.object().keys({
   region: Joi.string(),
   company: Joi.string(),
   occupation: Joi.string(),
+  jobRole: Joi.string(),
   phoneNumber: Joi.string(),
 });
 
