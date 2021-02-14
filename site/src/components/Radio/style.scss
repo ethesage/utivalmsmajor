@@ -3,8 +3,11 @@
 .input-div {
   width: 100%;
   position: relative;
-  margin-bottom: 20px;
   padding: 0;
+
+  &.radx {
+    margin-bottom: 20px;
+}
 
   &.radx {
     .rad_options {

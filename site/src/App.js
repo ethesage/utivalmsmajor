@@ -16,6 +16,7 @@ const Payment = lazy(() => import('./views/Payment'));
 const Dashboard = lazy(() => import('./views/Dashboard'));
 const Admin = lazy(() => import('./views/Admin'));
 const Courses = lazy(() => import('./views/AllCourses'));
+const Home = lazy(() => import('./views/HomePage'));
 
 function App() {
   const dispatch = useDispatch();
@@ -53,6 +54,7 @@ function App() {
             <Route path="/payment/:courseCohortId" component={Payment} />
             <AProtected path="/admin" component={Admin} type="admin" />
             <Route path="/all-courses" component={Courses} />
+            <Protected path="/formal-home-page" component={Home} />
             <Protected path="/" component={Dashboard} />
             <Route path={Auth} />
           </Switch>

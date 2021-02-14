@@ -45,6 +45,7 @@ const patterns = {
   name: shortText,
   link: shortText,
   search: shortText,
+  jobRole: text,
   vimeo: /vimeo\.com\/(\d+)/,
   list_desc: shortText,
 };

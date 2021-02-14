@@ -150,9 +150,17 @@ function Signup() {
 
   return (
     <div className="auth_section sign_up">
-      <div className="reg_text">
-        <h2>Create your Account</h2>
-        <p>Welcome to the Utiva Learning Platform</p>
+      <div className="reg_text flex-col al-start">
+        <h2>
+          Accelerate your carrer{' '}
+          <span role="img" aria-label="spaceship emoji">
+            🚀
+          </span>
+        </h2>
+
+        <div className="w-full flex-row j-space">
+          <p>Thank you for choosing to join Utiva</p>
+        </div>
       </div>
       <form className="form">
         {data.map((form, i) => (
@@ -162,6 +170,7 @@ function Signup() {
             type={form.type}
             itype={form.itype}
             placeHolder={form.placeHolder}
+            label={form.label}
             value={inputTypes[form.name]}
             errorMsg={form.errorMsg}
             required={form.required}
@@ -177,13 +186,18 @@ function Signup() {
           />
         ))}
 
-        <Button
-          btnRef={submitButton}
-          onClick={handleSubmit}
-          className="s_btn flex-row"
-          text="Create Account"
-        />
+        <div className="btn_sec_sm flex-row j-end">
+          <Button
+            btnRef={submitButton}
+            onClick={handleSubmit}
+            className="s_btn flex-row"
+            text="Sign up"
+          />
+        </div>
       </form>
+
+      <Social />
+
       <div className="externs flex-row j-space">
         <small>
           Already have an account?{' '}
@@ -192,7 +206,6 @@ function Signup() {
           </Link>
         </small>
       </div>
-      <Social />
     </div>
   );
 }

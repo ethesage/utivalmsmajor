@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import PhoneInput from 'react-phone-number-input';
 import { validateInput, validate } from 'helpers';
 import Eye from 'assets/icons/eye';
 import Hide from 'assets/icons/hide';
 import './style.scss';
+import 'react-phone-number-input/style.css';
 
 const Input = ({
   type = 'text',
@@ -40,6 +42,9 @@ const Input = ({
   }, [inputRef, name, validateSelf, value, required]);
 
   const validateOne = (event) => {
+    if (name !== event.target.name) return;
+    console.log(name, event);
+
     handleChange(event, error);
     if (shouldValidate) {
       if (!validateInput(event)) {
@@ -58,27 +63,16 @@ const Input = ({
         type === 'checkbox' ? 'flex-row j-start check' : ''
       }`}
     >
-      {label && <label className="t_label">{label}</label>}
-      {type === 'textarea' ? (
-        <textarea
-          className="input-type"
-          ref={inputRef}
-          required={required}
-          name={name}
-          onChange={validateOne}
-          value={value}
-          placeholder={`${placeHolder} ${
-            required ? (showAsterix ? '*' : '') : ''
-          }`}
-          rows={10}
-          {...attr}
-        />
-      ) : (
-        <>
-          <input
+      {label && (
+        <label className="t_label">{`${label} ${
+          required ? (showAsterix ? '*' : '') : ''
+        }`}</label>
+      )}
+      <div className="input-con">
+        {type === 'textarea' ? (
+          <textarea
             className="input-type"
             ref={inputRef}
-            type={reviel ? 'text' : type}
             required={required}
             name={name}
             onChange={validateOne}
@@ -86,22 +80,59 @@ const Input = ({
             placeholder={`${placeHolder} ${
               required ? (showAsterix ? '*' : '') : ''
             }`}
+            rows={10}
             {...attr}
           />
-          {type === 'checkbox' ? <label>{placeHolder}</label> : ''}
-        </>
-      )}
-      {value && type === 'password' ? (
-        <span
-          onClick={() => {
-            setShowPassword(!showPassword);
-            revielPassword();
-          }}
-          className="reviel-password"
-        >
-          {!showPassword ? <Eye /> : <Hide />}
-        </span>
-      ) : null}
+        ) : (
+          <>
+            {name === 'phoneNumber' ? (
+              <PhoneInput
+                value={value}
+                onChange={(phone) =>
+                  validateOne({
+                    target: {
+                      name: name,
+                      value: phone,
+                      attributes: { name: { value: name } },
+                    },
+                  })
+                }
+                required={required}
+                ref={inputRef}
+                name={name}
+                className="input-type"
+                {...attr}
+              />
+            ) : (
+              <>
+                <input
+                  className="input-type"
+                  ref={inputRef}
+                  type={reviel ? 'text' : type}
+                  required={required}
+                  name={name}
+                  onChange={validateOne}
+                  value={value}
+                  placeholder={placeHolder}
+                  {...attr}
+                />
+                {type === 'checkbox' ? <label>{placeHolder}</label> : ''}
+              </>
+            )}
+          </>
+        )}
+        {value && type === 'password' ? (
+          <span
+            onClick={() => {
+              setShowPassword(!showPassword);
+              revielPassword();
+            }}
+            className="reviel-password"
+          >
+            {!showPassword ? <Eye /> : <Hide />}
+          </span>
+        ) : null}
+      </div>
       <p className="error" style={{ display: error ? 'block' : 'none' }}>
         {errorMsg}
       </p>

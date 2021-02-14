@@ -9,12 +9,13 @@ $distance: 0px;
 .input-div {
   width: 100%;
   position: relative;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 
   .t_label {
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     display: inline-block;
-    font-weight: bold;
+    color: color(light-theme);
+    font-size: 0.8em;
   }
 
   input[type='date']::before {
@@ -44,19 +45,47 @@ $distance: 0px;
     font-size: 0.8em;
   }
 
+  .input-con {
+    position: relative;
+  }
+
   .input-type {
     border: none;
     width: 100%;
     font-size: 1em;
-    background: color(light);
+    background: white;
     color: color(text);
     padding: 10px 20px;
     padding-left: 35px;
     border-radius: 5px;
     position: relative;
+    border: 1px solid #a29eeb;
 
     &::-webkit-input-placeholder {
       color: rgba(color(text), 0.8);
+      font-weight: 300;
+    }
+
+    &.PhoneInput {
+      padding: 0;
+      overflow: hidden;
+
+      input {
+        border: none;
+        color: color(text);
+        font-size: 1em;
+        padding: 10px 0px;
+      }
+
+      .PhoneInputCountry {
+        background: #f3f3fb;
+        padding: 0 5px;
+      }
+
+      .PhoneInputCountryIcon--border {
+        box-shadow: unset;
+        background-color: unset;
+      }
     }
 
     .select {
@@ -219,7 +248,7 @@ $distance: 0px;
     width: 25px;
     height: 25px;
     right: 35px;
-    top: 6.5px;
+    top: 9.5px;
     cursor: pointer;
 
     svg {

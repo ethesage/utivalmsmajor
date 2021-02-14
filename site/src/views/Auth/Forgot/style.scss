@@ -1,0 +1,27 @@
+@import '../../../media';
+
+.forgot {
+  margin-bottom: 100px;
+
+  @include for-size(tablet-portrait-up) {
+    margin-bottom: 0;
+  }
+
+  .sm {
+    font-size: 0.8em;
+  }
+
+  .btn.sm {
+    min-width: unset;
+    max-width: 150px;
+    margin: 30px 0;
+  }
+
+  .mb-20 {
+    margin-bottom: 20px;
+  }
+
+  strong {
+    cursor: pointer;
+  }
+}

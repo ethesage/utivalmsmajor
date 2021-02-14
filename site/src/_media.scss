@@ -47,7 +47,8 @@
 }
 
 $colors: (
-  theme: #120c64,
+  theme: #0f078e,
+  light-theme: #0f078e,
   secondary: #fbaf1b,
   off: #1976d2,
   approved: #09ac23,
@@ -55,7 +56,7 @@ $colors: (
   fade: #aaa4a4,
   text: #565656,
   text_fade: #6f6f6f,
-  light_fade: #f7f7f7
+  light_fade: #f7f7f7,
 );
 
 @function color($color) {

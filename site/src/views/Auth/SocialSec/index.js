@@ -1,10 +1,10 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useToasts } from 'react-toast-notifications';
 import google from 'assets/icons/google.png';
 import { login } from 'g_actions/user';
-// import linkedin from 'assets/icons/linkedin.png';git 
+// import linkedin from 'assets/icons/linkedin.png';git
 import { auth, googleProvider, facebookProvider } from 'helpers/firebase';
 import { axiosInstance } from 'helpers';
 import './style.scss';
@@ -18,6 +18,7 @@ const Social = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const { addToast } = useToasts();
+  const location = useLocation();
 
   //remember to add the redirect on login for v2
 
@@ -48,6 +49,14 @@ const Social = () => {
         if (response) {
           dispatch(login(response.user));
           history.push('/');
+
+          const redirectUrl = location?.search?.split('redirect=')[1];
+
+          redirectUrl
+            ? history.push(redirectUrl)
+            : response.data.user.role === 'admin'
+            ? history.push('/admin')
+            : history.push('/');
         }
       } catch (error) {
         addToast(error.message, {

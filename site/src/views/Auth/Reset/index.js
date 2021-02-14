@@ -5,7 +5,6 @@ import Button from 'components/Button';
 import useInput from 'Hooks/useInput';
 import data from 'data/reset';
 import { useToasts } from 'react-toast-notifications';
-import { Link } from 'react-router-dom';
 import { axiosInstance } from 'helpers';
 import '../style.scss';
 
@@ -64,10 +63,14 @@ function Reset() {
   };
 
   return (
-    <div className="auth_section">
-      <div className="reg_text">
-        <h2>Reset your password</h2>
-        <p>One last step and you'll be on your way</p>
+    <div className="auth_section forgot">
+      <div className="reg_text flex-col al-start">
+        <h2>
+          Set New Password{' '}
+          <span role="img" aria-label="key emoji">
+            🔑
+          </span>
+        </h2>
       </div>
       <form className="form">
         {data.map((form, i) => (
@@ -76,6 +79,7 @@ function Reset() {
             name={form.name}
             type={form.type}
             placeHolder={form.placeHolder}
+            label={form.label}
             value={inputTypes[form.name]}
             errorMsg={form.errorMsg}
             required={form.required}
@@ -86,21 +90,25 @@ function Reset() {
           />
         ))}
 
-        <Button
-          btnRef={submitButton}
-          onClick={handleSubmit}
-          className="s_btn flex-row input-div"
-          text="Reset"
-        />
+        <div
+          className="btn_sec_sm flex-row j-end"
+          style={{ marginBottom: '20px' }}
+        >
+          <Button
+            btnRef={submitButton}
+            onClick={handleSubmit}
+            className="s_btn flex-row"
+            text="Submit"
+          />{' '}
+        </div>
       </form>
-      <div className="externs flex-row j-space">
-        <small>
-          Don't have an account?{' '}
-          <Link to="/auth/signup">
-            <strong className="theme-color">Sign up</strong>
-          </Link>
-        </small>
-      </div>
+
+      <small className="warn">
+        <span role="img" aria-label="warning emoji">
+          ⚠️
+        </span>{' '}
+        To keep you account safe, don’t share your password with anyone
+      </small>
     </div>
   );
 }

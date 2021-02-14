@@ -8,6 +8,7 @@ import Button from 'components/Button';
 import data from 'data/signIn';
 import { axiosInstance } from 'helpers';
 import { login } from 'g_actions/user';
+import user_icon from 'assets/auth/user_icon.png';
 import Social from '../SocialSec';
 import '../style.scss';
 
@@ -53,14 +54,18 @@ function Login() {
 
   return (
     <div className="auth_section">
-      <div className="reg_text">
-        <h2>Sign In</h2>
-        <p>
-          To use another email address,{' '}
-          <Link to="/signin">
-            <strong className="theme-color">click here</strong>
-          </Link>
-        </p>
+      <div className="reg_text flex-col al-start">
+        <h2>
+          Login{' '}
+          <span role="img" aria-label="key emoji">
+            🔑
+          </span>
+        </h2>
+
+        <div className="w-full flex-row j-space">
+          <p>Welcome back</p>
+          <img src={user_icon} alt="user" />
+        </div>
       </div>
       <form className="form">
         {data.map((form, i) => (
@@ -69,6 +74,7 @@ function Login() {
             name={form.name}
             type={form.type}
             placeHolder={form.placeHolder}
+            label={form.label}
             value={inputTypes[form.name]}
             errorMsg={form.errorMsg}
             required={form.required}
@@ -80,20 +86,28 @@ function Login() {
           />
         ))}
 
-        <Button
-          btnRef={submitButton}
-          onClick={handleSubmit}
-          className="s_btn flex-row"
-          text="Login"
-        />
-      </form>
-      <div className="externs flex-row j-space">
-        <small>
-          Forgot password?{' '}
+        <div
+          className="externs flex-row j-space light"
+          style={{ margin: '-8px 0 20px' }}
+        >
           <Link to="/auth/forgot">
-            <strong className="theme-color">Click here</strong>
+            <small>Forgot password?</small>
           </Link>
-        </small>
+        </div>
+
+        <div className="btn_sec_sm flex-row j-end">
+          <Button
+            btnRef={submitButton}
+            onClick={handleSubmit}
+            className="s_btn flex-row"
+            text="Login"
+          />{' '}
+        </div>
+      </form>
+
+      <Social />
+
+      <div className="externs flex-row j-space">
         <small>
           Don't have an account?{' '}
           <Link to="/auth/signup">
@@ -101,7 +115,6 @@ function Login() {
           </Link>
         </small>
       </div>
-      <Social />
     </div>
   );
 }
