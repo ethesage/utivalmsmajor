@@ -7,7 +7,6 @@ import { login } from 'g_actions/user';
 // import linkedin from 'assets/icons/linkedin.png';git
 import { auth, googleProvider, facebookProvider } from 'helpers/firebase';
 import { axiosInstance } from 'helpers';
-import './style.scss';
 
 const socials = {
   google: googleProvider,
@@ -68,14 +67,21 @@ const Social = () => {
   };
 
   return (
-    <div className="social">
-      <div className="head flex-row">
-        <p>Or</p>
+    <div className="social mt-2.5 mb-5">
+      <div className="head flex-center relative h-12 z-0">
+        <p className="z-10 bg-white p-3">Or</p>
+        <span
+          className="inline-block w-full absolute top-1/1 bg-gray-200 z-0"
+          style={{ height: '1px' }}
+        ></span>
       </div>
-      <div className="btn_sec flex-row j-space">
-        <button className="flex-row w-full" onClick={() => signIn('google')}>
-          <img src={google} alt="google" />
-          <p>Google</p>
+      <div className="btn_sec flex items-center justify-between">
+        <button
+          className="flex-center w-full bg-light shadow-sm py-2.5 px-5 rounded-md"
+          onClick={() => signIn('google')}
+        >
+          <img src={google} alt="google" className="mr-2.5 md:mr-5 w-5" />
+          <p className="text-txt text-sm md:text-base">Google</p>
         </button>
         {/* <button className="flex-row j-start" onClick={() => signIn('facebook')}>
           <img src={linkedin} alt="linkedin" />

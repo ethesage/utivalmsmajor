@@ -1,6 +1,5 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import './style.scss';
 
 const Button = ({ className = '', link, onClick, text, btnRef, children }) => {
   const history = useHistory();
@@ -11,7 +10,7 @@ const Button = ({ className = '', link, onClick, text, btnRef, children }) => {
   };
 
   return (
-    <button ref={btnRef} className={`btn  ${className}`} onClick={handleClick}>
+    <button ref={btnRef} className={`btn ${className}`} onClick={handleClick}>
       <p className="">{text || children}</p>
     </button>
   );

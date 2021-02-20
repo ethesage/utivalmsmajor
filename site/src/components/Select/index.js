@@ -86,7 +86,9 @@ const Select = ({
   const options = innerInputs.map((input, index) => {
     return (
       <button
-        className={`options ${input.value === presentValue ? 'selected' : ''}`}
+        className={`options block w-full p-2.5 text-base rounded-sm text-left text-txt ${
+          input.value === presentValue ? 'selected' : ''
+        }`}
         type="button"
         key={index}
         value={input.value}
@@ -110,7 +112,7 @@ const Select = ({
       <div className="input-type">
         {/* <div className="input-type"> */}
         <div
-          className={`select ${
+          className={`select relative ${
             openDrop || presentValue !== '' ? 'open-drop' : ''
           }`}
           ref={selectRef}
@@ -118,9 +120,9 @@ const Select = ({
           tabIndex={-1}
         >
           <button
-            className={`currentValue ${openDrop ? 'open-drop' : ''}${
-              useArrow ? ' arrow' : ''
-            }`}
+            className={`currentValue flex justify-between items-center w-full text-left text-base text-txt relative capitalize ${
+              openDrop ? 'open-drop' : ''
+            }${useArrow ? ' arrow' : ''}`}
             type="button"
             onClick={revileDropDown}
           >
@@ -129,10 +131,12 @@ const Select = ({
             </p>
           </button>
           <div
-            className={`dropDownButtons ${openDrop ? 'open-drop' : 'close'}`}
+            className={`dropDownButtons absolute -top-2.5 bg-white text-txt rounded-sm py-2.5 px-2 overflow-hidden invisible opacity-0 ${
+              openDrop ? 'open-drop' : 'close'
+            }`}
           >
             {useSearch ? (
-              <div className="search-input">
+              <div className="search-input w-full border border-txt_fade mb-3 rounded-sm p-2.5 sticky top-2.5 bg-white pt-2.5 text-base">
                 <input
                   type="text"
                   placeholder="search"

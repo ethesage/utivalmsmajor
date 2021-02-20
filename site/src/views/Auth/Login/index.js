@@ -54,7 +54,7 @@ function Login() {
 
   return (
     <div className="auth_section">
-      <div className="reg_text flex-col al-start">
+      <div className="reg_text">
         <h2>
           Login{' '}
           <span role="img" aria-label="key emoji">
@@ -62,7 +62,7 @@ function Login() {
           </span>
         </h2>
 
-        <div className="w-full flex-row j-space">
+        <div>
           <p>Welcome back</p>
           <img src={user_icon} alt="user" />
         </div>
@@ -86,32 +86,24 @@ function Login() {
           />
         ))}
 
-        <div
-          className="externs flex-row j-space light"
-          style={{ margin: '-8px 0 20px' }}
-        >
+        <div className="externs light" style={{ margin: '-8px 0 20px' }}>
           <Link to="/auth/forgot">
-            <small>Forgot password?</small>
+            <small className="text-light-theme">Forgot password?</small>
           </Link>
         </div>
 
-        <div className="btn_sec_sm flex-row j-end">
-          <Button
-            btnRef={submitButton}
-            onClick={handleSubmit}
-            className="s_btn flex-row"
-            text="Login"
-          />{' '}
+        <div className="btn_sec_sm">
+          <Button btnRef={submitButton} onClick={handleSubmit} text="Login" />{' '}
         </div>
       </form>
 
       <Social />
 
-      <div className="externs flex-row j-space">
+      <div className="externs">
         <small>
           Don't have an account?{' '}
           <Link to="/auth/signup">
-            <strong className="theme-color">Sign up</strong>
+            <strong className="text-theme">Sign up</strong>
           </Link>
         </small>
       </div>

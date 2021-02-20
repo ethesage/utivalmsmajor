@@ -43,7 +43,6 @@ const Input = ({
 
   const validateOne = (event) => {
     if (name !== event.target.name) return;
-    console.log(name, event);
 
     handleChange(event, error);
     if (shouldValidate) {
@@ -59,7 +58,7 @@ const Input = ({
 
   return (
     <div
-      className={`input-div ${
+      className={`input-div w-full relative mb-4 ${
         type === 'checkbox' ? 'flex-row j-start check' : ''
       }`}
     >
@@ -68,7 +67,7 @@ const Input = ({
           required ? (showAsterix ? '*' : '') : ''
         }`}</label>
       )}
-      <div className="input-con">
+      <div className="input-con relative">
         {type === 'textarea' ? (
           <textarea
             className="input-type"

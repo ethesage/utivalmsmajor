@@ -1,102 +1,22 @@
 @import '../../media';
 
-.auth {
-  min-height: 100vh;
-  flex-grow: 1;
-  background: color(theme);
-
-  .nav {
-    height: 80px;
-
-    img {
-      width: 100px;
-    }
-
-    p {
-      color: rgba(#fff, 0.7);
-      font-style: italic;
-    }
-  }
-
-  .card {
-    flex-grow: 1;
-
-    @include for-size(tablet-portrait-up) {
-      margin-top: 30px;
-    }
-
-    .img-sec {
-      width: 40%;
-
-      @include for-size(tablet-portrait-up) {
-        display: none;
-      }
-    }
-
-    .pages {
-      background: white;
-      border-radius: 10px;
-      filter: drop-shadow(0px 4px 30px rgba(0, 0, 0, 0.1));
-
-      @include for-size(phone-only) {
-        width: 100%;
-      }
-    }
-  }
-
-  .ftr {
-    padding: 30px 0;
-    text-align: center;
-    font-size: 0.8em;
-    color: rgba(#fff, 0.7);
-
-    p {
-      font-style: italic;
-    }
-  }
-}
-
-.auth-con {
-  padding: 50px 70px;
-
-  @include for-size(phone-only) {
-    padding: 20px;
-    width: 100%;
-  }
-}
-
 .auth_section {
-  width: 100%;
-  max-width: 450px;
-  min-width: 350px;
-
-  @include for-size(phone-only) {
-    min-width: unset;
-  }
+  @apply w-full md:min-w-xs;
 
   .reg_text {
-    margin-bottom: 20px;
-    text-align: center;
+    @apply mb-5 flex flex-col items-start;
 
     h2 {
-      font-weight: 500;
-      margin-bottom: 5px;
+      @apply font-semibold mb-1.5 text-2xl text-theme;
     }
 
-    p {
-      font-size: 1em;
+    div {
+      @apply w-full flex justify-between items-center;
     }
   }
 
   .externs {
-    flex-wrap: wrap;
-    margin-top: 10px;
-
-    &.light {
-      small {
-        color: color(light-theme);
-      }
-    }
+    @apply flex items-center justify-between mt-2.5 flex-wrap;
 
     small {
       font-size: 0.75em;
@@ -104,16 +24,16 @@
   }
 
   .btn_sec_sm {
+    @apply flex items-center justify-end;
+
     button {
-      width: 40%;
       min-width: unset;
+      width: 40%;
+      @apply flex justify-center items-center;
     }
   }
 
   .warn {
-    color: #f90217;
-    margin-top: 40px;
-    display: inline-block;
-    font-size: 0.75em;
+    @apply text-red-600 mt-10 inline-block text-xs;
   }
 }

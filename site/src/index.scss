@@ -9,7 +9,7 @@
 *::before,
 *::after {
   box-sizing: border-box;
-  outline: none;
+  outline: none !important;
   -webkit-tap-highlight-color: transparent;
   font-family: 'Open Sans', sans-serif;
 }
@@ -21,6 +21,17 @@ html {
 
 abbr[title] {
   text-decoration: none;
+}
+
+.flex-center {
+  @apply flex justify-center items-center;
+}
+
+.container {
+  padding: 0 15px;
+  @screen xl {
+    max-width: 1256px;
+  }
 }
 
 .clipped-text {
@@ -35,23 +46,32 @@ abbr[title] {
 
 .btn {
   box-shadow: 0px 12px 35px rgba(160, 121, 0, 0.2);
-  padding: 10px 20px;
-  color: white;
-  background: color(secondary);
-  border-radius: 5px;
+  @apply py-2.5 px-5 text-white bg-secondary rounded-md min-w-vs fill-current transition-all duration-300;
 
   p {
     pointer-events: none;
   }
 
-  &.theme {
-    background: color(theme);
-    box-shadow: 0px 12px 35px rgba(color(theme), 0.2);
+  &:hover {
+    box-shadow: 1px 1px 4px rgba(black, 0.5);
   }
 
-  a {
-    color: white;
+  &.no-hover {
+    &:hover {
+      box-shadow: none;
+    }
   }
+
+  &:focus {
+    &::before {
+      opacity: 1;
+      transform: translate(0);
+      box-shadow: 1px 1px 4px rgba(black, 0.5);
+    }
+  }
+  // a {
+  //   color: white;
+  // }
 }
 
 ::-webkit-scrollbar {

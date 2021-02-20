@@ -61,8 +61,6 @@ export default function Input({
     } catch (error) {
       // error.message = "Incorrect login details";
 
-      console.log(error);
-
       if (error.response) {
         if (error.response.status === 500)
           error.message = "Network error please try again";

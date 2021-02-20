@@ -7,7 +7,6 @@ import Button from 'components/Button';
 import { useToasts } from 'react-toast-notifications';
 import { axiosInstance } from 'helpers';
 import '../style.scss';
-import './style.scss';
 
 function QuickCheckout() {
   const submitButton = useRef();
@@ -46,10 +45,11 @@ function QuickCheckout() {
   };
 
   return (
-    <div className="auth_section forgot">
+    <div className="auth_section md:mb-28">
       {!sent ? (
+        // {false ? (
         <>
-          <div className="reg_text flex-col al-start">
+          <div className="reg_text">
             <h2>
               Forgot Password{' '}
               <span role="img" aria-label="key emoji">
@@ -57,7 +57,7 @@ function QuickCheckout() {
               </span>
             </h2>
 
-            <div className="w-full flex-row j-space">
+            <div>
               <p>
                 <span role="img" aria-label="smiling emoji">
                   😀
@@ -84,14 +84,10 @@ function QuickCheckout() {
               />
             ))}
 
-            <div
-              className="btn_sec_sm flex-row j-end"
-              style={{ marginBottom: '20px' }}
-            >
+            <div className="btn_sec_sm" style={{ marginBottom: '20px' }}>
               <Button
                 btnRef={submitButton}
                 onClick={handleSubmit}
-                className="s_btn flex-row"
                 text="Submit"
               />{' '}
             </div>
@@ -103,14 +99,14 @@ function QuickCheckout() {
                 🤔
               </span>{' '}
               <a href="/auth/signin">
-                <strong className="theme-color">Sign in</strong>
+                <strong className="text-theme cursor-pointer">Sign in</strong>
               </a>
             </small>
           </div>{' '}
         </>
       ) : (
         <>
-          <div className="reg_text flex-col al-start submitted">
+          <div className="reg_text submitted">
             <h2>
               Password Reset{' '}
               <span role="img" aria-label="key emoji">
@@ -119,7 +115,7 @@ function QuickCheckout() {
             </h2>
           </div>
 
-          <p className="sm">
+          <p className="text-sm">
             A password resent link hasbeen sent to{' '}
             <div>
               <strong className="theme-color">{inputTypes.email}</strong>
@@ -130,15 +126,16 @@ function QuickCheckout() {
           <a
             href={`https://${inputTypes.email.split('@')[1]}`}
             target="_"
-            className="btn sm flex-row"
+            className="btn text-sm flex-center my-8"
+            style={{ maxWidth: '150px' }}
           >
             <p>Check Mail</p>
           </a>
 
-          <p className="mb-20 sm">
+          <p className="mb-5 text-sm">
             Didn’t get the mail?{' '}
             <strong
-              className="theme-color"
+              className="text-theme cursor-pointer"
               onClick={(e) => {
                 document.querySelector('body').classList.add('spinner3');
                 handleSubmit(e);
@@ -148,10 +145,10 @@ function QuickCheckout() {
             </strong>
           </p>
 
-          <p className="mb-20 sm">
+          <p className="mb-5 text-sm">
             Wrong email address?{' '}
             <strong
-              className="theme-color"
+              className="text-theme cursor-pointer"
               onClick={() => {
                 setSent(false);
                 history.push('/auth/forgot');

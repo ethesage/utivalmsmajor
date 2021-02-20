@@ -149,16 +149,16 @@ function Signup() {
   }, [inputTypes.country]);
 
   return (
-    <div className="auth_section sign_up">
-      <div className="reg_text flex-col al-start">
-        <h2>
+    <div className="auth_section sign_up my-12 sm:my-0">
+      <div className="reg_text mb-5">
+        <h2 className='mb-3'>
           Accelerate your carrer{' '}
           <span role="img" aria-label="spaceship emoji">
             🚀
           </span>
         </h2>
 
-        <div className="w-full flex-row j-space">
+        <div>
           <p>Thank you for choosing to join Utiva</p>
         </div>
       </div>
@@ -186,23 +186,18 @@ function Signup() {
           />
         ))}
 
-        <div className="btn_sec_sm flex-row j-end">
-          <Button
-            btnRef={submitButton}
-            onClick={handleSubmit}
-            className="s_btn flex-row"
-            text="Sign up"
-          />
+        <div className="btn_sec_sm mt-2.5">
+          <Button btnRef={submitButton} onClick={handleSubmit} text="Sign up" />
         </div>
       </form>
 
       <Social />
 
-      <div className="externs flex-row j-space">
+      <div className="externs">
         <small>
           Already have an account?{' '}
           <Link to="/auth/signin">
-            <strong className="theme-color">Login</strong>
+            <strong className="text-theme">Login</strong>
           </Link>
         </small>
       </div>

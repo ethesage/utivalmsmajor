@@ -63,8 +63,8 @@ function Reset() {
   };
 
   return (
-    <div className="auth_section forgot">
-      <div className="reg_text flex-col al-start">
+    <div className="auth_section mb-24">
+      <div className="reg_text">
         <h2>
           Set New Password{' '}
           <span role="img" aria-label="key emoji">
@@ -90,16 +90,8 @@ function Reset() {
           />
         ))}
 
-        <div
-          className="btn_sec_sm flex-row j-end"
-          style={{ marginBottom: '20px' }}
-        >
-          <Button
-            btnRef={submitButton}
-            onClick={handleSubmit}
-            className="s_btn flex-row"
-            text="Submit"
-          />{' '}
+        <div className="btn_sec_sm mb-5">
+          <Button btnRef={submitButton} onClick={handleSubmit} text="Submit" />{' '}
         </div>
       </form>
 
