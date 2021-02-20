@@ -1,4 +1,4 @@
-@import "../../media";
+@import '../../media';
 
 .snx_mem {
   width: 100%;
@@ -70,9 +70,8 @@
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0 0 5px rgba(#000, 0.1);
-  width: 90%;
+  width: 90vw;
   max-width: 400px;
-  min-width: 230px;
   margin: auto;
 
   h3 {

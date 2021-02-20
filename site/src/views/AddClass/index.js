@@ -239,7 +239,7 @@ const AddAssignment = ({ editedClass, edit, name, courseId, mainCohortId }) => {
                 required={true}
                 handleChange={handleChange}
                 validateSelf={validateSelf}
-                attr={{ min: moment().format("YYYY-MM-DD") }}
+                // attr={{ min: moment().format("YYYY-MM-DD") }}
                 showAsterix={false}
               />
             </div>

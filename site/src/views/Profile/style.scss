@@ -1,4 +1,4 @@
-@import "../../media";
+@import '../../media';
 
 .profile {
   max-width: 1000px;
@@ -114,9 +114,8 @@
 
   &.bio {
     background: white;
-    width: 90%;
+    width: 90vw;
     max-width: 500px;
-    min-width: 250px;
 
     .form_sec {
       @include for-size(phone-only) {
@@ -145,7 +144,7 @@
         color: color(text);
       }
 
-      input[type="textarea"] {
+      input[type='textarea'] {
         height: 300px;
       }
 
