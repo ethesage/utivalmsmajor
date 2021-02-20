@@ -1,12 +1,13 @@
-@import "../../../media";
+@import '../../../media';
 
 .details {
   margin-bottom: 50px;
   .container {
     .details_con {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      width: 80%;
+      grid-template-columns: 55% 40%;
+      grid-gap: 5%;
+      justify-items: stretch;
 
       @include for-size(tablet-landscape-up) {
         width: 100%;
@@ -23,8 +24,6 @@
 
     .img-sec {
       border-radius: 5px;
-      height: 250px;
-      margin-right: 50px;
       // max-width: 300px;
 
       @include for-size(tablet-portrait-up) {
@@ -37,9 +36,8 @@
       }
 
       img {
-        width: auto;
         border-radius: 10px;
-        max-width: 350px;
+        max-height: 300px;
 
         @include for-size(tablet-portrait-up) {
           width: 100%;
@@ -148,7 +146,7 @@
           padding: 10px;
           cursor: pointer;
 
-          &[data-active="true"] {
+          &[data-active='true'] {
             border-color: rgba(color(theme), 0.4);
           }
         }

@@ -1,4 +1,4 @@
-@import "../../media";
+@import '../../media';
 
 .purchase {
   min-height: 100vh;
@@ -7,7 +7,7 @@
 
     a {
       img {
-        width: 100px;
+        width: 80px;
       }
     }
   }
@@ -18,25 +18,5 @@
 
   .purchase_con {
     flex-grow: 1;
-
-    .nav {
-      margin-bottom: 20px;
-      .nav-item {
-        padding: 0 30px 10px;
-        border-bottom: 1px solid color(fade);
-        transition: 0.3s ease;
-        transform-origin: left;
-
-        &[data-active="true"] {
-          font-weight: 900;
-          border-bottom: 2px solid color(secondary);
-        }
-
-        cursor: pointer;
-        p {
-          pointer-events: none;
-        }
-      }
-    }
   }
 }

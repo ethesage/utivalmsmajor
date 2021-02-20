@@ -96,8 +96,11 @@ const Details = ({ proceed, match, set, setPaymentAmount }) => {
       </Helmet>
       <div className="details">
         <div className="container">
+          <h2 className="theme-color">Course Details</h2>
           <div className="details_con mx-auto">
-            <div className="img-sec flex-row j-end">
+            <div className="img-sec flex-col al-start">
+              <p>{purchaseCourse?.name}</p>
+
               <img
                 src={purchaseCourse?.thumbnail}
                 alt={purchaseCourse?.name}

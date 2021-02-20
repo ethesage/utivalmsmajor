@@ -1,11 +1,13 @@
 @import './media';
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap');
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 *,
 *::before,
 *::after {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
   outline: none;
   -webkit-tap-highlight-color: transparent;
@@ -14,114 +16,11 @@
 
 body,
 html {
-  // scroll-behavior: smooth;
-  width: 100%;
-  min-height: 100vh;
-  // overflow-x: hidden;
-  color: color(text);
+  @apply text-txt min-h-screen w-full;
 }
 
 abbr[title] {
   text-decoration: none;
-}
-
-a {
-  color: color(text);
-  text-decoration: none;
-}
-
-p {
-  line-height: 1.5;
-}
-
-.flex {
-  display: flex;
-}
-
-.flex-row {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.mx-auto {
-  margin: 0 auto;
-}
-
-.my-auto {
-  margin: auto 0;
-}
-
-.m-auto {
-  margin: auto;
-}
-
-.flex-col {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.row-reverse {
-  flex-direction: row-reverse;
-}
-
-.col-reverse {
-  flex-direction: column-reverse;
-}
-
-.j-start {
-  justify-content: flex-start;
-}
-.j-end {
-  justify-content: flex-end;
-}
-.j-space {
-  justify-content: space-between;
-}
-
-.al-start {
-  align-items: flex-start;
-}
-.al-end {
-  align-items: flex-end;
-}
-.al-bet {
-  align-content: space-between;
-}
-
-button {
-  cursor: pointer;
-  border: none;
-  background: none;
-}
-
-.img {
-  width: 100%;
-  height: 100%;
-}
-
-.cover {
-  object-fit: cover;
-}
-
-.contain {
-  object-fit: contain;
-}
-
-.block {
-  display: block;
-}
-
-.theme-color {
-  color: color(theme);
-  fill: color(theme);
-}
-
-.secondary-color {
-  color: color(secondary);
-  fill: color(secondary);
 }
 
 .clipped-text {
@@ -132,219 +31,6 @@ button {
   text-overflow: ellipsis;
   hyphens: auto;
   // word-break: break-all;
-}
-
-.txt-center {
-  text-align: center;
-}
-
-.icon::before {
-  display: inline-block;
-  font-style: normal;
-  font-variant: normal;
-  text-rendering: auto;
-  -webkit-font-smoothing: antialiased;
-}
-
-.container {
-  width: 1300px;
-  margin: auto;
-
-  @include for-size(desktop-up) {
-    width: 1100px;
-  }
-
-  @include for-size(smaller-desktop) {
-    width: 90%;
-  }
-}
-
-.full-center {
-  display: grid;
-  align-items: center;
-}
-
-.centered {
-  display: grid;
-  place-content: center;
-}
-
-%centered {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.absolute-center {
-  @extend %centered;
-}
-
-.before {
-  @extend %centered;
-}
-
-ul,
-li {
-  list-style: none;
-}
-
-.read-more {
-  color: color(theme);
-  font-size: 0.9em;
-}
-
-.underline {
-  border-bottom: 1px solid black;
-}
-
-.card {
-  @include for-size(phone-only) {
-    flex-direction: column;
-  }
-
-  .img-sec,
-  .text-sec {
-    width: 50%;
-
-    @include for-size(phone-only) {
-      width: 90%;
-    }
-  }
-
-  &.var {
-    .img-sec,
-    .text-sec {
-      width: unset;
-
-      @include for-size(phone-only) {
-        width: 90%;
-      }
-    }
-  }
-}
-
-.m-150 {
-  margin-top: 130px;
-
-  @include for-size(desktop-up) {
-    margin-top: 100px;
-  }
-
-  @include for-size(phone-only) {
-    margin-top: 80px;
-  }
-}
-
-.inblock {
-  display: inline-block;
-}
-
-.hd {
-  font-size: 2.7em;
-  color: color(theme);
-  margin-bottom: 15px;
-
-  @include for-size(smaller-desktop) {
-    font-size: 2.5em;
-  }
-
-  @include for-size(tablet-landscape-up) {
-    font-size: 2em;
-  }
-
-  @include for-size(tablet-portrait-up) {
-    font-size: 1.5em;
-  }
-
-  &.middle {
-    text-align: center;
-  }
-}
-
-.s_hd {
-  font-size: 2em;
-
-  @include for-size(tablet-landscape-up) {
-    font-size: 1.5em;
-  }
-
-  @include for-size(tablet-portrait-up) {
-    font-size: 1em;
-  }
-
-  @include for-size(phone-only) {
-    font-size: 0.85em;
-  }
-
-  &.middle {
-    text-align: center;
-  }
-}
-
-.reg_text {
-  h2 {
-    color: color(theme);
-    margin-bottom: 10px;
-    font-size: 1.6em;
-
-    @include for-size(smaller-desktop) {
-      font-size: 1.4em;
-    }
-  }
-
-  h3 {
-    color: color(text);
-    margin-bottom: 5px;
-    font-size: 1.4em;
-
-    @include for-size(smaller-desktop) {
-      font-size: 1.2em;
-    }
-  }
-
-  p {
-    color: color(text);
-    font-size: 1.2em;
-
-    @include for-size(smaller-desktop) {
-      font-size: 1em;
-    }
-    &.spaced {
-      margin-bottom: 20px;
-    }
-  }
-}
-
-._text {
-  h2 {
-    color: color(theme);
-    margin-bottom: 10px;
-    font-size: 1.3em;
-
-    @include for-size(smaller-desktop) {
-      font-size: 1.1em;
-    }
-  }
-
-  h3 {
-    color: color(text);
-    margin-bottom: 5px;
-    font-size: 1.1em;
-
-    @include for-size(smaller-desktop) {
-      font-size: 1em;
-    }
-  }
-
-  p {
-    color: color(text);
-    font-size: 1em;
-
-    @include for-size(smaller-desktop) {
-      font-size: 0.8em;
-    }
-  }
 }
 
 .btn {
@@ -436,30 +122,6 @@ li {
   overflow: hidden;
 }
 
-// .scrolled {
-//   background: /* Shadow covers */ linear-gradient(
-//       white 30%,
-//       rgba(255, 255, 255, 0)
-//     ),
-//     linear-gradient(rgba(255, 255, 255, 0), white 70%) 0 100%,
-//     /* Shadows */
-//       radial-gradient(
-//         farthest-side at 50% 0,
-//         rgba(0, 0, 0, 0.3),
-//         rgba(0, 0, 0, 0)
-//       ),
-//     radial-gradient(
-//         farthest-side at 50% 100%,
-//         rgba(0, 0, 0, 0.3),
-//         rgba(0, 0, 0, 0)
-//       )
-//       0 100%;
-//   background-repeat: no-repeat;
-//   background-color: white;
-//   background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
-//   background-attachment: local, local, scroll, scroll;
-// }
-
 .scrolled {
   background: /* Shadow covers */ linear-gradient(white 30%, rgba(#fff, 0)),
     linear-gradient(rgba(#fff, 0), white 70%) 0 100%,
@@ -494,10 +156,6 @@ li {
     text-align: center;
     margin-bottom: 20px;
   }
-}
-
-.mb-10 {
-  margin-bottom: 10px;
 }
 
 %spinner {
@@ -718,16 +376,9 @@ li {
   display: flex;
   margin-top: 30px;
   justify-content: center;
-
-  // display: inline-block;
   padding-left: 0;
   margin: 20px 0;
   border-radius: 4px;
-
-  // li {
-  //   padding: 10px;
-  //   border: 1px solid color(theme);
-  // }
 }
 
 .p_right {
@@ -838,8 +489,4 @@ li {
 
 .smooth-scroll {
   scroll-behavior: smooth;
-}
-
-.w-full {
-  width: 100%;
 }
