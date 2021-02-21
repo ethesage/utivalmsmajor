@@ -143,7 +143,7 @@ const Details = ({ proceed, match, set, setPaymentAmount }) => {
         <meta name="twitter:card" content="summary_large_image" />
       </Helmet>
       <div className="details pb-12">
-        <div className="container mx-auto">
+        <div className="container --small mx-auto">
           <h2 className="text-theme text-lg font-semibold mb-3">
             Course Details
           </h2>
@@ -318,7 +318,7 @@ const Details = ({ proceed, match, set, setPaymentAmount }) => {
               </div>
             </div>
 
-            {purchaseCourse?.CohortTrainers.lenght > 0 && (
+            {purchaseCourse?.CohortTrainers?.lenght > 0 && (
               <div className="col-span-3 md:w-4/5">
                 <div className="mb-6">
                   <h2 className="font-semibold text-theme mb-2">

@@ -1,40 +1,47 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
-import { useHistory, Link } from 'react-router-dom';
-import logo from 'assets/logo.png';
+import { useSelector } from 'react-redux';
 import hamburger from 'assets/icons/hambuger.png';
-import notifyIcon from 'assets/icons/notify.png';
-import { log_out } from 'g_actions/user';
-import './style.scss';
+import notifyIcon from 'assets/bell.png';
+import user_icon from 'assets/user_icon.png';
+// import { log_out } from 'g_actions/user';
 
 const NavBar = ({ open, grow }) => {
-  const dispatch = useDispatch();
-  const history = useHistory();
+  const { user } = useSelector((state) => state.auth);
 
-  const logout = async () => {
-    dispatch(log_out());
-    history.push('/auth/signin');
-  };
+  // const logout = async () => {
+  //   dispatch(log_out());
+  //   history.push('/signin');
+  // };
 
   return (
-    <div className="header flex-row al-end">
-      <aside className={`dh-aside ${grow ? ' open' : ''}`}></aside>
-      <nav className="dash-nav flex-col al-start">
-        <div className="be-white"></div>
-        <div className="nav-contents flex-row j-space">
-          <div className="nav-icons flex-row">
-            <img className="nav" onClick={open} src={hamburger} alt="" />
-            <Link to="/home">
-              <img className="logo" src={logo} alt="png" />
-            </Link>
+    <div className="header flex flex-row items-end justify-center fixed top-0 left-0 z-20 h-20 w-full px-5 lg:px-16">
+      <aside
+        className={`dh-aside h-full ${grow ? ' open' : ''}`}
+        style={{ zIndex: '-20px' }}
+      ></aside>
+      <nav className="dash-nav flex flex-col xl:container mx-auto justify-center items-start h-full flex-grow overflow-hidden relative bg-v_light">
+        <div className="nav-contents flex justify-between items-center h-full w-full">
+          <div className="nav-icons flex-center">
+            <img
+              className="nav block lg:hidden w-9"
+              onClick={open}
+              src={hamburger}
+              alt=""
+            />
           </div>
 
-          <div className="info flex-row">
-            <div className="bell">
-              <img src={notifyIcon} alt="bell" className="img contain" />
-            </div>
+          <div className="info flex-center">
+            <img src={notifyIcon} alt="bell" className="w-6 h-6 mr-6" />
+            <img
+              key={user.profilePic}
+              src={(user && user.profilePic) || user_icon}
+              alt=""
+              className="w-10 h-10 rounded-full object-cover mr-3"
+            />
 
-            <button onClick={logout}>Log out</button>
+            <p className="text-txt text-sm">
+              {user && `${user.firstName} ${user.lastName}`}
+            </p>
           </div>
         </div>
       </nav>

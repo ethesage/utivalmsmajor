@@ -43,10 +43,8 @@ const Payment = ({ back, paymentAmount }) => {
     disRef.current.open();
   }
 
-  disRef.current.open();
-
   return (
-    <div className="payment container mx-auto">
+    <div className="payment container --small mx-auto">
       {/* <dialog ref={disRef} className="d_s_c"> */}
       <Modal ref={disRef}>
         <div className="flex flex-col p-7 bg-white rounded w-4/5 mx-auto max-w-lg">

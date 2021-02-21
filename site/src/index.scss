@@ -28,9 +28,12 @@ abbr[title] {
 }
 
 .container {
-  padding: 0 15px;
-  @screen xl {
-    max-width: 1256px;
+  padding: 0 20px;
+
+  &.--small {
+    @screen xl {
+      max-width: 1256px;
+    }
   }
 }
 
@@ -86,9 +89,10 @@ abbr[title] {
   width: 8px;
   height: 5px;
   background: transparent;
+  display: none;
 
-  @include for-size(tablet-landscape-up) {
-    display: none;
+  @screen lg {
+    display: block;
   }
 }
 

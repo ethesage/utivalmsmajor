@@ -10,7 +10,7 @@ import { axiosInstance } from 'helpers';
 import { login } from 'g_actions/user';
 import user_icon from 'assets/auth/user_icon.png';
 import Social from '../SocialSec';
-import '../style.scss';
+import Layout from 'Layouts/Auth';
 
 function Login() {
   const submitButton = useRef();
@@ -53,61 +53,63 @@ function Login() {
   };
 
   return (
-    <div className="auth_section">
-      <div className="reg_text">
-        <h2>
-          Login{' '}
-          <span role="img" aria-label="key emoji">
-            🔑
-          </span>
-        </h2>
+    <Layout>
+      <div className="auth_section">
+        <div className="reg_text">
+          <h2>
+            Login{' '}
+            <span role="img" aria-label="key emoji">
+              🔑
+            </span>
+          </h2>
 
-        <div>
-          <p>Welcome back</p>
-          <img src={user_icon} alt="user" />
+          <div>
+            <p>Welcome back</p>
+            <img src={user_icon} alt="user" />
+          </div>
+        </div>
+        <form className="form">
+          {data.map((form, i) => (
+            <Input
+              key={`login_form_${i}`}
+              name={form.name}
+              type={form.type}
+              placeHolder={form.placeHolder}
+              label={form.label}
+              value={inputTypes[form.name]}
+              errorMsg={form.errorMsg}
+              required={form.required}
+              reviel={form.type === 'password' ? reviel : false}
+              revielPassword={revielPassword}
+              handleChange={handleChange}
+              validateSelf={validateSelf}
+              attr={form.attr}
+            />
+          ))}
+
+          <div className="externs light" style={{ margin: '-8px 0 20px' }}>
+            <Link to="/forgot">
+              <small className="text-light-theme">Forgot password?</small>
+            </Link>
+          </div>
+
+          <div className="btn_sec_sm">
+            <Button btnRef={submitButton} onClick={handleSubmit} text="Login" />{' '}
+          </div>
+        </form>
+
+        <Social />
+
+        <div className="externs">
+          <small>
+            Don't have an account?{' '}
+            <Link to="/signup">
+              <strong className="text-theme">Sign up</strong>
+            </Link>
+          </small>
         </div>
       </div>
-      <form className="form">
-        {data.map((form, i) => (
-          <Input
-            key={`login_form_${i}`}
-            name={form.name}
-            type={form.type}
-            placeHolder={form.placeHolder}
-            label={form.label}
-            value={inputTypes[form.name]}
-            errorMsg={form.errorMsg}
-            required={form.required}
-            reviel={form.type === 'password' ? reviel : false}
-            revielPassword={revielPassword}
-            handleChange={handleChange}
-            validateSelf={validateSelf}
-            attr={form.attr}
-          />
-        ))}
-
-        <div className="externs light" style={{ margin: '-8px 0 20px' }}>
-          <Link to="/auth/forgot">
-            <small className="text-light-theme">Forgot password?</small>
-          </Link>
-        </div>
-
-        <div className="btn_sec_sm">
-          <Button btnRef={submitButton} onClick={handleSubmit} text="Login" />{' '}
-        </div>
-      </form>
-
-      <Social />
-
-      <div className="externs">
-        <small>
-          Don't have an account?{' '}
-          <Link to="/auth/signup">
-            <strong className="text-theme">Sign up</strong>
-          </Link>
-        </small>
-      </div>
-    </div>
+    </Layout>
   );
 }
 

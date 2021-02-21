@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { validate } from "../helpers";
-import { useToasts } from "react-toast-notifications";
+import { useState } from 'react';
+import { validate } from '../helpers';
+import { useToasts } from 'react-toast-notifications';
 
 export default function Input({
   inputs,
@@ -17,11 +17,11 @@ export default function Input({
       inputs.reduce(
         (acc, input) => ({
           ...acc,
-          [input.name]: initials[input.name] ? initials[input.name] : "",
+          [input.name]: initials[input.name] ? initials[input.name] : '',
         }),
         {}
       )
-  ); 
+  );
   const { addToast } = useToasts();
 
   const handleSubmit = async (e) => {
@@ -41,8 +41,8 @@ export default function Input({
     });
 
     if (shouldSubmit && validateForm) {
-      addToast("Please ensure the form is completely and correctly filled", {
-        appearance: "warning",
+      addToast('Please ensure the form is completely and correctly filled', {
+        appearance: 'warning',
         autoDismiss: true,
       });
       setValidateSelf(true);
@@ -51,46 +51,49 @@ export default function Input({
 
     if (submitButton.current) {
       submitButton.current.children[0].innerHTML = btnText.loading;
-      submitButton.current.classList.add("loader");
+      submitButton.current.classList.add('loader');
     }
 
     let response;
 
     try {
+      submitButton.current.disabled = true;
       response = await cb(inputTypes, setInputTypes);
+      if (submitButton.current) submitButton.current.disabled = false;
     } catch (error) {
       // error.message = "Incorrect login details";
+      submitButton.current.disabled = false;
 
       if (error.response) {
         if (error.response.status === 500)
-          error.message = "Network error please try again";
+          error.message = 'Network error please try again';
         else error.message = error.response.data.error;
-      } else error.message = "Error occured";
+      } else error.message = 'Error occured';
 
       const err = Array.isArray(error.message)
-        ? error.message.join(", ")
+        ? error.message.join(', ')
         : error.message;
 
       addToast(err, {
-        appearance: "error",
+        appearance: 'error',
         autoDismiss: true,
       });
 
       if (submitButton.current) {
         submitButton.current.children[0].innerHTML = btnText.reg;
-        submitButton.current.classList.remove("loader");
+        submitButton.current.classList.remove('loader');
       }
       return error;
     }
 
-    return { msg: "success", response };
+    return { msg: 'success', response };
   };
 
   const handleChange = (event, error) => {
     const { name, value, type, checked } = event.target;
     setInputTypes({
       ...inputTypes,
-      [name]: type === "checkbox" ? (checked ? checked : false) : value,
+      [name]: type === 'checkbox' ? (checked ? checked : false) : value,
     });
   };
 

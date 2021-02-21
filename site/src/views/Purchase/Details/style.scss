@@ -21,7 +21,7 @@
     }
 
     &:hover {
-      background: #f0f5ff;
+      @apply bg-v_light;
     }
   }
 }

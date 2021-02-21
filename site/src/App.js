@@ -3,6 +3,11 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useToasts } from 'react-toast-notifications';
 import { hot } from 'react-hot-loader';
+import Login from './views/Auth/Login';
+import Forgot from './views/Auth/Forgot';
+import QuickCheckout from './views/Auth/QuickCheckout';
+import Reset from './views/Auth/Reset';
+import SignUp from './views/Auth/SignUp';
 import Loader from './components/Loading';
 import Protected from './components/Protected';
 import AProtected from './components/Protected/AdminProtected';
@@ -10,7 +15,6 @@ import { log_out } from 'g_actions/user';
 import { axiosInstance } from 'helpers';
 import './App.css';
 
-const Auth = lazy(() => import('./views/Auth'));
 const Purchase = lazy(() => import('./views/Purchase'));
 const Payment = lazy(() => import('./views/Payment'));
 const Dashboard = lazy(() => import('./views/Dashboard'));
@@ -28,6 +32,10 @@ function App() {
         return response;
       },
       function (err) {
+        if (window.location.href.includes('signin')) return;
+
+        console.log(window.location.href.includes('signin'));
+
         if (err.response && err.response.status === 401) {
           addToast('Session expired, please login again', {
             appearance: 'error',
@@ -49,14 +57,22 @@ function App() {
         <Loader />
         <Suspense fallback={<Loader tempLoad={true} full={true} />}>
           <Switch>
-            <Route path="/auth" component={Auth} />
+            <Route exact path="/signin" component={Login} />
+            <Route exact path="/signup" component={SignUp} />
+            <Route
+              exact
+              path="/quickcheckout/:courseCohortId"
+              component={QuickCheckout}
+            />
+            <Route exact path="/forgot" component={Forgot} />
+            <Route exact path="/reset-password" component={Reset} />
             <Route path="/purchase/:courseCohortId" component={Purchase} />
             <Route path="/payment/:courseCohortId" component={Payment} />
             <AProtected path="/admin" component={Admin} type="admin" />
             <Route path="/all-courses" component={Courses} />
             <Route path="/formal-home-page" component={Home} />
             <Protected path="/" component={Dashboard} />
-            <Route path={Auth} />
+            <Route component={Login} />
           </Switch>
         </Suspense>
       </Router>

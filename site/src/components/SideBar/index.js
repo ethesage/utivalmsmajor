@@ -10,17 +10,19 @@ import student from 'assets/icons/side-nav/student.png';
 import faq from 'assets/icons/side-nav/faq.png';
 import settings from 'assets/icons/side-nav/settings.png';
 import settings1 from 'assets/icons/side-nav/settings-1.png';
-import user_icon from 'assets/user_icon.png';
+import logo from 'assets/logo-theme.png';
+
+import Dashboard from 'assets/icons/side-nav/dashboard';
 import './style.scss';
 
 const links = [
   {
-    img: dash,
+    img: <Dashboard />,
     title: 'Dashboard',
     link: '/',
   },
   {
-    img: course,
+    // img: course,
     title: 'Courses',
     link: '/courses',
   },
@@ -30,12 +32,12 @@ const links = [
   //   link: '/files',
   // },
   {
-    img: faq,
+    // img: faq,
     title: 'FAQs',
     link: '/faqs',
   },
   {
-    img: settings1,
+    // img: settings1,
     title: 'Settings',
     link: '/settings',
   },
@@ -43,17 +45,17 @@ const links = [
 
 const adminlinks = [
   {
-    img: dash,
+    img: <Dashboard />,
     title: 'Dashboard',
     link: '/admin',
   },
   {
-    img: student,
+    // img: student,
     title: 'Users',
     link: '/admin/users',
   },
   {
-    img: course,
+    // img: course,
     title: 'Courses',
     link: '/admin/courses',
   },
@@ -68,7 +70,7 @@ const adminlinks = [
   //   link: '/admin/admins',
   // },
   {
-    img: settings,
+    // img: settings,
     title: 'Settings',
     link: '/admin/settings',
   },
@@ -83,18 +85,15 @@ const SideBard = ({ close, type = 'reg' }) => {
   const user = useSelector((state) => state.auth.user);
 
   return (
-    <div className="side_nav">
-      <div className="contents flex-col al-start j-start">
-        <div className="profile_pic flex-col">
-          <div className="img-sec">
-            <img
-              key={user.profilePic}
-              src={(user && user.profilePic) || user_icon}
-              alt=""
-              className="img cover"
-            />
-          </div>
-          <p>{user && `${user.firstName} ${user.lastName}`}</p>
+    <div className="side_nav bg-white w-full h-full">
+      <div className="flex relative flex-col justify-start z-0 w-full h-full pt-8">
+        <div className="">
+          <img
+            key={user.profilePic}
+            src={logo}
+            alt=""
+            className="w-20 object-contain"
+          />
         </div>
         <div className="link-sec">
           {uselink[type].map((link, i) => (
@@ -102,11 +101,11 @@ const SideBard = ({ close, type = 'reg' }) => {
               exact={i === 0}
               to={`${link.link}`}
               activeClassName="__active"
-              className="link-item flex-row j-start"
+              className="link-item flex justify-start items-center"
               key={`link_${i}`}
               onClick={close}
             >
-              <img src={link.img} alt={link.title} /> <p>{link.title}</p>
+              {link.img} {link.title}
             </NavLink>
           ))}
         </div>

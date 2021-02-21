@@ -9,7 +9,8 @@ import { Link } from 'react-router-dom';
 import { axiosInstance } from 'helpers';
 import { login } from 'g_actions/user';
 import Social from '../SocialSec';
-import '../style.scss';
+import '../../../Layouts/Auth/style.scss';
+// import '../style.scss';
 
 function QuickCheckout({ match }) {
   const submitButton = useRef();
@@ -123,7 +124,7 @@ function QuickCheckout({ match }) {
       <div className="externs">
         <small>
           Already have an account?{' '}
-          <Link to="/auth/signin">
+          <Link to="/signin">
             <strong className="text-theme">Sign In</strong>
           </Link>
         </small>

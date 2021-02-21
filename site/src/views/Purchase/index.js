@@ -27,7 +27,7 @@ const Purchase = (props) => {
 
   return (
     <main className="purchase min-h-screen">
-      <div className="nav container mx-auto flex items-center justify-start h-20">
+      <div className="nav container --small mx-auto flex items-center justify-start h-20">
         <Link to="/">
           <img src={logo} alt="logo" className="w-20" />
         </Link>

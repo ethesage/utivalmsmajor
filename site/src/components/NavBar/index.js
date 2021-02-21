@@ -7,8 +7,8 @@ import Button from '../Button';
 import './style.scss';
 
 const links = [
-  { title: 'Login', link: '/auth/signin' },
-  { title: 'Get Started', link: '/auth/signup', classname: ' nav_btn' },
+  { title: 'Login', link: '/signin' },
+  { title: 'Get Started', link: '/signup', classname: ' nav_btn' },
   { title: 'Dashboard', link: '/', classname: ' nav_btn' },
 ];
 

@@ -19,6 +19,7 @@ module.exports = {
         txt: '#565656',
         txt_fade: '#6f6f6f',
         light_fade: '#f7f7f7',
+        v_light: '#f0f5ff',
       },
       animation: {
         'spin-fast': 'spin 0.3s linear infinite',

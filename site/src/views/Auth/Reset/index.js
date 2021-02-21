@@ -6,7 +6,7 @@ import useInput from 'Hooks/useInput';
 import data from 'data/reset';
 import { useToasts } from 'react-toast-notifications';
 import { axiosInstance } from 'helpers';
-import '../style.scss';
+import Layout from 'Layouts/Auth';
 
 function Reset() {
   const submitButton = useRef();
@@ -53,7 +53,7 @@ function Reset() {
           autoDismiss: true,
         });
 
-        history.push('/auth/signin');
+        history.push('/signin');
       }
     },
   });
@@ -63,45 +63,51 @@ function Reset() {
   };
 
   return (
-    <div className="auth_section mb-24">
-      <div className="reg_text">
-        <h2>
-          Set New Password{' '}
-          <span role="img" aria-label="key emoji">
-            🔑
-          </span>
-        </h2>
-      </div>
-      <form className="form">
-        {data.map((form, i) => (
-          <Input
-            key={`login_form_${i}`}
-            name={form.name}
-            type={form.type}
-            placeHolder={form.placeHolder}
-            label={form.label}
-            value={inputTypes[form.name]}
-            errorMsg={form.errorMsg}
-            required={form.required}
-            reviel={form.type === 'password' ? reviel : false}
-            revielPassword={revielPassword}
-            handleChange={handleChange}
-            validateSelf={validateSelf}
-          />
-        ))}
-
-        <div className="btn_sec_sm mb-5">
-          <Button btnRef={submitButton} onClick={handleSubmit} text="Submit" />{' '}
+    <Layout>
+      <div className="auth_section mb-24">
+        <div className="reg_text">
+          <h2>
+            Set New Password{' '}
+            <span role="img" aria-label="key emoji">
+              🔑
+            </span>
+          </h2>
         </div>
-      </form>
+        <form className="form">
+          {data.map((form, i) => (
+            <Input
+              key={`login_form_${i}`}
+              name={form.name}
+              type={form.type}
+              placeHolder={form.placeHolder}
+              label={form.label}
+              value={inputTypes[form.name]}
+              errorMsg={form.errorMsg}
+              required={form.required}
+              reviel={form.type === 'password' ? reviel : false}
+              revielPassword={revielPassword}
+              handleChange={handleChange}
+              validateSelf={validateSelf}
+            />
+          ))}
 
-      <small className="warn">
-        <span role="img" aria-label="warning emoji">
-          ⚠️
-        </span>{' '}
-        To keep you account safe, don’t share your password with anyone
-      </small>
-    </div>
+          <div className="btn_sec_sm mb-5">
+            <Button
+              btnRef={submitButton}
+              onClick={handleSubmit}
+              text="Submit"
+            />{' '}
+          </div>
+        </form>
+
+        <small className="warn">
+          <span role="img" aria-label="warning emoji">
+            ⚠️
+          </span>{' '}
+          To keep you account safe, don’t share your password with anyone
+        </small>
+      </div>
+    </Layout>
   );
 }
 
