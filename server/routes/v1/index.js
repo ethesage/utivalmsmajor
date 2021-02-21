@@ -13,6 +13,7 @@ import checkout from "./checkout";
 import transaction from "./transaction";
 import stripe from "./stripe";
 import upload from "./upload";
+import coupon from "./coupon"
 import helpers from "../../helpers";
 
 const { errorStat, successStat } = helpers;
@@ -46,5 +47,6 @@ router.use("/checkout", checkout);
 router.use("/transaction", transaction);
 router.use("/upload", upload);
 router.use("/stripe", stripe);
+router.use("/coupon", coupon);
 
 export default router;

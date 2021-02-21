@@ -69,6 +69,15 @@ import {
   getStudentSubmitClassAssignmentSchema,
 } from './validators/schemas/assignment';
 
+import {
+  generateCoupon,
+  getAllCouponSchema,
+  getCouponSchema,
+  useCouponSchema,
+  updateCouponSchema,
+  deleteCouponSchema 
+} from './validators/schemas/coupon';
+
 import { idSchema, deleteStudentSchema } from './validators/schemas/general';
 
 import { checkoutSchema } from './validators/schemas/checkout';
@@ -132,4 +141,10 @@ export default {
   idSchema,
   deleteStudentSchema,
   transactionSchema,
+  generateCoupon,
+  getAllCouponSchema,
+  getCouponSchema,
+  useCouponSchema,
+  updateCouponSchema,
+  deleteCouponSchema 
 };

@@ -18,17 +18,3 @@ export const addStudentProgressSchema = Joi.object().keys({
   courseCohortId: Joi.string().uuid().trim().required(),
   classId: Joi.string().uuid().trim().required(),
 });
-
-// export const courseTrainerSchema = Joi.object().keys({
-//   courseId: Joi.string().uuid().trim().required(),
-// });
-
-// export const updateTrainerSchema = Joi.object().keys({
-//   trainerId: Joi.string().uuid().trim().required(),
-//   courseId: Joi.string().uuid().trim(),
-//   userId: Joi.string().uuid().trim(),
-// });
-
-// export const trainerSchema = Joi.object().keys({
-//   trainerId: Joi.string().uuid().trim().required(),
-// });
