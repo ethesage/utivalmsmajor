@@ -1,4 +1,4 @@
-export default [
+const data = [
   {
     name: 'email',
     label: 'Email Address',
@@ -18,3 +18,5 @@ export default [
     placeHolder: '',
   },
 ];
+
+export default data;

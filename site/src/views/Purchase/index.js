@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import logo from 'assets/logo.png';
 import Details from './Details';
 import Payment from './Payment';
-import './style.scss';
 
 const Purchase = (props) => {
   // console.log(props, '.....')
@@ -27,14 +26,14 @@ const Purchase = (props) => {
   }, []);
 
   return (
-    <main className="purchase">
-      <div className="nav container flex-row j-start">
+    <main className="purchase min-h-screen">
+      <div className="nav container mx-auto flex items-center justify-start h-20">
         <Link to="/">
-          <img src={logo} alt="logo" />
+          <img src={logo} alt="logo" className="w-20" />
         </Link>
       </div>
 
-      <div className="purchase_con">
+      <div className="purchase_con flex-grow mt-10">
         <div>{pages[currentPage]}</div>
       </div>
     </main>

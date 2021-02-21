@@ -2,10 +2,19 @@ import React, { useEffect, useRef, useState } from 'react';
 import Helmet from 'react-helmet';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { useToasts } from 'react-toast-notifications';
 import getCurrencyRate from 'Hooks/getConvertionRate';
 import Input from 'components/Input';
 import { check, checkoutCourse, addPurchaseCourse } from 'g_actions/courses';
+import Experience from 'assets/icons/experience';
+import Clock from 'assets/icons/clock';
+import Button from 'components/Button';
+import { format_comma, axiosInstance } from 'helpers';
+import loading_icon from 'assets/loader.gif';
+import checkMark from 'assets/check_mark.png';
+import Spinner from 'components/Spinner';
 import './style.scss';
+import TrainerCardList from 'components/TrainerCardList';
 
 const Details = ({ proceed, match, set, setPaymentAmount }) => {
   const { checkoutData, purchaseCourse } = useSelector(
@@ -14,18 +23,26 @@ const Details = ({ proceed, match, set, setPaymentAmount }) => {
   const { push } = useHistory();
   const dispatch = useDispatch();
   const btnRef = useRef();
+  const { addToast } = useToasts;
 
   const [loading, rate] = getCurrencyRate();
   const [paymentType, setPaymentType] = useState();
   const [amountToPay, setAmountToPay] = useState();
+  const [enterCoupon, setEnterCoupon] = useState(false);
+  const [couponDetails, setCouponDetails] = useState(0);
+  const [loadingCoupon, setLoadingCoupon] = useState(false);
 
   const checkout = async () => {
     btnRef.current.classList.add('loader');
     const value = await dispatch(check(match.params.courseCohortId));
 
+    if (couponDetails) {
+      // add the user to the used coupon table
+    }
+
     if (value.message === 'Not Enrolled') {
       set(match.params.courseCohortId);
-      setPaymentAmount(amountToPay);
+      setPaymentAmount(amountToPay - couponDetails);
       proceed(1);
     } else push(`/courses/overview/${match.params.courseCohortId}`);
     // /
@@ -44,14 +61,14 @@ const Details = ({ proceed, match, set, setPaymentAmount }) => {
     document.querySelector('.summary').scrollIntoView();
 
     return () => {};
-  }, [paymentType, purchaseCourse]);
+  }, [paymentType, purchaseCourse, couponDetails]);
 
   useEffect(() => {
     if (!purchaseCourse) return;
 
     if (purchaseCourse?.CourseCohorts[0].paymentType === 'full')
       setAmountToPay(purchaseCourse.cost);
-  }, [purchaseCourse]);
+  }, [purchaseCourse, couponDetails]);
 
   useEffect(() => {
     document.querySelector('body').classList.add('smooth-scroll');
@@ -79,8 +96,39 @@ const Details = ({ proceed, match, set, setPaymentAmount }) => {
 
   const chooseCurrency = (amount) => {
     return purchaseCourse.currency_type === 'local'
-      ? `₦ ${Math.round(amount)}`
-      : `$ ${Math.round(amount / rate.USD_NGN)}`;
+      ? `₦ ${format_comma(Math.round(amount))}`
+      : `$ ${format_comma(Math.round(amount / rate.USD_NGN))}`;
+  };
+
+  const toggleCoupon = () => {
+    setEnterCoupon(!enterCoupon);
+  };
+
+  const fetchCouponDetails = async (e) => {
+    e.preventDefault();
+    setCouponDetails(0);
+    setLoadingCoupon(true);
+
+    try {
+      // const data = await axiosInstance.get('/coupon_details/{couponValue}')
+      const data = { value: 7000 };
+
+      setTimeout(() => {
+        setCouponDetails(data.value > amountToPay ? amountToPay : data.value);
+        setLoadingCoupon(false);
+      }, 3000);
+    } catch (err) {
+      addToast(
+        err.response && err.response.status === 409
+          ? 'Coupon expired'
+          : 'Coupon details not correct',
+        {
+          appearance: 'error',
+          autoDismiss: true,
+        }
+      );
+      setLoadingCoupon(false);
+    }
   };
 
   return purchaseCourse && !loading ? (
@@ -94,122 +142,204 @@ const Details = ({ proceed, match, set, setPaymentAmount }) => {
         <meta property="og:image" content={purchaseCourse?.thumbnail} />
         <meta name="twitter:card" content="summary_large_image" />
       </Helmet>
-      <div className="details">
-        <div className="container">
-          <h2 className="theme-color">Course Details</h2>
-          <div className="details_con mx-auto">
-            <div className="img-sec flex-col al-start">
-              <p>{purchaseCourse?.name}</p>
+      <div className="details pb-12">
+        <div className="container mx-auto">
+          <h2 className="text-theme text-lg font-semibold mb-3">
+            Course Details
+          </h2>
+          <div className="details_con mx-auto block md:grid grid-flow-dense grid-cols-5 gap-4 grid-row-2 items-stretch">
+            <div className="img-sec flex-col al-start col-span-3 md:w-4/5">
+              <p className="mb-3">{purchaseCourse?.name}</p>
 
               <img
                 src={purchaseCourse?.thumbnail}
                 alt={purchaseCourse?.name}
-                className="img cover"
+                className="w-full object-cover mb-5 rounded-md overflow-hidden shadow h-80"
               />
-            </div>
-            <div className="text-sec flex-col j-space al-start">
-              <div>
-                <h2>{purchaseCourse?.name}</h2>
-                <p className="clipped-text" style={{ '--number': 4 }}>
-                  {purchaseCourse?.description}
-                </p>
-              </div>
-              <div>
-                <div className="c_inf flex-row j-space">
-                  <small>{purchaseCourse?.duration} Weeks</small>
-                  <small>
-                    {'> '}
-                    {purchaseCourse?.level}
-                  </small>
-                  <small>{purchaseCourse?.value}</small>
-                </div>
-                <a
-                  href={purchaseCourse?.learnMore}
-                  className="ext btn theme centered"
-                  target="_"
-                >
-                  <p>Learn More</p>
-                </a>
-              </div>
-              {/* <Button /> */}
-            </div>
 
-            {purchaseCourse?.CourseCohorts[0].paymentType === 'split' && (
-              <div className="summary split_sec">
-                <h3 className="theme-color">How do you want to Pay</h3>
-                <div
-                  className="sel-p-type"
-                  data-active={paymentType === 'full'}
-                  onClick={() => setPaymentType('full')}
-                >
-                  <small>Full Payment</small>
-                  <p>
-                    You will pay{' '}
-                    <strong className="theme-color">
-                      {chooseCurrency(purchaseCourse?.cost)}
-                    </strong>{' '}
-                    now
-                  </p>
-                </div>
-                <div
-                  className="sel-p-type"
-                  data-active={paymentType === 'split'}
-                  onClick={() => setPaymentType('split')}
-                >
-                  <small>Part Payment</small>
-                  <p>
-                    You will pay{' '}
-                    <strong className="theme-color">
-                      {chooseCurrency(purchaseCourse?.initialSplitAmount)}
-                    </strong>{' '}
-                    now and{' '}
-                    <strong className="theme-color">
-                      {chooseCurrency(purchaseCourse?.finalSplitAmount)}
-                    </strong>{' '}
-                    later
-                  </p>
-                </div>
-              </div>
-            )}
+              <div className="flex flex-col mb-5">
+                <h3 className="font-semibold text-theme mb-2">About Course</h3>
 
-            {amountToPay && (
-              <div className="summary flex-row j-start">
-                <div className="contents">
-                  <div className="cost-analysis">
-                    <div className="flex-row j-space">
-                      <p>Price</p>
-                      <p>
-                        {purchaseCourse?.type === 'free'
-                          ? 'Free'
-                          : chooseCurrency(amountToPay)}
-                      </p>
-                    </div>
-                    <div className="flex-row j-space">
-                      <p>Discount</p>
-                      <p>-</p>
-                    </div>
-                    <div className="flex-row j-space theme-color strong">
-                      <p>Total</p>
-                      <p>
-                        {purchaseCourse?.type === 'free'
-                          ? 'Free'
-                          : chooseCurrency(amountToPay)}
-                      </p>
-                    </div>
+                <div className="mb-3">
+                  <p className="text-sm inline">
+                    {purchaseCourse?.description}{' '}
+                  </p>
+                  <a
+                    href={purchaseCourse?.learnMore}
+                    target="_"
+                    className="text-theme text-sm font-semibold"
+                  >
+                    Read More
+                  </a>
+                </div>
+
+                <div>
+                  <div className="c_inf flex-row j-space">
+                    <small className="inline-flex items-center mr-5">
+                      <Clock className="inline-block mr-3 w-5 h-5" />{' '}
+                      {purchaseCourse?.duration} Weeks
+                    </small>
+                    <small className="inline-flex items-center">
+                      <Experience className="inline-block mr-3 w-5 h-5" />
+                      {purchaseCourse?.level}
+                    </small>
                   </div>
-                  <div className="checkout">
-                    <p className="cx-hdx">Apply Coupon Code</p>
+                </div>
+              </div>
+            </div>
 
-                    <Input name="coupon" placeHolder="" />
-                    <button
-                      className="btn centered"
-                      onClick={checkout}
-                      ref={btnRef}
+            <div className="col-span-2 mb-5 ">
+              <div className="border border-gray-200 max-w-sm rounded-md p-6 bg-white">
+                <h1 className="mb-3">{purchaseCourse?.name}</h1>
+
+                <h1 className="text-theme text-2xl font-semibold pb-4 border-b border-gray-300 mb-5">
+                  {chooseCurrency(purchaseCourse?.cost)}
+                </h1>
+
+                {purchaseCourse?.CourseCohorts[0].paymentType === 'split' && (
+                  // {true && (
+                  <div className="summary split_sec">
+                    <h3 className="font-semibold text-xs mb-2.5">
+                      How do you want to Pay?
+                    </h3>
+                    <div
+                      className="sel-p-type relative"
+                      data-active={paymentType === 'full'}
+                      onClick={() => setPaymentType('full')}
                     >
-                      <p>Checkout</p>
-                    </button>
+                      <small>Full Payment</small>
+                      <p className="text-sm">
+                        You will pay{' '}
+                        <strong>{chooseCurrency(purchaseCourse?.cost)}</strong>{' '}
+                        now
+                      </p>
+                      <div className="absolute ch_mk top-2.5 right-2.5 border border-gray-400 w-5 h-5 flex-center rounded-full">
+                        <img
+                          src={checkMark}
+                          alt="check mark"
+                          className="hidden"
+                        />
+                      </div>
+                    </div>
+                    <div
+                      className="sel-p-type relative"
+                      data-active={paymentType === 'split'}
+                      onClick={() => setPaymentType('split')}
+                    >
+                      <small>Part Payment</small>
+                      <p className="text-sm">
+                        You will pay{' '}
+                        <strong>
+                          {chooseCurrency(purchaseCourse?.initialSplitAmount)}
+                        </strong>{' '}
+                        now and{' '}
+                        <strong>
+                          {chooseCurrency(purchaseCourse?.finalSplitAmount)}
+                        </strong>{' '}
+                        later
+                      </p>
+                      <div className="absolute ch_mk top-2.5 right-2.5 border border-gray-400  w-5 h-5 flex-center rounded-full">
+                        <img
+                          src={checkMark}
+                          alt="check mark"
+                          className="hidden"
+                        />
+                      </div>
+                    </div>
                   </div>
+                )}
+
+                {amountToPay && (
+                  <div className="summary mt-3">
+                    <strong className="text-sm mt-3 mb-10">
+                      Payment summary:
+                    </strong>
+                    <div className="">
+                      <div className="cost-analysis">
+                        <div className="flex text-sm mb-1 itmes-center justify-between ">
+                          <p>Price</p>
+                          <p>
+                            {purchaseCourse?.type === 'free'
+                              ? 'Free'
+                              : chooseCurrency(amountToPay)}
+                          </p>
+                        </div>
+                        <div className="flex text-sm mb-1 itmes-center justify-between ">
+                          <p>Discount</p>
+                          <p>
+                            {couponDetails
+                              ? `- ${chooseCurrency(couponDetails)}`
+                              : '-'}
+                          </p>
+                        </div>
+                        <div className="flex text-sm mb-1 itmes-center justify-between  theme-color strong">
+                          <p>Total</p>
+                          <p className="font-semibold">
+                            {purchaseCourse?.type === 'free'
+                              ? 'Free'
+                              : chooseCurrency(amountToPay - couponDetails)}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="checkout">
+                        <p
+                          className="mb-2 text-xs mt-2 text-theme underline cursor-pointer"
+                          onClick={toggleCoupon}
+                        >
+                          Enter Coupon{' '}
+                          {enterCoupon && <span>(Press enter to apply)</span>}
+                          {loadingCoupon && (
+                            <img
+                              src={loading_icon}
+                              alt="loading..."
+                              className="w-10 h-10 inline-block"
+                            />
+                          )}
+                        </p>
+
+                        {enterCoupon && (
+                          <form onSubmit={fetchCouponDetails}>
+                            <Input name="coupon" placeHolder="" />
+                          </form>
+                        )}
+                        <div className="flex justify-end mt-5">
+                          <Button
+                            text="Proceed To pay"
+                            btnRef={btnRef}
+                            onClick={checkout}
+                            className="w-auto"
+                            disabled={!amountToPay}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {purchaseCourse?.CohortTrainers.lenght > 0 && (
+              <div className="col-span-3 md:w-4/5">
+                <div className="mb-6">
+                  <h2 className="font-semibold text-theme mb-2">
+                    You are in safe hands
+                  </h2>
+
+                  <p style={{ letterSpacing: '0.4em' }}>
+                    MEET OUR TOP INSTRUCTORS
+                  </p>
                 </div>
+
+                <TrainerCardList data={purchaseCourse?.CohortTrainers} />
+                <small>
+                  Have more questions?{' '}
+                  <a
+                    className="text-theme font-semibold"
+                    href="https://utiva.io/contact-us"
+                  >
+                    Contact us
+                  </a>
+                </small>
               </div>
             )}
           </div>
@@ -217,11 +347,8 @@ const Details = ({ proceed, match, set, setPaymentAmount }) => {
       </div>
     </>
   ) : (
-    <div className="flex-row details" style={{ height: '300px' }}>
-      <div
-        className="spinner2"
-        style={{ width: '100px', height: '100px' }}
-      ></div>
+    <div className="flex-center" style={{ height: '300px' }}>
+      <Spinner />
     </div>
   );
 };

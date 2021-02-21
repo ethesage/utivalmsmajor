@@ -9,7 +9,6 @@ import { Link } from 'react-router-dom';
 import { axiosInstance } from 'helpers';
 import { login } from 'g_actions/user';
 import Social from '../SocialSec';
-import './style.scss';
 import '../style.scss';
 
 function QuickCheckout({ match }) {
@@ -73,15 +72,13 @@ function QuickCheckout({ match }) {
   return (
     <div className="auth_section">
       <div className="reg_text">
-        <h2>Hi there</h2>
-        <h2>One last step before you can pay. </h2>
-
-        <p style={{ fontSize: '.9em' }}>
-          Already have an account?{' '}
-          <Link to="/signin">
-            <strong className="theme-color">Sign in</strong>
-          </Link>
-        </p>
+        <h2>
+          Hi there{' '}
+          <span role="img" aria-label="smiling emoji">
+            🙂
+          </span>{' '}
+        </h2>
+        <p>One last step before you can pay. </p>
       </div>
       <form className="form">
         {data.slice(0, 2).map((form, i) => (
@@ -97,6 +94,7 @@ function QuickCheckout({ match }) {
             revielPassword={revielPassword}
             handleChange={handleChange}
             validateSelf={validateSelf}
+            label={form.label}
           />
         ))}
         {pass && (
@@ -112,17 +110,24 @@ function QuickCheckout({ match }) {
             revielPassword={revielPassword}
             handleChange={handleChange}
             validateSelf={validateSelf}
+            label={data[2].label}
           />
         )}
 
-        <Button
-          btnRef={submitButton}
-          onClick={handleSubmit}
-          className="s_btn flex-row input-div"
-          text="Submit"
-        />
+        <div className="btn_sec_sm">
+          <Button btnRef={submitButton} onClick={handleSubmit} text="Submit" />{' '}
+        </div>
       </form>
       <Social />
+
+      <div className="externs">
+        <small>
+          Already have an account?{' '}
+          <Link to="/auth/signin">
+            <strong className="text-theme">Sign In</strong>
+          </Link>
+        </small>
+      </div>
     </div>
   );
 }

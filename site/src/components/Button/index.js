@@ -1,7 +1,15 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 
-const Button = ({ className = '', link, onClick, text, btnRef, children }) => {
+const Button = ({
+  className = '',
+  link,
+  onClick,
+  text,
+  btnRef,
+  children,
+  disabled,
+}) => {
   const history = useHistory();
 
   const handleClick = (e) => {
@@ -10,7 +18,12 @@ const Button = ({ className = '', link, onClick, text, btnRef, children }) => {
   };
 
   return (
-    <button ref={btnRef} className={`btn ${className}`} onClick={handleClick}>
+    <button
+      ref={btnRef}
+      className={`btn ${className}`}
+      onClick={handleClick}
+      disabled={disabled}
+    >
       <p className="">{text || children}</p>
     </button>
   );

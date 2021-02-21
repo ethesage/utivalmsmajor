@@ -1,27 +1,11 @@
-@import "../../media";
+@import '../../media';
 
 .apx_mod {
-  border: 0;
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
   transform: scale(1);
   transition: 0.3s cubic-bezier(0.5, 0.05, 0.28, 1.45);
-  background: transparent;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  max-width: 100vw;
-  max-height: 100vh;
-
-  .apx_in {
-    position: relative;
-  }
 
   &:not([open]) {
     transform: scale(0);
-    display: flex;
   }
 
   &::backdrop {

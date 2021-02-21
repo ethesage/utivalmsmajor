@@ -1,19 +1,24 @@
-export default [
+const data = [
   {
-    name: "fullName",
-    placeHolder: "Full Name",
-    errorMsg: "name should be greater than 2 characters",
+    name: 'fullName',
+    label: 'Full Name',
+    errorMsg: 'name should be greater than 2 characters',
+    placeHolder: '',
   },
   {
-    name: "email",
-    placeHolder: "Email",
-    errorMsg: "email should be of the format johndoe@gmail.com",
+    name: 'email',
+    label: 'Email',
+    errorMsg: 'email should be of the format johndoe@gmail.com',
+    placeHolder: '',
   },
   {
-    name: "password",
-    placeHolder: "Enter Password",
-    errorMsg: "",
+    name: 'password',
+    label: 'Enter Password',
+    errorMsg: '',
     // required: true,
-    type: 'password'
+    type: 'password',
+    placeHolder: '',
   },
 ];
+
+export default data;

@@ -21,7 +21,7 @@ module.exports = {
         light_fade: '#f7f7f7',
       },
       animation: {
-        'spin-fast': 'spin 0.5s linear infinite',
+        'spin-fast': 'spin 0.3s linear infinite',
       },
       maxWidth: {
         '1/4': '25%',

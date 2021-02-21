@@ -1,10 +1,10 @@
-import React, { useRef } from "react";
-import { loadStripe } from "@stripe/stripe-js";
-import { useDispatch, useSelector } from "react-redux";
-import getCurrencyRate from "Hooks/getConvertionRate";
-import { chargeCard } from "g_actions/courses";
-import Modal from "components/Modal";
-import sstripe from "assets/icons/stripe.svg";
+import React, { useRef } from 'react';
+import { loadStripe } from '@stripe/stripe-js';
+import { useDispatch, useSelector } from 'react-redux';
+import getCurrencyRate from 'Hooks/getConvertionRate';
+import { chargeCard } from 'g_actions/courses';
+import Modal from 'components/Modal';
+import sstripe from 'assets/icons/stripe.svg';
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_API_KEY);
@@ -53,29 +53,20 @@ const Stripe = ({ paymentAmount }) => {
 
   return (
     <>
-      <div className="flutter_btn">
+      <div className="card_btn">
         <button type="button" role="link" onClick={handleClick}>
-          <img
-            src={sstripe}
-            style={{
-              marginBottom: "20px",
-              marginTop: "5px",
-              width: "200px",
-              height: "40px",
-            }}
-            alt="paystack button"
-          />
+          <img src={sstripe} alt="paystack button" />
         </button>
       </div>
       <Modal ref={loadsstripe} useButton={false}>
         <div
           style={{
-            background: "white",
-            width: "400px",
-            height: "300px",
-            textAlign: "center",
-            margin: "auto",
-            borderRadius: "10px",
+            background: 'white',
+            width: '400px',
+            height: '300px',
+            textAlign: 'center',
+            margin: 'auto',
+            borderRadius: '10px',
           }}
           className="s_btn flex-row loader"
         >

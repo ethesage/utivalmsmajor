@@ -1,93 +1,22 @@
 @import '../../../media';
 
-.payment {
-  .payment_con {
-    width: 100%;
-    max-width: 700px;
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
-    border-radius: 10px;
-    padding: 30px 7%;
+.payment_con {
+  .card_btn {
+    @apply m-5;
 
-    small {
-      font-size: 0.7em;
-    }
+    button {
+      box-shadow: 0px 5px 10px rgba(#000, 0.1);
 
-    .flutter_btn {
-      box-shadow: 0 0 5px rgba(#000, 0.1);
-      margin: 20px;
-
-      button {
-        width: 100%;
-      }
-
-      img {
-        margin-bottom: 0 !important;
+      @apply w-full h-14 text-center flex
+        justify-center py-2 transition-all duration-300;
+      &:hover {
+        @apply shadow;
       }
     }
-
-    .nav-sec {
-      margin-bottom: 30px;
-
-      @include for-size(phone-only) {
-        margin: 0;
-        .nav-item img {
-          width: 80px;
-        }
-      }
-
-      @include for-size(mid-phone) {
-        .nav-item img {
-          width: 60px;
-        }
-      }
-    }
-
-    .card-sec {
-      width: 100%;
-    }
-
-    .pay-card {
-      width: 80%;
-      margin-top: 50px;
-
-      @include for-size(phone-only) {
-        width: 100%;
-      }
-    }
-
-    .back {
-      margin-top: 50px;
-      color: color(theme);
-      font-weight: bold;
-      text-align: center;
-      width: 100%;
-    }
-  }
-
-  .d_content {
-    padding: 30px;
-    position: relative;
-    background: white;
-    border-radius: 4px;
-    width: 80%;
-    margin: auto;
 
     img {
-      width: 100%;
-    }
-
-    .reg_text {
-      margin-bottom: 30px;
-      text-align: center;
-
-      h2 {
-        color: #09ac23;
-        margin: 30px 0 10px;
-      }
-    }
-
-    .btn {
-      width: 80%;
+      margin-bottom: 0 !important;
+      @apply w-auto h-full;
     }
   }
 }

@@ -45,11 +45,19 @@ abbr[title] {
 }
 
 .btn {
-  box-shadow: 0px 12px 35px rgba(160, 121, 0, 0.2);
-  @apply py-2.5 px-5 text-white bg-secondary rounded-md min-w-vs fill-current transition-all duration-300;
+  box-shadow: 0px 5px 10px rgba(160, 121, 0, 0.2);
+  min-width: 150px;
+  @apply py-2.5 px-5 text-white bg-secondary rounded-md
+    fill-current transition-all duration-300 inline-block;
+
+  &:disabled {
+    box-shadow: none;
+    @apply bg-gray-400 cursor-not-allowed;
+  }
 
   p {
     pointer-events: none;
+    @apply text-xs;
   }
 
   &:hover {

@@ -14,7 +14,7 @@ const Input = ({
   errorMsg = '',
   required,
   validateSelf,
-  handleChange,
+  handleChange = () => {},
   reviel,
   revielPassword,
   method,

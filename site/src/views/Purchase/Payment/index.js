@@ -43,15 +43,17 @@ const Payment = ({ back, paymentAmount }) => {
     disRef.current.open();
   }
 
+  disRef.current.open();
+
   return (
-    <div className="payment container">
+    <div className="payment container mx-auto">
       {/* <dialog ref={disRef} className="d_s_c"> */}
       <Modal ref={disRef}>
-        <div className="d_content flex-col">
-          <img src={approved} alt="approved" />
-          <div className="reg_text">
-            <h2 className="hd">Successful</h2>
-            <p>Your payment is successful</p>
+        <div className="flex flex-col p-7 bg-white rounded w-4/5 mx-auto max-w-lg">
+          <img src={approved} alt="approved" className="w-full" />
+          <div className="reg_text mb-5">
+            <h2 className="text-theme font-semibold mt-10 mb-1">Successful</h2>
+            <p className="text-txt text-sm">Your payment is successful</p>
           </div>
 
           <button
@@ -66,8 +68,9 @@ const Payment = ({ back, paymentAmount }) => {
           </button>
         </div>
       </Modal>
+      {/* {true ? ( */}
       {user ? (
-        <div className="payment_con mx-auto txt-center">
+        <div className="payment_con mx-auto text-center w-full max-w-2xl rounded-md md:py-8 md:px-5">
           <p className="con_msg">
             Congratulations! Continue your paymant using
           </p>
@@ -80,17 +83,20 @@ const Payment = ({ back, paymentAmount }) => {
             </>
           )}
 
-          <small className="theme-color">
+          <small className="text-theme font-semibold text-xs">
             Please note that we recommend using Flutterwave if you are using a
             naira card
           </small>
 
-          <button className="back" onClick={goBack}>
+          <button
+            className="mt-12 text-theme font-semibold text-center w-full"
+            onClick={goBack}
+          >
             Back
           </button>
         </div>
       ) : (
-        <div className="flex-row">
+        <div className="flex-row max-w-sm">
           <QuickCheckout />
         </div>
       )}

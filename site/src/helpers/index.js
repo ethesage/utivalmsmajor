@@ -45,6 +45,7 @@ const patterns = {
   name: shortText,
   link: shortText,
   search: shortText,
+  coupon: shortText,
   jobRole: text,
   vimeo: /vimeo\.com\/(\d+)/,
   list_desc: shortText,
@@ -83,6 +84,14 @@ export const axiosInstance = axios.create({
 export const format_comma = (x) => {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };
+
+// export const addsign = (value) => {
+//   if (Number(value) < 10000) {
+//     return isFloat(value)
+//       ? numeral(value).format('0,00.00')
+//       : numeral(value).format('0,00');
+//   } else return numeral(value).format('0.00a');
+// };
 
 const tokens = {};
 
