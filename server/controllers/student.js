@@ -52,8 +52,6 @@ export const addStudentCourse = async (req, res) => {
     }
     let studC;
 
-    console.log(cour)
-
     if (cour.paymentType === "split" && !resource) {
       studC = await models.StudentCourse.create({
         ...req.body.student,
