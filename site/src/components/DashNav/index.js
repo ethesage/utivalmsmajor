@@ -8,11 +8,6 @@ import user_icon from 'assets/user_icon.png';
 const NavBar = ({ open, grow }) => {
   const { user } = useSelector((state) => state.auth);
 
-  // const logout = async () => {
-  //   dispatch(log_out());
-  //   history.push('/signin');
-  // };
-
   return (
     <div className="header flex flex-row items-end justify-center fixed top-0 left-0 z-20 h-20 w-full px-5 lg:px-16">
       <aside

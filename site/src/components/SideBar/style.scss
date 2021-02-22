@@ -3,15 +3,15 @@
 .side_nav {
   .link-sec {
     .link-item {
-      @apply py-2 px-10 mb-2.5 relative;
+      @apply py-2 px-8 mb-2.5 relative text-sm;
 
       &::before {
         content: '';
-        @apply absolute left-0 h-4/5 transform -translate-y-1/2 top-1/2;
+        @apply absolute left-0 h-0 transform -translate-y-1/2 bg-secondary w-1 top-auto bottom-0 transition-all duration-300;
       }
 
       svg {
-        @apply fill-current text-black ml-5;
+        @apply fill-current text-black mr-3 w-5 h-5;
       }
 
       p {
@@ -20,7 +20,12 @@
 
       &:hover,
       &.__active {
-        //   background: white;
+        @apply text-theme;
+
+        &::before {
+          @apply h-1/2 top-1/2 bottom-auto;
+        }
+
         p {
           font-weight: bold;
         }

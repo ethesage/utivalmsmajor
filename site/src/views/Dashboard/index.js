@@ -7,7 +7,6 @@ import FAQ from '../FAQ';
 import Home from './Home';
 import Files from '../Files';
 import Settings from '../Settings';
-import './style.scss';
 // import NavBar from 'components/CourseNav';
 
 const Dashboard = () => {

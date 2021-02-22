@@ -1,19 +1,12 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-// import Sekeleton from 'react-skeleton-loader';
 import ProfileCheck from 'components/ProfileCheck';
 import Classes from 'components/NextClassTrainer';
-// import Files from 'components/Files';
 import CountSection from './CountSection';
 import Layout from 'Layouts/HomeGrid';
 import Welcome from './Welcome';
-// import CourseCard from 'components/CourseCard';
 import girl from 'assets/utiva viretnship programme.png';
 import UserClases from 'components/UserMainClass';
-// import { getCourse } from './action';
-// import { mapCourse } from './action';
-// import useFetch from 'Hooks/useFetch';
-// import no_course from 'assets/dashboard/no_course.png';
 import './style.scss';
 
 const InfoSec = ({ txt, children, useSubtitle = true }) => (
@@ -26,26 +19,8 @@ const InfoSec = ({ txt, children, useSubtitle = true }) => (
   </div>
 );
 
-// const Loader = () => (
-//   <div className="next_class">
-//     <Sekeleton width="120%" height="100%" />
-//   </div>
-// );
-
-// const NoCourse = () => (
-//   <div className="next_class flex-row ">
-//     <img src={no_course} alt="" className="" />
-//     <div className="text-sec flex-col">
-//       <h2>No available course</h2>
-//     </div>
-//   </div>
-// );
-
 const Home = ({ gapi }) => {
   const { user, isStudent } = useSelector((state) => state.auth);
-  // const { allCourses, mappedCourses } = useSelector((state) => state.home);
-  // const dispatch = useDispatch();
-  // const [loading, , fetch] = useFetch(dispatch, !!!allCourses, true);
 
   return (
     <main className="dash-con dash-home">
@@ -97,26 +72,6 @@ const Home = ({ gapi }) => {
               />
             </div>
           </div>
-
-          {/* <div className="course-section">
-            <nav className="cs_nav flex-row j-space reg_text">
-              <h2>Top Skills People are Learning</h2>
-              <p>View all courses</p>
-            </nav>
-            {!mappedCourses ? (
-              [1, 2, 3].map((i) => <Loader key={`load_${i}`} />)
-            ) : mappedCourses.length === 0 ? (
-              <NoCourse />
-            ) : (
-              mappedCourses?.map((course, i) => (
-                <CourseCard
-                  data={course}
-                  size="small"
-                  key={`current_cate_${i}`}
-                />
-              ))
-            )}
-          </div> */}
         </>
       ) : null}
     </main>

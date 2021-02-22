@@ -1,18 +1,13 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { NavLink } from 'react-router-dom';
-import dash from 'assets/icons/side-nav/dash.png';
-import course from 'assets/icons/side-nav/course.png';
-import student from 'assets/icons/side-nav/student.png';
-// import trainer from 'assets/icons/side-nav/trainer.png';
-// import admin from 'assets/icons/side-nav/admin.png';
-// import files from 'assets/icons/side-nav/files.png';
-import faq from 'assets/icons/side-nav/faq.png';
-import settings from 'assets/icons/side-nav/settings.png';
-import settings1 from 'assets/icons/side-nav/settings-1.png';
+import { NavLink, useHistory } from 'react-router-dom';
 import logo from 'assets/logo-theme.png';
-
+import { useDispatch } from 'react-redux';
+import { log_out } from 'g_actions/user';
 import Dashboard from 'assets/icons/side-nav/dashboard';
+import Courses from 'assets/icons/side-nav/courses';
+import Settings from 'assets/icons/side-nav/setting';
+import Logout from 'assets/icons/side-nav/logout.png';
 import './style.scss';
 
 const links = [
@@ -22,7 +17,7 @@ const links = [
     link: '/',
   },
   {
-    // img: course,
+    img: <Courses />,
     title: 'Courses',
     link: '/courses',
   },
@@ -37,7 +32,7 @@ const links = [
     link: '/faqs',
   },
   {
-    // img: settings1,
+    img: <Settings />,
     title: 'Settings',
     link: '/settings',
   },
@@ -55,7 +50,7 @@ const adminlinks = [
     link: '/admin/users',
   },
   {
-    // img: course,
+    img: <Courses />,
     title: 'Courses',
     link: '/admin/courses',
   },
@@ -70,7 +65,7 @@ const adminlinks = [
   //   link: '/admin/admins',
   // },
   {
-    // img: settings,
+    img: <Settings />,
     title: 'Settings',
     link: '/admin/settings',
   },
@@ -83,19 +78,28 @@ const uselink = {
 
 const SideBard = ({ close, type = 'reg' }) => {
   const user = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const logout = async (e) => {
+    e.preventDefault();
+
+    dispatch(log_out());
+    history.push('/signin');
+  };
 
   return (
     <div className="side_nav bg-white w-full h-full">
       <div className="flex relative flex-col justify-start z-0 w-full h-full pt-8">
-        <div className="">
+        <div className="ml-8">
           <img
             key={user.profilePic}
             src={logo}
             alt=""
-            className="w-20 object-contain"
+            className="w-16 object-contain"
           />
         </div>
-        <div className="link-sec">
+        <div className="link-sec mt-10">
           {uselink[type].map((link, i) => (
             <NavLink
               exact={i === 0}
@@ -108,6 +112,15 @@ const SideBard = ({ close, type = 'reg' }) => {
               {link.img} {link.title}
             </NavLink>
           ))}
+
+          <a
+            href="/"
+            onClick={logout}
+            className="link-item flex justify-start items-center"
+          >
+            <img src={Logout} alt="logout" className="w-5 h-4 mr-3" />
+            <span className="text-red-600">Logout</span>
+          </a>
         </div>
       </div>
     </div>
