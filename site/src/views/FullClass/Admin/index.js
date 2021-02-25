@@ -98,6 +98,7 @@ function FullClass({ gapi }) {
                   name={currentCourse?.name}
                   courseId={courseId}
                   mainCohortId={currentCohort?.Cohort?.id}
+                  key={data?.id}
                 />
               )}
 
@@ -110,6 +111,7 @@ function FullClass({ gapi }) {
                     gapi={gapi}
                     isStudent={isStudent}
                     folderId={currentCohort?.folderId}
+                    key={data?.id}
                   />
                 </>
               )}
