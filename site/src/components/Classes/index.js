@@ -183,6 +183,7 @@ function Classes({
       } else if (result.error === 'Not Started') {
         setWait(true);
       } else {
+        console.log(result.error);
         openclass(true);
         addToast('Request Failed', {
           appearance: 'error',
