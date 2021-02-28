@@ -24,7 +24,7 @@ const CourseNav = () => {
 
   const user_links = [
     { link: `/courses/study-plan/${courseId}`, title: 'Study Plan' },
-    { link: `/courses/members/${courseId}`, title: 'Members' },
+    { link: `/courses/members/${courseId}`, title: 'Co-learners' },
   ];
 
   const t_link = [

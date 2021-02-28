@@ -1,7 +1,7 @@
-import React, { useRef, useEffect, useCallback, useState } from "react";
-import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { useToasts } from "react-toast-notifications";
+import React, { useRef, useEffect, useCallback, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { useToasts } from 'react-toast-notifications';
 import {
   getAssignments,
   getResources,
@@ -9,27 +9,27 @@ import {
   deleteResources,
   studentProgress,
   courseProgress,
-} from "g_actions/member";
-import Editor from "components/Editor";
-import { addPrevVideoFn, removePrevVideoFn } from "g_actions/admin";
-import ProgressBar from "components/ProgressBar";
-import Button from "components/Button";
-import Input from "components/Input";
-import { weeks, axiosInstance } from "helpers";
-import Confirm from "components/Confirm";
-import play from "assets/icons/course/play.png";
-import material from "assets/icons/course/material.png";
-import assignment from "assets/icons/course/assignment.png";
-import class_icon from "assets/icons/class_icon.png";
-import Plus from "assets/icons/plus";
-import Remove from "assets/icons/remove";
-import Modal from "../Modal";
-import user_icon from "assets/user_icon.png";
-import Files from "components/Files";
-import ResourceBtn from "../ResourceButton";
-import RevielDrop from "../RevielDrop";
+} from 'g_actions/member';
+import Editor from 'components/Editor';
+import { addPrevVideoFn, removePrevVideoFn } from 'g_actions/admin';
+import ProgressBar from 'components/ProgressBar';
+import Button from 'components/Button';
+import Input from 'components/Input';
+import { weeks, axiosInstance } from 'helpers';
+import Confirm from 'components/Confirm';
+import play from 'assets/icons/course/play.png';
+import material from 'assets/icons/course/material.png';
+import assignment from 'assets/icons/course/assignment.png';
+import class_icon from 'assets/icons/class_icon.png';
+import Plus from 'assets/icons/plus';
+import Remove from 'assets/icons/remove';
+import Modal from '../Modal';
+import user_icon from 'assets/user_icon.png';
+import Files from 'components/Files';
+import ResourceBtn from '../ResourceButton';
+import RevielDrop from '../RevielDrop';
 
-import "./style.scss";
+import './style.scss';
 
 function Classes({
   data,
@@ -56,7 +56,7 @@ function Classes({
   const [progress, setProgress] = useState(0);
   const [dropType, setDropType] = useState();
   const [addPrevVideo, setAddPrevVideo] = useState(false);
-  const [prevVideo, setPrevVideo] = useState("");
+  const [prevVideo, setPrevVideo] = useState('');
   const { classResources, currentCourse } = useSelector(
     (state) => state.member
   );
@@ -76,10 +76,10 @@ function Classes({
   const list_desc = currentCourse.list_desc || currentCourse?.Course?.list_desc;
 
   const resources = data.ClassResources.filter(
-    (res) => res.type === "resource"
+    (res) => res.type === 'resource'
   );
   const assignment_ = data.ClassResources.filter(
-    (res) => res.type === "assignment"
+    (res) => res.type === 'assignment'
   );
 
   // console.log(data);
@@ -90,7 +90,7 @@ function Classes({
       return await gapi.gapi.get(
         null,
         id,
-        "id, name, iconLink, webContentLink, size, webViewLink, parents"
+        'id, name, iconLink, webContentLink, size, webViewLink, parents'
       );
     },
     [gapi]
@@ -166,7 +166,7 @@ function Classes({
     e.preventDefault();
 
     if (!isStudent) {
-      dropDrop("resource");
+      dropDrop('resource');
     } else modalRef.current.open();
   };
 
@@ -178,14 +178,14 @@ function Classes({
     if (isStudent) {
       result = await dispatch(studentProgress(courseCohortId, classId));
       if (result.data) {
-        window.open(link, "_blank");
+        window.open(link, '_blank');
         openclass(true);
-      } else if (result.error === "Not Started") {
+      } else if (result.error === 'Not Started') {
         setWait(true);
       } else {
         openclass(true);
-        addToast("Request Failed", {
-          appearance: "error",
+        addToast('Request Failed', {
+          appearance: 'error',
           autoDismiss: true,
         });
       }
@@ -195,10 +195,10 @@ function Classes({
       openclass(true);
 
       if (result.data) {
-        window.open(link, "_blank");
+        window.open(link, '_blank');
       } else {
-        addToast("You are not allowed to start this class", {
-          appearance: "error",
+        addToast('You are not allowed to start this class', {
+          appearance: 'error',
           autoDismiss: true,
         });
       }
@@ -211,38 +211,38 @@ function Classes({
 
   const addVideo = async (e) => {
     if (!prevVideo || !prevVideo.match(/vimeo\.com\/(\d+)/)) {
-      console.log("incorrect value");
+      console.log('incorrect value');
       return;
     }
 
     const courseCohortId = currentCohort[courseName]?.id || data.courseCohortId;
 
-    document.querySelector("body").classList.add("spinner1");
+    document.querySelector('body').classList.add('spinner1');
 
     await dispatch(
       addPrevVideoFn(
-        prevVideo.split(".com/")[1],
+        prevVideo.split('.com/')[1],
         courseName,
         classId,
         courseCohortId
       )
     );
 
-    document.querySelector("body").classList.remove("spinner1");
+    document.querySelector('body').classList.remove('spinner1');
 
-    setPrevVideo("");
+    setPrevVideo('');
     setAddPrevVideo(false);
   };
 
   const removeVideo = async (id) => {
-    vidrefs[id].classList.add("spinner1");
-    vidrefs[id].classList.remove("allowHover");
+    vidrefs[id].classList.add('spinner1');
+    vidrefs[id].classList.remove('allowHover');
 
     try {
       await dispatch(removePrevVideoFn(courseName, classId, id));
     } catch (err) {
-      vidrefs[id].classList.remove("spinner1");
-      vidrefs[id].classList.add("allowHover");
+      vidrefs[id].classList.remove('spinner1');
+      vidrefs[id].classList.add('allowHover');
     }
   };
 
@@ -262,19 +262,19 @@ function Classes({
 
   const delete_file = async () => {
     const file =
-      dropType === "resource"
+      dropType === 'resource'
         ? classResources[title].files.find((file) => file.id === currentFile)
         : classResources[title].assignment[0];
 
     const resourceId = file.resourceId;
 
     const slug =
-      dropType === "resource" ? `class/assignment/` : `class/assignment/`;
+      dropType === 'resource' ? `class/assignment/` : `class/assignment/`;
 
     try {
       const res = await axiosInstance.delete(`${slug}${resourceId}`);
       if (res) {
-        dropType === "resource"
+        dropType === 'resource'
           ? dispatch(deleteResources(title, file.id))
           : dispatch(deleteAssignmnet(title, file.id));
         await gapi.gapi.deleteFile(file.id);
@@ -283,8 +283,8 @@ function Classes({
       }
     } catch (err) {
       // console.log(err);
-      addToast("Error Deleting file", {
-        appearance: "error",
+      addToast('Error Deleting file', {
+        appearance: 'error',
         autoDismiss: true,
       });
       return false;
@@ -327,8 +327,8 @@ function Classes({
       // console.log(err);
       progressDialog.current.close();
 
-      addToast("Error Uploding File", {
-        appearance: "error",
+      addToast('Error Uploding File', {
+        appearance: 'error',
         autoDismiss: true,
       });
 
@@ -352,13 +352,13 @@ function Classes({
           runOnClose={() => !full && setShowResourceDrop(false)}
           header={
             <div className="cx_header hx-main flex-row j-space">
-              <h2 className={`h_con flex-row j-start  ${full ? " full" : ""}`}>
-                <img src={class_icon} alt="class" />{" "}
+              <h2 className={`h_con flex-row j-start  ${full ? ' full' : ''}`}>
+                <img src={class_icon} alt="class" />{' '}
                 <div className="flex-row j-space img">
                   <span>
                     {Number(index + 1)
                       ? `${list_desc} ${weeks[index + 1]} - `
-                      : ""}{" "}
+                      : ''}{' '}
                     {title}
                   </span>
                   {(isAdmin || isTrainer) && full ? (
@@ -383,8 +383,8 @@ function Classes({
                               }}
                             >
                               {classResources[title].assignment.length === 0
-                                ? "Add Assignment"
-                                : "Edit Assignment"}
+                                ? 'Add Assignment'
+                                : 'Edit Assignment'}
                             </Link>
                           )}
                         </div>
@@ -401,8 +401,8 @@ function Classes({
                               }}
                             >
                               {classResources[title].assignment.length === 0
-                                ? "Add Assignment"
-                                : "Edit Assignment"}
+                                ? 'Add Assignment'
+                                : 'Edit Assignment'}
                             </Link>
                           </div>
                         )}
@@ -413,7 +413,7 @@ function Classes({
             </div>
           }
         >
-          <div className={`cx_lis-content ${full ? " full" : ""}`}>
+          <div className={`cx_lis-content ${full ? ' full' : ''}`}>
             {assData?.length > 0 ? (
               <div className="inf_x">
                 <h3>{assData[0].title}</h3>
@@ -438,7 +438,7 @@ function Classes({
                     <div className="btn_sec">
                       <ResourceBtn
                         img={play}
-                        text={isAdmin ? "Class Link" : "Join Class"}
+                        text={isAdmin ? 'Class Link' : 'Join Class'}
                         color="theme"
                         link={link}
                         ext
@@ -468,10 +468,10 @@ function Classes({
                 {isAdmin && full && (
                   <div>
                     <h4
-                      style={{ margin: "40px 0 10px" }}
+                      style={{ margin: '40px 0 10px' }}
                       className="theme-color"
                     >
-                      Trainer{data?.CohortTrainers.length > 1 ? "s" : ""}
+                      Trainer{data?.CohortTrainers.length > 1 ? 's' : ''}
                     </h4>
 
                     {data?.CohortTrainers.length > 0 ? (
@@ -507,7 +507,7 @@ function Classes({
                     <div className="btn_sec">
                       <ResourceBtn
                         img={material}
-                        text={`${isStudent ? "Download" : "Class"} Materials`}
+                        text={`${isStudent ? 'Download' : 'Class'} Materials`}
                         color="secondary"
                         link=""
                         handleClick={viewResources}
@@ -517,7 +517,7 @@ function Classes({
                 </div>
               </div>
             ) : (
-              ""
+              ''
             )}
 
             {!full ? (
@@ -543,24 +543,24 @@ function Classes({
             <div className="class_file_con">
               <div className="box-shade" data-open={showResourceDrop}>
                 <h3>
-                  {dropType === "resource"
-                    ? "Resource Materials"
-                    : "Class assignment"}
+                  {dropType === 'resource'
+                    ? 'Resource Materials'
+                    : 'Class assignment'}
                 </h3>
                 <Files
                   files={
-                    dropType === "resource"
+                    dropType === 'resource'
                       ? classResources[title]?.files
                       : classResources[title]?.assignment
                   }
                   showdrag={
-                    dropType === "resource" ? true : false
+                    dropType === 'resource' ? true : false
                     // : !!!classResources[title].files
                   }
                   errorMsg={
-                    dropType === "resource"
-                      ? "No materials for this class yet"
-                      : "No assignment Yet"
+                    dropType === 'resource'
+                      ? 'No materials for this class yet'
+                      : 'No assignment Yet'
                   }
                   deleteFile={deleteFIle}
                   handleImage={upload}
@@ -574,7 +574,7 @@ function Classes({
               <h3>Resource Materials</h3>
               <Files
                 files={classResources[title].files}
-                errorMsg="No materials availabel yet"
+                errorMsg="No materials available yet"
                 showdrag={false}
               />
             </div>
@@ -597,12 +597,12 @@ function Classes({
       <Modal ref={startclass}>
         <div
           style={{
-            background: "white",
-            width: "400px",
-            height: "300px",
-            textAlign: "center",
-            margin: "auto",
-            borderRadius: "10px",
+            background: 'white',
+            width: '400px',
+            height: '300px',
+            textAlign: 'center',
+            margin: 'auto',
+            borderRadius: '10px',
           }}
           className="s_btn flex-row loader"
         >
@@ -621,15 +621,15 @@ function Classes({
         <div className="prev_vid_cn reg_text">
           <nav className="flex-row j-space">
             <h4 className="theme-color">
-              Previous class video
-              {data.CohortClassVideos.length <= 1 ? "" : "s"}
+              Class recordings
+              {data.CohortClassVideos.length <= 1 ? '' : 's'}
             </h4>
 
             {!isStudent && (
               <div
                 onClick={() => {
                   setAddPrevVideo(!addPrevVideo);
-                  setPrevVideo("");
+                  setPrevVideo('');
                 }}
               >
                 {!addPrevVideo ? <Plus /> : <Remove />}
@@ -654,7 +654,7 @@ function Classes({
           </div>
 
           {data.CohortClassVideos.length === 0 && (
-            <div className="flex-row" style={{ marginTop: "50px" }}>
+            <div className="flex-row" style={{ marginTop: '50px' }}>
               <p>No videos yet</p>
             </div>
           )}
@@ -662,8 +662,8 @@ function Classes({
           <div className="frame_sec">
             {data.CohortClassVideos.map((prevVideo, i) => (
               <div
-                className={`frame_con ${!isStudent ? "allowHover" : ""}`}
-                key={`prev_vid_data_${prevVideo.id.split("-")[0]}`}
+                className={`frame_con ${!isStudent ? 'allowHover' : ''}`}
+                key={`prev_vid_data_${prevVideo.id.split('-')[0]}`}
                 ref={(ref) => (vidrefs[prevVideo.id] = ref)}
               >
                 <div className="rm" onClick={() => removeVideo(prevVideo.id)}>

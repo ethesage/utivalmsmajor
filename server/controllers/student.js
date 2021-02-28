@@ -1,7 +1,7 @@
 // import { ConfigurationServicePlaceholders } from "aws-sdk/lib/config_service_placeholders";
-import sequelize from "sequelize";
-import models from "../database/models";
-import helpers from "../helpers";
+import sequelize from 'sequelize';
+import models from '../database/models';
+import helpers from '../helpers';
 
 const { successStat, errorStat } = helpers;
 
@@ -25,7 +25,7 @@ export const addStudentCourse = async (req, res) => {
     });
 
     if (!student) {
-      return errorStat(res, 404, "Student does not exist");
+      return errorStat(res, 404, 'Student does not exist');
     }
 
     const cour = await models.CourseCohort.findOne({
@@ -33,7 +33,7 @@ export const addStudentCourse = async (req, res) => {
     });
 
     if (!cour) {
-      return errorStat(res, 404, "Course does not exist");
+      return errorStat(res, 404, 'Course does not exist');
     }
 
     const course = await models.Course.findOne({
@@ -48,25 +48,25 @@ export const addStudentCourse = async (req, res) => {
       resource &&
       (resource.paymentComplete === true || resource.paymentComplete === null)
     ) {
-      return errorStat(res, 404, "Student is Already Taking This Course");
+      return errorStat(res, 404, 'Student is Already Taking This Course');
     }
     let studC;
 
-    console.log(cour)
+    console.log(cour);
 
-    if (cour.paymentType === "split" && !resource) {
+    if (cour.paymentType === 'split' && !resource) {
       studC = await models.StudentCourse.create({
         ...req.body.student,
         isCompleted: false,
         expiresAt: cour.expiresAt,
         cohortId: cour.cohortId,
-        status: "ongoing",
+        status: 'ongoing',
         courseAmount: course.cost,
         amountPaid: amount,
         paymentComplete: Number(course.cost) === Number(amount),
       });
     } else if (
-      cour.paymentType === "split" &&
+      cour.paymentType === 'split' &&
       resource &&
       resource.paymentComplete === false
     ) {
@@ -81,7 +81,7 @@ export const addStudentCourse = async (req, res) => {
         isCompleted: false,
         expiresAt: cour.expiresAt,
         cohortId: cour.cohortId,
-        status: "ongoing",
+        status: 'ongoing',
         paymentComplete: true,
         courseAmount: course.cost,
         amountPaid: amount,
@@ -92,12 +92,12 @@ export const addStudentCourse = async (req, res) => {
       totalStudent: cour.totalStudent + 1,
     });
 
-    return successStat(res, 200, "data", {
+    return successStat(res, 200, 'data', {
       ...studC.dataValues,
-      message: "Student added Successfully",
+      message: 'Student added Successfully',
     });
   } catch (e) {
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
@@ -107,30 +107,30 @@ export const getAllStudentCourse = async (req, res) => {
   try {
     const resource = await models.StudentCourse.findAll({
       where: { studentId: id },
-      attributes: ["id", "progress"],
+      attributes: ['id', 'progress'],
       include: [
         {
           model: models.Cohort,
-          attributes: ["cohort", "id"],
+          attributes: ['cohort', 'id'],
         },
         {
           model: models.Course,
-          attributes: ["id", "name", "thumbnail"],
+          attributes: ['id', 'name', 'thumbnail'],
         },
         {
           model: models.CourseCohort,
-          attributes: ["id", "cohortId", "dateRange", "courseId"],
+          attributes: ['id', 'cohortId', 'dateRange', 'courseId'],
         },
       ],
     });
 
     if (!resource[0]) {
-      return successStat(res, 200, "data", []);
+      return successStat(res, 200, 'data', []);
     }
 
-    return successStat(res, 200, "data", resource);
+    return successStat(res, 200, 'data', resource);
   } catch (e) {
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
@@ -157,7 +157,7 @@ export const getSingleStudentCourse = async (req, res) => {
       },
       {
         model: models.Course,
-        attributes: ["id", "name", "description", "thumbnail", "list_desc"],
+        attributes: ['id', 'name', 'description', 'thumbnail', 'list_desc'],
         include: [
           {
             model: models.CourseDescription,
@@ -169,16 +169,16 @@ export const getSingleStudentCourse = async (req, res) => {
               {
                 model: models.CohortTrainer,
                 where: { courseCohortId },
-                attributes: ["id", "userId"],
+                attributes: ['id', 'userId'],
                 required: false,
                 include: {
                   model: models.User,
                   attributes: [
-                    "firstName",
-                    "lastName",
-                    "profilePic",
-                    "occupation",
-                    "bio",
+                    'firstName',
+                    'lastName',
+                    'profilePic',
+                    'occupation',
+                    'bio',
                   ],
                 },
               },
@@ -187,7 +187,7 @@ export const getSingleStudentCourse = async (req, res) => {
               },
               {
                 model: models.CohortClassVideo,
-                attributes: ["id", "link"],
+                attributes: ['id', 'link'],
                 where: { courseCohortId },
                 required: false,
               },
@@ -206,18 +206,18 @@ export const getSingleStudentCourse = async (req, res) => {
     ],
 
     order: [
-      [models.Course, models.Classes, models.CohortClassDays, "date", "ASC"],
+      [models.Course, models.Classes, models.CohortClassDays, 'date', 'ASC'],
     ],
   });
 
   if (!resource) {
-    return errorStat(res, 404, "Student Course Not Found");
+    return errorStat(res, 404, 'Student Course Not Found');
   }
 
   if (!resource.isCompleted && new Date() > resource.duration) {
     resource.update({
       isCompleted: true,
-      status: "finished",
+      status: 'finished',
     });
   }
 
@@ -225,7 +225,7 @@ export const getSingleStudentCourse = async (req, res) => {
   // console.log(resource.Course.Classes);
 
   if (
-    resource.CourseCohort.dataValues.paymentType === "split" &&
+    resource.CourseCohort.dataValues.paymentType === 'split' &&
     resource.paymentComplete === false
   ) {
     const half = Math.ceil(resource.Course.Classes.length / 2);
@@ -233,7 +233,7 @@ export const getSingleStudentCourse = async (req, res) => {
   }
 
   // console.log(resource.Course.Classes.length, resource.paymentComplete);
-  return successStat(res, 200, "data", resource);
+  return successStat(res, 200, 'data', resource);
 };
 
 export const getStudentDashboard = async (req, res) => {
@@ -241,20 +241,20 @@ export const getStudentDashboard = async (req, res) => {
 
   try {
     const completed = await models.StudentCourse.count({
-      where: { studentId: id, status: "finished" },
+      where: { studentId: id, status: 'finished' },
     });
 
     const ongoing = await models.StudentCourse.count({
-      where: { studentId: id, status: "ongoing" },
+      where: { studentId: id, status: 'ongoing' },
     });
 
     const course = await models.StudentCourse.count({
       where: { studentId: id },
     });
 
-    return successStat(res, 200, "data", { course, ongoing, completed });
+    return successStat(res, 200, 'data', { course, ongoing, completed });
   } catch (e) {
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
@@ -272,25 +272,25 @@ export const allCourseStudents = async (req, res) => {
         {
           model: models.User,
           attributes: [
-            "id",
-            "firstName",
-            "lastName",
-            "linkedin",
-            "profilePic",
-            "occupation",
-            "email",
-            "phoneNumber",
-            "company",
-            "occupation"
+            'id',
+            'firstName',
+            'lastName',
+            'linkedin',
+            'profilePic',
+            'occupation',
+            'email',
+            'phoneNumber',
+            'company',
+            'occupation',
           ],
         },
       ],
-      attributes: ["courseCohortId"],
+      attributes: ['courseCohortId'],
     });
 
-    return successStat(res, 200, "data", courseStudent);
+    return successStat(res, 200, 'data', courseStudent);
   } catch (e) {
-    errorStat(res, 500, "Operation Failed, Please Try Again");
+    errorStat(res, 500, 'Operation Failed, Please Try Again');
   }
 };
 
@@ -312,23 +312,23 @@ export const getStudentNextClass = async (req, res) => {
   };
 
   const getClasses = await models.StudentCourse.findAll({
-    where: { studentId: id, isCompleted: false, status: "ongoing" },
-    attributes: ["studentId", "paymentComplete", "courseCohortId"],
+    where: { studentId: id, isCompleted: false, status: 'ongoing' },
+    attributes: ['studentId', 'paymentComplete', 'courseCohortId'],
     include: [
       {
         model: models.Course,
-        attributes: ["thumbnail", "name", "extLink"],
+        attributes: ['thumbnail', 'name', 'extLink'],
 
         include: [
           {
             model: models.Classes,
-            attributes: ["link"],
+            attributes: ['link'],
             include: [
               {
                 model: models.CohortClassDays,
                 where: { date: { [Op.gte]: new Date() } },
-                attributes: ["date", "time"],
-                order: [["date", "createdAt", "ASC"]],
+                attributes: ['date', 'time'],
+                order: [['date', 'createdAt', 'ASC']],
               },
             ],
           },
@@ -336,7 +336,7 @@ export const getStudentNextClass = async (req, res) => {
       },
       {
         model: models.CourseCohort,
-        attributes: ["courseId", "id"],
+        attributes: ['courseId', 'id'],
       },
     ],
     // order: [[models.CohortClassDays, 'date', 'ASC']]
@@ -344,7 +344,7 @@ export const getStudentNextClass = async (req, res) => {
 
   isSort(
     getClasses[0].dataValues.Course.Classes,
-    "dataValues.CohortClassDays.date"
+    'dataValues.CohortClassDays.date'
   );
 
   const getAll = getClasses.reduce((acc, item, index) => {
@@ -371,12 +371,12 @@ export const getStudentNextClass = async (req, res) => {
       include: [
         {
           model: models.CohortClassDays,
-          attributes: ["date", "time"],
+          attributes: ['date', 'time'],
           required: false,
-          order: [["date", "createdAt", "ASC"]],
+          order: [['date', 'createdAt', 'ASC']],
         },
       ],
-      order: [["createdAt", "ASC"]],
+      order: [['createdAt', 'ASC']],
     });
 
     const alll = getAllClass.reduce((acc, item, index) => {
@@ -393,7 +393,7 @@ export const getStudentNextClass = async (req, res) => {
       return acc;
     }, []);
 
-    const sorted = isSort(alll, "date", true);
+    const sorted = isSort(alll, 'date', true);
 
     const half = Math.ceil(sorted.length / 2);
     sorted.splice(0, half);
@@ -402,10 +402,10 @@ export const getStudentNextClass = async (req, res) => {
 
     // console.log(getClasses);
 
-    if (val) getAll[0].link = "";
+    if (val) getAll[0].link = '';
   }
 
-  return successStat(res, 200, "data", getAll);
+  return successStat(res, 200, 'data', getAll);
 };
 
 export const getStudentClassDays = async (req, res) => {
@@ -422,20 +422,20 @@ export const getStudentClassDays = async (req, res) => {
       where: { studentId: id, courseCohortId },
     });
 
-    if (!checkStudent) return errorStat(res, 400, "Not Allowed");
+    if (!checkStudent) return errorStat(res, 400, 'Not Allowed');
 
     const getClassDays = await models.Classes.findAll({
       where: { courseCohortId },
-      attributes: ["title"],
+      attributes: ['title'],
       include: [
         {
           model: models.CohortClassDays,
-          attributes: ["date", "time"],
+          attributes: ['date', 'time'],
         },
       ],
     });
 
-    if (!getClassDays[0]) return errorStat(res, 400, "No Available Class Day");
+    if (!getClassDays[0]) return errorStat(res, 400, 'No Available Class Day');
 
     const getAll = getClassDays.reduce((acc, item, index) => {
       if (item.CohortClassDays[0]) {
@@ -450,10 +450,10 @@ export const getStudentClassDays = async (req, res) => {
       return acc;
     }, []);
 
-    return successStat(res, 200, "data", getAll);
+    return successStat(res, 200, 'data', getAll);
   } catch (e) {
     // console.log(e);
-    errorStat(res, 500, "Operation Failed Please Try Again");
+    errorStat(res, 500, 'Operation Failed Please Try Again');
   }
 };
 
@@ -467,16 +467,16 @@ export const addStudentProgress = async (req, res) => {
       where: { studentId: id, courseCohortId },
     });
 
-    if (!checkStudent) return errorStat(res, 200, "Not Allowed");
+    if (!checkStudent) return errorStat(res, 200, 'Not Allowed');
 
     const checkClass = await models.Classes.findOne({
       where: { id: classId, started: true },
     });
 
-    if (!checkClass) return errorStat(res, 200, "Not Started");
+    if (!checkClass) return errorStat(res, 200, 'Not Started');
 
     const findclassProgress = await models.CourseProgress.findAll({
-      where: { userId: id, classId, type: "student" },
+      where: { userId: id, classId, type: 'student' },
     });
 
     // console.log(findclassProgress)
@@ -486,11 +486,11 @@ export const addStudentProgress = async (req, res) => {
         courseCohortId,
         userId: id,
         classId,
-        type: "student",
+        type: 'student',
       });
 
       const find = await models.CourseProgress.findAll({
-        where: { userId: id, courseCohortId, type: "student" },
+        where: { userId: id, courseCohortId, type: 'student' },
       });
 
       const count = await models.Classes.findAll({
@@ -502,8 +502,8 @@ export const addStudentProgress = async (req, res) => {
       });
     }
 
-    return successStat(res, 200, "data", "update successful");
+    return successStat(res, 200, 'data', 'update successful');
   } catch (e) {
-    errorStat(res, 500, "Operation Failed Please Try Again");
+    errorStat(res, 500, 'Operation Failed Please Try Again');
   }
 };

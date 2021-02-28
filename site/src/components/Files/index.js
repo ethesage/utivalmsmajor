@@ -38,7 +38,7 @@ const Files = ({
           useErrorMessage && (
             <div className="n_available flex-col img">
               <img src={no_file} alt="no classes" />
-              <p className="txts">{errorMsg || 'You have no uplods'}</p>
+              <p className="txts">{errorMsg || 'You have no uploads'}</p>
             </div>
           )
         ) : (
