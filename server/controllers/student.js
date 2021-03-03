@@ -225,15 +225,18 @@ export const getSingleStudentCourse = async (req, res) => {
   // console.log(resource.Course.Classes);
 
   if (
-    resource.CourseCohort.dataValues.paymentType === 'split' &&
-    resource.paymentComplete === false
+    resource.CourseCohort.dataValues.paymentType !== 'split' &&
+    resource.paymentComplete === null
   ) {
     const half = Math.ceil(resource.Course.Classes.length / 2);
-    resource.Course.Classes = resource.Course.Classes.splice(0, half);
-  }
+    const split = resource.Course.Classes.splice(0, half);
 
-  // console.log(resource.Course.Classes.length, resource.paymentComplete);
-  return successStat(res, 200, 'data', resource);
+    const splitCourseTitle = resource.Course.Classes.map(delts => delts.title)
+
+    split.push({splitCourseTitle})
+
+    return successStat(res, 200, 'data', split)
+  } else return successStat(res, 200, 'data', resource);
 };
 
 export const getStudentDashboard = async (req, res) => {
