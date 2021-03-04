@@ -1,3 +1,4 @@
+/* eslint-disable nonblock-statement-body-position */
 // import { ConfigurationServicePlaceholders } from "aws-sdk/lib/config_service_placeholders";
 import sequelize from 'sequelize';
 import models from '../database/models';
@@ -51,8 +52,6 @@ export const addStudentCourse = async (req, res) => {
       return errorStat(res, 404, 'Student is Already Taking This Course');
     }
     let studC;
-
-    console.log(cour);
 
     if (cour.paymentType === 'split' && !resource) {
       studC = await models.StudentCourse.create({
@@ -157,7 +156,15 @@ export const getSingleStudentCourse = async (req, res) => {
       },
       {
         model: models.Course,
-        attributes: ['id', 'name', 'description', 'thumbnail', 'list_desc'],
+        attributes: [
+          'id',
+          'name',
+          'description',
+          'thumbnail',
+          'list_desc',
+          'initialSplitAmount',
+          'finalSplitAmount',
+        ],
         include: [
           {
             model: models.CourseDescription,
@@ -221,22 +228,30 @@ export const getSingleStudentCourse = async (req, res) => {
     });
   }
 
-  // isSort(resource.Course.Classes);
-  // console.log(resource.Course.Classes);
-
   if (
     resource.CourseCohort.dataValues.paymentType !== 'split' &&
     resource.paymentComplete === null
   ) {
     const half = Math.ceil(resource.Course.Classes.length / 2);
-    const split = resource.Course.Classes.splice(0, half);
+    const split = resource.Course.Classes.splice(0);
+    const EditedClasses = [];
 
-    const splitCourseTitle = resource.Course.Classes.map(delts => delts.title)
+    split.forEach((el, i) => {
+      if (i <= half - 1) {
+        EditedClasses.push(el.dataValues);
+      } else EditedClasses.push({ title: el.title, ClassResources: [], id: el.id });
+    });
 
-    split.push({splitCourseTitle})
+    return successStat(res, 200, 'data', {
+      ...resource.dataValues,
+      Course: {
+        ...resource.dataValues.Course.dataValues,
+        Classes: EditedClasses,
+      },
+    });
+  }
 
-    return successStat(res, 200, 'data', split)
-  } else return successStat(res, 200, 'data', resource);
+  return successStat(res, 200, 'data', resource);
 };
 
 export const getStudentDashboard = async (req, res) => {
