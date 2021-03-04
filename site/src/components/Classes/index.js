@@ -341,9 +341,14 @@ function Classes({
     e.target.src = user_icon;
   };
 
+  const completedPayment = !(Object.keys(data).length === 3);
+
   return (
     <>
-      <div className="cx_listnx_con" ref={classRef}>
+      <div
+        className={`cx_listnx_con ${!completedPayment ? 'greyed' : ''}`}
+        ref={classRef}
+      >
         <RevielDrop
           open={open}
           showArrow={showArrow}
@@ -414,132 +419,140 @@ function Classes({
             </div>
           }
         >
-          <div className={`cx_lis-content ${full ? ' full' : ''}`}>
-            {assData?.length > 0 ? (
-              <div className="inf_x">
-                <h3>{assData[0].title}</h3>
-                <p>{assData[0].description}</p>
-              </div>
-            ) : (
-              <div className="inf_x">
-                {/* <p>{title}</p> */}
-                <Editor
-                  key={description}
-                  readOnly={true}
-                  data={description}
-                  mode="no-edit"
-                />
-              </div>
-            )}
+          {completedPayment && (
+            <div className={`cx_lis-content ${full ? ' full' : ''}`}>
+              {assData?.length > 0 ? (
+                <div className="inf_x">
+                  <h3>{assData[0].title}</h3>
+                  <p>{assData[0].description}</p>
+                </div>
+              ) : (
+                <div className="inf_x">
+                  {/* <p>{title}</p> */}
+                  <Editor
+                    key={description}
+                    readOnly={true}
+                    data={description}
+                    mode="no-edit"
+                  />
+                </div>
+              )}
 
-            {showResources ? (
-              <div className="btns">
-                <div className="reg_text">
-                  <div className="btn_sec_con flex-row j-start">
-                    <div className="btn_sec">
-                      <ResourceBtn
-                        img={play}
-                        text={isAdmin ? 'Class Link' : 'Join Class'}
-                        color="theme"
-                        link={link}
-                        ext
-                        handleClick={joinclass}
-                      />
-                    </div>
-
-                    {(assignment_.length > 0 || !isStudent) && (
+              {showResources ? (
+                <div className="btns">
+                  <div className="reg_text">
+                    <div className="btn_sec_con flex-row j-start">
                       <div className="btn_sec">
                         <ResourceBtn
-                          img={assignment}
-                          text="Assignment"
-                          color="off"
-                          link={
-                            isAdmin
-                              ? `/admin/courses/all-assignments/${courseId}/${cohortId}/${data.id}`
-                              : isTrainer
-                              ? `/courses/all-assignments/${courseId}/${data.id}`
-                              : `/courses/assignment/${courseId}/${data.id}`
-                          }
+                          img={play}
+                          text={isAdmin ? 'Class Link' : 'Join Class'}
+                          color="theme"
+                          link={link}
+                          ext
+                          handleClick={joinclass}
                         />
                       </div>
-                    )}
-                  </div>
-                </div>
 
-                {isAdmin && full && (
-                  <div>
-                    <h4
-                      style={{ margin: '40px 0 10px' }}
-                      className="theme-color"
-                    >
-                      Trainer{data?.CohortTrainers.length > 1 ? 's' : ''}
-                    </h4>
-
-                    {data?.CohortTrainers.length > 0 ? (
-                      data.CohortTrainers.map((trainer) => (
-                        <div
-                          className="trainer flex-row j-start"
-                          key={trainer.id}
-                        >
-                          <img
-                            src={trainer.User?.profilePic || user_icon}
-                            alt="userimage"
-                            onError={handleImgError}
+                      {(assignment_.length > 0 || !isStudent) && (
+                        <div className="btn_sec">
+                          <ResourceBtn
+                            img={assignment}
+                            text="Assignment"
+                            color="off"
+                            link={
+                              isAdmin
+                                ? `/admin/courses/all-assignments/${courseId}/${cohortId}/${data.id}`
+                                : isTrainer
+                                ? `/courses/all-assignments/${courseId}/${data.id}`
+                                : `/courses/assignment/${courseId}/${data.id}`
+                            }
                           />
-                          <div>
-                            <strong>
-                              <p>
-                                {trainer.User.firstName} {trainer.User.lastName}
-                              </p>
-                            </strong>
-                            <small>{trainer.User.occupation}</small>
-                          </div>
                         </div>
-                      ))
-                    ) : (
-                      <p>No Trainer has been assigned to this class</p>
-                    )}
+                      )}
+                    </div>
                   </div>
-                )}
 
-                <div className="reg_text">
-                  <h4>Resources</h4>
-                  <div className="btn_sec_con flex-row j-start">
-                    <div className="btn_sec">
-                      <ResourceBtn
-                        img={material}
-                        text={`${isStudent ? 'Download' : 'Class'} Materials`}
-                        color="secondary"
-                        link=""
-                        handleClick={viewResources}
-                      />
+                  {isAdmin && full && (
+                    <div>
+                      <h4
+                        style={{ margin: '40px 0 10px' }}
+                        className="theme-color"
+                      >
+                        Trainer{data?.CohortTrainers.length > 1 ? 's' : ''}
+                      </h4>
+
+                      {data?.CohortTrainers.length > 0 ? (
+                        data.CohortTrainers.map((trainer) => (
+                          <div
+                            className="trainer flex-row j-start"
+                            key={trainer.id}
+                          >
+                            <img
+                              src={trainer.User?.profilePic || user_icon}
+                              alt="userimage"
+                              onError={handleImgError}
+                            />
+                            <div>
+                              <strong>
+                                <p>
+                                  {trainer.User.firstName}{' '}
+                                  {trainer.User.lastName}
+                                </p>
+                              </strong>
+                              <small>{trainer.User.occupation}</small>
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <p>No Trainer has been assigned to this class</p>
+                      )}
+                    </div>
+                  )}
+
+                  <div className="reg_text">
+                    <h4>Resources</h4>
+                    <div className="btn_sec_con flex-row j-start">
+                      <div className="btn_sec">
+                        <ResourceBtn
+                          img={material}
+                          text={`${isStudent ? 'Download' : 'Class'} Materials`}
+                          color="secondary"
+                          link=""
+                          handleClick={viewResources}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ) : (
-              ''
-            )}
+              ) : (
+                ''
+              )}
 
-            {!full ? (
-              <Link
-                className="view"
-                to={
-                  isAdmin
-                    ? `/admin/courses/classroom/${courseId}/${cohortId}/${data.id}`
-                    : `/courses/classroom/${courseId}/${data.id}`
-                }
-              >
-                View full outline
-              </Link>
-            ) : null}
-          </div>
+              {!full ? (
+                <Link
+                  className="view"
+                  to={
+                    isAdmin
+                      ? `/admin/courses/classroom/${courseId}/${cohortId}/${data.id}`
+                      : `/courses/classroom/${courseId}/${data.id}`
+                  }
+                >
+                  View full outline
+                </Link>
+              ) : null}
+            </div>
+          )}
+          {!completedPayment && (
+            <div className="cx_lis-content ">
+              <p>You do not have access to this class</p>
+            </div>
+          )}
         </RevielDrop>
         {/** For  a student show the modal pop up for the class materails and assignments
          * but for a trainer show this as a section underneat, this then helps to show the modal for uploading or deleting. Since we don't want overlapping modals
          */}
 
-        {!isStudent ? (
+        {!isStudent && completedPayment ? (
           <RevielDrop open={showResourceDrop}>
             <div className="class_file_con">
               <div className="box-shade" data-open={showResourceDrop}>
@@ -582,105 +595,116 @@ function Classes({
           </Modal>
         )}
       </div>
-      <Modal ref={deleteDialog}>
-        <Confirm
-          text="Are you sure?"
-          onClick={delete_file}
-          close={() => deleteDialog.current.close()}
-          closeText="Successfuly Deleted"
-        />
-      </Modal>
+      {completedPayment && (
+        <>
+          <Modal ref={deleteDialog}>
+            <Confirm
+              text="Are you sure?"
+              onClick={delete_file}
+              close={() => deleteDialog.current.close()}
+              closeText="Successfuly Deleted"
+            />
+          </Modal>
 
-      <Modal ref={progressDialog}>
-        <ProgressBar progress={progress * 0.95} />
-      </Modal>
+          <Modal ref={progressDialog}>
+            <ProgressBar progress={progress * 0.95} />
+          </Modal>
 
-      <Modal ref={startclass}>
-        <div
-          style={{
-            background: 'white',
-            width: '400px',
-            height: '300px',
-            textAlign: 'center',
-            margin: 'auto',
-            borderRadius: '10px',
-          }}
-          className="s_btn flex-row loader"
-        >
-          {(isTrainer || isAdmin) && (
-            <p className="loader_con_main">Loading class...</p>
-          )}
-          {wait ? (
-            <div>This class is yet to start</div>
-          ) : (
-            <p className="loader_con_main">Loading class...</p>
-          )}
-        </div>
-      </Modal>
+          <Modal ref={startclass}>
+            <div
+              style={{
+                background: 'white',
+                width: '400px',
+                height: '300px',
+                textAlign: 'center',
+                margin: 'auto',
+                borderRadius: '10px',
+              }}
+              className="s_btn flex-row loader"
+            >
+              {(isTrainer || isAdmin) && (
+                <p className="loader_con_main">Loading class...</p>
+              )}
+              {wait ? (
+                <div>This class is yet to start</div>
+              ) : (
+                <p className="loader_con_main">Loading class...</p>
+              )}
+            </div>
+          </Modal>
 
-      {full && (data.CohortClassVideos.length > 0 || !isStudent) && (
-        <div className="prev_vid_cn reg_text">
-          <nav className="flex-row j-space">
-            <h4 className="theme-color">
-              Class recordings
-              {data.CohortClassVideos.length <= 1 ? '' : 's'}
-            </h4>
+          {full && (data.CohortClassVideos.length > 0 || !isStudent) && (
+            <div className="prev_vid_cn reg_text">
+              <nav className="flex-row j-space">
+                <h4 className="theme-color">
+                  Class recordings
+                  {data.CohortClassVideos.length <= 1 ? '' : 's'}
+                </h4>
 
-            {!isStudent && (
-              <div
-                onClick={() => {
-                  setAddPrevVideo(!addPrevVideo);
-                  setPrevVideo('');
-                }}
-              >
-                {!addPrevVideo ? <Plus /> : <Remove />}
+                {!isStudent && (
+                  <div
+                    onClick={() => {
+                      setAddPrevVideo(!addPrevVideo);
+                      setPrevVideo('');
+                    }}
+                  >
+                    {!addPrevVideo ? <Plus /> : <Remove />}
+                  </div>
+                )}
+              </nav>
+
+              <div className="prevForm" data-active={addPrevVideo}>
+                {addPrevVideo && (
+                  <div className="flex-row j-start al-start form_sec">
+                    <Input
+                      handleChange={handleChange}
+                      name="vimeo"
+                      value={prevVideo}
+                      placeHolder="Enter your video url"
+                      errorMsg="enter a valid video url"
+                    />
+
+                    <Button
+                      text="Add"
+                      className="flex-row"
+                      onClick={addVideo}
+                    />
+                  </div>
+                )}
               </div>
-            )}
-          </nav>
 
-          <div className="prevForm" data-active={addPrevVideo}>
-            {addPrevVideo && (
-              <div className="flex-row j-start al-start form_sec">
-                <Input
-                  handleChange={handleChange}
-                  name="vimeo"
-                  value={prevVideo}
-                  placeHolder="Enter your video url"
-                  errorMsg="enter a valid video url"
-                />
+              {data.CohortClassVideos.length === 0 && (
+                <div className="flex-row" style={{ marginTop: '50px' }}>
+                  <p>No videos yet</p>
+                </div>
+              )}
 
-                <Button text="Add" className="flex-row" onClick={addVideo} />
+              <div className="frame_sec">
+                {data.CohortClassVideos.map((prevVideo, i) => (
+                  <div
+                    className={`frame_con ${!isStudent ? 'allowHover' : ''}`}
+                    key={`prev_vid_data_${prevVideo.id.split('-')[0]}`}
+                    ref={(ref) => (vidrefs[prevVideo.id] = ref)}
+                  >
+                    <div
+                      className="rm"
+                      onClick={() => removeVideo(prevVideo.id)}
+                    >
+                      <Remove />
+                    </div>
+                    <iframe
+                      title={`${data.id}_previous_video_${i}`}
+                      src={`https://player.vimeo.com/video/${prevVideo.link}`}
+                      frameBorder="0"
+                      allow="autoplay; fullscreen"
+                      allowFullScreen
+                    ></iframe>
+                  </div>
+                ))}
               </div>
-            )}
-          </div>
-
-          {data.CohortClassVideos.length === 0 && (
-            <div className="flex-row" style={{ marginTop: '50px' }}>
-              <p>No videos yet</p>
             </div>
           )}
-
-          <div className="frame_sec">
-            {data.CohortClassVideos.map((prevVideo, i) => (
-              <div
-                className={`frame_con ${!isStudent ? 'allowHover' : ''}`}
-                key={`prev_vid_data_${prevVideo.id.split('-')[0]}`}
-                ref={(ref) => (vidrefs[prevVideo.id] = ref)}
-              >
-                <div className="rm" onClick={() => removeVideo(prevVideo.id)}>
-                  <Remove />
-                </div>
-                <iframe
-                  title={`${data.id}_previous_video_${i}`}
-                  src={`https://player.vimeo.com/video/${prevVideo.link}`}
-                  frameBorder="0"
-                  allow="autoplay; fullscreen"
-                  allowFullScreen
-                ></iframe>
-              </div>
-            ))}
-          </div>
-        </div>
+        </>
       )}
     </>
   );

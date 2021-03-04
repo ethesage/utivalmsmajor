@@ -7,6 +7,10 @@
   max-width: 900px;
   margin-bottom: 15px;
 
+  &.greyed {
+    filter: grayscale(90%);
+  }
+
   .hx-main {
     border-bottom: 0.5px solid rgba(#000, 0.1);
     padding-bottom: 5px;

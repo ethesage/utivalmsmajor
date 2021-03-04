@@ -10,7 +10,7 @@ import { addStudentCourse } from 'g_actions/mainCourse';
 import Modal from 'components/Modal';
 import './style.scss';
 
-const Payment = ({ back, paymentAmount }) => {
+const Payment = ({ back, paymentAmount, mainText, doneFunc }) => {
   const { push } = useHistory();
   const disRef = useRef();
 
@@ -39,6 +39,11 @@ const Payment = ({ back, paymentAmount }) => {
   };
 
   function done() {
+    if (doneFunc) {
+      doneFunc();
+      return;
+    }
+
     if (disRef.current.open) return;
     disRef.current.open();
   }
@@ -69,7 +74,7 @@ const Payment = ({ back, paymentAmount }) => {
       {user ? (
         <div className="payment_con mx-auto txt-center">
           <p className="con_msg">
-            Congratulations! Continue your paymant using
+            {mainText || 'Congratulations! Continue your paymant using'}
           </p>
 
           {courses.purchaseCourse.type !== 'free' && (

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import PaymentComplete from 'components/CompletePayment';
 import GetCurrentCourse from 'Hooks/getCurrentCourse';
 import useBreadcrumbs from 'Hooks/useBreadCrumbs';
 import Loader from 'components/Loading';
@@ -10,7 +11,6 @@ import './style.scss';
 
 const Classroom = ({ full = false, gapi }) => {
   const { courseId } = useParams();
-
   const currentCourse = useSelector((state) => state.member.currentCourse);
   const [openedRef, setOpenedRef] = useState();
 
@@ -31,22 +31,37 @@ const Classroom = ({ full = false, gapi }) => {
         {!currentCourse ? (
           <Loader tempLoad={true} full={false} />
         ) : (
-          <div>
-            {currentCourse.Course.Classes.map((class_room, i) => (
-              <Classes
-                key={`cx_listnx_${i}`}
-                trainers={``}
-                data={class_room}
-                courseId={courseId}
-                full={full}
-                index={i}
-                gapi={gapi}
-                openedRef={openedRef}
-                setOpenedRef={setOpenedRef}
-                folderId={currentCourse.CourseCohort.folderId}
-              />
-            ))}
-          </div>
+          <>
+            <div>
+              {currentCourse.Course.Classes.map((class_room, i) => (
+                <Classes
+                  key={`cx_listnx_${i}`}
+                  trainers={``}
+                  data={class_room}
+                  courseId={courseId}
+                  full={full}
+                  index={i}
+                  gapi={gapi}
+                  openedRef={openedRef}
+                  setOpenedRef={setOpenedRef}
+                  folderId={currentCourse.CourseCohort.folderId}
+                  completedPayment={
+                    i < currentCourse.Course.Classes.length / 2
+                      ? true
+                      : currentCourse.paymentComplete
+                  }
+                />
+              ))}
+            </div>
+            <PaymentComplete
+              paymentComplete={currentCourse && !currentCourse.paymentComplete}
+              details={{
+                ...currentCourse,
+                courseCohort: [currentCourse.courseCohort],
+                type: 'paid',
+              }}
+            />
+          </>
         )}
       </section>
     </>

@@ -4,6 +4,7 @@ import { NavLink, useParams, useLocation, useHistory } from 'react-router-dom';
 import GetCurrentCourse from 'Hooks/getCurrentCourse';
 import Loader from 'components/Loading';
 import Classes from 'components/Classes';
+import PaymentComplete from 'components/CompletePayment';
 // import ResourceBtn from 'components/ResourceButton';
 import useBreadcrumbs from 'Hooks/useBreadCrumbs';
 import NavBar from 'components/CourseNav';
@@ -133,6 +134,16 @@ function FullClass({ gapi }) {
                 </>
               )}
             </div>
+
+            <PaymentComplete
+              paymentComplete={data && !(Object.keys(data).length === 3)}
+              details={{
+                ...currentCourse,
+                courseCohort: [currentCourse.courseCohort],
+                type: 'paid',
+              }}
+              full
+            />
           </Layout>
         )}
       </div>
