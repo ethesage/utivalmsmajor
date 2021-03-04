@@ -74,7 +74,7 @@ const Payment = ({ back, paymentAmount, mainText, doneFunc }) => {
       {user ? (
         <div className="payment_con mx-auto txt-center">
           <p className="con_msg">
-            {mainText || 'Congratulations! Continue your paymant using'}
+            {mainText || 'Congratulations! Continue your payment using'}
           </p>
 
           {courses.purchaseCourse.type !== 'free' && (

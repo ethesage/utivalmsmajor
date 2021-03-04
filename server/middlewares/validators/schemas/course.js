@@ -63,6 +63,10 @@ export const getCourseDescriptionSchema = Joi.object().keys({
   courseId: Joi.string(),
 });
 
+export const deleteDescriptionSchema = Joi.object().keys({
+  courseDescriptionId: Joi.string().uuid().trim(),
+});
+
 export const getAllCourseSchema = Joi.object().keys({
   currentPage: Joi.number().required(),
   pageLimit: Joi.number().required(),

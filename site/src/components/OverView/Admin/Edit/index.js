@@ -2,14 +2,21 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useToasts } from 'react-toast-notifications';
-import { addCourseDescription, updateCourseDescription } from 'g_actions/admin';
+import {
+  addCourseDescription,
+  updateCourseDescription,
+  deleteCourseDescription,
+} from 'g_actions/admin';
+import Modal from 'components/Modal';
 import useInput from 'Hooks/useInput';
 import Input from 'components/Input';
 import data from 'data/classDiscrip';
+import deleteIcon from 'assets/icons/delete.png';
+import EditIcon from 'assets/icons/edit.js';
 import { axiosInstance } from 'helpers';
 import './style.scss';
 
-const AddDes = ({ editedDisp, reset, courseName }) => {
+const AddDes = ({ editedDisp, reset, courseName, close }) => {
   const dispatch = useDispatch();
   const { courseId } = useParams();
   const editMode = editedDisp.title !== '' || editedDisp.description !== '';
@@ -65,6 +72,7 @@ const AddDes = ({ editedDisp, reset, courseName }) => {
 
       submitButton.current.children[0].innerHTML = btnText.reg;
       submitButton.current.classList.remove('loader');
+      close();
     },
   });
 
@@ -76,6 +84,7 @@ const AddDes = ({ editedDisp, reset, courseName }) => {
 
   return (
     <form className="">
+      <h3> {editMode ? 'Edit' : 'Add New'}</h3>
       {editMode && (
         <button>
           <p
@@ -87,7 +96,7 @@ const AddDes = ({ editedDisp, reset, courseName }) => {
               })
             }
           >
-            Reset
+            Clear Form
           </p>
         </button>
       )}
@@ -111,7 +120,7 @@ const AddDes = ({ editedDisp, reset, courseName }) => {
       ))}
 
       <button
-        className="flex-row img"
+        className="flex-row img bt"
         onClick={handleSubmit}
         ref={submitButton}
       >
@@ -121,11 +130,45 @@ const AddDes = ({ editedDisp, reset, courseName }) => {
   );
 };
 
-const Edit = ({ descrip, courseName }) => {
+const Edit = ({ descrip, courseName, open, setOpen }) => {
   const [singleDisp, setSingleDisp] = useState({
     title: '',
     description: '',
   });
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!open) return;
+    modalRef.current.open();
+  }, [open]);
+
+  const modalRef = useRef();
+
+  const edit = (classr) => {
+    modalRef.current.open();
+    setSingleDisp(classr);
+  };
+
+  const resetForm = () => {
+    setSingleDisp({
+      title: '',
+      description: '',
+    });
+    setOpen(false);
+  };
+
+  const close = () => {
+    modalRef.current.close();
+    setOpen(false);
+  };
+
+  const deleteDesc = async (disc) => {
+    document.querySelector('body').classList.add('spinner1');
+
+    await dispatch(deleteCourseDescription(disc, courseName));
+
+    document.querySelector('body').classList.remove('spinner1');
+  };
 
   return (
     <div className="lnx">
@@ -135,23 +178,42 @@ const Edit = ({ descrip, courseName }) => {
         </nav> */}
 
         <div className="list_info">
-          {descrip.map((classr, i) => (
+          <h2>What Student Will Learn</h2>
+          {descrip?.map((classr, i) => (
             <div className="list" key={`descriptors_${i}`}>
-              <nav className="flex-row j-space">
-                <h3>{classr.title}</h3>
-                <p onClick={() => setSingleDisp(classr)}>Edit</p>
-              </nav>
-              <p>{classr.description}</p>
+              <span className="flex-row">
+                <p>{i + 1}</p>
+              </span>
+              <div>
+                <nav className="">
+                  <h3>{classr.title}</h3>
+                  <div className="flex-row icon-sec">
+                    <button className="flex-row" onClick={() => edit(classr)}>
+                      <EditIcon />
+                    </button>
+                    <button
+                      className="flex-row"
+                      onClick={() => deleteDesc(classr)}
+                    >
+                      <img src={deleteIcon} alt="delete" />
+                    </button>
+                  </div>
+                </nav>
+                <p>{classr.description}</p>
+              </div>
             </div>
           ))}
         </div>
       </div>
 
-      <AddDes
-        editedDisp={singleDisp}
-        reset={setSingleDisp}
-        courseName={courseName}
-      />
+      <Modal ref={modalRef} runOnClose={resetForm}>
+        <AddDes
+          editedDisp={singleDisp}
+          reset={setSingleDisp}
+          courseName={courseName}
+          close={close}
+        />
+      </Modal>
     </div>
   );
 };

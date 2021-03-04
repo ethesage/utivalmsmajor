@@ -11,13 +11,13 @@ const course = (state = initialState, action) => {
   let currentCohort;
 
   switch (action.type) {
-    case "GET_ALL_ORIGINAL_COURSES":
+    case 'GET_ALL_ORIGINAL_COURSES':
       return {
         ...state,
         allCourses: payload,
       };
 
-    case "GET_ALL_COURSE_COHORTS":
+    case 'GET_ALL_COURSE_COHORTS':
       return {
         ...state,
         cohorts: {
@@ -26,7 +26,7 @@ const course = (state = initialState, action) => {
         },
       };
 
-    case "UPDATE_COURSE_DESCRIPTION":
+    case 'UPDATE_COURSE_DESCRIPTION':
       return {
         ...state,
         currentCohort: {
@@ -48,7 +48,26 @@ const course = (state = initialState, action) => {
         },
       };
 
-    case "ADD_COURSE_DESCRIPTION":
+    case 'DELETE_COURSE_DESCRIPTION':
+      return {
+        ...state,
+        currentCohort: {
+          ...state.currentCohort,
+          [payload.name]: {
+            ...state.currentCohort[payload.name],
+            Course: {
+              ...state.currentCohort[payload.name].Course,
+              CourseDescriptions: state.currentCohort[
+                payload.name
+              ].Course.CourseDescriptions.filter(
+                (descrip) => descrip.id !== payload.courseDescription.id
+              ),
+            },
+          },
+        },
+      };
+
+    case 'ADD_COURSE_DESCRIPTION':
       return {
         ...state,
         currentCohort: {
@@ -66,7 +85,7 @@ const course = (state = initialState, action) => {
         },
       };
 
-    case "ADD_CLASS":
+    case 'ADD_CLASS':
       return {
         ...state,
         currentCohort: {
@@ -81,7 +100,7 @@ const course = (state = initialState, action) => {
         },
       };
 
-    case "EDIT_CLASS":
+    case 'EDIT_CLASS':
       return {
         ...state,
         currentCohort: {
@@ -103,7 +122,7 @@ const course = (state = initialState, action) => {
         },
       };
 
-    case "ADD_NEW_VIDEO":
+    case 'ADD_NEW_VIDEO':
       currentCohort = state.currentCohort[payload.courseName];
       currentCourse = state.currentCohort[payload.courseName].Course;
 
@@ -132,7 +151,7 @@ const course = (state = initialState, action) => {
         },
       };
 
-    case "REMOVE_VIDEO":
+    case 'REMOVE_VIDEO':
       currentCohort = state.currentCohort[payload.courseName];
       currentCourse = state.currentCohort[payload.courseName].Course;
 
@@ -160,7 +179,7 @@ const course = (state = initialState, action) => {
         },
       };
 
-    case "DELETE_CLASS":
+    case 'DELETE_CLASS':
       return {
         ...state,
         currentCohort: {
@@ -174,7 +193,7 @@ const course = (state = initialState, action) => {
         },
       };
 
-    case "ADD_COURSE_COHORT":
+    case 'ADD_COURSE_COHORT':
       return {
         ...state,
         cohorts: state.cohorts[payload.name]
@@ -188,7 +207,7 @@ const course = (state = initialState, action) => {
             },
       };
 
-    case "EDIT_COURSE_COHORT":
+    case 'EDIT_COURSE_COHORT':
       return {
         ...state,
         cohorts: {
@@ -203,7 +222,7 @@ const course = (state = initialState, action) => {
         },
       };
 
-    case "ADD_CURRENT_COHORT":
+    case 'ADD_CURRENT_COHORT':
       return {
         ...state,
         currentCohort: {
@@ -212,7 +231,7 @@ const course = (state = initialState, action) => {
         },
       };
 
-    case "ADD_COURSE":
+    case 'ADD_COURSE':
       return {
         ...state,
         allCourses: state.allCourses
@@ -220,7 +239,7 @@ const course = (state = initialState, action) => {
           : [payload],
       };
 
-    case "EDIT_COURSE":
+    case 'EDIT_COURSE':
       return {
         ...state,
         allCourses: state.allCourses.map((course) => {
@@ -231,7 +250,7 @@ const course = (state = initialState, action) => {
         }),
       };
 
-    case "DELETE_COURSE":
+    case 'DELETE_COURSE':
       return {
         ...state,
         allCourses: state.allCourses.filter(
@@ -239,13 +258,13 @@ const course = (state = initialState, action) => {
         ),
       };
 
-    case "GET_CURRENT_COURSE":
+    case 'GET_CURRENT_COURSE':
       return {
         ...state,
         currentCourse: payload,
       };
 
-    case "RESET":
+    case 'RESET':
       return initialState;
 
     default:

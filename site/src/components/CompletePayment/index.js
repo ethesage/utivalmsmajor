@@ -24,7 +24,7 @@ const PaymentComp = ({ full, paymentComplete, details }) => {
       } else {
         setTimeout(() => {
           setShowPaymentCompleteDialog(true);
-        }, 10000);
+        }, 5000);
       }
     }
   }, [details, full, paymentComplete]);
