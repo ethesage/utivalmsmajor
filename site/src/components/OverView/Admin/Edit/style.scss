@@ -44,6 +44,13 @@
     .list_info {
       margin-top: 10px;
 
+      .head {
+        p {
+          cursor: pointer;
+          font-weight: bold;
+        }
+      }
+
       .list {
         margin-bottom: 20px;
 

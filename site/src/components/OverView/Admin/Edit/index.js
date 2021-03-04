@@ -130,17 +130,12 @@ const AddDes = ({ editedDisp, reset, courseName, close }) => {
   );
 };
 
-const Edit = ({ descrip, courseName, open, setOpen }) => {
+const Edit = ({ descrip, courseName }) => {
   const [singleDisp, setSingleDisp] = useState({
     title: '',
     description: '',
   });
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (!open) return;
-    modalRef.current.open();
-  }, [open]);
 
   const modalRef = useRef();
 
@@ -154,12 +149,10 @@ const Edit = ({ descrip, courseName, open, setOpen }) => {
       title: '',
       description: '',
     });
-    setOpen(false);
   };
 
   const close = () => {
     modalRef.current.close();
-    setOpen(false);
   };
 
   const deleteDesc = async (disc) => {
@@ -178,7 +171,13 @@ const Edit = ({ descrip, courseName, open, setOpen }) => {
         </nav> */}
 
         <div className="list_info">
-          <h2>What Student Will Learn</h2>
+          <div className="flex-row j-space head">
+            <h2>What Student Will Learn</h2>
+
+            <p className="edit" onClick={() => modalRef.current.open()}>
+              Add New
+            </p>
+          </div>
           {descrip?.map((classr, i) => (
             <div className="list" key={`descriptors_${i}`}>
               <span className="flex-row">

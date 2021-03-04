@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import GetCurrentCohort from 'Hooks/getCurrentCohort';
 import Loader from 'components/Loading';
 import Nav from 'components/AdminHeader';
@@ -9,9 +9,6 @@ import './style.scss';
 
 const Overview = () => {
   const [loading, error, currentCohort, currentCourse] = GetCurrentCohort();
-  const [createNew, setCreateNew] = useState(false);
-  // console.log(currentCohort, currentCourse);
-
   return (
     <>
       <Nav currentCohort={currentCohort} currentCourse={currentCourse} />
@@ -26,11 +23,8 @@ const Overview = () => {
           <>
             <div className="info_sec _text">
               <div className="info">
-                <div className="nv flex-row j-space">
+                <div className="nv">
                   <h2>Course Brief</h2>
-                  <p className="edit" onClick={() => setCreateNew(true)}>
-                    Add New
-                  </p>
                 </div>
                 <p>{currentCohort?.Course?.description}</p>
               </div>
@@ -51,8 +45,6 @@ const Overview = () => {
               <Edit
                 descrip={currentCohort?.Course?.CourseDescriptions || []}
                 courseName={currentCourse?.name}
-                open={createNew}
-                setOpen={setCreateNew}
               />
             </div>
           </>
