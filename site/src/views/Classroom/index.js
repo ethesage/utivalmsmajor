@@ -54,7 +54,11 @@ const Classroom = ({ full = false, gapi }) => {
               ))}
             </div>
             <PaymentComplete
-              paymentComplete={currentCourse && !currentCourse.paymentComplete}
+              paymentComplete={
+                currentCourse &&
+                (currentCourse.paymentComplete ||
+                  null === currentCourse.paymentComplete)
+              }
               details={{
                 ...currentCourse,
                 courseCohort: [currentCourse.courseCohort],

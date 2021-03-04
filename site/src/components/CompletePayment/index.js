@@ -18,7 +18,7 @@ const PaymentComp = ({ full, paymentComplete, details }) => {
   );
 
   useEffect(() => {
-    if (details && !paymentComplete) {
+    if (!(details && paymentComplete)) {
       if (full) {
         setShowPaymentCompleteDialog(true);
       } else {
