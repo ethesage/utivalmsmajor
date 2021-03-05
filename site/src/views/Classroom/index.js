@@ -48,7 +48,9 @@ const Classroom = ({ full = false, gapi }) => {
                   completedPayment={
                     i < currentCourse.Course.Classes.length / 2
                       ? true
-                      : currentCourse.paymentComplete
+                      : currentCourse &&
+                        (currentCourse.paymentComplete ||
+                          null === currentCourse.paymentComplete)
                   }
                 />
               ))}
