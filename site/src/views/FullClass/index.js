@@ -60,6 +60,8 @@ function FullClass({ gapi }) {
   );
   // const ass = data?.ClassResources.filter((res) => res.type === 'assignment');
 
+  console.log(data && !(Object.keys(data).length === 3));
+
   return (
     <>
       <NavBar />
@@ -99,24 +101,9 @@ function FullClass({ gapi }) {
                       history.push(`${pathname}/add-assignment`);
                     }}
                     editClass={() => setEditClass(!editClass)}
+                    completedPayment={data && !(Object.keys(data).length === 3)}
                   />
-                  {/* {isStudent && ass.length > 0 && (
-                    <div className="btns">
-                      <div className="reg_text">
-                        <h4>Activities</h4>
-                        <div className="btn_sec_con flex-row j-start">
-                          <div className="btn_sec">
-                            <ResourceBtn
-                              img={assignment}
-                              text="Submit Assignment"
-                              color="approved"
-                              link={`/courses/assignment/${courseId}/${classroom}`}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )} */}
+
                   <div className="prev_courses"></div>
                 </>
               )}
