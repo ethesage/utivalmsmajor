@@ -134,7 +134,7 @@ export const getAllStudentCourse = async (req, res) => {
 };
 
 export const getSingleStudentCourse = async (req, res) => {
-  const { id } = req.session.user;
+  const { id, role } = req.session.user;
 
   const { courseCohortId } = req.body.student;
 

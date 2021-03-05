@@ -85,6 +85,7 @@ function FullClass({ gapi }) {
                     }}
                     editClass={() => setEditClass(!editClass)}
                     cohortId={cohortId}
+                    completedPayment={true}
                   />
 
                   <div className="prev_courses"></div>
