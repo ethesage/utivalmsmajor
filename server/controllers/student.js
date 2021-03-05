@@ -229,8 +229,9 @@ export const getSingleStudentCourse = async (req, res) => {
   }
 
   if (
-    resource.CourseCohort.dataValues.paymentType !== 'split' &&
-    resource.paymentComplete === null
+    resource.CourseCohort.dataValues.paymentType === 'split' &&
+    resource.paymentComplete !== null &&
+    !resource.paymentComplete
   ) {
     const half = Math.ceil(resource.Course.Classes.length / 2);
     const split = resource.Course.Classes.splice(0);
@@ -239,7 +240,9 @@ export const getSingleStudentCourse = async (req, res) => {
     split.forEach((el, i) => {
       if (i <= half - 1) {
         EditedClasses.push(el.dataValues);
-      } else EditedClasses.push({ title: el.title, ClassResources: [], id: el.id });
+      } else {
+        EditedClasses.push({ title: el.title, ClassResources: [], id: el.id });
+      }
     });
 
     return successStat(res, 200, 'data', {

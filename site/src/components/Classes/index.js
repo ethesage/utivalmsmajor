@@ -47,6 +47,7 @@ function Classes({
   setOpenedRef,
   addAssignment,
   editClass,
+  completedPayment,
 }) {
   const { title, description, link, courseCohortId } = data;
   const { isStudent, isAdmin, isTrainer } = useSelector((state) => state.auth);
@@ -340,8 +341,6 @@ function Classes({
   const handleImgError = (e) => {
     e.target.src = user_icon;
   };
-
-  const completedPayment = !(Object.keys(data).length === 3);
 
   return (
     <>

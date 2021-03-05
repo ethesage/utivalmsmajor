@@ -33,27 +33,38 @@ const Classroom = ({ full = false, gapi }) => {
         ) : (
           <>
             <div>
-              {currentCourse.Course.Classes.map((class_room, i) => (
-                <Classes
-                  key={`cx_listnx_${i}`}
-                  trainers={``}
-                  data={class_room}
-                  courseId={courseId}
-                  full={full}
-                  index={i}
-                  gapi={gapi}
-                  openedRef={openedRef}
-                  setOpenedRef={setOpenedRef}
-                  folderId={currentCourse.CourseCohort.folderId}
-                  completedPayment={
+              {currentCourse.Course.Classes.map((class_room, i) => {
+                {
+                  console.log(
                     i < currentCourse.Course.Classes.length / 2
                       ? true
                       : currentCourse &&
-                        (currentCourse.paymentComplete ||
-                          null === currentCourse.paymentComplete)
-                  }
-                />
-              ))}
+                          (currentCourse.paymentComplete ||
+                            null === currentCourse.paymentComplete)
+                  );
+                }
+                return (
+                  <Classes
+                    key={`cx_listnx_${i}`}
+                    trainers={``}
+                    data={class_room}
+                    courseId={courseId}
+                    full={full}
+                    index={i}
+                    gapi={gapi}
+                    openedRef={openedRef}
+                    setOpenedRef={setOpenedRef}
+                    folderId={currentCourse.CourseCohort.folderId}
+                    completedPayment={
+                      i < currentCourse.Course.Classes.length / 2
+                        ? true
+                        : currentCourse &&
+                          (currentCourse.paymentComplete ||
+                            null === currentCourse.paymentComplete)
+                    }
+                  />
+                );
+              })}
             </div>
             <PaymentComplete
               paymentComplete={
