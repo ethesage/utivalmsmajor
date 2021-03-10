@@ -61,7 +61,7 @@ const PaymentComp = ({ full, paymentComplete, details }) => {
           <div>
             <h1>Hello {user.firstName},</h1>
             <p>You have not completed the payment for the couse</p>
-            <p> please click on the link below to complete your payment</p>
+            <p> please click on the button below to complete your payment</p>
             <button className="pay" onClick={pay}>
               Pay Now
             </button>
@@ -74,13 +74,14 @@ const PaymentComp = ({ full, paymentComplete, details }) => {
       <Modal ref={paymentModal} runOnClose={runOnClose}>
         {payNow && (
           <Paymentcard
-            paymentAmount={details?.finalSplitAmount}
+            fromSplit
+            paymentAmount={details.courseAmount - details.amountPaid}
             mainText={
               <div style={{ marginBottom: '40px' }}>
                 <h1>Hi, {user.firstName}</h1>
                 <p>
                   Please complete your final payment of{' '}
-                  {details?.finalSplitAmount} using
+                  {details.courseAmount - details.amountPaid} using
                 </p>
               </div>
             }

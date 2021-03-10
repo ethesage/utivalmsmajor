@@ -10,7 +10,7 @@ import { addStudentCourse } from 'g_actions/mainCourse';
 import Modal from 'components/Modal';
 import './style.scss';
 
-const Payment = ({ back, paymentAmount, mainText, doneFunc }) => {
+const Payment = ({ back, paymentAmount, mainText, doneFunc, fromSplit }) => {
   const { push } = useHistory();
   const disRef = useRef();
 
@@ -73,15 +73,25 @@ const Payment = ({ back, paymentAmount, mainText, doneFunc }) => {
       </Modal>
       {user ? (
         <div className="payment_con mx-auto txt-center">
-          <p className="con_msg">
-            {mainText || 'Congratulations! Continue your payment using'}
-          </p>
+          {mainText || (
+            <p className="con_msg">
+              Congratulations! Continue your payment using
+            </p>
+          )}
 
           {courses.purchaseCourse.type !== 'free' && (
             <>
-              <Flutterwave done={done} paymentAmount={paymentAmount} />
+              <Flutterwave
+                done={done}
+                paymentAmount={paymentAmount}
+                back={fromSplit ? () => back() : () => {}}
+              />
 
-              <Stripe done={done} paymentAmount={paymentAmount} />
+              <Stripe
+                done={done}
+                paymentAmount={paymentAmount}
+                back={fromSplit ? () => back() : () => {}}
+              />
             </>
           )}
 
