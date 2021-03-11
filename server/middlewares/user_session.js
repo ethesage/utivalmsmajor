@@ -95,8 +95,8 @@ module.exports.main = function easySessionMain(connect, opts) {
    */
   Session.prototype.logout = async function logout(req, res) {
     req.session = null;
-    res.clearCookie('cbndemo', { domain: process.env.domain });
-    res.clearCookie('cbn_demo', { domain: process.env.domain });
+    res.clearCookie('uti_va', { domain: process.env.domain });
+    res.clearCookie('utiva', { domain: process.env.domain });
   };
 
   /**
