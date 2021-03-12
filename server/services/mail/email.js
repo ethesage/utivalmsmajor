@@ -157,8 +157,8 @@ class Mailer {
     this.templateTemp = Temp;
   }
 
-  getCohortmail(name, user) {
-    this.templateTemp = courseEmails[name](user);
+  getCohortmail(name, user, dateObj) {
+    this.templateTemp = courseEmails[name](user, dateObj);
     return this;
   }
 }

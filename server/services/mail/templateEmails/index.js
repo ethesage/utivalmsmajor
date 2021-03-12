@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 const style = `
   * {
     box-sizing: border-box;
@@ -50,7 +52,7 @@ const style = `
     background: #f0f5ff;
   }`;
 
-const dataAccelerator = (user) => {
+const dataAccelerator = (user, dateObj) => {
   const html = `<!DOCTYPE html>
     <html lang="en">
       <head>
@@ -75,7 +77,7 @@ const dataAccelerator = (user) => {
             />
           </nav>
           <h3 class="">Dear ${user.firstName}</h3>
-    
+
           <p>
             I warmly welcome you to the Utiva Data Accelerator program. We are super
             excited to have you become a part of this great ecosystem.
@@ -89,7 +91,7 @@ const dataAccelerator = (user) => {
                 materials, resources, important class links, post-class recordings,
                 assignments etc. (Visit app.utiva.io and login)
               </li>
-    
+
               <p>
                 <strong>
                   It is imperative that you sign up on the learning platform and
@@ -98,13 +100,13 @@ const dataAccelerator = (user) => {
                   kickstart this learning journey with you).
                 </strong>
               </p>
-    
+
               <li>
                 On the learning platform under the "Pre-learning session", there are
                 two short videos on <strong>Introduction to Data Visualization</strong>. Please
                 ensure you watch the videos before the class begins.
               </li>
-    
+
               <li>
                 <p>
                   Your live classes will be held on Zoom; the link to join is
@@ -112,10 +114,10 @@ const dataAccelerator = (user) => {
                   install SQL AND Power BI software on your laptop before coming
                   into class.
                 </p>
-    
+
                 <div>
                   <h4>TUTORIALS ON SQL INSTALLATION</h4>
-    
+
                   <ol>
                     <li>
                       Click
@@ -137,10 +139,10 @@ const dataAccelerator = (user) => {
                     </li>
                   </ol>
                 </div>
-    
+
                 <div>
                   <h4>TUTORIALS ON POWER BI INSTALLATION</h4>
-    
+
                   <div>
                     <h5>For Windows OS Users</h5>
                     <ol>
@@ -155,7 +157,7 @@ const dataAccelerator = (user) => {
                       </li>
                     </ol>
                   </div>
-    
+
                   <div>
                     <h5>For macOS Users</h5>
                     <ol>
@@ -179,47 +181,51 @@ const dataAccelerator = (user) => {
                     </ol>
                   </div>
                 </div>
-    
+
                 <p>
                   I will advise you to get started on the installations as soon as
                   possible. Reach out to me if you have any challenges.
                 </p>
               </li>
-    
+
               <li>
                 You may need to join your classes from a second screen (perhaps your
                 phone). This is important so that you are able to follow the
                 facilitator's screen and also practice at the same time.
               </li>
-    
+
               <li>
-                Class begins with an orientation session on the ${first_class_time} (Nigerian time). More information about this will be shared.
+                Class begins with an orientation session on the 
+                ${moment(dateObj.date).format('Do MMM YYYY')} 
+                ${moment(dateObj.time, 'HH:mm:ss').format('hh:mm A')} 
+                (Nigerian time). More information about this will be shared.
                 Endeavour to join in at least 10 minutes earlier so you can get a
                 head start.
               </li>
-    
+
               <li>
                 Kindly join the <a href="https://chat.whatsapp.com/K4E9yotG019Ey2gIJJ3Uis">CLASS CHAT ROOM</a>. Please note that this is very
                 important as all your class discussions will be taking place here.
               </li>
-    
+
               <li>
                 Finally, come with lots of enthusiasm as this is the beginning
                 of an exciting journey.
               </li>
             </ol>
-    
+
             <div>
               <h3>
                 Note that ALL the classes are very essential if you want to get
                 maximum value.
               </h3>
-    
+
               <p>
-                ${user.firstName}, please feel free to reach out to me if you have any
+                ${user.firstName}, 
+                please feel free to reach out to me if you have any
                 questions or further information.
               </p>
-    
+
               <p>Best Regards.</p>
             </div>
           </div>
@@ -233,7 +239,7 @@ const dataAccelerator = (user) => {
   };
 };
 
-const dataIncubator = (user) => {
+const dataIncubator = (user, dateObj) => {
   const html = `
     <!DOCTYPE html>
       <html lang="en">
@@ -332,7 +338,9 @@ const dataIncubator = (user) => {
             </li>
   
             <li>
-              Class begins with an orientation session on the ${first_class_time}
+              Class begins with an orientation session on the 
+              ${moment(dateObj.date).format('Do MMM YYYY')} 
+              ${moment(dateObj.time, 'HH:mm:ss').format('hh:mm A')} 
               (Nigerian time). More information about this will be shared.
               Endeavour to join in at least 10 minutes earlier so you can get a
               head start.
@@ -376,7 +384,7 @@ const dataIncubator = (user) => {
   };
 };
 
-const carrerStarters = (user) => {
+const carrerStarters = (user, dateObj) => {
   const html = `
       <!DOCTYPE html>
         <html lang="en">
@@ -529,7 +537,9 @@ const carrerStarters = (user) => {
           </li>
 
           <li>
-            Class begins with an orientation session on the ${first_class_time}
+            Class begins with an orientation session on the 
+            ${moment(dateObj.date).format('Do MMM YYYY')} 
+            ${moment(dateObj.time, 'HH:mm:ss').format('hh:mm A')} 
             (Nigerian time). More information about this will be shared.
             Endeavour to join in at least 10 minutes earlier so you can get a
             head start.
@@ -573,7 +583,7 @@ const carrerStarters = (user) => {
   };
 };
 
-const designSchool = (user) => {
+const designSchool = (user, dateObj) => {
   const html = `
     <!DOCTYPE html>
     <html lang="en">
@@ -607,8 +617,10 @@ const designSchool = (user) => {
         </p>
         <div>
             <h4>
-            Kindly note that the class begins with an orientation session on
-            ${first_class_time}. (More information will be sent to you soon)
+            Kindly note that the class begins with an orientation session on the 
+            ${moment(dateObj.date).format('Do MMM YYYY')} 
+            ${moment(dateObj.time, 'HH:mm:ss').format('hh:mm A')}. 
+            (More information will be sent to you soon)
             </h4>
 
             <p>
@@ -674,7 +686,8 @@ const designSchool = (user) => {
             </h3>
 
             <p>
-                ${user.firstName}, please feel free to reach out to me if you have
+                ${user.firstName}, 
+                please feel free to reach out to me if you have
                 any questions or further information.
             </p>
 
@@ -691,7 +704,7 @@ const designSchool = (user) => {
   };
 };
 
-const projectManagement = (user) => {
+const projectManagement = (user, dateObj) => {
   const html = `
       <!DOCTYPE html>
       <html lang="en">
@@ -717,37 +730,41 @@ const projectManagement = (user) => {
           />
         </nav>
         <h3 class="">Dear ${user.firstName}</h3>
-  
+
         <p>
           Preparations are well underway to ensure an amazing learning experience
-          as you come into class on ${first_class_time}. However, I need to
+          as you come into class on 
+          ${moment(dateObj.date).format('Do')}. 
+          However, I need to
           mention a few things:
         </p>
         <div>
           <h4>
-            Kindly note that the class begins with an orientation session on
-            ${first_class_time}. (More information will be sent to you soon)
+            Kindly note that the class begins with an orientation session on the 
+            ${moment(dateObj.date).format('Do MMM YYYY')} 
+            ${moment(dateObj.time, 'HH:mm:ss').format('hh:mm A')}. 
+            (More information will be sent to you soon)
           </h4>
-  
+
           <ol>
             <li>
               It is awesome that you share the start of this journey with your
               LinkedIn connections. This helps to expose you to more opportunities
               in the ecosystem.
             </li>
-  
+
             <h5>
               If you want me to send a short template of a post you can put up, I
               am happy to do that right away.
             </h5>
-  
+
             <li>
               The
               <a href="https://app.utiva.io/">Utiva Learning Platform</a> would be
               your primary platform for class activities. Kindly create an account
               (if you have not) and ensure your profile is updated.
             </li>
-  
+
             <li>
               The Online Classes will be coordinated via the
               <a
@@ -756,7 +773,7 @@ const projectManagement = (user) => {
               >. Kindly download it to your device(laptop or phone), for easy
               communication.
             </li>
-  
+
             <li>
               communication.
               <a
@@ -766,7 +783,7 @@ const projectManagement = (user) => {
               you will be working on. Do well to review them before the class
               starts on Saturday.
             </li>
-  
+
             <li>
               The Class is going to be a practical one where you will be assigned
               a project from the beginning of the class, you will adopt
@@ -778,7 +795,7 @@ const projectManagement = (user) => {
                 >HERE</a
               >
             </li>
-  
+
             <li>
               You will be working on a Project Management case from the beginning
               of the class. Download your learning materials as well as the
@@ -788,13 +805,13 @@ const projectManagement = (user) => {
                 >HERE</a
               >
             </li>
-  
+
             <li>
               At Utiva, we believe <strong>punctuality</strong> is the core of a
               business, so be early for your classes.
             </li>
           </ol>
-  
+
           <div>
             <p>
               One more thing, to ensure effective communication with the rest of
@@ -803,9 +820,11 @@ const projectManagement = (user) => {
                 >GROUP CHAT HERE</a
               >
             </p>
-  
-            <p>See you in class on ${first_class_time_day}, ${user.firstName}.</p>
-  
+
+            <p>See you in class on ${moment(dateObj.date).format('Do')}, 
+            ${user.firstName}.
+            </p>
+
             <p>Warm Regards.</p>
           </div>
         </div>
@@ -815,11 +834,13 @@ const projectManagement = (user) => {
             `;
   return {
     html,
-    subject: `PM class starts ${first_class_time_day}, ${user.firstName}! - Important tasks to help you prepare adequately.`,
+    subject: `PM class starts ${moment(dateObj.date).format('Do MMM YYYY')}, ${
+      user.firstName
+    }! - Important tasks to help you prepare adequately.`,
   };
 };
 
-const productSchool = (user) => {
+const productSchool = (user, dateObj) => {
   const html = `
         <!DOCTYPE html>
         <html lang="en">
@@ -845,7 +866,7 @@ const productSchool = (user) => {
               />
             </nav>
             <h3 class="">Hi ${user.firstName}</h3>
-      
+
             <p>
               I welcome you to Utiva Product School. We are super excited to have you
               in our prodigious ecosystem. You are the perfect fit for the students we
@@ -853,12 +874,14 @@ const productSchool = (user) => {
             </p>
             <div>
               <h4>
-                Kindly note that the class begins with an orientation session on
-                ${first_class_time}. (More information will be sent to you soon)
+                Kindly note that the class begins with an orientation session on the 
+                ${moment(dateObj.date).format('Do MMM YYYY')} 
+                ${moment(dateObj.time, 'HH:mm:ss').format('hh:mm A')}. 
+                (More information will be sent to you soon)
               </h4>
-      
+
               <h4>Kindly take note of the following:</h4>
-      
+
               <ol>
                 <li>
                   Your entire learning experience will be taking place via the
@@ -867,7 +890,7 @@ const productSchool = (user) => {
                   post-class recordings, certificates, etc. (Visit app.utiva.io and
                   login your details)
                 </li>
-      
+
                 <h5>
                   Here is a short
                   <a
@@ -882,7 +905,7 @@ const productSchool = (user) => {
                     kickstart this learning journey with you).</strong
                   >
                 </h5>
-      
+
                 <li>
                   To get you ready for class, please watch this
                   <a
@@ -893,7 +916,7 @@ const productSchool = (user) => {
                   With this, you'll understand Product Management, your role as a
                   Product Manager, and how you can transition seamlessly.
                 </li>
-      
+
                 <li>
                   The Online Classes will be coordinated via the
                   <a
@@ -902,7 +925,7 @@ const productSchool = (user) => {
                   >. Kindly download it to your device(laptop or phone), for easy
                   communication.
                 </li>
-      
+
                 <li>
                   Kindly join the
                   <a
@@ -912,14 +935,14 @@ const productSchool = (user) => {
                   discussions will be taking place here.
                 </li>
               </ol>
-      
+
               <div>
                 <p>
                   At Utiva, we believe <strong>punctuality</strong> is the core of our
                   business, hence, you are required to arrive at class 10 minutes
                   early so you can get a head start.
                 </p>
-      
+
                 <p>
                   Finally, come with lots of enthusiasm as we've got the best value
                   for you.
@@ -928,9 +951,11 @@ const productSchool = (user) => {
                     want to get maximum value.</strong
                   >
                 </p>
-      
-                <p>${user.firstName}, please feel free to reach out to me if you have any questions or further information.</p>
-      
+
+                <p>
+                ${user.firstName} 
+                , please feel free to reach out to me if you have any questions or further information.</p>
+
                 <p>Warm Regards.</p>
               </div>
             </div>
@@ -945,7 +970,7 @@ const productSchool = (user) => {
   };
 };
 
-const bigDataPython = (user) => {
+const bigDataPython = (user, dateObj) => {
   const html = `
         <!DOCTYPE html>
         <html lang="en">
@@ -1060,7 +1085,9 @@ const bigDataPython = (user) => {
 
           <li>
             Class begins with an orientation session on the
-            ${first_class_time}(Nigerian time). More information about this will
+            ${moment(dateObj.date).format('Do MMM YYYY')}
+            ${moment(dateObj.time, 'HH:mm:ss').format('hh:mm A')}
+            (Nigerian time). More information about this will
             be shared. Endeavour to join in at least 10 minutes earlier so you
             can get a head start
           </li>
@@ -1104,11 +1131,11 @@ const bigDataPython = (user) => {
 };
 
 export default {
-  'Data Accelerator': () => dataAccelerator(),
-  'Project Management': () => projectManagement(),
-  'Data Incubator': () => dataIncubator(),
-  'Career Starters Program': () => carrerStarters(),
-  'Design School': () => designSchool(),
-  'Product School': () => productSchool(),
-  'Big Data With Python': () => bigDataPython(),
+  'Data Accelerator': (name, dateObj) => dataAccelerator(name, dateObj),
+  'Project Management': (name, dateObj) => projectManagement(name, dateObj),
+  'Data Incubator': (name, dateObj) => dataIncubator(name, dateObj),
+  'Career Starters Program': (name, dateObj) => carrerStarters(name, dateObj),
+  'Design School': (name, dateObj) => designSchool(name, dateObj),
+  'Product School': (name, dateObj) => productSchool(name, dateObj),
+  'Big Data With Python': (name, dateObj) => bigDataPython(name, dateObj),
 };
