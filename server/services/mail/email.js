@@ -2,6 +2,7 @@ import sendgridMail from '@sendgrid/mail';
 import dotenv from 'dotenv';
 import debug from 'debug';
 import style from './style';
+import courseEmails from './templateEmails';
 
 dotenv.config();
 
@@ -46,7 +47,7 @@ class Mailer {
     this.bodyStyle = '';
     this.headerStyle = '';
     this.messageStyle = '';
-    this.templateTemp = '';
+    this.templateTemp = null;
   }
 
   /**
@@ -89,8 +90,8 @@ class Mailer {
     const mail = {
       to: this.to,
       from: senderEmail,
-      subject: this.subject,
-      html,
+      subject: (this.templateTemp && this.templateTemp.subject) || this.subject,
+      html: (this.templateTemp && this.templateTemp.html) || html,
     };
 
     try {
@@ -154,6 +155,11 @@ class Mailer {
    */
   Initemplate(Temp) {
     this.templateTemp = Temp;
+  }
+
+  getCohortmail(name, user) {
+    this.templateTemp = courseEmails[name](user);
+    return this;
   }
 }
 
