@@ -1,15 +1,15 @@
-import AWS from "aws-sdk";
-import isBase64 from "is-base64";
-import bluebird from "bluebird";
+import AWS from 'aws-sdk';
+import isBase64 from 'is-base64';
+import bluebird from 'bluebird';
 import {
   AWS_SECRET_ACCESS_KEY,
   AWS_ACCESS_KEY_ID,
   AWS_REGION,
   AWS_BUCKET_NAME,
   ENCRYPTION_SECRET,
-} from "../config/envVariables";
+} from '../config/envVariables';
 
-const Cryptr = require("cryptr");
+const Cryptr = require('cryptr');
 
 const config = {
   aws: {
@@ -81,7 +81,7 @@ export function validateJoi(object, schema, req, res, next, name) {
       res,
       400,
       error.details.map((detail) => {
-        const message = detail.message.replace(/"/gi, "");
+        const message = detail.message.replace(/"/gi, '');
         return message;
       })
     );
@@ -94,24 +94,37 @@ export function validateJoi(object, schema, req, res, next, name) {
 export const uploadImage = async (url, fileName) => {
   try {
     if (!isBase64(url, { mimeRequired: true })) {
-      throw Error("Invalid base64 image");
+      throw Error('Invalid base64 image');
     }
     const buffer = new Buffer.from(
-      url.replace(/^data:image\/\w+;base64,/, ""),
-      "base64"
+      url.replace(/^data:image\/\w+;base64,/, ''),
+      'base64'
     );
     const data = {
-      ACL: "public-read",
+      ACL: 'public-read',
       Key: fileName,
       Body: buffer,
-      ContentEncoding: "base64",
-      ContentType: "image/jpeg",
+      ContentEncoding: 'base64',
+      ContentType: 'image/jpeg',
     };
     return s3.upload(data).promise();
   } catch (err) {
     return err.message;
   }
 };
+
+// export const getFolderListings = async () => {
+//   s3.listObjects(
+//     { Bucket: 'utiva-app', Delimiter: ',', Prefix: 'media' },
+//     (err, data) => {
+//       if (err) {
+//         return console.log(err);
+//       }
+
+//       console.log(data);
+//     }
+//   );
+// };
 
 export const encryptQuery = (string) => {
   try {
@@ -142,10 +155,10 @@ const shuffleArray = (array) => {
 };
 
 export const generatePassword = (passwordLength, coupon) => {
-  const numberChars = "0123456789";
-  const upperChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  const lowerChars = "abcdefghijklmnopqrstuvwxyz";
-  const symbols = "!@#$%&*";
+  const numberChars = '0123456789';
+  const upperChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const lowerChars = 'abcdefghijklmnopqrstuvwxyz';
+  const symbols = '!@#$%&*';
 
   const allChars = coupon
     ? upperChars
@@ -158,5 +171,5 @@ export const generatePassword = (passwordLength, coupon) => {
   randPasswordArray = randPasswordArray.fill(allChars, 4);
   return shuffleArray(
     randPasswordArray.map((x) => x[Math.floor(Math.random() * x.length)])
-  ).join("");
+  ).join('');
 };
