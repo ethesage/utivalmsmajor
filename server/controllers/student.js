@@ -3,6 +3,7 @@
 import sequelize from "sequelize";
 import models from "../database/models";
 import helpers from "../helpers";
+import Mail from "../services/mail/email";
 
 const { successStat, errorStat } = helpers;
 
@@ -39,6 +40,21 @@ export const addStudentCourse = async (req, res) => {
 
     const course = await models.Course.findOne({
       where: { id: cour.courseId },
+      include: [
+        {
+          model: models.Classes,
+          attributes: ["link"],
+          include: [
+            {
+              model: models.CohortClassDays,
+              // where: { date: { [Op.gte]: new Date() } },
+              limit: 1,
+              attributes: ["date", "time"],
+              order: [["date", "ASC"]],
+            },
+          ],
+        },
+      ],
     });
 
     const resource = await models.StudentCourse.findOne({
@@ -91,6 +107,26 @@ export const addStudentCourse = async (req, res) => {
     await cour.update({
       totalStudent: cour.totalStudent + 1,
     });
+
+    console.log(course.title,
+      { firstName: student.firstName },
+      {
+        date: course.Classes.CohortClassDays.date,
+        time: course.Classes.CohortClassDays.time,
+      })
+
+    // const mail = new Mail({
+    //   to: student.email,
+    // });
+    // mail.getCohortmail(
+    //   course.title,
+    //   { firstName: student.firstName },
+    //   {
+    //     date: course.Classes.CohortClassDays.date,
+    //     time: course.Classes.CohortClassDays.time,
+    //   }
+    // );
+    // mail.sendMail();
 
     return successStat(res, 200, "data", {
       ...studC.dataValues,

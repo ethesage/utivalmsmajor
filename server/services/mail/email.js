@@ -59,7 +59,7 @@ class Mailer {
    * @returns  {Object} - Mailer response
    */
   async sendMail() {
-    if (!this.messageBody) {
+    if (!this.messageBody && !this.templateTemp) {
       throw new Error('Message cannot be empty!');
     }
     const html = `
@@ -87,12 +87,15 @@ class Mailer {
       </html>
   `;
 
+
     const mail = {
       to: this.to,
       from: senderEmail,
       subject: (this.templateTemp && this.templateTemp.subject) || this.subject,
       html: (this.templateTemp && this.templateTemp.html) || html,
     };
+
+    // console.log(mail)
 
     try {
       await sendgridMail.send(mail);

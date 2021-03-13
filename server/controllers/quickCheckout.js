@@ -2,6 +2,7 @@
 // import sequelize from "sequelize";
 import models from "../database/models";
 import helpers from "../helpers";
+import Mail from "../services/mail/email";
 
 const { successStat, errorStat } = helpers;
 
@@ -18,11 +19,11 @@ const { successStat, errorStat } = helpers;
 
 export const quickCheckout = async (req, res) => {
   const { courseCohortId, insertUser = [], amount } = req.body.checkout;
-  const { id } = req.session.user;
+  const { id, firstName, email } = req.session.user;
 
-  console.log('====================================')
-  console.log(req.body.checkout)
-  console.log('====================================')
+  // console.log('====================================')
+  // console.log(req.body.checkout)
+  // console.log('====================================')
 
   const cour = await models.CourseCohort.findOne({
     where: { id: courseCohortId },
@@ -31,6 +32,7 @@ export const quickCheckout = async (req, res) => {
   if (!cour) {
     return errorStat(res, 404, "Course does not exist");
   }
+
   if (!insertUser[0]) {
     const resource = await models.StudentCourse.findOne({
       where: { studentId: id, courseCohortId },
@@ -38,6 +40,20 @@ export const quickCheckout = async (req, res) => {
 
     const course = await models.Course.findOne({
       where: { id: cour.courseId },
+      include: [
+        {
+          model: models.Classes,
+          attributes: ["link"],
+          include: [
+            {
+              model: models.CohortClassDays,
+              attributes: ["date", "time"],
+              order: [["date", "ASC"]],
+            },
+          ],
+        },
+      ],
+      order: [[models.Classes, models.CohortClassDays, "date", "ASC"]],
     });
 
     if (
@@ -74,8 +90,22 @@ export const quickCheckout = async (req, res) => {
         status: "ongoing",
         courseAmount: course.cost,
         amountPaid: amount,
-        paymentComplete: Number(course.cost) === Number(amount),
+        paymentComplete: Number(amount) >= Number(course.cost),
       });
+
+      //SEND EMAIL TO STUDENT IF SPLIT PAYMENT
+      const mail = new Mail({
+        to: email,
+      });
+      mail.getCohortmail(
+        course.name,
+        { firstName },
+        {
+          date: course.Classes[0].CohortClassDays[0].dataValues.date,
+          time: course.Classes[0].CohortClassDays[0].dataValues.time,
+        }
+      );
+      mail.sendMail();
     } else if (
       cour.paymentType === "split" &&
       resource &&
@@ -84,7 +114,7 @@ export const quickCheckout = async (req, res) => {
       studC = resource.update({
         amountPaid: Number(resource.amountPaid) + Number(amount),
         paymentComplete:
-          Number(course.cost) >= Number(resource.amountPaid) + Number(amount),
+          Number(resource.amountPaid) + Number(amount) >= Number(course.cost),
       });
     } else {
       studC = await models.StudentCourse.create({
@@ -101,15 +131,30 @@ export const quickCheckout = async (req, res) => {
         progress: 0,
         courseId: cour.courseId,
       });
+
+      const mail = new Mail({
+        to: email,
+      });
+      
+      //SEND EMAIL TO STUDENT IF NOT SPLIT PAYMENT
+      mail.getCohortmail(
+        course.name,
+        { firstName },
+        {
+          date: course.Classes[0].CohortClassDays[0].dataValues.date,
+          time: course.Classes[0].CohortClassDays[0].dataValues.time,
+        }
+      );
+      mail.sendMail();
     }
 
-    // await models.CourseProgress.create({
-    //   courseId: cour.courseId,
-    //   userId: id,
-    //   progress: 0,
-    // });
+    await models.CourseProgress.create({
+      courseId: cour.courseId,
+      userId: id,
+      progress: 0,
+    });
 
-    // console.log()
+    console.log();
 
     await cour.update({
       totalStudent: cour.totalStudent + 1,
@@ -117,9 +162,10 @@ export const quickCheckout = async (req, res) => {
 
     return successStat(res, 200, "data", {
       ...studC.dataValues,
-      message: "Student added Successfully",
+      message: "Student added successfully",
     });
   }
+
   await cour.update({
     totalStudent: cour.totalStudent + insertUser.length,
   });
@@ -136,6 +182,9 @@ export const quickCheckout = async (req, res) => {
       status: "ongoing",
       courseId: cour.courseId,
       progress: 0,
+      paymentComplete: true,
+      courseAmount: course.cost,
+      amountPaid: course.cost,
     });
   });
   const studC = await models.StudentCourse.bulkCreate(data, {
