@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import QuickCheckout from 'views/Auth/QuickCheckout';
@@ -20,16 +20,24 @@ const Payment = ({ back, paymentAmount, mainText, doneFunc, fromSplit }) => {
 
   useEffect(() => {
     if (courses?.purchaseCourse?.type === 'free') {
-      dispatch(
-        checkout(courses.purchaseCourse.CourseCohorts[0].id),
-        paymentAmount
-      );
-      dispatch(
-        addStudentCourse(courses.purchaseCourse, [
-          { courseCohortId: courses.purchaseCourse.CourseCohorts[0].id },
-        ])
-      );
-      done();
+      try {
+        document.querySelector('body').classList.add('spinner1');
+        dispatch(
+          checkout(courses.purchaseCourse.CourseCohorts[0].id),
+          paymentAmount
+        );
+        dispatch(
+          addStudentCourse(courses.purchaseCourse, [
+            { courseCohortId: courses.purchaseCourse.CourseCohorts[0].id },
+          ])
+        );
+
+        done();
+        document.querySelector('body').classList.remove('spinner1');
+      } catch (err) {
+        done();
+        document.querySelector('body').classList.remove('spinner1');
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

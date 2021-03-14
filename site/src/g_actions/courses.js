@@ -72,14 +72,12 @@ export const check = (courseCohortId) => async (dispatch) => {
 
 export const checkout = (courseCohortId, amount) => async (dispatch) => {
   let checkout;
-  try {
-    checkout = await axiosInstance.post(
-      `/checkout/quickcheckout/${courseCohortId}`,
-      { amount }
-    );
-  } catch (error) {
-    return error;
-  }
+
+  checkout = await axiosInstance.post(
+    `/checkout/quickcheckout/${courseCohortId}`,
+    { amount }
+  );
+
   return checkout;
 };
 
