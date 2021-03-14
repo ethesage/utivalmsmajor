@@ -158,8 +158,13 @@ class Mailer {
   }
 
   getCohortmail(name, user, dateObj) {
-    this.templateTemp = courseEmails[name](user, dateObj);
-    return this;
+    const mailData = courseEmails[name] && courseEmails[name](user, dateObj);
+    if (mailData) {
+      this.templateTemp =
+        courseEmails[name] && courseEmails[name](user, dateObj);
+      return this;
+    }
+    return null;
   }
 }
 

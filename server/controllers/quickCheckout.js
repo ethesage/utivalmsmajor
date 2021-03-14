@@ -60,19 +60,6 @@ export const quickCheckout = async (req, res) => {
     }
     let studC;
 
-    // const studC = await models.StudentCourse.create({
-    //   ...req.body.checkout,
-    //   studentId: id,
-    //   isCompleted: false,
-    //   expiresAt: cour.expiresAt,
-    //   cohortId: cour.cohortId,
-    //   status: "ongoing",
-    //   courseId: cour.courseId,
-    //   progress: 0,
-    //   courseAmount: course.cost,
-    //   amountPaid: amount,
-    //   paymentComplete: Number(course.cost) === Number(amount),
-    // });
     if (cour.paymentType === 'split' && !resource) {
       studC = await models.StudentCourse.create({
         ...req.body.checkout,
@@ -92,7 +79,8 @@ export const quickCheckout = async (req, res) => {
       const mail = new Mail({
         to: email,
       });
-      mail.getCohortmail(
+
+      const resp = mail.getCohortmail(
         course.name,
         { firstName },
         {
@@ -100,7 +88,9 @@ export const quickCheckout = async (req, res) => {
           time: course.Classes[0].CohortClassDays[0].dataValues.time,
         }
       );
-      mail.sendMail();
+      if (resp) {
+        mail.sendMail();
+      }
     } else if (
       cour.paymentType === 'split' &&
       resource &&
@@ -131,7 +121,7 @@ export const quickCheckout = async (req, res) => {
       });
 
       // SEND EMAIL TO STUDENT IF NOT SPLIT PAYMENT
-      mail.getCohortmail(
+      const resp = mail.getCohortmail(
         course.name,
         { firstName },
         {
@@ -139,7 +129,9 @@ export const quickCheckout = async (req, res) => {
           time: course.Classes[0].CohortClassDays[0].dataValues.time,
         }
       );
-      mail.sendMail();
+      if (resp) {
+        mail.sendMail();
+      }
     }
 
     await models.CourseProgress.create({

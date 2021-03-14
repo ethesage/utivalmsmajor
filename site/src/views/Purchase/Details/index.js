@@ -16,9 +16,7 @@ const Details = ({ proceed, match, set, setPaymentAmount }) => {
   const btnRef = useRef();
 
   const [loading, rate] = getCurrencyRate();
-  const [paymentType, setPaymentType] = useState(
-    purchaseCourse?.type === 'free' && 'full'
-  );
+  const [paymentType, setPaymentType] = useState();
   const [amountToPay, setAmountToPay] = useState();
 
   const checkout = async () => {
@@ -34,12 +32,13 @@ const Details = ({ proceed, match, set, setPaymentAmount }) => {
   };
 
   useEffect(() => {
-    if (!paymentType) return;
-
     if (purchaseCourse?.type === 'free') {
       setAmountToPay(purchaseCourse?.cost);
+      setPaymentType('full');
       return;
     }
+
+    if (!paymentType) return;
 
     if (paymentType === 'split') {
       setAmountToPay(purchaseCourse.initialSplitAmount);
