@@ -57,12 +57,12 @@ const CousreCard = ({ data }) => {
           </>
         ) : null}
 
-        {!isStudent ? (
-          <div className="chx flex-row j-space">
-            <strong>{<p>{Cohort?.cohort} Cohort</p>}</strong>
-            <small>{CourseCohort?.dateRange}</small>
-          </div>
-        ) : null}
+        {/* {!isStudent ? ( */}
+        <div className="chx flex-row j-space">
+          <strong>{<p>{Cohort?.cohort} Cohort</p>}</strong>
+          <small>{CourseCohort?.dateRange}</small>
+        </div>
+        {/* ) : null} */}
       </div>
     </div>
   );

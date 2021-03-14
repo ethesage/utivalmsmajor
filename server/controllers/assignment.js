@@ -207,11 +207,13 @@ export const deleteAssignment = async (req, res) => {
 
   if (!findAssignment) return errorStat(res, 404, 'Assignment not found');
 
-  if (findAssignment.studentId !== id)
+  if (findAssignment.studentId !== id) {
     return errorStat(res, 400, 'Forbidden Access');
+  }
 
-  if (findAssignment.isGraded)
+  if (findAssignment.isGraded) {
     return errorStat(res, 400, 'Cannot Delete Graded Assignment');
+  }
 
   await findAssignment.destroy();
   return successStat(res, 200, 'data', {

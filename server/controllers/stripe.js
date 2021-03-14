@@ -5,7 +5,7 @@ const Stripe = require('stripe');
 
 const stripe = Stripe(process.env.STRIPE_SECRET_API_KEY);
 
-const { successStat, errorStat } = helpers;
+const { successStat } = helpers;
 
 export const createSession = async (req, res) => {
   const { id, email } = req.session.user;

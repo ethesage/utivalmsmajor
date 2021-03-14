@@ -778,7 +778,7 @@ li {
   padding: 10px 0;
   width: 100%;
   border-radius: 10px;
-  max-height: 401px;
+  // max-height: 401px;
 
   .img-sec {
     height: 250px;
@@ -805,7 +805,7 @@ li {
 
     .slim {
       height: 2px;
-      margin: 2px 0 20px;
+      margin: 2px 0 10px;
 
       .react-sweet-progress-line {
         height: 100%;
@@ -822,6 +822,7 @@ li {
     }
 
     .chx {
+      font-size: 0.75em;
       @include for-size(tablet-portrait-up) {
         flex-direction: column;
         align-items: start;
