@@ -24,7 +24,7 @@ const CousreCard = ({ data }) => {
 
         {isStudent ? (
           <>
-            <div>
+            <div className="w-full">
               <small>Completion level</small>
               <Progress
                 className="slim"

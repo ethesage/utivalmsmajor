@@ -800,11 +800,13 @@ li {
     flex-direction: column;
     justify-content: space-between;
     flex-grow: 1;
+    width: 100%;
 
     .title_sec {
       margin-bottom: 20px;
       display: flex;
       align-items: flex-start;
+      width: 100%;
 
       img {
         width: 30px;
@@ -836,6 +838,7 @@ li {
 
     .chx {
       font-size: 0.75em;
+      width: 100%;
     }
 
     .grade {

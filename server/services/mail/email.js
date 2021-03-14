@@ -92,8 +92,6 @@ class Mailer {
       html: (this.templateTemp && this.templateTemp.html) || html,
     };
 
-    console.log(mail);
-
     try {
       await sendgridMail.send(mail);
       console.log(`Message Sent! to ${mail.to}`);
