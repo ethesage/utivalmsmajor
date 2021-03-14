@@ -1,12 +1,12 @@
-import { axiosInstance } from "../helpers";
+import { axiosInstance } from '../helpers';
 
-export const getEnrolledCourses = (id, data, userType = "student") => async (
+export const getEnrolledCourses = (id, data, userType = 'student') => async (
   dispatch
 ) => {
   let courses;
 
-  const slug = userType === "student" ? userType : "trainer/course";
-  const courseId = id ? `/${id}` : "";
+  const slug = userType === 'student' ? userType : 'trainer/course';
+  const courseId = id ? `/${id}` : '';
 
   courses = data ? data : await axiosInstance.get(`/${slug}${courseId}`);
 
@@ -27,14 +27,14 @@ export const getEnrolledCourses = (id, data, userType = "student") => async (
     );
 
     dispatch({
-      type: "CREATE_CLASS_RESOURCES",
+      type: 'CREATE_CLASS_RESOURCES',
       payload: data_,
     });
   }
 
   // create a list of the class name so we can add the class resources
   dispatch({
-    type: id ? "GET_CURRENT_COURSE" : "GET_ENROLLED_COURSES",
+    type: id ? 'GET_CURRENT_COURSE' : 'GET_ENROLLED_COURSES',
     payload: data ? courses : courses.data.data,
   });
 };
@@ -48,21 +48,21 @@ export const getEnrolledMembers = (id, data) => async (dispatch) => {
   }
 
   dispatch({
-    type: "GET_ALL_ENROLLED_STUDENTS",
+    type: 'GET_ALL_ENROLLED_STUDENTS',
     payload: { members: members.data.data, courseId: id },
   });
 };
 
 export const enrollStudents = (data) => async (dispatch) => {
   dispatch({
-    type: "ENROLL_STUDENTS",
+    type: 'ENROLL_STUDENTS',
     payload: data,
   });
 };
 
 export const deleteStudent = (id) => async (dispatch) => {
   dispatch({
-    type: "REMOVE_STUDENT",
+    type: 'REMOVE_STUDENT',
     payload: id,
   });
 };
@@ -76,7 +76,7 @@ export const countDetails = () => async (dispatch) => {
   }
 
   dispatch({
-    type: "COUNTS",
+    type: 'COUNTS',
     payload: counts.data.data,
   });
 };
@@ -90,75 +90,75 @@ export const getClassDays = (id) => async (dispatch) => {
   }
 
   dispatch({
-    type: "GET_ALL_CLASS_DAYS",
+    type: 'GET_ALL_CLASS_DAYS',
     payload: classdays.data.data,
   });
 };
 
 export const getResources = (name, file) => async (dispatch) => {
   dispatch({
-    type: "GET_RESOURCES",
+    type: 'GET_RESOURCES',
     payload: { name, file },
   });
 };
 
 export const deleteResources = (name, id) => async (dispatch) => {
   dispatch({
-    type: "DELETE_RESOURCE",
+    type: 'DELETE_RESOURCE',
     payload: { name, id },
   });
 };
 
 export const updateResourceName = (oldname, newname) => (dispatch) => {
   dispatch({
-    type: "UPDATE_RESOURCE_NAME",
+    type: 'UPDATE_RESOURCE_NAME',
     payload: { oldname, newname },
   });
 };
 
 export const createResourceName = (name) => (dispatch) => {
   dispatch({
-    type: "CREATE_RESOURCE_NAME",
+    type: 'CREATE_RESOURCE_NAME',
     payload: name,
   });
 };
 
 export const getAssignments = (name, file) => async (dispatch) => {
   dispatch({
-    type: "GET_ASSIGNMENT",
+    type: 'GET_ASSIGNMENT',
     payload: { name, file },
   });
 };
 
 export const editAssignments = (name, file, id) => async (dispatch) => {
   dispatch({
-    type: "DELETE_ASSIGNMENT",
+    type: 'DELETE_ASSIGNMENT',
     payload: { name, id },
   });
 
   dispatch({
-    type: "GET_ASSIGNMENT",
+    type: 'GET_ASSIGNMENT',
     payload: { name, file },
   });
 };
 
 export const deleteAssignmnet = (name, id) => async (dispatch) => {
   dispatch({
-    type: "DELETE_ASSIGNMENT",
+    type: 'DELETE_ASSIGNMENT',
     payload: { name, id },
   });
 };
 
 export const getSubmittedAssignments = (name, file) => async (dispatch) => {
   dispatch({
-    type: "SUBMIT_ASSIGNMENT",
+    type: 'SUBMIT_ASSIGNMENT',
     payload: { name, file },
   });
 };
 
 export const deleteSubmittedAssignment = (name, id) => async (dispatch) => {
   dispatch({
-    type: "DELETE_SUBMITTED_ASSIGNMENT",
+    type: 'DELETE_SUBMITTED_ASSIGNMENT',
     payload: { name, id },
   });
 };
@@ -171,14 +171,14 @@ export const getAllsubmittedAssignment = (name, classId, cohortId) => async (
   );
 
   dispatch({
-    type: "GET_ALL_SUBMITTED_ASSIGNMENTS",
+    type: 'GET_ALL_SUBMITTED_ASSIGNMENTS',
     payload: { name, data: res.data.data },
   });
 };
 
 export const gradeAssignment = (name, Id, grade) => async (dispatch) => {
   dispatch({
-    type: "GRADE_ASSIGNMENT",
+    type: 'GRADE_ASSIGNMENT',
     payload: { name, Id, grade },
   });
 };
@@ -193,11 +193,10 @@ export const studentProgress = (courseCohortId, classId) => async (
   };
 
   try {
-    members = await axiosInstance.post("/student/addprogress", data);
-    // console.log(members, 'members');
+    members = await axiosInstance.post('/student/addprogress', data);
+
     return members.data;
   } catch (error) {
-    // console.log(error.message.error)
     return error;
   }
 };
@@ -209,8 +208,8 @@ export const courseProgress = (courseCohortId, classId) => async (dispatch) => {
     classId,
   };
   try {
-    members = await axiosInstance.post("/course/addprogress", data);
-    // console.log(members, 'members');
+    members = await axiosInstance.post('/course/addprogress', data);
+
     return members.data;
   } catch (error) {
     return error;

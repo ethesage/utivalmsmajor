@@ -1,8 +1,8 @@
 /* eslint-disable import/prefer-default-export */
 // import sequelize from "sequelize";
-import models from "../database/models";
-import helpers from "../helpers";
-import Mail from "../services/mail/email";
+import models from '../database/models';
+import helpers from '../helpers';
+import Mail from '../services/mail/email';
 
 const { successStat, errorStat } = helpers;
 
@@ -21,16 +21,12 @@ export const quickCheckout = async (req, res) => {
   const { courseCohortId, insertUser = [], amount } = req.body.checkout;
   const { id, firstName, email } = req.session.user;
 
-  // console.log('====================================')
-  // console.log(req.body.checkout)
-  // console.log('====================================')
-
   const cour = await models.CourseCohort.findOne({
     where: { id: courseCohortId },
   });
 
   if (!cour) {
-    return errorStat(res, 404, "Course does not exist");
+    return errorStat(res, 404, 'Course does not exist');
   }
 
   if (!insertUser[0]) {
@@ -43,24 +39,24 @@ export const quickCheckout = async (req, res) => {
       include: [
         {
           model: models.Classes,
-          attributes: ["link"],
+          attributes: ['link'],
           include: [
             {
               model: models.CohortClassDays,
-              attributes: ["date", "time"],
-              order: [["date", "ASC"]],
+              attributes: ['date', 'time'],
+              order: [['date', 'ASC']],
             },
           ],
         },
       ],
-      order: [[models.Classes, models.CohortClassDays, "date", "ASC"]],
+      order: [[models.Classes, models.CohortClassDays, 'date', 'ASC']],
     });
 
     if (
       resource &&
       (resource.paymentComplete === true || resource.paymentComplete === null)
     ) {
-      return errorStat(res, 404, "Student is Already Taking This Course");
+      return errorStat(res, 404, 'Student is Already Taking This Course');
     }
     let studC;
 
@@ -77,23 +73,22 @@ export const quickCheckout = async (req, res) => {
     //   amountPaid: amount,
     //   paymentComplete: Number(course.cost) === Number(amount),
     // });
-    if (cour.paymentType === "split" && !resource) {
+    if (cour.paymentType === 'split' && !resource) {
       studC = await models.StudentCourse.create({
         ...req.body.checkout,
         isCompleted: false,
-        cohortId: cour.cohortId,
         studentId: id,
         progress: 0,
         courseId: cour.courseId,
         expiresAt: cour.expiresAt,
         cohortId: cour.cohortId,
-        status: "ongoing",
+        status: 'ongoing',
         courseAmount: course.cost,
         amountPaid: amount,
         paymentComplete: Number(amount) >= Number(course.cost),
       });
 
-      //SEND EMAIL TO STUDENT IF SPLIT PAYMENT
+      // SEND EMAIL TO STUDENT IF SPLIT PAYMENT
       const mail = new Mail({
         to: email,
       });
@@ -107,7 +102,7 @@ export const quickCheckout = async (req, res) => {
       );
       mail.sendMail();
     } else if (
-      cour.paymentType === "split" &&
+      cour.paymentType === 'split' &&
       resource &&
       resource.paymentComplete === false
     ) {
@@ -121,8 +116,7 @@ export const quickCheckout = async (req, res) => {
         ...req.body.checkout,
         isCompleted: false,
         expiresAt: cour.expiresAt,
-        cohortId: cour.cohortId,
-        status: "ongoing",
+        status: 'ongoing',
         paymentComplete: true,
         courseAmount: course.cost,
         amountPaid: amount,
@@ -135,8 +129,8 @@ export const quickCheckout = async (req, res) => {
       const mail = new Mail({
         to: email,
       });
-      
-      //SEND EMAIL TO STUDENT IF NOT SPLIT PAYMENT
+
+      // SEND EMAIL TO STUDENT IF NOT SPLIT PAYMENT
       mail.getCohortmail(
         course.name,
         { firstName },
@@ -154,15 +148,13 @@ export const quickCheckout = async (req, res) => {
       progress: 0,
     });
 
-    console.log();
-
     await cour.update({
       totalStudent: cour.totalStudent + 1,
     });
 
-    return successStat(res, 200, "data", {
+    return successStat(res, 200, 'data', {
       ...studC.dataValues,
-      message: "Student added successfully",
+      message: 'Student added successfully',
     });
   }
 
@@ -179,12 +171,12 @@ export const quickCheckout = async (req, res) => {
       isCompleted: false,
       expiresAt: cour.expiresAt,
       cohortId: cour.cohortId,
-      status: "ongoing",
+      status: 'ongoing',
       courseId: cour.courseId,
       progress: 0,
       paymentComplete: true,
-      courseAmount: course.cost,
-      amountPaid: course.cost,
+      courseAmount: cour.cost,
+      amountPaid: cour.cost,
     });
   });
   const studC = await models.StudentCourse.bulkCreate(data, {
@@ -192,9 +184,9 @@ export const quickCheckout = async (req, res) => {
     allowDuplicates: false,
   });
 
-  return successStat(res, 200, "data", {
+  return successStat(res, 200, 'data', {
     ...studC.dataValues,
-    message: "Student(s) added Successfully",
+    message: 'Student(s) added Successfully',
   });
 };
 
@@ -202,8 +194,8 @@ export const checkStatus = async (req, res) => {
   const { courseCohortId } = req.body.checkout;
 
   if (!req.session.user) {
-    return successStat(res, 200, "data", {
-      message: "Not Enrolled",
+    return successStat(res, 200, 'data', {
+      message: 'Not Enrolled',
     });
   }
 
@@ -214,7 +206,7 @@ export const checkStatus = async (req, res) => {
   });
 
   if (!cour) {
-    return errorStat(res, 404, "Course does not exist");
+    return errorStat(res, 404, 'Course does not exist');
   }
 
   const resource = await models.StudentCourse.findOne({
@@ -222,10 +214,10 @@ export const checkStatus = async (req, res) => {
   });
 
   if (resource) {
-    return successStat(res, 200, "Student is Already Taking This Course");
+    return successStat(res, 200, 'Student is Already Taking This Course');
   }
 
-  return successStat(res, 200, "data", {
-    message: "Not Enrolled",
+  return successStat(res, 200, 'data', {
+    message: 'Not Enrolled',
   });
 };

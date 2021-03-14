@@ -43,8 +43,6 @@ const Stripe = ({ paymentAmount, back }) => {
         sessionId: response.data.id,
       }));
 
-    // console.log(result, "......");
-
     if (result?.error) {
       // If `redirectToCheckout` fails due to a browser or network
       // error, display the localized error message to your customer

@@ -51,6 +51,12 @@ const CourseCard = ({ data, size = '' }) => {
 
   const handleClick = (e) => {
     e.preventDefault();
+
+    if (user && data?.StudentCourses?.length > 0) {
+      history.push(`/courses/overview/${CourseCohorts[0].id}`);
+      return;
+    }
+
     dispatch(purchaseCourse(data));
     history.push(`/purchase/${CourseCohorts[0].id}`);
   };

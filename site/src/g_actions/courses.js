@@ -1,15 +1,15 @@
-import { axiosInstance } from "../helpers";
+import { axiosInstance } from '../helpers';
 
 export const loading = () => async (dispatch) => {
   dispatch({
-    type: "LOADING_ARTICLES",
+    type: 'LOADING_ARTICLES',
     payload: true,
   });
 };
 
 export const done_loading = () => async (dispatch) => {
   dispatch({
-    type: "DONE_LOADING_ARTICLE",
+    type: 'DONE_LOADING_ARTICLE',
     payload: false,
   });
 };
@@ -17,13 +17,13 @@ export const done_loading = () => async (dispatch) => {
 export const getcategories = () => async (dispatch) => {
   let categories;
   try {
-    categories = await axiosInstance.get("/category");
+    categories = await axiosInstance.get('/category');
   } catch (error) {
     return error;
   }
 
   dispatch({
-    type: "GET_CATEGORIES",
+    type: 'GET_CATEGORIES',
     payload: categories.data.Categories,
   });
 };
@@ -37,7 +37,7 @@ export const getSingleCourse = (slug) => async (dispatch) => {
   }
 
   dispatch({
-    type: "GET_CURRENT_COURSE",
+    type: 'GET_CURRENT_COURSE',
     payload: course.data.course,
   });
 };
@@ -53,7 +53,7 @@ export const getAllCourses = (page) => async (dispatch) => {
   }
 
   dispatch({
-    type: "GET_ALL_COURSES",
+    type: 'GET_ALL_COURSES',
     payload: course.data.course,
   });
 };
@@ -75,7 +75,7 @@ export const checkout = (courseCohortId, amount) => async (dispatch) => {
   try {
     checkout = await axiosInstance.post(
       `/checkout/quickcheckout/${courseCohortId}`,
-      {amount}
+      { amount }
     );
   } catch (error) {
     return error;
@@ -97,23 +97,20 @@ export const chargeCard = (data) => async (dispatch) => {
 };
 
 export const checkoutCourse = (course) => async (dispatch) => {
-  // console.log(course, '...//')
   dispatch({
-    type: "CHECKOUT",
+    type: 'CHECKOUT',
     payload: course,
   });
 };
 
 export const purchaseCourse = (course) => async (dispatch) => {
-  // console.log(course, '...//')
   dispatch({
-    type: "PURCHASE_COURSE",
+    type: 'PURCHASE_COURSE',
     payload: course,
   });
 };
 
 export const addPurchaseCourse = (courseCohortId) => async (dispatch) => {
-  // console.log(course, '...//')
   let p_course;
   try {
     p_course = await axiosInstance.get(
@@ -122,9 +119,9 @@ export const addPurchaseCourse = (courseCohortId) => async (dispatch) => {
   } catch (error) {
     return error;
   }
-  // console.log(p_course, 'oop')
+
   dispatch({
-    type: "PURCHASE_COURSE",
+    type: 'PURCHASE_COURSE',
     payload: p_course.data.data,
   });
 };

@@ -150,7 +150,6 @@ const AddAssignment = ({ title, course, currentClass, gapi, folderId }) => {
         }, 2000);
       }
     } catch (err) {
-      console.log(err);
       progressDialog.current.close();
 
       addToast('Error Uploding File', {
@@ -175,7 +174,6 @@ const AddAssignment = ({ title, course, currentClass, gapi, folderId }) => {
         return true;
       }
     } catch (err) {
-      console.log(err);
       addToast('Error Deleting file', {
         appearance: 'error',
         autoDismiss: true,
@@ -231,8 +229,6 @@ const AddAssignment = ({ title, course, currentClass, gapi, folderId }) => {
         autoDismiss: true,
       });
     } catch (err) {
-      console.log(err);
-
       submitBtn.current.children[0].innerHTML = 'Assign';
       submitBtn.current.classList.remove('loader');
       addToast('Unable to create assignment', {

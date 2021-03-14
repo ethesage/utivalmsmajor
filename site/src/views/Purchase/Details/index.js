@@ -16,14 +16,16 @@ const Details = ({ proceed, match, set, setPaymentAmount }) => {
   const btnRef = useRef();
 
   const [loading, rate] = getCurrencyRate();
-  const [paymentType, setPaymentType] = useState();
+  const [paymentType, setPaymentType] = useState(
+    purchaseCourse?.type === 'free' && 'full'
+  );
   const [amountToPay, setAmountToPay] = useState();
 
   const checkout = async () => {
     btnRef.current.classList.add('loader');
     const value = await dispatch(check(match.params.courseCohortId));
 
-    if (value.message === 'Not Enrolled') {
+    if (value?.message === 'Not Enrolled') {
       set(match.params.courseCohortId);
       setPaymentAmount(amountToPay);
       proceed(1);
@@ -33,6 +35,11 @@ const Details = ({ proceed, match, set, setPaymentAmount }) => {
 
   useEffect(() => {
     if (!paymentType) return;
+
+    if (purchaseCourse?.type === 'free') {
+      setAmountToPay(purchaseCourse?.cost);
+      return;
+    }
 
     if (paymentType === 'split') {
       setAmountToPay(purchaseCourse.initialSplitAmount);
@@ -131,45 +138,46 @@ const Details = ({ proceed, match, set, setPaymentAmount }) => {
               {/* <Button /> */}
             </div>
 
-            {purchaseCourse?.CourseCohorts[0].paymentType === 'split' && (
-              <div className="summary split_sec">
-                <h3 className="theme-color">How do you want to Pay</h3>
-                <div
-                  className="sel-p-type"
-                  data-active={paymentType === 'full'}
-                  onClick={() => setPaymentType('full')}
-                >
-                  <small>Full Payment</small>
-                  <p>
-                    You will pay{' '}
-                    <strong className="theme-color">
-                      {chooseCurrency(purchaseCourse?.cost)}
-                    </strong>{' '}
-                    now
-                  </p>
+            {purchaseCourse?.CourseCohorts[0].paymentType === 'split' &&
+              purchaseCourse?.type !== 'free' && (
+                <div className="summary split_sec">
+                  <h3 className="theme-color">How do you want to Pay</h3>
+                  <div
+                    className="sel-p-type"
+                    data-active={paymentType === 'full'}
+                    onClick={() => setPaymentType('full')}
+                  >
+                    <small>Full Payment</small>
+                    <p>
+                      You will pay{' '}
+                      <strong className="theme-color">
+                        {chooseCurrency(purchaseCourse?.cost)}
+                      </strong>{' '}
+                      now
+                    </p>
+                  </div>
+                  <div
+                    className="sel-p-type"
+                    data-active={paymentType === 'split'}
+                    onClick={() => setPaymentType('split')}
+                  >
+                    <small>Part Payment</small>
+                    <p>
+                      You will pay{' '}
+                      <strong className="theme-color">
+                        {chooseCurrency(purchaseCourse?.initialSplitAmount)}
+                      </strong>{' '}
+                      now and{' '}
+                      <strong className="theme-color">
+                        {chooseCurrency(purchaseCourse?.finalSplitAmount)}
+                      </strong>{' '}
+                      later
+                    </p>
+                  </div>
                 </div>
-                <div
-                  className="sel-p-type"
-                  data-active={paymentType === 'split'}
-                  onClick={() => setPaymentType('split')}
-                >
-                  <small>Part Payment</small>
-                  <p>
-                    You will pay{' '}
-                    <strong className="theme-color">
-                      {chooseCurrency(purchaseCourse?.initialSplitAmount)}
-                    </strong>{' '}
-                    now and{' '}
-                    <strong className="theme-color">
-                      {chooseCurrency(purchaseCourse?.finalSplitAmount)}
-                    </strong>{' '}
-                    later
-                  </p>
-                </div>
-              </div>
-            )}
+              )}
 
-            {amountToPay && (
+            {amountToPay !== undefined && (
               <div className="summary flex-row j-start">
                 <div className="contents">
                   <div className="cost-analysis">

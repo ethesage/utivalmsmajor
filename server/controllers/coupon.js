@@ -1,8 +1,8 @@
 /* eslint-disable import/prefer-default-export */
 // import sequelize from "sequelize";
-import { paginate, calculateLimitAndOffset } from "paginate-info";
-import models from "../database/models";
-import helpers from "../helpers";
+import { paginate, calculateLimitAndOffset } from 'paginate-info';
+import models from '../database/models';
+import helpers from '../helpers';
 // import { generateToken } from '../helpers/auth';
 
 const { successStat, errorStat, generatePassword } = helpers;
@@ -21,18 +21,17 @@ const { successStat, errorStat, generatePassword } = helpers;
 export const generateCouponCode = async (req, res) => {
   const { firstName, lastName } = req.session.user;
 
-  const code = await generatePassword(8, true)
-  // console.log(code, '===')
+  const code = await generatePassword(8, true);
 
   const createCoupon = await models.Coupon.create({
     ...req.body.coupon,
     code,
     expired: false,
     totalUsedCount: 0,
-    createdBy: firstName + " " + lastName,
+    createdBy: `${firstName} ${lastName}`,
   });
 
-  return successStat(res, 201, "data", createCoupon);
+  return successStat(res, 201, 'data', createCoupon);
 };
 
 export const getAllCouponCode = async (req, res) => {
@@ -51,7 +50,7 @@ export const getAllCouponCode = async (req, res) => {
 
   const paginationMeta = paginate(currentPage, count, rows, pageLimit);
 
-  return successStat(res, 201, "data", { paginationMeta, rows });
+  return successStat(res, 201, 'data', { paginationMeta, rows });
 };
 
 export const getCouponCode = async (req, res) => {
@@ -61,13 +60,13 @@ export const getCouponCode = async (req, res) => {
     where: { id: couponId },
   });
 
-  if (!couponDetails) return errorStat(res, 404, "Coupon Not Found");
+  if (!couponDetails) return errorStat(res, 404, 'Coupon Not Found');
 
-  return successStat(res, 201, "data", couponDetails);
+  return successStat(res, 201, 'data', couponDetails);
 };
 
 export const useCouponCode = async (req, res) => {
-  const { code, courseCohortId } = req.body.coupon;
+  // const { code, courseCohortId } = req.body.coupon;
 
   const { id } = req.session.user;
 
@@ -75,20 +74,23 @@ export const useCouponCode = async (req, res) => {
     where: { ...req.body.coupon },
   });
 
-  if (!couponDetails) return errorStat(res, 404, "Coupon Not Found");
+  if (!couponDetails) return errorStat(res, 404, 'Coupon Not Found');
 
-  if (couponDetails.expired) return errorStat(res, 400, "Expired Coupon Code");
+  if (couponDetails.expired) return errorStat(res, 400, 'Expired Coupon Code');
 
   const savedCoupon = await models.SavedCoupon.findOne({
     where: { userId: id, couponId: couponDetails.id },
   });
 
-  if (savedCoupon)
-    return errorStat(res, 404, "Coupon already used by this user");
+  if (savedCoupon) {
+    return errorStat(res, 404, 'Coupon already used by this user');
+  }
 
   couponDetails.update({
     totalUsedCount: couponDetails.totalUsedCount + 1,
-    expired: couponDetails.limit ? couponDetails.totalUsedCount + 1 >= couponDetails.limit : false,
+    expired: couponDetails.limit
+      ? couponDetails.totalUsedCount + 1 >= couponDetails.limit
+      : false,
   });
 
   await models.SavedCoupon.create({
@@ -96,7 +98,7 @@ export const useCouponCode = async (req, res) => {
     couponId: couponDetails.id,
   });
 
-  return successStat(res, 201, "data", couponDetails);
+  return successStat(res, 201, 'data', couponDetails);
 };
 
 export const updateCouponCode = async (req, res) => {
@@ -106,13 +108,13 @@ export const updateCouponCode = async (req, res) => {
     where: { code },
   });
 
-  if (!couponDetails) return errorStat(res, 404, "Coupon Not Found");
+  if (!couponDetails) return errorStat(res, 404, 'Coupon Not Found');
 
   couponDetails.update({
     ...req.body.coupon,
   });
 
-  return successStat(res, 201, "data", couponDetails);
+  return successStat(res, 201, 'data', couponDetails);
 };
 
 export const deleteCouponCode = async (req, res) => {
@@ -122,9 +124,9 @@ export const deleteCouponCode = async (req, res) => {
     where: { id: couponId },
   });
 
-  if (!couponDetails) return errorStat(res, 404, "Coupon Not Found");
+  if (!couponDetails) return errorStat(res, 404, 'Coupon Not Found');
 
   couponDetails.destroy({});
 
-  return successStat(res, 201, "data", "Delete Successful");
+  return successStat(res, 201, 'data', 'Delete Successful');
 };

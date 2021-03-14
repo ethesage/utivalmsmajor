@@ -50,10 +50,6 @@ const ViewGrade = ({
     !!prevPath && !!assData
   );
 
-  // console.log(data, length, assignmentId, currentClass);
-
-  // console.log(data, assignmentId);
-
   useEffect(() => {
     if (assData) return;
 
@@ -287,7 +283,8 @@ const ViewGrade = ({
                         <div className="text-sec">
                           <div className="u_name flex-row j-space">
                             <small className="name">
-                              {comment?.User?.firstName} {comment?.User?.lastName}
+                              {comment?.User?.firstName}{' '}
+                              {comment?.User?.lastName}
                             </small>
                             <div>
                               <small>

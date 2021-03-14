@@ -1,16 +1,16 @@
-import React, { useEffect, useState, useCallback } from "react";
-import { useParams, useHistory } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { getAllsubmittedAssignment } from "g_actions/member";
-import { useDebounce } from "use-debounce";
-import moment from "moment";
-import Input from "components/InputType";
-import T from "components/Table";
-import { stringSearch } from "helpers";
-import Button from "components/Button";
-import user_icon from "assets/user_icon.png";
-import ViewGrade from "components/ViewGrade";
-import "./style.scss";
+import React, { useEffect, useState, useCallback } from 'react';
+import { useParams, useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllsubmittedAssignment } from 'g_actions/member';
+import { useDebounce } from 'use-debounce';
+import moment from 'moment';
+import Input from 'components/InputType';
+import T from 'components/Table';
+import { stringSearch } from 'helpers';
+import Button from 'components/Button';
+import user_icon from 'assets/user_icon.png';
+import ViewGrade from 'components/ViewGrade';
+import './style.scss';
 
 const AllAssignmnets = ({ gapi, currentCourse, isAdmin, cohortId }) => {
   const { courseId, classroom } = useParams();
@@ -22,8 +22,8 @@ const AllAssignmnets = ({ gapi, currentCourse, isAdmin, cohortId }) => {
   const [loading, setLoading] = useState();
   const [filteredData, setFilteredData] = useState();
   const [filters, setFilters] = useState({
-    type: "reset",
-    searchString: "",
+    type: 'reset',
+    searchString: '',
   });
   const [searchQuery] = useDebounce(filters.searchString, 800);
   const [viewGrade, setViewGrade] = useState(false);
@@ -41,7 +41,7 @@ const AllAssignmnets = ({ gapi, currentCourse, isAdmin, cohortId }) => {
       return await gapi.gapi.get(
         null,
         id,
-        "id, name, iconLink, webContentLink, size, webViewLink, parents"
+        'id, name, iconLink, webContentLink, size, webViewLink, parents'
       );
     },
     [gapi]
@@ -56,22 +56,6 @@ const AllAssignmnets = ({ gapi, currentCourse, isAdmin, cohortId }) => {
     return () => {};
   }, [classes, currentCourse, history, courseId, classroom, classesToUse]);
 
-  // useEffect(() => {
-  //   if (!currentCourse) return;
-  //   if (!classes) return;
-  //   if (classroom) return;
-  //   // setCurrentClass();
-  //   const classname = currentCourse?.CourseCohort?.Classes[0].id;
-  //   history.push(
-  //     isAdmin
-  //       ? `/admin/courses/all-assignments/${courseId}/${cohortId}/${classname}`
-  //       : `/courses/all-assignments/${courseId}/${classname}`
-  //   );
-
-  //   return () => {};
-  // }, [classes, currentCourse, history, courseId, classroom, isAdmin, cohortId]);
-
-  //get all submitted assignment for a user
   useEffect(() => {
     if (!classroom) return;
     if (!currentCourse) return;
@@ -89,7 +73,6 @@ const AllAssignmnets = ({ gapi, currentCourse, isAdmin, cohortId }) => {
       )
     )
       return;
-    // console.log(currentClassdata[0], classroom);
 
     const s_cohort_id = cohortId || currentCourse.CourseCohort.id;
 
@@ -147,13 +130,13 @@ const AllAssignmnets = ({ gapi, currentCourse, isAdmin, cohortId }) => {
   };
 
   const Loader = () => (
-    <div className="spinner1" style={{ height: "300px" }}></div>
+    <div className="spinner1" style={{ height: '300px' }}></div>
   );
 
   if (
     !classes ||
     !currentClassdata?.length === 0 ||
-    currentClass === "" ||
+    currentClass === '' ||
     loading
   ) {
     // if (true) {
@@ -164,7 +147,7 @@ const AllAssignmnets = ({ gapi, currentCourse, isAdmin, cohortId }) => {
             <div className="nav-item">
               <Input
                 inputs={listnameList || []}
-                value={listnameList ? "loading..." : currentClass}
+                value={listnameList ? 'loading...' : currentClass}
                 handleSelect={handleSelect}
                 placeHolder="Select Class"
                 label="Select class"
@@ -185,9 +168,9 @@ const AllAssignmnets = ({ gapi, currentCourse, isAdmin, cohortId }) => {
   };
 
   const setFilter = ({ target: { name, value } }) => {
-    if (value && value !== "reset" && value !== "") {
+    if (value && value !== 'reset' && value !== '') {
       const temp = data.filter(
-        (s_data) => s_data.isGraded === (value === "graded")
+        (s_data) => s_data.isGraded === (value === 'graded')
       );
 
       updateInput(name, value);
@@ -248,9 +231,9 @@ const AllAssignmnets = ({ gapi, currentCourse, isAdmin, cohortId }) => {
                   <p className="label">Type</p>
                   <Input
                     inputs={[
-                      { name: "All", value: "reset" },
-                      { name: "Graded", value: "graded" },
-                      { name: "Ungraded", value: "ungraded" },
+                      { name: 'All', value: 'reset' },
+                      { name: 'Graded', value: 'graded' },
+                      { name: 'Ungraded', value: 'ungraded' },
                     ]}
                     value={filters.type}
                     handleSelect={setFilter}
@@ -273,18 +256,18 @@ const AllAssignmnets = ({ gapi, currentCourse, isAdmin, cohortId }) => {
 
             {loading || !data ? (
               classroom ? (
-                <div className="spinner1" style={{ height: "300px" }}></div>
+                <div className="spinner1" style={{ height: '300px' }}></div>
               ) : (
-                <div className="flex-row" style={{ height: "300px" }}>
+                <div className="flex-row" style={{ height: '300px' }}>
                   <p>Please select a class</p>
                 </div>
               )
             ) : data.length === 0 ? (
-              <div className="flex-row" style={{ height: "300px" }}>
+              <div className="flex-row" style={{ height: '300px' }}>
                 <p>No Submitted Assignments Yet</p>
               </div>
             ) : (
-              <T.Table keys={["Name", "Submission Date", "Grade", ""]}>
+              <T.Table keys={['Name', 'Submission Date', 'Grade', '']}>
                 {({ keys }) => (
                   <T.Body keys={keys}>
                     {(filteredData || data).map((assignment, i) => (
@@ -301,15 +284,15 @@ const AllAssignmnets = ({ gapi, currentCourse, isAdmin, cohortId }) => {
                               <p>{`${assignment?.User?.firstName} ${assignment?.User?.lastName}`}</p>
                             </div>
                           ),
-                          "Submission Date": moment(
+                          'Submission Date': moment(
                             assignment.submitDate
-                          ).format("DD-MM-YYYY"),
+                          ).format('DD-MM-YYYY'),
                           Grade: assignment.grade || 0,
-                          "Grade Now": "yes",
-                          "": (
+                          'Grade Now': 'yes',
+                          '': (
                             <Button
                               className="td-cls flex-row"
-                              text={assignment.grade ? "View grade" : "Grade"}
+                              text={assignment.grade ? 'View grade' : 'Grade'}
                               onClick={() => grade(assignment)}
                             />
                           ),

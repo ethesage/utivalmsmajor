@@ -87,15 +87,12 @@ class Mailer {
       </html>
   `;
 
-
     const mail = {
       to: this.to,
       from: senderEmail,
       subject: (this.templateTemp && this.templateTemp.subject) || this.subject,
       html: (this.templateTemp && this.templateTemp.html) || html,
     };
-
-    // console.log(mail)
 
     try {
       await sendgridMail.send(mail);

@@ -5,12 +5,7 @@ import 'react-sweet-progress/lib/style.css';
 import './style.scss';
 
 const CousreCard = ({ course, cohort, isStudent, range, progress }) => {
-  const {
-    thumbnail,
-    name,
-    // CourseProgresses: { progress },
-  } = course;
-  // console.log(progress, 'ppeoe')
+  const { thumbnail, name } = course;
 
   return (
     <div className="ac_cx_cd flex-row j-start al-start">
