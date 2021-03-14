@@ -413,7 +413,6 @@ export const addCourseCohortProgress = async (req, res) => {
 
 export const getCohortCourse = async (req, res) => {
   const { courseCohortId } = req.params;
-  // console.log()
   // const { offset, limit } = calculateLimitAndOffset(currentPage, pageLimit);
   // const id = req?.session?.user?.id ;
   let user;

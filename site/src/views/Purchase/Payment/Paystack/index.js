@@ -33,8 +33,8 @@ const Paystack = ({ done }) => {
   // you can call this function anything
   const onClose = () => {
     // implementation for  whatever you want to do when the Paystack dialog closed.
-    // console.log("closed");
   };
+
   const initializePayment = usePaystackPayment(config);
   return (
     <div>

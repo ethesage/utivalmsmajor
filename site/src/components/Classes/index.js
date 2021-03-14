@@ -83,8 +83,6 @@ function Classes({
     (res) => res.type === 'assignment'
   );
 
-  // console.log(data);
-
   const getFiles = useCallback(
     async (id) => {
       if (!gapi) return;
@@ -172,7 +170,6 @@ function Classes({
   };
 
   const joinclass = async () => {
-    // console.log("joinclassmmm", isTrainer);
     setWait(false);
     openclass();
     let result;
@@ -184,7 +181,6 @@ function Classes({
       } else if (result.error === 'Not Started') {
         setWait(true);
       } else {
-        console.log(result.error);
         openclass(true);
         addToast('Request Failed', {
           appearance: 'error',
@@ -213,7 +209,6 @@ function Classes({
 
   const addVideo = async (e) => {
     if (!prevVideo || !prevVideo.match(/vimeo\.com\/(\d+)/)) {
-      console.log('incorrect value');
       return;
     }
 
@@ -254,8 +249,6 @@ function Classes({
 
   // const viewAssignment = (e) => {
   //   e.preventDefault();
-
-  //   // console.log(classResources[title].assignment[0]);
 
   //   if (!isStudent) {
   //     dropDrop('assignment');

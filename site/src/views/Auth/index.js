@@ -15,14 +15,10 @@ import Reset from './Reset';
 import logo from '../../assets/logo.png';
 import './style.scss';
 
-// const pages = ['quickcheckout', 'signin', 'signup', 'forgot', 'reset-password'];
-
 const Auth = () => {
   const location = useLocation();
   const { path } = useRouteMatch();
   const [page, setPage] = useState('signup');
-
-  //   console.log(location);
 
   useEffect(() => {
     const pathname = location.pathname.split('/')[1];

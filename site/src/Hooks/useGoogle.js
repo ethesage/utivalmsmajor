@@ -47,9 +47,7 @@ const Google = ({ updateSignInStatus = () => {} }) => {
       // window.location.reload();
 
       return !!response.rt;
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   };
 
   async function upload(file, setPercentage, folderId) {

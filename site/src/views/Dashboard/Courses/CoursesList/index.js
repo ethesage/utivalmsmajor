@@ -16,7 +16,7 @@ const CousreCard = ({ data }) => {
       <Link className="img-sec" to={`/courses/overview/${CourseCohort?.id}`}>
         <Image image={Course.thumbnail} imgClass="img cover" lazyLoad={true} />
       </Link>
-      <div className="txt-sec">
+      <div className="txt-sec flex-col flex-grow">
         <div className="title_sec flex-row j-space">
           <h3 className="theme-color">{Course.name}</h3>
           {isStudent && isCompleted ? <img src={medal} alt="" /> : ''}
@@ -24,7 +24,7 @@ const CousreCard = ({ data }) => {
 
         {isStudent ? (
           <>
-            <div>
+            <div className="w-full">
               <small>Completion level</small>
               <Progress
                 className="slim"
@@ -57,12 +57,12 @@ const CousreCard = ({ data }) => {
           </>
         ) : null}
 
-        {!isStudent ? (
-          <div className="chx flex-row j-space">
-            <strong>{<p>{Cohort?.cohort} Cohort</p>}</strong>
-            <small>{CourseCohort?.dateRange}</small>
-          </div>
-        ) : null}
+        {/* {!isStudent ? ( */}
+        <div className="chx flex-col al-start">
+          <strong>{<p>{Cohort?.cohort} Cohort</p>}</strong>
+          <small>{CourseCohort?.dateRange}</small>
+        </div>
+        {/* ) : null} */}
       </div>
     </div>
   );

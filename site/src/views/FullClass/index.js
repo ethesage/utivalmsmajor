@@ -60,8 +60,6 @@ function FullClass({ gapi }) {
   );
   // const ass = data?.ClassResources.filter((res) => res.type === 'assignment');
 
-  console.log(data && !(Object.keys(data).length === 3));
-
   return (
     <>
       <NavBar />

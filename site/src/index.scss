@@ -778,7 +778,9 @@ li {
   padding: 10px 0;
   width: 100%;
   border-radius: 10px;
-  max-height: 401px;
+  display: flex;
+  flex-direction: column;
+  // max-height: 401px;
 
   .img-sec {
     height: 250px;
@@ -794,18 +796,31 @@ li {
 
   .txt-sec {
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
+    width: 100%;
 
     .title_sec {
       margin-bottom: 20px;
+      display: flex;
+      align-items: flex-start;
+      width: 100%;
 
       img {
         width: 30px;
+      }
+
+      h3 {
+        margin-top: -10px;
+        font-size: 1em;
       }
     }
 
     .slim {
       height: 2px;
-      margin: 2px 0 20px;
+      margin: 2px 0 10px;
 
       .react-sweet-progress-line {
         height: 100%;
@@ -822,10 +837,8 @@ li {
     }
 
     .chx {
-      @include for-size(tablet-portrait-up) {
-        flex-direction: column;
-        align-items: start;
-      }
+      font-size: 0.75em;
+      width: 100%;
     }
 
     .grade {

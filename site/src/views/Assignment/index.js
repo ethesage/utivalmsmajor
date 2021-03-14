@@ -1,25 +1,25 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
-import { useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import ResourceBtn from "components/ResourceButton";
-import Classes from "components/Classes";
-import assignment from "assets/icons/course/assignment.png";
-import Confirm from "components/Confirm";
-import { getEnrolledCourses } from "g_actions/member";
-import Loader from "components/Loading";
-import Files from "components/Files";
-import Modal from "components/Modal";
-import ProgressBar from "components/ProgressBar";
-import ViewGrade from "components/ViewGrade";
+import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import ResourceBtn from 'components/ResourceButton';
+import Classes from 'components/Classes';
+import assignment from 'assets/icons/course/assignment.png';
+import Confirm from 'components/Confirm';
+import { getEnrolledCourses } from 'g_actions/member';
+import Loader from 'components/Loading';
+import Files from 'components/Files';
+import Modal from 'components/Modal';
+import ProgressBar from 'components/ProgressBar';
+import ViewGrade from 'components/ViewGrade';
 import {
   getSubmittedAssignments,
   deleteSubmittedAssignment,
-} from "g_actions/member";
-import { useToasts } from "react-toast-notifications";
-import Button from "components/Button";
-import "components/ViewGrade/style.scss";
-import { axiosInstance } from "helpers";
-import "./style.scss";
+} from 'g_actions/member';
+import { useToasts } from 'react-toast-notifications';
+import Button from 'components/Button';
+import 'components/ViewGrade/style.scss';
+import { axiosInstance } from 'helpers';
+import './style.scss';
 
 const Assignment = ({ gapi }) => {
   const { courseId, classroom, assignmentId } = useParams();
@@ -59,7 +59,7 @@ const Assignment = ({ gapi }) => {
       return await gapi.gapi.get(
         null,
         id,
-        "id, name, iconLink, webContentLink, size, webViewLink, parents"
+        'id, name, iconLink, webContentLink, size, webViewLink, parents'
       );
     },
     [gapi]
@@ -100,8 +100,6 @@ const Assignment = ({ gapi }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentClass]);
 
-  // console.log(length.current);
-
   const download = async (e) => {
     e.preventDefault();
 
@@ -112,8 +110,6 @@ const Assignment = ({ gapi }) => {
         classResources[currentClass.title].assignment[0].webContentLink
     );
   };
-
-  // console.log(classResources[currentClass.title].assignment);
 
   const viewAss = async (e) => {
     e.preventDefault();
@@ -133,7 +129,7 @@ const Assignment = ({ gapi }) => {
   const upload = async (files) => {
     setDeleteDialog(false);
     const assignment_ = currentClass.ClassResources.filter(
-      (res) => res.type === "assignment"
+      (res) => res.type === 'assignment'
     )[0].id;
 
     modalRef.current.open();
@@ -144,7 +140,7 @@ const Assignment = ({ gapi }) => {
     );
 
     try {
-      const res = await axiosInstance.post("assignment/submit", {
+      const res = await axiosInstance.post('assignment/submit', {
         classId: currentClass.id,
         classResourcesId: assignment_,
         resourceLink: file.id,
@@ -159,8 +155,8 @@ const Assignment = ({ gapi }) => {
         dispatch(getSubmittedAssignments(currentClass.title, file));
       }
     } catch (err) {
-      addToast("Error Deleting File", {
-        appearance: "error",
+      addToast('Error Deleting File', {
+        appearance: 'error',
         autoDismiss: true,
       });
 
@@ -193,8 +189,8 @@ const Assignment = ({ gapi }) => {
         return true;
       }
     } catch (err) {
-      addToast("Error submitting", {
-        appearance: "error",
+      addToast('Error submitting', {
+        appearance: 'error',
         autoDismiss: true,
       });
     }

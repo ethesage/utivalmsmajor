@@ -1,12 +1,10 @@
 import sendgridMail from '@sendgrid/mail';
 import dotenv from 'dotenv';
-import debug from 'debug';
+// import debug from 'debug';
 import style from './style';
 import courseEmails from './templateEmails';
 
 dotenv.config();
-
-const log = debug('dev');
 
 sendgridMail.setApiKey(process.env.SENDGRID_API_KEY);
 const senderEmail = process.env.SERVER_MAIL;
@@ -59,7 +57,7 @@ class Mailer {
    * @returns  {Object} - Mailer response
    */
   async sendMail() {
-    if (!this.messageBody) {
+    if (!this.messageBody && !this.templateTemp) {
       throw new Error('Message cannot be empty!');
     }
     const html = `
@@ -96,9 +94,9 @@ class Mailer {
 
     try {
       await sendgridMail.send(mail);
-      log(`Message Sent! to ${mail.to}`);
+      console.log(`Message Sent! to ${mail.to}`);
     } catch (err) {
-      log(err.message);
+      console.log(err.message);
     }
   }
 
@@ -158,8 +156,13 @@ class Mailer {
   }
 
   getCohortmail(name, user, dateObj) {
-    this.templateTemp = courseEmails[name](user, dateObj);
-    return this;
+    const mailData = courseEmails[name] && courseEmails[name](user, dateObj);
+    if (mailData) {
+      this.templateTemp =
+        courseEmails[name] && courseEmails[name](user, dateObj);
+      return this;
+    }
+    return null;
   }
 }
 

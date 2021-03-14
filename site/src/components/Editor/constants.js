@@ -46,12 +46,6 @@ export const EDITOR_JS_TOOLS = {
          * @return {Promise.<{success, file: {url}}>}
          */
         async uploadByFile(file) {
-          // var form = new FormData();
-          // form.append('image', file);
-          // for (var key of form.entries()) {
-          //   console.log(key[0] + ', ' + key[1]);
-          // }
-
           const data = await toBase64(file);
 
           return axiosInstance
