@@ -19,28 +19,37 @@ const Payment = ({ back, paymentAmount, mainText, doneFunc, fromSplit }) => {
   const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (courses?.purchaseCourse?.type === 'free') {
-      try {
-        document.querySelector('body').classList.add('spinner1');
-        dispatch(
-          checkout(courses.purchaseCourse.CourseCohorts[0].id),
-          paymentAmount
-        );
-        dispatch(
-          addStudentCourse(courses.purchaseCourse, [
-            { courseCohortId: courses.purchaseCourse.CourseCohorts[0].id },
-          ])
-        );
+    if (!user) return;
 
-        done();
-        document.querySelector('body').classList.remove('spinner1');
-      } catch (err) {
-        done();
-        document.querySelector('body').classList.remove('spinner1');
+    const moveIfFree = async () => {
+      if (courses?.purchaseCourse?.type === 'free') {
+        try {
+          document.querySelector('body').classList.add('spinner1');
+          await dispatch(
+            checkout(courses.purchaseCourse.CourseCohorts[0].id),
+            paymentAmount
+          );
+          dispatch(
+            addStudentCourse(courses.purchaseCourse, [
+              { courseCohortId: courses.purchaseCourse.CourseCohorts[0].id },
+            ])
+          );
+
+          push(
+            `/courses/overview/${courses.purchaseCourse.CourseCohorts[0].id}`
+          );
+          document.querySelector('body').classList.remove('spinner1');
+        } catch (err) {
+          push(
+            `/courses/overview/${courses.purchaseCourse.CourseCohorts[0].id}`
+          );
+          document.querySelector('body').classList.remove('spinner1');
+        }
       }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    };
+
+    moveIfFree();
+  }, [user]);
 
   const goBack = () => {
     back(0);
@@ -52,14 +61,20 @@ const Payment = ({ back, paymentAmount, mainText, doneFunc, fromSplit }) => {
       return;
     }
 
-    if (disRef.current.open) return;
     disRef.current.open();
   }
 
   return (
     <div className="payment container">
       {/* <dialog ref={disRef} className="d_s_c"> */}
-      <Modal ref={disRef}>
+      <Modal
+        ref={disRef}
+        runOnClose={() =>
+          push(
+            `/courses/overview/${courses.purchaseCourse.CourseCohorts[0].id}`
+          )
+        }
+      >
         <div className="d_content flex-col">
           <img src={approved} alt="approved" />
           <div className="reg_text">

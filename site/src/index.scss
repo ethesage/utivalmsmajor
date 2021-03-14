@@ -778,6 +778,8 @@ li {
   padding: 10px 0;
   width: 100%;
   border-radius: 10px;
+  display: flex;
+  flex-direction: column;
   // max-height: 401px;
 
   .img-sec {
@@ -794,12 +796,23 @@ li {
 
   .txt-sec {
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
 
     .title_sec {
       margin-bottom: 20px;
+      display: flex;
+      align-items: flex-start;
 
       img {
         width: 30px;
+      }
+
+      h3 {
+        margin-top: -10px;
+        font-size: 1em;
       }
     }
 
@@ -823,10 +836,6 @@ li {
 
     .chx {
       font-size: 0.75em;
-      @include for-size(tablet-portrait-up) {
-        flex-direction: column;
-        align-items: start;
-      }
     }
 
     .grade {

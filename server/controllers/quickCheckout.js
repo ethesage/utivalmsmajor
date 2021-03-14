@@ -88,6 +88,7 @@ export const quickCheckout = async (req, res) => {
           time: course.Classes[0].CohortClassDays[0].dataValues.time,
         }
       );
+
       if (resp) {
         mail.sendMail();
       }
@@ -129,6 +130,7 @@ export const quickCheckout = async (req, res) => {
           time: course.Classes[0].CohortClassDays[0].dataValues.time,
         }
       );
+
       if (resp) {
         mail.sendMail();
       }
