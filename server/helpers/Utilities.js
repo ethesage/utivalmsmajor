@@ -113,18 +113,20 @@ export const uploadImage = async (url, fileName) => {
   }
 };
 
-// export const getFolderListings = async () => {
-//   s3.listObjects(
-//     { Bucket: 'utiva-app', Delimiter: ',', Prefix: 'media' },
-//     (err, data) => {
-//       if (err) {
-//         return console.log(err);
-//       }
+export const getFolderListings = async () => {
+  s3.listObjects(
+    { Bucket: 'utiva-app', Delimiter: ',', Prefix: 'Courses' },
+    (err, data) => {
+      if (err) {
+        return console.log(err);
+      }
 
-//       console.log(data);
-//     }
-//   );
-// };
+      console.log(data);
+    }
+  );
+};
+
+console.log(getFolderListings());
 
 export const encryptQuery = (string) => {
   try {
