@@ -113,20 +113,56 @@ export const uploadImage = async (url, fileName) => {
   }
 };
 
-export const getFolderListings = async () => {
-  s3.listObjects(
-    { Bucket: 'utiva-app', Delimiter: ',', Prefix: 'Courses' },
-    (err, data) => {
-      if (err) {
-        return console.log(err);
-      }
+export const uploadData = async (file, path, fileName) => {
+  if (!isBase64(file, { mimeRequired: true })) {
+    throw Error('Invalid base64 Data');
+  }
 
-      console.log(data);
-    }
+  const buffer = new Buffer.from(
+    file.replace(/^data:image\/\w+;base64,/, ''),
+    'base64'
   );
+
+  const data = {
+    ACL: 'public-read',
+    Key: `${path}/${fileName}`,
+    Body: buffer,
+    ContentEncoding: 'base64',
+  };
+
+  return s3.upload(data).promise();
 };
 
-console.log(getFolderListings());
+export const getFolderListings = async () =>
+  s3
+    .listObjects({ Bucket: 'utiva-app', Delimiter: ',', Prefix: 'Courses' })
+    .promise();
+
+export const createFileFolder = async (path) => {
+  const params = {
+    Key: path,
+  };
+
+  return s3.putObject(params).promise();
+};
+
+export const deleteImage = async (path) => {
+  const deleteParam = {
+    Key: path,
+  };
+
+  return s3.deleteObject(deleteParam).promise();
+};
+
+// deleteImage(
+//   'Courses/Data Incubator/classes/Pre-class Learning [Introduction to Excel]/att_users_202103041239.csv'
+// );
+
+// console.log(
+//   createFileFolder(
+//     'Courses/Data Incubator/classes/Pre-class Learning [Introduction to Excel]/'
+//   )
+// );
 
 export const encryptQuery = (string) => {
   try {
