@@ -1,7 +1,7 @@
 import models from "../database/models";
 import helpers from "../helpers";
 
-const { successStat, errorStat } = helpers;
+const { successStat, errorStat, getFolderListings, deleteImage, uploadData } = helpers;
 
 /**
  * / @static
@@ -13,16 +13,14 @@ const { successStat, errorStat } = helpers;
  */
 
 export const createFile = async (req, res) => {
-  const { id } = req.session.user;
+  // const { id } = req.session.user;
+  const { file, path, fileName } = req.body.file
   try {
-    const file = await models.File.create({
-      ...req.body.file,
-      userId: id
-    });
+    const fileUpload = await uploadData(file, path, fileName)
 
-    return successStat(res, 201, 'data', { ...file.dataValues, message: 'File Successfully Created' });
+    return successStat(res, 201, "data", fileUpload);
   } catch (e) {
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
+    errorStat(res, 500, "Operation Failed, Please Try Again");
   }
 };
 
@@ -34,31 +32,38 @@ export const getFile = async (req, res) => {
     const file = await models.File.findOne({
       where: {
         userId: id,
-        id: fileId
-      }
+        id: fileId,
+      },
     });
 
-    if (!file) return errorStat(res, 404, 'File not found');
+    if (!file) return errorStat(res, 404, "File not found");
 
-    return successStat(res, 200, 'data', file);
+    return successStat(res, 200, "data", file);
   } catch (e) {
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
+    errorStat(res, 500, "Operation Failed, Please Try Again");
   }
 };
 
 export const getAllFiles = async (req, res) => {
-  const { id } = req.session.user;
+  const { key } = req.body.file;
 
   try {
-    const files = await models.File.findAll({
-      where: { userId: id }
-    });
+    const fileList = await getFolderListings(key);
 
-    if (!files[0]) return errorStat(res, 404, 'No file found');
+    const content =
+      fileList &&
+      fileList.Contents.reduce((acc, list) => {
+        if (list.Key !== key) acc.push({ Key: 'https://utiva-app.s3.amazonaws.com/' + list.Key, Size: list.Size });
 
-    return successStat(res, 200, 'data', files);
+        return acc;
+      }, []);
+
+    // console.log(content);
+
+    return successStat(res, 200, "data", content);
   } catch (e) {
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
+    console.log(e);
+    errorStat(res, 500, "Operation Failed, Please Try Again");
   }
 };
 
@@ -70,39 +75,30 @@ export const updateFile = async (req, res) => {
     const file = await models.File.findOne({
       where: {
         id: fileId,
-        userId: id
-      }
+        userId: id,
+      },
     });
 
-    if (!file) return errorStat(res, 404, 'File not found');
+    if (!file) return errorStat(res, 404, "File not found");
 
     await file.update({
-      name
+      name,
     });
 
-    return successStat(res, 200, 'data', file);
+    return successStat(res, 200, "data", file);
   } catch (e) {
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
+    errorStat(res, 500, "Operation Failed, Please Try Again");
   }
 };
 
 export const deleteFile = async (req, res) => {
-  const { fileId } = req.body.file;
-  const { id } = req.session.user;
+  const { path } = req.body.file;
   try {
-    const file = await models.File.findOne({
-      where: {
-        id: fileId,
-        userId: id
-      }
-    });
 
-    if (!file) return errorStat(res, 404, 'File not found');
+    await deleteImage(path);
 
-    await file.destroy();
-
-    return successStat(res, 200, 'data', 'Delete Successful');
+    return successStat(res, 200, "data", "Delete Successful");
   } catch (e) {
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
+    errorStat(res, 500, "Operation Failed, Please Try Again");
   }
 };

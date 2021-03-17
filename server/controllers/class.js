@@ -3,11 +3,11 @@
 /* eslint-disable import/prefer-default-export */
 // import sequelize from "sequelize";
 // import { paginate, calculateLimitAndOffset } from 'paginate-info';
-import models from '../database/models';
-import helpers from '../helpers';
+import models from "../database/models";
+import helpers from "../helpers";
 // import  from "../helpers"
 
-const { successStat, errorStat } = helpers;
+const { successStat, errorStat, createFileFolder, uploadData } = helpers;
 
 /**
  * / @static
@@ -28,6 +28,10 @@ export const createClass = async (req, res) => {
     time,
     courseId,
     cohortId,
+    title,
+    file,
+    path,
+    fileName
   } = req.body.class;
 
   const courseCohort = await models.CourseCohort.findOne({
@@ -35,20 +39,26 @@ export const createClass = async (req, res) => {
   });
 
   if (!courseCohort) {
-    return errorStat(res, 404, 'Course Cohort does not exist');
+    return errorStat(res, 404, "Course Cohort does not exist");
   }
+
+  const course = await models.Course.findOne({
+    where: { id: courseId },
+  });
 
   const classCreate = await models.Classes.create({
     ...req.body.class,
   });
 
-  const resource = resourceLink
-    ? await models.ClassResources.create({
-        ...req.body.class,
-        link: resourceLink,
-        classId: classCreate.id,
-      })
-    : [];
+  // const resource = resourceLink
+  //   ? await models.ClassResources.create({
+  //       ...req.body.class,
+  //       link: resourceLink,
+  //       classId: classCreate.id,
+  //     })
+  //   : [];
+
+  const resource = resourceLink ? await uploadData(file, path, fileName) : [];
 
   await courseCohort.update({
     totalClasses: courseCohort.totalClasses + 1,
@@ -79,7 +89,10 @@ export const createClass = async (req, res) => {
     time,
   });
 
-  return successStat(res, 201, 'data', {
+  await createFileFolder(`Course/${course.name}/classes/${title}/resources/`);
+  await createFileFolder(`Course/${course.name}/classes/${title}/assignments/`);
+
+  return successStat(res, 201, "data", {
     ...classCreate.dataValues,
     ClassResources: resource,
     ClassDays: [day],
@@ -102,9 +115,9 @@ export const getClass = async (req, res) => {
     ],
   });
 
-  if (!allClass) return errorStat(res, 404, 'Class Not Found');
+  if (!allClass) return errorStat(res, 404, "Class Not Found");
 
-  return successStat(res, 200, 'data', allClass);
+  return successStat(res, 200, "data", allClass);
 };
 
 export const getAllClass = async (req, res) => {
@@ -123,10 +136,10 @@ export const getAllClass = async (req, res) => {
   });
 
   if (!allClass[0]) {
-    return errorStat(res, 404, 'No class Found for this course');
+    return errorStat(res, 404, "No class Found for this course");
   }
 
-  return successStat(res, 200, 'data', allClass);
+  return successStat(res, 200, "data", allClass);
 };
 
 export const getAllStudentClass = async (req, res) => {
@@ -145,14 +158,14 @@ export const getAllStudentClass = async (req, res) => {
         ],
       },
     ],
-    order: [['createdAt', 'DESC']],
+    order: [["createdAt", "DESC"]],
   });
 
   if (!resource[0]) {
-    return errorStat(res, 404, 'No Course Found');
+    return errorStat(res, 404, "No Course Found");
   }
 
-  return successStat(res, 200, 'data', resource);
+  return successStat(res, 200, "data", resource);
 };
 
 export const getAllTrainerClass = async (req, res) => {
@@ -166,14 +179,14 @@ export const getAllTrainerClass = async (req, res) => {
         where: { userId: id },
       },
     ],
-    order: [['createdAt', 'DESC']],
+    order: [["createdAt", "DESC"]],
   });
 
   if (!resource[0]) {
-    return errorStat(res, 404, 'No Course Found');
+    return errorStat(res, 404, "No Course Found");
   }
 
-  return successStat(res, 200, 'data', resource);
+  return successStat(res, 200, "data", resource);
 };
 
 export const updateClass = async (req, res) => {
@@ -221,16 +234,16 @@ export const updateClass = async (req, res) => {
       {
         model: models.CohortTrainer,
         where: { courseCohortId },
-        attributes: ['id', 'userId'],
+        attributes: ["id", "userId"],
         required: false,
         include: {
           model: models.User,
-          attributes: ['firstName', 'lastName', 'profilePic', 'occupation'],
+          attributes: ["firstName", "lastName", "profilePic", "occupation"],
         },
       },
       {
         model: models.CohortClassVideo,
-        attributes: ['id', 'link'],
+        attributes: ["id", "link"],
         where: { courseCohortId },
         required: false,
       },
@@ -247,7 +260,7 @@ export const updateClass = async (req, res) => {
       where: { classId },
     });
 
-    successStat(res, 200, 'data', {
+    successStat(res, 200, "data", {
       ...updatedClass.dataValues,
       ClassResources: resource || [],
       CohortClassDays: updateClassdays,
@@ -260,7 +273,7 @@ export const updateClass = async (req, res) => {
       time,
     });
 
-    return successStat(res, 200, 'data', {
+    return successStat(res, 200, "data", {
       ...updatedClass.dataValues,
       ClassResources: resource || [],
       CohortClassDays: days,
@@ -284,12 +297,12 @@ export const deleteClass = async (req, res) => {
   });
 
   if (!foundClass) {
-    return errorStat(res, 404, 'Class not found');
+    return errorStat(res, 404, "Class not found");
   }
 
   await foundClass.destroy();
 
-  return successStat(res, 201, 'data', 'Delete Successful');
+  return successStat(res, 201, "data", "Delete Successful");
 };
 
 export const classAssignment = async (req, res) => {
@@ -300,15 +313,15 @@ export const classAssignment = async (req, res) => {
     where: { id: classId },
   });
 
-  if (!findClass) return errorStat(res, 404, 'Class not found');
+  if (!findClass) return errorStat(res, 404, "Class not found");
 
   const createAssignment = await models.ClassResources.create({
     ...req.body.class,
-    type: 'assignment',
+    type: "assignment",
   });
-  return successStat(res, 201, 'data', {
+  return successStat(res, 201, "data", {
     ...createAssignment.dataValues,
-    message: 'Class Assignment created successfully',
+    message: "Class Assignment created successfully",
   });
 };
 
@@ -320,16 +333,16 @@ export const editClassAssignment = async (req, res) => {
   });
 
   if (!findAssignment) {
-    return errorStat(res, 404, 'Class Assignment not found');
+    return errorStat(res, 404, "Class Assignment not found");
   }
 
   await findAssignment.update({
     ...req.body.class,
   });
 
-  return successStat(res, 201, 'data', {
+  return successStat(res, 201, "data", {
     ...findAssignment.dataValues,
-    message: 'Class Assignment created successfully',
+    message: "Class Assignment created successfully",
   });
 };
 
@@ -341,12 +354,12 @@ export const deleteClassAssignment = async (req, res) => {
   });
 
   if (!findAssignment) {
-    return errorStat(res, 404, 'Class Assignment not found');
+    return errorStat(res, 404, "Class Assignment not found");
   }
 
   await findAssignment.destroy();
 
-  return successStat(res, 201, 'data', 'Class Assignment deleted successfully');
+  return successStat(res, 201, "data", "Class Assignment deleted successfully");
 };
 
 export const addClassResources = async (req, res) => {
@@ -356,14 +369,14 @@ export const addClassResources = async (req, res) => {
     where: { id: classId },
   });
 
-  if (!findClass) return errorStat(res, 404, 'Class not found');
+  if (!findClass) return errorStat(res, 404, "Class not found");
 
   const createResource = await models.ClassResources.create({
     ...req.body.class,
-    type: 'resource',
+    type: "resource",
   });
-  return successStat(res, 201, 'data', {
+  return successStat(res, 201, "data", {
     ...createResource.dataValues,
-    message: 'Class Resource created successfully',
+    message: "Class Resource created successfully",
   });
 };

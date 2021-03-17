@@ -2,17 +2,21 @@
 import Joi from '@hapi/joi';
 
 export const createFileSchema = Joi.object().keys({
-  link: Joi.string().trim().required(),
-  fileType: Joi.string().trim().required(),
-  fileSize: Joi.string().trim().required(),
-  name: Joi.string().trim().required(),
+  file: Joi.string().trim().required(),
+  path: Joi.string().trim().required(),
+  fileName: Joi.string().trim().required(),
+  // name: Joi.string().trim().required(),
 });
 
 export const getFileSchema = Joi.object().keys({
-  fileId: Joi.string().uuid().trim().required(),
+  path: Joi.string().uuid().required(),
 });
 
 export const updateFileSchema = Joi.object().keys({
   fileId: Joi.string().uuid().trim().required(),
   name: Joi.string().trim(),
+});
+
+export const getAllFileSchema = Joi.object().keys({
+  key: Joi.string().trim().required(),
 });

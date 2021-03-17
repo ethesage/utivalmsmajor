@@ -6,7 +6,7 @@ import helpers from "../helpers";
 // import { createCourse } from "../middlewares/validators/schemas/course";
 // import  from "../helpers"
 
-const { successStat, errorStat } = helpers;
+const { successStat, errorStat, createFileFolder } = helpers;
 
 // const { Op } = sequelize;
 
@@ -112,6 +112,8 @@ export const addCohortCourse = async (req, res) => {
       },
     ],
   });
+
+  await createFileFolder(`Course/${course.name}/cohorts/${cohortGet.cohort}/submitted-assignments/`)
 
   return successStat(res, 201, "data", course_cohort);
 };

@@ -133,10 +133,12 @@ export const uploadData = async (file, path, fileName) => {
   return s3.upload(data).promise();
 };
 
-export const getFolderListings = async () =>
-  s3
-    .listObjects({ Bucket: 'utiva-app', Delimiter: ',', Prefix: 'Courses' })
+export const getFolderListings = async (key) =>{
+console.log(key)
+  return s3
+    .listObjects({ Bucket: 'utiva-app', Delimiter: '/', Prefix: key })
     .promise();
+}
 
 export const createFileFolder = async (path) => {
   const params = {
@@ -145,6 +147,7 @@ export const createFileFolder = async (path) => {
 
   return s3.putObject(params).promise();
 };
+
 
 export const deleteImage = async (path) => {
   const deleteParam = {

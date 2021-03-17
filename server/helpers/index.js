@@ -1,6 +1,15 @@
-import { hashPassword, comparePassword } from './passwordHash';
-import { errorStat, successStat, validateJoi, uploadImage, generatePassword } from './Utilities';
-import { generateToken, verifyToken } from './auth';
+import { hashPassword, comparePassword } from "./passwordHash";
+import {
+  errorStat,
+  successStat,
+  validateJoi,
+  uploadImage,
+  generatePassword,
+  getFolderListings,
+  uploadData,
+  deleteImage,
+} from "./Utilities";
+import { generateToken, verifyToken } from "./auth";
 
 export default {
   hashPassword,
@@ -11,5 +20,8 @@ export default {
   generateToken,
   verifyToken,
   uploadImage,
-  generatePassword
+  generatePassword,
+  getFolderListings,
+  deleteImage,
+  uploadData
 };

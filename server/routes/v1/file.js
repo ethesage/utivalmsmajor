@@ -14,6 +14,7 @@ const {
   createFileSchema,
   getFileSchema,
   updateFileSchema,
+  getAllFileSchema,
   usession
 } = middlewares;
 
@@ -35,7 +36,8 @@ fileRoutes.get(
 
 fileRoutes.get(
   '/',
-  usession.can(''),
+  // usession.can(''),
+  validate(getAllFileSchema),
   getAllFiles
 );
 

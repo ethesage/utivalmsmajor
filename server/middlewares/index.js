@@ -48,6 +48,7 @@ import {
   createFileSchema,
   getFileSchema,
   updateFileSchema,
+  getAllFileSchema
 } from './validators/schemas/files';
 
 import {
@@ -149,4 +150,5 @@ export default {
   updateCouponSchema,
   deleteCouponSchema,
   deleteDescriptionSchema,
+  getAllFileSchema
 };

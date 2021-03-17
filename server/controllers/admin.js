@@ -163,9 +163,9 @@ export const getCourseCohort = async (req, res) => {
             model: models.Classes,
             attributes: ['id', 'title', 'description', 'link'],
             include: [
-              {
-                model: models.ClassResources,
-              },
+              // {
+              //   model: models.ClassResources,
+              // },
               {
                 model: models.CohortClassDays,
                 where: { courseCohortId: id },

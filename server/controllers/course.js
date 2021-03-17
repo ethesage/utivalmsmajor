@@ -6,7 +6,7 @@ import models from '../database/models';
 import helpers from '../helpers';
 // import  from "../helpers"
 
-const { successStat, errorStat, uploadImage } = helpers;
+const { successStat, errorStat, uploadImage, createFileFolder } = helpers;
 
 // const { Op, literal } = sequelize;
 
@@ -20,7 +20,7 @@ const { successStat, errorStat, uploadImage } = helpers;
  */
 
 export const create = async (req, res) => {
-  const { courseDescription } = req.body.course;
+  const { courseDescription, name } = req.body.course;
 
   const { id } = req.session.user;
 
@@ -61,6 +61,8 @@ export const create = async (req, res) => {
       ignoreDuplicates: true,
     });
   }
+
+  await createFileFolder(`Course/${name}/classes/`)
 
   return successStat(res, 201, 'data', {
     course,
