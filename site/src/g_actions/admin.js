@@ -143,18 +143,26 @@ export const getCurrentCourseCohort = (courseCohortId, name) => async (
 
   const useObject = courses.data.data;
 
-  const data_ = useObject?.Course?.Classes.reduce(
-    (acc, cur) => ({
+  const data_ = await useObject?.Course?.Classes.reduce(
+    async (acc, cur) => ({
       ...acc,
       [cur.title]: {
-        files: null,
-        assignment: null,
+        resources: await axiosInstance.get(
+          `/file?key=Course/${useObject.Course.name}/classes/${cur.title}/resources/`
+        ),
+        assignments: await axiosInstance.get(
+          `/file?key=Course/${useObject.Course.name}/cohorts/${cur.title}/assignments/`
+        ),
         submittedAssignment: null,
-        allSubmittedAssignment: null,
+        allSubmittedAssignment: await axiosInstance.get(
+          `/file?key=Course/${useObject.Course.name}/cohorts/${useObject.Cohort.cohort}/resources/`
+        ),
       },
     }),
     {}
   );
+
+  // https://utiva-app.s3.amazonaws.com/
 
   if (data_) {
     dispatch({

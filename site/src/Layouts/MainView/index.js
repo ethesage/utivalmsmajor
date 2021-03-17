@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import NavBar from 'components/DashNav';
-import useGoogle from 'Hooks/useGoogle';
 import SideBar from 'components/SideBar';
 import Modal from 'components/Modal';
 import google from 'assets/icons/google.png';
@@ -8,9 +7,7 @@ import './style.scss';
 
 const MainView = ({ children, type }) => {
   const [open, setOpen] = useState(false);
-  const [signedIn, setSignedIn] = useState(false);
   const modalRef = useRef();
-  const { gapi, signIn } = useGoogle({ updateSignInStatus });
 
   const openBar = () => {
     setOpen(!open);
@@ -18,17 +15,6 @@ const MainView = ({ children, type }) => {
 
   const close = () => {
     setOpen(false);
-  };
-
-  function updateSignInStatus(isSignedIn) {
-    if (!isSignedIn) modalRef.current.open();
-    setSignedIn(isSignedIn);
-  }
-
-  const signin = async () => {
-    const res = await signIn();
-    modalRef.current.close();
-    setSignedIn(res);
   };
 
   useEffect(() => {
@@ -58,7 +44,7 @@ const MainView = ({ children, type }) => {
             drive materials for this course
           </p>
           <p className="ext">click on the button below to signin.</p>
-          <button className="flex-row" onClick={signin}>
+          <button className="flex-row">
             <img src={google} alt="google" />
             <p>Google</p>
           </button>
@@ -70,7 +56,7 @@ const MainView = ({ children, type }) => {
       <section className="dh-main flex-col">
         <div className="contents flex-col">
           <NavBar open={openBar} grow={open} />
-          {React.cloneElement(children, { gapi: { gapi, signedIn } })}
+          {children}
         </div>
         <div className="dash-footer">(c) 2020 Utiva All Rights Reserved</div>
       </section>

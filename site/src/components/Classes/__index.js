@@ -38,11 +38,14 @@ function Classes({
   full,
   index,
   showResources = true,
+  gapi,
+  folderId,
   cohortId,
   assData,
   openedRef,
   setOpenedRef,
   addAssignment,
+  editClass,
   completedPayment,
 }) {
   const { title, description, link, courseCohortId } = data;
@@ -69,27 +72,19 @@ function Classes({
 
   const classId = data.id;
   const courseName = currentCohort && Object.keys(currentCohort)[0];
-
   const list_desc = currentCourse.list_desc || currentCourse?.Course?.list_desc;
 
-  const resources = data.ClassResources.filter(
-    (res) => res.type === 'resource'
+  const getFiles = useCallback(
+    async (id) => {
+      if (!gapi) return;
+      return await gapi.gapi.get(
+        null,
+        id,
+        'id, name, iconLink, webContentLink, size, webViewLink, parents'
+      );
+    },
+    [gapi]
   );
-  const assignment_ = data.ClassResources.filter(
-    (res) => res.type === 'assignment'
-  );
-
-  // const getFiles = useCallback(
-  //   async (id) => {
-  //     if (!gapi) return;
-  //     return await gapi.gapi.get(
-  //       null,
-  //       id,
-  //       'id, name, iconLink, webContentLink, size, webViewLink, parents'
-  //     );
-  //   },
-  //   [gapi]
-  // );
 
   useEffect(() => {
     if (!openedRef) return;
@@ -102,53 +97,29 @@ function Classes({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openedRef]);
 
-  useEffect(() => {
-    if (!classResources[title].files) {
-      if (resources.length === 0) {
-        dispatch(getResources(title, null));
-      }
+  // useEffect(() => {
+  //   if (!classResources[title].assignment) {
+  //     if (assignment_.length === 0) {
+  //       dispatch(getAssignments(title, null));
+  //     }
 
-      resources.forEach(async (resource) => {
-        const file = await getFiles(resource.link);
+  //     assignment_.forEach(async (resource) => {
+  //       const file = await getFiles(resource.link);
 
-        dispatch(
-          getResources(title, {
-            ...resource,
-            resourceId: resource.id,
-            ...file,
-            comments: null,
-          })
-        );
-      });
-    }
+  //       dispatch(
+  //         getAssignments(title, {
+  //           ...resource,
+  //           resourceId: resource.id,
+  //           ...file,
+  //           comments: null,
+  //         })
+  //       );
+  //     });
+  //   }
 
-    return () => {};
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (!classResources[title].assignment) {
-      if (assignment_.length === 0) {
-        dispatch(getAssignments(title, null));
-      }
-
-      assignment_.forEach(async (resource) => {
-        const file = await getFiles(resource.link);
-
-        dispatch(
-          getAssignments(title, {
-            ...resource,
-            resourceId: resource.id,
-            ...file,
-            comments: null,
-          })
-        );
-      });
-    }
-
-    return () => {};
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  //   return () => {};
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   const dropDrop = (type) => {
     dropType === type || !dropType
@@ -268,7 +239,7 @@ function Classes({
         dropType === 'resource'
           ? dispatch(deleteResources(title, file.id))
           : dispatch(deleteAssignmnet(title, file.id));
-
+        await gapi.gapi.deleteFile(file.id);
         setCurrentFile(null);
         return true;
       }
@@ -297,6 +268,8 @@ function Classes({
     let file;
 
     try {
+      file = await gapi.gapi.upload(files, setProgress, folderId);
+
       const res = await axiosInstance.post(`class/${dropType}/${data.id}`, {
         link: file.id,
       });
@@ -320,6 +293,8 @@ function Classes({
         appearance: 'error',
         autoDismiss: true,
       });
+
+      file && (await gapi.gapi.deleteFile(file.id));
     }
   };
 

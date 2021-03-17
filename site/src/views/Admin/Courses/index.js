@@ -17,7 +17,7 @@ import StudyPlan from '../../StudyPlan/Admin';
 import Members from '../../Members/Admin';
 import './style.scss';
 
-const Courses = ({ gapi }) => {
+const Courses = () => {
   let { path } = useRouteMatch();
   const dispatch = useDispatch();
   const allCourses = useSelector((state) => state.admin.allCourses);
@@ -75,28 +75,28 @@ const Courses = ({ gapi }) => {
               component={CohortList}
             />
             <Route exact path={`${path}/classroom/:courseId/:cohortId`}>
-              <Classroom gapi={gapi} />
+              <Classroom />
             </Route>
             <Route exact path={`${path}/classroom/:courseId/:cohortId/add`}>
-              <Classroom gapi={gapi} />
+              <Classroom />
             </Route>
             <Route
               exact
               path={`${path}/classroom/:courseId/:cohortId/:classroom`}
             >
-              <FullClass gapi={gapi} />
+              <FullClass />
             </Route>
             <Route
               exact
               path={`${path}/classroom/:courseId/:cohortId/:classroom/edit`}
             >
-              <FullClass gapi={gapi} />
+              <FullClass />
             </Route>
             <Route
               exact
               path={`${path}/classroom/:courseId/:cohortId/:classroom/add-assignment`}
             >
-              <FullClass gapi={gapi} />
+              <FullClass />
             </Route>
 
             <Route
@@ -113,7 +113,7 @@ const Courses = ({ gapi }) => {
               exact
               path={`${path}/all-assignments/:courseId/:cohortId/:classroom?`}
             >
-              <AllAssignments gapi={gapi} />
+              <AllAssignments />
             </Route>
           </Switch>
         </>

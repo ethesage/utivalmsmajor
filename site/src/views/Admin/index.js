@@ -1,30 +1,35 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { Route, Switch } from 'react-router-dom';
+import LazyLoad from 'components/SiteLoader';
 import Layout from 'Layouts/MainView';
-import Courses from './Courses';
-import Home from './Home';
-import Students from '../Students';
-import Settings from '../Settings';
 import './style.scss';
 
+const Courses = lazy(() => import('./Courses'));
+const Home = lazy(() => import('./Home'));
+const Students = lazy(() => import('../Students'));
+const Settings = lazy(() => import('../Settings'));
+
 const Dashboard = () => {
-  const Routes = ({ gapi }) => (
-    <Switch>
-      <Route exact path="/admin">
-        <Home gapi={gapi} />
-      </Route>
-      <Route path="/admin/courses">
-        <Courses gapi={gapi} />
-      </Route>
+  const Routes = () => (
+    <Suspense fallback={<LazyLoad />}>
+      <Switch>
+        <Route exact path="/admin">
+          <Home />
+        </Route>
 
-      <Route path="/admin/users">
-        <Students />
-      </Route>
+        <Route path="/admin/courses">
+          <Courses />
+        </Route>
 
-      <Route path="/admin/settings">
-        <Settings />
-      </Route>
-    </Switch>
+        <Route path="/admin/users">
+          <Students />
+        </Route>
+
+        <Route path="/admin/settings">
+          <Settings />
+        </Route>
+      </Switch>
+    </Suspense>
   );
 
   return (
