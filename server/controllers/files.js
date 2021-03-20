@@ -53,7 +53,7 @@ export const getAllFiles = async (req, res) => {
     fileList.Contents.reduce((acc, list) => {
       if (list.Key !== key) {
         acc.push({
-          Key: `https://utiva-app.s3.amazonaws.com/${list.Key}`,
+          Key: list.Key,
           Size: list.Size,
         });
       }
