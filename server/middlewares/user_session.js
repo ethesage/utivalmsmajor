@@ -94,9 +94,11 @@ module.exports.main = function easySessionMain(connect, opts) {
    * @memberof Helper
    */
   Session.prototype.logout = async function logout(req, res) {
-    req.session = null;
-    res.clearCookie('uti_va', { domain: process.env.domain });
-    res.clearCookie('utiva', { domain: process.env.domain });
+    if (req) {
+      req.session = null;
+      res.clearCookie('uti_va', { domain: process.env.domain });
+      res.clearCookie('utiva', { domain: process.env.domain });
+    }
   };
 
   /**

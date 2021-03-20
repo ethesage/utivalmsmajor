@@ -114,14 +114,11 @@ export const uploadImage = async (url, fileName) => {
 };
 
 export const uploadData = async (file, path, fileName) => {
-  if (!isBase64(file, { mimeRequired: true })) {
-    throw Error('Invalid base64 Data');
-  }
+  // if (!isBase64(file, { mimeRequired: true })) {
+  //   throw Error('Invalid base64 Data');
+  // }
 
-  const buffer = new Buffer.from(
-    file.replace(/^data:image\/\w+;base64,/, ''),
-    'base64'
-  );
+  const buffer = new Buffer.from(file.split('base64,')[1], 'base64');
 
   const data = {
     ACL: 'public-read',
@@ -133,12 +130,10 @@ export const uploadData = async (file, path, fileName) => {
   return s3.upload(data).promise();
 };
 
-export const getFolderListings = async (key) =>{
-console.log(key)
-  return s3
+export const getFolderListings = async (key) =>
+  s3
     .listObjects({ Bucket: 'utiva-app', Delimiter: '/', Prefix: key })
     .promise();
-}
 
 export const createFileFolder = async (path) => {
   const params = {
@@ -148,7 +143,6 @@ export const createFileFolder = async (path) => {
   return s3.putObject(params).promise();
 };
 
-
 export const deleteImage = async (path) => {
   const deleteParam = {
     Key: path,
@@ -157,22 +151,14 @@ export const deleteImage = async (path) => {
   return s3.deleteObject(deleteParam).promise();
 };
 
-// deleteImage(
-//   'Courses/Data Incubator/classes/Pre-class Learning [Introduction to Excel]/att_users_202103041239.csv'
-// );
-
-// console.log(
-//   createFileFolder(
-//     'Courses/Data Incubator/classes/Pre-class Learning [Introduction to Excel]/'
-//   )
-// );
-
 export const encryptQuery = (string) => {
   try {
     const cryptr = new Cryptr(ENCRYPTION_SECRET);
     const encryptedString = cryptr.encrypt(string);
     return encryptedString;
-  } catch (error) {}
+  } catch (error) {
+    //
+  }
 };
 
 export const decrypt = (string) => {
@@ -186,7 +172,7 @@ export const decrypt = (string) => {
 };
 
 const shuffleArray = (array) => {
-  for (let i = array.length - 1; i > 0; i--) {
+  for (let i = array.length - 1; i > 0; i -= 1) {
     const j = Math.floor(Math.random() * (i + 1));
     const temp = array[i];
     array[i] = array[j];

@@ -72,12 +72,7 @@ function Classes({
 
   const list_desc = currentCourse.list_desc || currentCourse?.Course?.list_desc;
 
-  const resources = data.ClassResources.filter(
-    (res) => res.type === 'resource'
-  );
-  const assignment_ = data.ClassResources.filter(
-    (res) => res.type === 'assignment'
-  );
+  console.log(data.ClassResources);
 
   // const getFiles = useCallback(
   //   async (id) => {
@@ -102,53 +97,29 @@ function Classes({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openedRef]);
 
-  useEffect(() => {
-    if (!classResources[title].files) {
-      if (resources.length === 0) {
-        dispatch(getResources(title, null));
-      }
+  // useEffect(() => {
+  //   if (!classResources[title].assignment) {
+  //     if (assignment_.length === 0) {
+  //       dispatch(getAssignments(title, null));
+  //     }
 
-      resources.forEach(async (resource) => {
-        const file = await getFiles(resource.link);
+  //     assignment_.forEach(async (resource) => {
+  //       const file = await getFiles(resource.link);
 
-        dispatch(
-          getResources(title, {
-            ...resource,
-            resourceId: resource.id,
-            ...file,
-            comments: null,
-          })
-        );
-      });
-    }
+  //       dispatch(
+  //         getAssignments(title, {
+  //           ...resource,
+  //           resourceId: resource.id,
+  //           ...file,
+  //           comments: null,
+  //         })
+  //       );
+  //     });
+  //   }
 
-    return () => {};
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (!classResources[title].assignment) {
-      if (assignment_.length === 0) {
-        dispatch(getAssignments(title, null));
-      }
-
-      assignment_.forEach(async (resource) => {
-        const file = await getFiles(resource.link);
-
-        dispatch(
-          getAssignments(title, {
-            ...resource,
-            resourceId: resource.id,
-            ...file,
-            comments: null,
-          })
-        );
-      });
-    }
-
-    return () => {};
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  //   return () => {};
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   const dropDrop = (type) => {
     dropType === type || !dropType
@@ -302,7 +273,6 @@ function Classes({
       });
 
       if (res) {
-        file = await getFiles(file.id);
         file.resourceId = res.data.data.id;
         setProgress(100);
 
@@ -363,7 +333,7 @@ function Classes({
                               Edit Class
                             </Link>
                           </div>
-                          {Array.isArray(classResources[title].assignment) && (
+                          {Array.isArray(classResources[title].assignments) && (
                             <Link
                               to=""
                               className="edit"
@@ -372,7 +342,7 @@ function Classes({
                                 addAssignment();
                               }}
                             >
-                              {classResources[title].assignment.length === 0
+                              {classResources[title].assignments.length === 0
                                 ? 'Add Assignment'
                                 : 'Edit Assignment'}
                             </Link>
@@ -380,7 +350,7 @@ function Classes({
                         </div>
                       )}
                       {isTrainer &&
-                        Array.isArray(classResources[title].assignment) && (
+                        Array.isArray(classResources[title].assignments) && (
                           <div className="edit_btns">
                             <Link
                               to=""
@@ -390,7 +360,7 @@ function Classes({
                                 addAssignment();
                               }}
                             >
-                              {classResources[title].assignment.length === 0
+                              {classResources[title].assignments.length === 0
                                 ? 'Add Assignment'
                                 : 'Edit Assignment'}
                             </Link>
@@ -437,7 +407,7 @@ function Classes({
                         />
                       </div>
 
-                      {(assignment_.length > 0 || !isStudent) && (
+                      {/* {(assignment_.length > 0 || !isStudent) && (
                         <div className="btn_sec">
                           <ResourceBtn
                             img={assignment}
@@ -452,7 +422,7 @@ function Classes({
                             }
                           />
                         </div>
-                      )}
+                      )} */}
                     </div>
                   </div>
 

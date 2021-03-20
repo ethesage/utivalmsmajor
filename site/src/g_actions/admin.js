@@ -143,24 +143,29 @@ export const getCurrentCourseCohort = (courseCohortId, name) => async (
 
   const useObject = courses.data.data;
 
-  const data_ = await useObject?.Course?.Classes.reduce(
-    async (acc, cur) => ({
+  const data_ = await useObject?.Course?.Classes.reduce(async (acc, cur) => {
+    const resources = await axiosInstance.get(
+      `/file?key=Course/${useObject.Course.name}/classes/${cur.title}/resources/`
+    );
+
+    const assignments = await axiosInstance.get(
+      `/file?key=Course/${useObject.Course.name}/classes/${cur.title}/assignments/`
+    );
+
+    const allSubmittedAssignment = await axiosInstance.get(
+      `/file?key=Course/${useObject.Course.name}/cohorts/${useObject.Cohort.cohort}/resources/`
+    );
+
+    return {
       ...acc,
       [cur.title]: {
-        resources: await axiosInstance.get(
-          `/file?key=Course/${useObject.Course.name}/classes/${cur.title}/resources/`
-        ),
-        assignments: await axiosInstance.get(
-          `/file?key=Course/${useObject.Course.name}/cohorts/${cur.title}/assignments/`
-        ),
+        resources: resources.data.data,
+        assignments: assignments.data.data,
         submittedAssignment: null,
-        allSubmittedAssignment: await axiosInstance.get(
-          `/file?key=Course/${useObject.Course.name}/cohorts/${useObject.Cohort.cohort}/resources/`
-        ),
+        allSubmittedAssignment: allSubmittedAssignment.data.data,
       },
-    }),
-    {}
-  );
+    };
+  }, {});
 
   // https://utiva-app.s3.amazonaws.com/
 

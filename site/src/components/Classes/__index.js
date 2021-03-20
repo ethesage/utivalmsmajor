@@ -72,7 +72,15 @@ function Classes({
 
   const classId = data.id;
   const courseName = currentCohort && Object.keys(currentCohort)[0];
+
   const list_desc = currentCourse.list_desc || currentCourse?.Course?.list_desc;
+
+  const resources = data.ClassResources.filter(
+    (res) => res.type === 'resource'
+  );
+  const assignment_ = data.ClassResources.filter(
+    (res) => res.type === 'assignment'
+  );
 
   const getFiles = useCallback(
     async (id) => {
@@ -97,29 +105,53 @@ function Classes({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openedRef]);
 
-  // useEffect(() => {
-  //   if (!classResources[title].assignment) {
-  //     if (assignment_.length === 0) {
-  //       dispatch(getAssignments(title, null));
-  //     }
+  useEffect(() => {
+    if (!classResources[title].files) {
+      if (resources.length === 0) {
+        dispatch(getResources(title, null));
+      }
 
-  //     assignment_.forEach(async (resource) => {
-  //       const file = await getFiles(resource.link);
+      resources.forEach(async (resource) => {
+        const file = await getFiles(resource.link);
 
-  //       dispatch(
-  //         getAssignments(title, {
-  //           ...resource,
-  //           resourceId: resource.id,
-  //           ...file,
-  //           comments: null,
-  //         })
-  //       );
-  //     });
-  //   }
+        dispatch(
+          getResources(title, {
+            ...resource,
+            resourceId: resource.id,
+            ...file,
+            comments: null,
+          })
+        );
+      });
+    }
 
-  //   return () => {};
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+    return () => {};
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (!classResources[title].assignment) {
+      if (assignment_.length === 0) {
+        dispatch(getAssignments(title, null));
+      }
+
+      assignment_.forEach(async (resource) => {
+        const file = await getFiles(resource.link);
+
+        dispatch(
+          getAssignments(title, {
+            ...resource,
+            resourceId: resource.id,
+            ...file,
+            comments: null,
+          })
+        );
+      });
+    }
+
+    return () => {};
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const dropDrop = (type) => {
     dropType === type || !dropType
