@@ -104,6 +104,7 @@ export const submitAssignment = async (req, res) => {
     classResourcesId,
     resourceLink,
     courseCohortId,
+    size,
   } = req.body.assignment;
   const { id } = req.session.user;
 
@@ -133,6 +134,7 @@ export const submitAssignment = async (req, res) => {
     isGraded: false,
     classResourcesId,
     courseCohortId,
+    size,
   });
 
   return successStat(res, 201, 'data', data.dataValues);
@@ -146,32 +148,32 @@ export const gradeStudentAssignment = async (req, res) => {
     where: { id: classId },
     include: [
       {
-        model: models.Trainer,
+        model: models.CohortTrainer,
         where: { userId: id },
       },
     ],
   });
 
-  if (!checkTrainer || role === 'student') {
-    return errorStat(res, 403, 'Cant Grade Assignment');
+  if (checkTrainer || role === 'admin') {
+    const foundAssignment = await models.Assignment.findOne({
+      where: { id: assignmentId },
+    });
+
+    if (!foundAssignment) {
+      return errorStat(res, 404, 'Assignment not found');
+    }
+
+    const updateAssignmet = await foundAssignment.update({
+      ...req.body.assignment,
+      isGraded: true,
+      gradeDate: new Date(),
+      gradedBy: `${firstName} ${lastName}`,
+    });
+
+    return successStat(res, 201, 'data', updateAssignmet);
   }
 
-  const foundAssignment = await models.Assignment.findOne({
-    where: { id: assignmentId },
-  });
-
-  if (!foundAssignment) {
-    return errorStat(res, 404, 'Assignment not found');
-  }
-
-  const updateAssignmet = await foundAssignment.update({
-    ...req.body.assignment,
-    isGraded: true,
-    gradeDate: new Date(),
-    gradedBy: `${firstName} ${lastName}`,
-  });
-
-  return successStat(res, 201, 'data', updateAssignmet);
+  return errorStat(res, 403, 'Cant Grade Assignment');
 };
 
 export const editSubmittedAssignment = async (req, res) => {

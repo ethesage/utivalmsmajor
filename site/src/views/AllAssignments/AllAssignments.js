@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllsubmittedAssignment } from 'g_actions/member';
@@ -12,14 +12,14 @@ import user_icon from 'assets/user_icon.png';
 import ViewGrade from 'components/ViewGrade';
 import './style.scss';
 
-const AllAssignmnets = ({ gapi, currentCourse, isAdmin, cohortId }) => {
+const AllAssignmnets = ({ currentCourse, isAdmin, cohortId }) => {
   const { courseId, classroom } = useParams();
   const dispatch = useDispatch();
   const { classResources } = useSelector((state) => state.member);
   const history = useHistory();
   const [classes, setClasses] = useState(currentCourse?.CourseCohort?.Classes);
   const [currentClass, setCurrentClass] = useState(classroom);
-  const [loading, setLoading] = useState();
+  // const [loading, setLoading] = useState();
   const [filteredData, setFilteredData] = useState();
   const [filters, setFilters] = useState({
     type: 'reset',
@@ -35,17 +35,9 @@ const AllAssignmnets = ({ gapi, currentCourse, isAdmin, cohortId }) => {
     (class_) => class_.id === classroom
   );
 
-  const getFiles = useCallback(
-    async (id) => {
-      if (!gapi) return;
-      return await gapi.gapi.get(
-        null,
-        id,
-        'id, name, iconLink, webContentLink, size, webViewLink, parents'
-      );
-    },
-    [gapi]
-  );
+  const data =
+    currentClassdata &&
+    classResources[currentClassdata[0]?.title]?.allSubmittedAssignment;
 
   useEffect(() => {
     if (!currentCourse) return;
@@ -60,29 +52,23 @@ const AllAssignmnets = ({ gapi, currentCourse, isAdmin, cohortId }) => {
     if (!classroom) return;
     if (!currentCourse) return;
     if (!currentClassdata) return;
+    if (data) return;
+
     setCurrentClass(classroom);
-
-    if (!classResources[currentClassdata[0].title].allSubmittedAssignment) {
-      setLoading(true);
-    } else setLoading(false);
-
-    if (
-      loading ||
-      Array.isArray(
-        classResources[currentClassdata[0].title].allSubmittedAssignment
-      )
-    )
-      return;
 
     const s_cohort_id = cohortId || currentCourse.CourseCohort.id;
 
-    dispatch(
-      getAllsubmittedAssignment(
-        currentClassdata[0].title,
-        classroom,
-        s_cohort_id
-      )
-    );
+    (async () => {
+      await dispatch(
+        getAllsubmittedAssignment(
+          currentClassdata[0].title,
+          classroom,
+          s_cohort_id,
+          currentCourse.Course.name,
+          currentCourse.Cohort.cohort
+        )
+      );
+    })();
 
     return () => {};
   }, [
@@ -91,14 +77,12 @@ const AllAssignmnets = ({ gapi, currentCourse, isAdmin, cohortId }) => {
     dispatch,
     classResources,
     currentClassdata,
-    loading,
     cohortId,
+    data,
   ]);
 
   useEffect(() => {
     if (!searchQuery) return;
-    const data =
-      classResources[currentClassdata[0].title].allSubmittedAssignment;
     if (!data) return;
 
     const searchResult = data.filter(
@@ -133,25 +117,25 @@ const AllAssignmnets = ({ gapi, currentCourse, isAdmin, cohortId }) => {
     <div className="spinner1" style={{ height: '300px' }}></div>
   );
 
-  if (
-    !classes ||
-    !currentClassdata?.length === 0 ||
-    currentClass === '' ||
-    loading
-  ) {
+  if (!classes || !currentClassdata?.length === 0 || currentClass === '') {
     // if (true) {
     return (
       <>
         <section className="ass_ls">
           <div className="nav-sec flex-col al-start">
             <div className="nav-item">
-              <Input
-                inputs={listnameList || []}
-                value={listnameList ? 'loading...' : currentClass}
-                handleSelect={handleSelect}
-                placeHolder="Select Class"
-                label="Select class"
-              />
+              {listnameList ? (
+                <Input
+                  inputs={listnameList || []}
+                  value={currentClass}
+                  handleSelect={handleSelect}
+                  placeHolder="Select Class"
+                  label="Select class"
+                  itype="select"
+                />
+              ) : (
+                <p>Loading...</p>
+              )}
             </div>
           </div>
           <Loader tempLoad />
@@ -159,9 +143,6 @@ const AllAssignmnets = ({ gapi, currentCourse, isAdmin, cohortId }) => {
       </>
     );
   }
-
-  const data =
-    classResources[currentClassdata[0]?.title]?.allSubmittedAssignment;
 
   const updateInput = (name, value) => {
     setFilters({ ...filters, [name]: value });
@@ -182,37 +163,13 @@ const AllAssignmnets = ({ gapi, currentCourse, isAdmin, cohortId }) => {
     setViewGrade(true);
     setCurrentSubmitted(null);
 
-    let file = await getFiles(assignment.resourceLink);
-
-    setCurrentSubmitted({ ...assignment, file });
+    setCurrentSubmitted(assignment);
   };
-
-  const viewAss = (e) => {
-    e.preventDefault();
-
-    if (!currentClass) return;
-    if (!currentSubmitted) return;
-    window.open(
-      currentSubmitted.file.webViewLink || currentSubmitted.file.webContentLink
-    );
-  };
-
-  // let assLink =
-  //   currentClassdata[0].ClassResources[0] &&
-  //   currentClassdata[0].ClassResources[0].link;
-
-  // if (assLink) {
-  //   (async () => {
-  //     assLink = await getFiles(assLink);
-
-  //     setAssFile(assLink);
-  //   })();
-  // }
 
   return (
     <>
       <section className="ass_ls">
-        {!viewGrade ? (
+        {!viewGrade && (
           <>
             <div className="nav-sec flex-col al-start">
               <div className="nav-item">
@@ -254,15 +211,17 @@ const AllAssignmnets = ({ gapi, currentCourse, isAdmin, cohortId }) => {
               </div>
             </div>
 
-            {loading || !data ? (
-              classroom ? (
-                <div className="spinner1" style={{ height: '300px' }}></div>
-              ) : (
-                <div className="flex-row" style={{ height: '300px' }}>
-                  <p>Please select a class</p>
-                </div>
-              )
-            ) : data.length === 0 ? (
+            {classroom && !data && (
+              <div className="spinner1" style={{ height: '300px' }}></div>
+            )}
+
+            {!classroom && (
+              <div className="flex-row" style={{ height: '300px' }}>
+                <p>Please select a class</p>
+              </div>
+            )}
+
+            {!data || data?.length === 0 ? (
               <div className="flex-row" style={{ height: '300px' }}>
                 <p>No Submitted Assignments Yet</p>
               </div>
@@ -304,17 +263,14 @@ const AllAssignmnets = ({ gapi, currentCourse, isAdmin, cohortId }) => {
               </T.Table>
             )}
           </>
-        ) : !currentSubmitted ? (
-          <Loader />
-        ) : (
+        )}
+
+        {viewGrade && (
           <ViewGrade
             assignmentId={currentSubmitted.id}
             length={1}
-            data={
-              classResources[currentClassdata[0].title].allSubmittedAssignment
-            }
+            data={currentSubmitted}
             currentClass={currentClassdata}
-            view={viewAss}
             goBack={() => setViewGrade(false)}
             name={listnameList.find((list) => list.value === currentClass).name}
             prevPath={

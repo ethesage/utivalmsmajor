@@ -6,6 +6,7 @@ import {
   getAllFiles,
   updateFile,
   deleteFile,
+  getOneFile,
 } from '../../controllers/files';
 import middlewares from '../../middlewares';
 
@@ -27,13 +28,18 @@ fileRoutes.post(
   createFile
 );
 
-fileRoutes.get('/:fileId', usession.can(''), validate(getFileSchema), getFile);
-
 fileRoutes.get(
   '/',
   usession.can(''),
   // validate(getAllFileSchema),
   getAllFiles
+);
+
+fileRoutes.get(
+  '/one',
+  usession.can(''),
+  // validate(getAllFileSchema),
+  getOneFile
 );
 
 fileRoutes.patch(
@@ -49,5 +55,7 @@ fileRoutes.delete(
   // validate(getFileSchema),
   deleteFile
 );
+
+fileRoutes.get('/:fileId', usession.can(''), validate(getFileSchema), getFile);
 
 export default fileRoutes;

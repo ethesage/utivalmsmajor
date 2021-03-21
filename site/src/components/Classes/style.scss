@@ -132,7 +132,7 @@
 
   .class_file_con {
     background: white;
-    width: 90%;
+    width: 90vw;
     max-width: 600px;
     border-radius: 10px;
     padding: 5px;
@@ -151,6 +151,7 @@
     h3 {
       text-align: center;
       padding: 20px;
+      color: color(text);
     }
   }
 }

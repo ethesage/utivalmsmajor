@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import no_file from 'assets/dashboard/no_file.png';
 import Skeleton from 'react-skeleton-loader';
 import FilesSec from './FileSec';
 import Drag from '../Drag';
+import Modal from 'components/Modal';
+import Docs from 'components/DocViewer';
 import './style.scss';
 
 const Files = ({
@@ -15,7 +17,23 @@ const Files = ({
   linkExt,
   useErrorMessage = true,
   errorMsg,
+  showOpt,
+  viewgrade,
 }) => {
+  const [currentFile, setCurrentFile] = useState();
+  const modalRef = useRef();
+
+  useEffect(() => {
+    if (currentFile) {
+      modalRef.current.open();
+    }
+  }, [currentFile]);
+
+  const close = () => {
+    setCurrentFile(null);
+    // modalRef.current.close()
+  };
+
   return (
     <div className="info_con">
       <div className="info_con_sec scrolled flex-col al-start j-start">
@@ -49,6 +67,9 @@ const Files = ({
               deleteFile={deleteFile}
               personal={personal}
               linkExt={linkExt}
+              setCurrentFile={setCurrentFile}
+              showOpt={showOpt}
+              viewgrade={viewgrade}
             />
           ))
         )}
@@ -61,6 +82,10 @@ const Files = ({
           handleImage={handleImage}
         />
       )}
+
+      <Modal ref={modalRef} runOnClose={close}>
+        <Docs docs={currentFile} close={close} />
+      </Modal>
     </div>
   );
 };

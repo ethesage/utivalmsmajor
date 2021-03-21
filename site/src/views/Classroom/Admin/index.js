@@ -48,9 +48,10 @@ const Classroom = ({ full = false, gapi }) => {
                   index={i}
                   gapi={gapi}
                   openedRef={openedRef}
-                  setOpenedRef={setOpenedRef} 
+                  setOpenedRef={setOpenedRef}
                   folderId={currentCohort.folderId}
                   cohortId={cohortId}
+                  currentCourse={currentCourse}
                   completedPayment={true}
                 />
               ))}

@@ -49,6 +49,7 @@ const Payment = ({ back, paymentAmount, mainText, doneFunc, fromSplit }) => {
     };
 
     moveIfFree();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const goBack = () => {

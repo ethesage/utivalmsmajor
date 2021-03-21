@@ -66,6 +66,27 @@ export const getAllFiles = async (req, res) => {
   return successStat(res, 200, 'data', content);
 };
 
+export const getOneFile = async (req, res) => {
+  const { key } = req.query;
+
+  const fileList = await getFolderListings(key);
+
+  const content =
+    fileList &&
+    fileList.Contents.reduce((acc, list) => {
+      acc.push({
+        Key: list.Key,
+        Size: list.Size,
+      });
+
+      return acc;
+    }, []);
+
+  // console.log(content);
+
+  return successStat(res, 200, 'data', content);
+};
+
 export const updateFile = async (req, res) => {
   const { fileId, name } = req.body.file;
   const { id } = req.session.user;

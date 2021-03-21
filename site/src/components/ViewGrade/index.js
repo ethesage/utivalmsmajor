@@ -7,12 +7,11 @@ import useBreadcrumbs from 'Hooks/useBreadCrumbs';
 import Moment from 'react-moment';
 import Back from 'assets/icons/back';
 import Button from 'components/Button';
-import ResourceBtn from 'components/ResourceButton';
-import assignment from 'assets/icons/course/assignment.png';
 import Input from 'components/Input';
 import { axiosInstance, validate } from 'helpers';
 import user_icon from 'assets/user_icon.png';
-
+import Files from 'components/Files';
+import deleteIcon from 'assets/icons/delete.png';
 import '../Classes/style.scss';
 import './style.scss';
 
@@ -21,7 +20,6 @@ const ViewGrade = ({
   length,
   assignmentId,
   currentClass,
-  view,
   goBack,
   name,
   prevPath,
@@ -32,8 +30,8 @@ const ViewGrade = ({
   const { addToast } = useToasts();
   const submitBtn = useRef();
   const { user, isStudent } = useSelector((state) => state.auth);
-  const [assData, setassData] = useState();
-  const [grade, setGrade] = useState();
+  const [assData] = useState(data);
+  const [grade, setGrade] = useState(data.grade || 0);
   const dispatch = useDispatch();
 
   useBreadcrumbs(
@@ -49,19 +47,6 @@ const ViewGrade = ({
     ],
     !!prevPath && !!assData
   );
-
-  useEffect(() => {
-    if (assData) return;
-
-    if (data) {
-      const current = data.filter(
-        (ass) => ass.resourceId === assignmentId || ass.id === assignmentId
-      )[0];
-
-      setassData(current);
-      setGrade(current.grade || 0);
-    }
-  }, [assignmentId, data, length, assData]);
 
   // get comment data
   useEffect(() => {
@@ -119,6 +104,34 @@ const ViewGrade = ({
     }
   };
 
+  const deleteComment = async (current_comment) => {
+    setLoading(true);
+
+    try {
+      const _comment = await axiosInstance.delete(
+        `/assignment/comment/${current_comment.id}`
+      );
+
+      if (_comment) setLoading(false);
+
+      setComments((comments) =>
+        comments.filter((comment) => comment.id !== current_comment.id)
+      );
+
+      setLoading(false);
+    } catch (err) {
+      if (err.response.status === 401) {
+        // disRef.current.showModal();
+      }
+
+      setLoading(false);
+      return addToast('Network error please try again', {
+        appearance: 'error',
+        autoDismiss: true,
+      });
+    }
+  };
+
   const handleChange = (event, error) => {
     const { value } = event.target;
     setNewComment(value);
@@ -159,17 +172,6 @@ const ViewGrade = ({
       });
     }
   };
-
-  // const deleteComment = (event, error) => {
-  //   const { value } = event.target;
-  //   setNewComment(value);
-  // };
-
-  // const getComments = async () => {
-  //   if (comments) return;
-  //   const _comments = await axiosInstance.get(`/article/comments/${data.id}`);
-  //   setComments(_comments.data.comments);
-  // };
 
   return (
     <section className="cx_listnx_con vx_gax">
@@ -226,17 +228,8 @@ const ViewGrade = ({
                 )}
               </div>
             </div>
-            <div className="btn_sec_con flex-row j-start">
-              <div className="btn_sec">
-                <ResourceBtn
-                  img={assignment}
-                  text="View Assignment"
-                  color="off"
-                  link=""
-                  handleClick={view}
-                />
-              </div>
-            </div>
+
+            <Files files={[data]} showdrag={false} />
           </div>
 
           {!isStudent && (
@@ -281,6 +274,15 @@ const ViewGrade = ({
                           className="logo cover"
                         />
                         <div className="text-sec">
+                          {new Date() - new Date(comment.createdAt) < 300000 &&
+                            comment.userId === user.id && (
+                              <button
+                                onClick={() => deleteComment(comment)}
+                                className="del_btn"
+                              >
+                                <img src={deleteIcon} alt="delete" />
+                              </button>
+                            )}
                           <div className="u_name flex-row j-space">
                             <small className="name">
                               {comment?.User?.firstName}{' '}

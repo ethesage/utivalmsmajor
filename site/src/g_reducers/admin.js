@@ -258,7 +258,7 @@ const course = (state = initialState, action) => {
         ),
       };
 
-    case 'GET_CURRENT_COURSE':
+    case 'GET_CURRENT_COURSE_ADMIN':
       return {
         ...state,
         currentCourse: payload,

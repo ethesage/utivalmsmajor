@@ -1,5 +1,5 @@
-import axios from "axios";
-import Cookies from "js-cookie";
+import axios from 'axios';
+import Cookies from 'js-cookie';
 
 let text = /[^\n]{2,}/;
 let shortText = /[^\n]{2,}/;
@@ -70,21 +70,21 @@ export const get_rand = (array) => {
 
 export const axiosInstance = axios.create({
   baseURL: `${
-    window.location.origin.includes("localhost")
-      ? "http://localhost:4000"
+    window.location.origin.includes('localhost')
+      ? 'http://localhost:4000'
       : window.location.origin
   }/api/v1`,
   timeout: 100000,
   withCredentials: true,
   headers: {
-    "Access-Control-Allow-Headers":
-      "Access-Control-Allow-Origin, Access-Control-Allow-Headers, Content-Type",
-    "Access-Control-Allow-Origin": "*",
+    'Access-Control-Allow-Headers':
+      'Access-Control-Allow-Origin, Access-Control-Allow-Headers, Content-Type',
+    'Access-Control-Allow-Origin': '*',
   },
 });
 
 export const format_comma = (x) => {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };
 
 const tokens = {};
@@ -92,15 +92,15 @@ const tokens = {};
 export function parseJwt(token) {
   if (tokens[token]) return tokens[token];
 
-  var base64Url = token.split(".")[1];
-  var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+  var base64Url = token.split('.')[1];
+  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
   var jsonPayload = decodeURIComponent(
     atob(base64)
-      .split("")
+      .split('')
       .map(function (c) {
-        return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
       })
-      .join("")
+      .join('')
   );
 
   const result = JSON.parse(jsonPayload);
@@ -112,7 +112,7 @@ export function parseJwt(token) {
 export function get_user() {
   let user;
 
-  const ctoken = Cookies.get("uti_va");
+  const ctoken = Cookies.get('uti_va');
   if (ctoken) {
     const _user = parseJwt(ctoken);
     user = {
@@ -123,16 +123,16 @@ export function get_user() {
     };
   }
 
-  const isAdmin = user && user.role === "admin";
-  const isTrainer = user && user.role === "trainer";
-  const isStudent = user && user.role === "student";
+  const isAdmin = user && user.role === 'admin';
+  const isTrainer = user && user.role === 'trainer';
+  const isStudent = user && user.role === 'student';
 
   return { user, isAdmin, isTrainer, isStudent };
 }
 
 export const logout = async () => {
-  Cookies.remove("uti_va");
-  axiosInstance.get("/logout");
+  Cookies.remove('uti_va');
+  axiosInstance.get('/logout');
 };
 
 export const toBase64 = (file) =>
@@ -144,38 +144,49 @@ export const toBase64 = (file) =>
   });
 
 export const weeks = {
-  1: "One",
-  2: "Two",
-  3: "Three",
-  4: "Four",
-  5: "Five",
-  6: "Six",
-  7: "Seven",
-  8: "Eight",
-  9: "Nine",
-  10: "Ten",
-  11: "Eleven",
-  12: "Twelve",
-  13: "Thirteen",
-  14: "Fourtheen",
-  15: "Fifteen",
-  16: "Sixteen",
-  17: "Seventeen",
-  18: "Eighteen",
-  19: "Nineteen",
-  20: "Twenty",
-  21: "Twenty One",
-  22: "Twenty Two",
-  23: "Twenty Three",
-  24: "Twenty Four",
-  25: "Twenty Five",
-  26: "Twenty Six",
-  27: "Twenty Seven",
-  28: "Twenty Eight",
-  29: "Twenty Nine",
-  30: "Thirty",
+  1: 'One',
+  2: 'Two',
+  3: 'Three',
+  4: 'Four',
+  5: 'Five',
+  6: 'Six',
+  7: 'Seven',
+  8: 'Eight',
+  9: 'Nine',
+  10: 'Ten',
+  11: 'Eleven',
+  12: 'Twelve',
+  13: 'Thirteen',
+  14: 'Fourtheen',
+  15: 'Fifteen',
+  16: 'Sixteen',
+  17: 'Seventeen',
+  18: 'Eighteen',
+  19: 'Nineteen',
+  20: 'Twenty',
+  21: 'Twenty One',
+  22: 'Twenty Two',
+  23: 'Twenty Three',
+  24: 'Twenty Four',
+  25: 'Twenty Five',
+  26: 'Twenty Six',
+  27: 'Twenty Seven',
+  28: 'Twenty Eight',
+  29: 'Twenty Nine',
+  30: 'Thirty',
 };
 
 export const stringSearch = (val, string) => {
   return string && string.toLowerCase().search(val.toLowerCase()) !== -1;
 };
+
+export const uploadProgress = (setPercentage) => {
+  return function (progressEvent) {
+    var percentCompleted = Math.round(
+      (progressEvent.loaded * 100) / progressEvent.total
+    );
+    setPercentage(percentCompleted);
+  };
+};
+
+export const s3url = 'https://utiva-app.s3.amazonaws.com';

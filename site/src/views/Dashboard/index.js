@@ -19,20 +19,20 @@ const Dashboard = () => {
     history.push('/admin');
   }
 
-  const Routes = ({ gapi }) => (
+  const Routes = () => (
     <Suspense fallback={<LazyLoad />}>
       <Switch>
         <Route exact path="/">
-          <Home gapi={gapi} />
+          <Home />
         </Route>
         <Route path="/courses">
-          <Courses gapi={gapi} />
+          <Courses />
         </Route>
         <Route exact path="/faqs/:info?">
           <FAQ />
         </Route>
         <Route path="/files">
-          <Files gapi={gapi} />
+          <Files />
         </Route>
         <Route path="/settings">
           <Settings />

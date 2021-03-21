@@ -12,6 +12,7 @@ import './style.scss';
 const Classroom = ({ full = false, gapi }) => {
   const { courseId } = useParams();
   const currentCourse = useSelector((state) => state.member.currentCourse);
+  const { user } = useSelector((state) => state.auth);
   const [openedRef, setOpenedRef] = useState();
 
   GetCurrentCourse();
@@ -45,30 +46,36 @@ const Classroom = ({ full = false, gapi }) => {
                     gapi={gapi}
                     openedRef={openedRef}
                     setOpenedRef={setOpenedRef}
+                    currentCourse={currentCourse}
                     folderId={currentCourse.CourseCohort.folderId}
                     completedPayment={
-                      i < currentCourse.Course.Classes.length / 2
-                        ? true
-                        : currentCourse &&
-                          (currentCourse.paymentComplete ||
-                            null === currentCourse.paymentComplete)
+                      user.role === 'student'
+                        ? i < currentCourse.Course.Classes.length / 2
+                          ? true
+                          : currentCourse &&
+                            (currentCourse.paymentComplete ||
+                              null === currentCourse.paymentComplete)
+                        : //if its a trainer then true
+                          true
                     }
                   />
                 );
               })}
             </div>
-            <PaymentComplete
-              paymentComplete={
-                currentCourse &&
-                (currentCourse.paymentComplete ||
-                  null === currentCourse.paymentComplete)
-              }
-              details={{
-                ...currentCourse,
-                courseCohort: [currentCourse.courseCohort],
-                type: 'paid',
-              }}
-            />
+            {user.role === 'student' && (
+              <PaymentComplete
+                paymentComplete={
+                  currentCourse &&
+                  (currentCourse.paymentComplete ||
+                    null === currentCourse.paymentComplete)
+                }
+                details={{
+                  ...currentCourse,
+                  courseCohort: [currentCourse.courseCohort],
+                  type: 'paid',
+                }}
+              />
+            )}
           </>
         )}
       </section>

@@ -20,7 +20,7 @@ const GetCurrentCohort = () => {
     course = null;
   }
 
-  const [loading, error, fetch] = useFetch(dispatch, !!!course);
+  const [loading, error, fetch] = useFetch(dispatch, !course);
 
   useEffect(() => {
     if (!currentCourse) return;

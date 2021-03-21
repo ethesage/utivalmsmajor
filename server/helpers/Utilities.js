@@ -131,9 +131,7 @@ export const uploadData = async (file, path, fileName) => {
 };
 
 export const getFolderListings = async (key) =>
-  s3
-    .listObjects({ Bucket: 'utiva-app', Delimiter: '/', Prefix: key })
-    .promise();
+  s3.listObjects({ Bucket: 'utiva-app', Delimiter: '', Prefix: key }).promise();
 
 export const createFileFolder = async (path) => {
   const params = {

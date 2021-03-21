@@ -1,9 +1,9 @@
-import React, { useRef, useEffect, useCallback, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useToasts } from 'react-toast-notifications';
+import moment from 'moment';
 import {
-  getAssignments,
   getResources,
   deleteAssignmnet,
   deleteResources,
@@ -11,23 +11,20 @@ import {
   courseProgress,
 } from 'g_actions/member';
 import Editor from 'components/Editor';
-import { addPrevVideoFn, removePrevVideoFn } from 'g_actions/admin';
 import ProgressBar from 'components/ProgressBar';
-import Button from 'components/Button';
-import Input from 'components/Input';
-import { weeks, axiosInstance } from 'helpers';
+import { axiosInstance } from 'helpers';
 import Confirm from 'components/Confirm';
 import play from 'assets/icons/course/play.png';
 import material from 'assets/icons/course/material.png';
 import assignment from 'assets/icons/course/assignment.png';
-import class_icon from 'assets/icons/class_icon.png';
-import Plus from 'assets/icons/plus';
-import Remove from 'assets/icons/remove';
 import Modal from '../Modal';
-import user_icon from 'assets/user_icon.png';
 import Files from 'components/Files';
 import ResourceBtn from '../ResourceButton';
 import RevielDrop from '../RevielDrop';
+import HeadSection from './headSection';
+import Trainer from './trainers';
+import ClassVideos from './classVideos';
+import { toBase64, uploadProgress } from 'helpers';
 import './style.scss';
 
 function Classes({
@@ -44,6 +41,8 @@ function Classes({
   setOpenedRef,
   addAssignment,
   completedPayment,
+  currentCourse,
+  editClass,
 }) {
   const { title, description, link, courseCohortId } = data;
   const { isStudent, isAdmin, isTrainer } = useSelector((state) => state.auth);
@@ -52,11 +51,7 @@ function Classes({
   const [wait, setWait] = useState(false);
   const [progress, setProgress] = useState(0);
   const [dropType, setDropType] = useState();
-  const [addPrevVideo, setAddPrevVideo] = useState(false);
-  const [prevVideo, setPrevVideo] = useState('');
-  const { classResources, currentCourse } = useSelector(
-    (state) => state.member
-  );
+  const { classResources } = useSelector((state) => state.member);
   const { currentCohort } = useSelector((state) => state.admin);
   const dispatch = useDispatch();
   const modalRef = useRef();
@@ -65,26 +60,10 @@ function Classes({
   const progressDialog = useRef();
   const { addToast } = useToasts();
   const classRef = useRef();
-  const vidrefs = {};
-
   const classId = data.id;
-  const courseName = currentCohort && Object.keys(currentCohort)[0];
 
-  const list_desc = currentCourse.list_desc || currentCourse?.Course?.list_desc;
-
-  console.log(data.ClassResources);
-
-  // const getFiles = useCallback(
-  //   async (id) => {
-  //     if (!gapi) return;
-  //     return await gapi.gapi.get(
-  //       null,
-  //       id,
-  //       'id, name, iconLink, webContentLink, size, webViewLink, parents'
-  //     );
-  //   },
-  //   [gapi]
-  // );
+  const list_desc =
+    currentCourse?.list_desc || currentCourse?.Course?.list_desc;
 
   useEffect(() => {
     if (!openedRef) return;
@@ -96,30 +75,6 @@ function Classes({
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openedRef]);
-
-  // useEffect(() => {
-  //   if (!classResources[title].assignment) {
-  //     if (assignment_.length === 0) {
-  //       dispatch(getAssignments(title, null));
-  //     }
-
-  //     assignment_.forEach(async (resource) => {
-  //       const file = await getFiles(resource.link);
-
-  //       dispatch(
-  //         getAssignments(title, {
-  //           ...resource,
-  //           resourceId: resource.id,
-  //           ...file,
-  //           comments: null,
-  //         })
-  //       );
-  //     });
-  //   }
-
-  //   return () => {};
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
 
   const dropDrop = (type) => {
     dropType === type || !dropType
@@ -170,75 +125,13 @@ function Classes({
     }
   };
 
-  const handleChange = ({ target: { value } }) => {
-    setPrevVideo(value);
-  };
-
-  const addVideo = async (e) => {
-    if (!prevVideo || !prevVideo.match(/vimeo\.com\/(\d+)/)) {
-      return;
-    }
-
-    const courseCohortId = currentCohort[courseName]?.id || data.courseCohortId;
-
-    document.querySelector('body').classList.add('spinner1');
-
-    await dispatch(
-      addPrevVideoFn(
-        prevVideo.split('.com/')[1],
-        courseName,
-        classId,
-        courseCohortId
-      )
-    );
-
-    document.querySelector('body').classList.remove('spinner1');
-
-    setPrevVideo('');
-    setAddPrevVideo(false);
-  };
-
-  const removeVideo = async (id) => {
-    vidrefs[id].classList.add('spinner1');
-    vidrefs[id].classList.remove('allowHover');
-
-    try {
-      await dispatch(removePrevVideoFn(courseName, classId, id));
-    } catch (err) {
-      vidrefs[id].classList.remove('spinner1');
-      vidrefs[id].classList.add('allowHover');
-    }
-  };
-
-  // const viewFile = async (contentLink) => {
-  //   window.open(contentLink, '_blank');
-  // };
-
-  // const viewAssignment = (e) => {
-  //   e.preventDefault();
-
-  //   if (!isStudent) {
-  //     dropDrop('assignment');
-  //   } else viewFile(classResources[title].assignment[0].webViewLink);
-  // };
-
   const delete_file = async () => {
-    const file =
-      dropType === 'resource'
-        ? classResources[title].files.find((file) => file.id === currentFile)
-        : classResources[title].assignment[0];
-
-    const resourceId = file.resourceId;
-
-    const slug =
-      dropType === 'resource' ? `class/assignment/` : `class/assignment/`;
-
     try {
-      const res = await axiosInstance.delete(`${slug}${resourceId}`);
+      const res = await axiosInstance.delete(`/file?path=${currentFile}`);
       if (res) {
         dropType === 'resource'
-          ? dispatch(deleteResources(title, file.id))
-          : dispatch(deleteAssignmnet(title, file.id));
+          ? dispatch(deleteResources(title, currentFile))
+          : dispatch(deleteAssignmnet(title, currentFile));
 
         setCurrentFile(null);
         return true;
@@ -253,8 +146,8 @@ function Classes({
     }
   };
 
-  const deleteFIle = (id) => {
-    setCurrentFile(id);
+  const deleteFIle = (file) => {
+    setCurrentFile(file);
     deleteDialog.current.open();
   };
 
@@ -264,26 +157,42 @@ function Classes({
   };
 
   const upload = async (files) => {
+    const fileName = files.name;
+    const path = `Courses/${currentCourse.name}/classes/${data.title}/resources`;
+    const file = await toBase64(files);
+
     progressDialog.current.open();
-    let file;
 
     try {
-      const res = await axiosInstance.post(`class/${dropType}/${data.id}`, {
-        link: file.id,
-      });
+      await axiosInstance.post(
+        'file/create',
+        {
+          file,
+          path,
+          fileName,
+        },
+        {
+          onUploadProgress: uploadProgress(setProgress),
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+        }
+      );
 
-      if (res) {
-        file.resourceId = res.data.data.id;
-        setProgress(100);
+      setProgress(100);
 
-        dispatch(getResources(title, file));
+      dispatch(
+        getResources(title, {
+          Key: `${path}/${fileName}`,
+          Size: files.size,
+        })
+      );
 
-        setTimeout(function () {
-          progressDialog.current.close();
-        }, 2000);
-      }
+      setTimeout(function () {
+        progressDialog.current.close();
+      }, 2000);
     } catch (err) {
-      // console.log(err);
+      console.log(err);
       progressDialog.current.close();
 
       addToast('Error Uploding File', {
@@ -291,10 +200,6 @@ function Classes({
         autoDismiss: true,
       });
     }
-  };
-
-  const handleImgError = (e) => {
-    e.target.src = user_icon;
   };
 
   return (
@@ -309,68 +214,20 @@ function Classes({
           runOnOpen={() => {
             setOpenedRef && setOpenedRef(classRef);
           }}
-          runOnClose={() => !full && setShowResourceDrop(false)}
+          runOnClose={() => setShowResourceDrop(false)}
           header={
-            <div className="cx_header hx-main flex-row j-space">
-              <h2 className={`h_con flex-row j-start  ${full ? ' full' : ''}`}>
-                <img src={class_icon} alt="class" />{' '}
-                <div className="flex-row j-space img">
-                  <span>
-                    {Number(index + 1)
-                      ? `${list_desc} ${weeks[index + 1]} - `
-                      : ''}{' '}
-                    {title}
-                  </span>
-                  {(isAdmin || isTrainer) && full ? (
-                    <>
-                      {isAdmin && (
-                        <div className="edit_btns flex-row">
-                          <div className="edit_btns">
-                            <Link
-                              to={`/admin/courses/classroom/${courseId}/${cohortId}/${data.id}/edit`}
-                              className="edit"
-                            >
-                              Edit Class
-                            </Link>
-                          </div>
-                          {Array.isArray(classResources[title].assignments) && (
-                            <Link
-                              to=""
-                              className="edit"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                addAssignment();
-                              }}
-                            >
-                              {classResources[title].assignments.length === 0
-                                ? 'Add Assignment'
-                                : 'Edit Assignment'}
-                            </Link>
-                          )}
-                        </div>
-                      )}
-                      {isTrainer &&
-                        Array.isArray(classResources[title].assignments) && (
-                          <div className="edit_btns">
-                            <Link
-                              to=""
-                              className="edit"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                addAssignment();
-                              }}
-                            >
-                              {classResources[title].assignments.length === 0
-                                ? 'Add Assignment'
-                                : 'Edit Assignment'}
-                            </Link>
-                          </div>
-                        )}
-                    </>
-                  ) : null}
-                </div>
-              </h2>
-            </div>
+            <HeadSection
+              index={index}
+              full={full}
+              list_desc={list_desc}
+              cohortId={cohortId}
+              data={data}
+              classResources={classResources}
+              isAdmin={isAdmin}
+              isTrainer={isTrainer}
+              courseId={courseId}
+              addAssignment={addAssignment}
+            />
           }
         >
           {completedPayment && (
@@ -379,6 +236,19 @@ function Classes({
                 <div className="inf_x">
                   <h3>{assData[0].title}</h3>
                   <p>{assData[0].description}</p>
+
+                  <div
+                    className="flex-row j-start"
+                    style={{ marginTop: '20px' }}
+                  >
+                    <p>
+                      <strong>Points:</strong> {assData[0].point}
+                    </p>{' '}
+                    <p style={{ marginLeft: '10px' }}>
+                      <strong>DueDate:</strong>{' '}
+                      {moment(assData[0]?.dueDate).format('YYYY-MM-DD')}
+                    </p>
+                  </div>
                 </div>
               ) : (
                 <div className="inf_x">
@@ -407,61 +277,27 @@ function Classes({
                         />
                       </div>
 
-                      {/* {(assignment_.length > 0 || !isStudent) && (
-                        <div className="btn_sec">
-                          <ResourceBtn
-                            img={assignment}
-                            text="Assignment"
-                            color="off"
-                            link={
-                              isAdmin
-                                ? `/admin/courses/all-assignments/${courseId}/${cohortId}/${data.id}`
-                                : isTrainer
-                                ? `/courses/all-assignments/${courseId}/${data.id}`
-                                : `/courses/assignment/${courseId}/${data.id}`
-                            }
-                          />
-                        </div>
-                      )} */}
+                      {classResources[title]?.assignments.length > 0 &&
+                        isStudent && (
+                          <div className="btn_sec">
+                            <ResourceBtn
+                              img={assignment}
+                              text="Assignment"
+                              color="off"
+                              link={
+                                isAdmin
+                                  ? `/admin/courses/all-assignments/${courseId}/${cohortId}/${data.id}`
+                                  : isTrainer
+                                  ? `/courses/all-assignments/${courseId}/${data.id}`
+                                  : `/courses/assignment/${courseId}/${data.id}`
+                              }
+                            />
+                          </div>
+                        )}
                     </div>
                   </div>
 
-                  {isAdmin && full && (
-                    <div>
-                      <h4
-                        style={{ margin: '40px 0 10px' }}
-                        className="theme-color"
-                      >
-                        Trainer{data?.CohortTrainers.length > 1 ? 's' : ''}
-                      </h4>
-
-                      {data?.CohortTrainers.length > 0 ? (
-                        data.CohortTrainers.map((trainer) => (
-                          <div
-                            className="trainer flex-row j-start"
-                            key={trainer.id}
-                          >
-                            <img
-                              src={trainer.User?.profilePic || user_icon}
-                              alt="userimage"
-                              onError={handleImgError}
-                            />
-                            <div>
-                              <strong>
-                                <p>
-                                  {trainer.User.firstName}{' '}
-                                  {trainer.User.lastName}
-                                </p>
-                              </strong>
-                              <small>{trainer.User.occupation}</small>
-                            </div>
-                          </div>
-                        ))
-                      ) : (
-                        <p>No Trainer has been assigned to this class</p>
-                      )}
-                    </div>
-                  )}
+                  <Trainer isAdmin={isAdmin} full={full} data={data} />
 
                   <div className="reg_text">
                     <h4>Resources</h4>
@@ -518,7 +354,7 @@ function Classes({
                 <Files
                   files={
                     dropType === 'resource'
-                      ? classResources[title]?.files
+                      ? classResources[title]?.resources
                       : classResources[title]?.assignment
                   }
                   showdrag={
@@ -541,7 +377,7 @@ function Classes({
             <div className="class_file_con">
               <h3>Resource Materials</h3>
               <Files
-                files={classResources[title].files}
+                files={classResources[title].resources}
                 errorMsg="No materials available yet"
                 showdrag={false}
               />
@@ -587,77 +423,13 @@ function Classes({
             </div>
           </Modal>
 
-          {full && (data.CohortClassVideos.length > 0 || !isStudent) && (
-            <div className="prev_vid_cn reg_text">
-              <nav className="flex-row j-space">
-                <h4 className="theme-color">
-                  Class recordings
-                  {data.CohortClassVideos.length <= 1 ? '' : 's'}
-                </h4>
-
-                {!isStudent && (
-                  <div
-                    onClick={() => {
-                      setAddPrevVideo(!addPrevVideo);
-                      setPrevVideo('');
-                    }}
-                  >
-                    {!addPrevVideo ? <Plus /> : <Remove />}
-                  </div>
-                )}
-              </nav>
-
-              <div className="prevForm" data-active={addPrevVideo}>
-                {addPrevVideo && (
-                  <div className="flex-row j-start al-start form_sec">
-                    <Input
-                      handleChange={handleChange}
-                      name="vimeo"
-                      value={prevVideo}
-                      placeHolder="Enter your video url"
-                      errorMsg="enter a valid video url"
-                    />
-
-                    <Button
-                      text="Add"
-                      className="flex-row"
-                      onClick={addVideo}
-                    />
-                  </div>
-                )}
-              </div>
-
-              {data.CohortClassVideos.length === 0 && (
-                <div className="flex-row" style={{ marginTop: '50px' }}>
-                  <p>No videos yet</p>
-                </div>
-              )}
-
-              <div className="frame_sec">
-                {data.CohortClassVideos.map((prevVideo, i) => (
-                  <div
-                    className={`frame_con ${!isStudent ? 'allowHover' : ''}`}
-                    key={`prev_vid_data_${prevVideo.id.split('-')[0]}`}
-                    ref={(ref) => (vidrefs[prevVideo.id] = ref)}
-                  >
-                    <div
-                      className="rm"
-                      onClick={() => removeVideo(prevVideo.id)}
-                    >
-                      <Remove />
-                    </div>
-                    <iframe
-                      title={`${data.id}_previous_video_${i}`}
-                      src={`https://player.vimeo.com/video/${prevVideo.link}`}
-                      frameBorder="0"
-                      allow="autoplay; fullscreen"
-                      allowFullScreen
-                    ></iframe>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+          <ClassVideos
+            data={data}
+            full={full}
+            isStudent={isStudent}
+            classId={classId}
+            currentCohort={currentCohort}
+          />
         </>
       )}
     </>

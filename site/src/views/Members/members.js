@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Sekeleton from 'react-skeleton-loader';
+import moment from 'moment';
+import { CSVLink } from 'react-csv';
 import {
   getEnrolledMembers,
   enrollStudents,
@@ -14,6 +16,7 @@ import Input from 'components/Input';
 import Button from 'components/Button';
 import user_icon from 'assets/user_icon.png';
 import Close from 'assets/icons/closeX';
+import Download from 'assets/icons/download';
 import { stringSearch, axiosInstance } from 'helpers';
 import './style.scss';
 
@@ -32,6 +35,7 @@ const Members = ({ courseId }) => {
   const [s_loading, , s_fetch] = useFetch(dispatch, !!!allStudents);
   const single_student_modal = useRef();
   const [currentStudent, setCurrentStudent] = useState();
+  const [date] = useState(moment().format('YYYY-MM-DD'));
 
   useEffect(() => {
     if (allStudents) return;
@@ -165,7 +169,25 @@ const Members = ({ courseId }) => {
     <>
       <section className="members">
         <nav className="nav_sec flex-row j-space">
-          <h3>{!loading && enrolledStudents?.members.length} Total Members</h3>
+          <h3>
+            {!loading && enrolledStudents?.members.length} Total Members{' '}
+            <CSVLink
+              filename={`total-students-${date}.csv`}
+              data={
+                enrolledStudents?.members?.map((rep, i) => ({
+                  'S/N': i + 1,
+                  'Full Name': `${rep?.User?.firstName} ${rep?.User?.lastName}`,
+                  email: rep?.User?.email,
+                  'linked In': rep?.User?.linkedIn,
+                  Occupation: rep?.User?.occupation,
+                  'Phone Number': rep?.User?.phoneNumber?.toString(),
+                  Company: rep?.User?.company,
+                })) || []
+              }
+            >
+              <Download />
+            </CSVLink>
+          </h3>
 
           {isAdmin && (
             <Button

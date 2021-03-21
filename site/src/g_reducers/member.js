@@ -17,7 +17,7 @@ const course = (state = initialState, action) => {
         ...state,
         enrolledcourses: payload,
       };
-    case 'GET_CURRENT_COURSE':
+    case 'GET_CURRENT_COURSE_MEMBER':
       return {
         ...state,
         currentCourse: payload,
@@ -109,7 +109,7 @@ const course = (state = initialState, action) => {
         classResources: payload,
       };
     case 'GET_RESOURCES':
-      const prevRes = state.classResources[payload.name].files;
+      const prevRes = state.classResources[payload.name].resources;
       const file = payload.file;
       return {
         ...state,
@@ -117,7 +117,7 @@ const course = (state = initialState, action) => {
           ...state.classResources,
           [payload.name]: {
             ...state.classResources[payload.name],
-            files: prevRes ? [...prevRes, file] : file ? [file] : [],
+            resources: prevRes ? [...prevRes, file] : file ? [file] : [],
           },
         },
       };
@@ -153,7 +153,7 @@ const course = (state = initialState, action) => {
           ...state.classResources,
           [payload]: {
             files: [],
-            assignment: [],
+            assignments: [],
             allSubmittedAssignment: null,
           },
         },
@@ -166,7 +166,19 @@ const course = (state = initialState, action) => {
           ...state.classResources,
           [payload.name]: {
             ...state.classResources[payload.name],
-            assignment: payload.file ? [payload.file] : [],
+            assignments: payload.file ? [payload.file] : [],
+          },
+        },
+      };
+
+    case 'UPDATE_ASSIGNMENTS':
+      return {
+        ...state,
+        classResources: {
+          ...state.classResources,
+          [payload.name]: {
+            ...state.classResources[payload.name],
+            assignments: payload.files,
           },
         },
       };
@@ -186,6 +198,38 @@ const course = (state = initialState, action) => {
               : payload.file
               ? [payload.file]
               : [],
+          },
+        },
+      };
+
+    case 'GET_STUDENT_ASSIGNMENT':
+      return {
+        ...state,
+        classResources: {
+          ...state.classResources,
+          [payload.name]: {
+            ...state.classResources[payload.name],
+            submittedAssignment: payload.data,
+          },
+        },
+      };
+
+    case 'UPDATE_SUBMITTED_ASSIGNMENT':
+      const prevSubmittedAss =
+        state.classResources[payload.name].submittedAssignment;
+
+      return {
+        ...state,
+        classResources: {
+          ...state.classResources,
+          [payload.name]: {
+            ...state.classResources[payload.name],
+            submittedAssignment: prevSubmittedAss.map((ass) => {
+              if (ass.Key === payload.file.Key) {
+                return payload.file;
+              }
+              return ass;
+            }),
           },
         },
       };
@@ -246,13 +290,13 @@ const course = (state = initialState, action) => {
           ...state.classResources,
           [payload.name]: {
             ...state.classResources[payload.name],
-            assignment: [],
+            assignments: [],
           },
         },
       };
 
     case 'DELETE_RESOURCE':
-      const prevAss_re = state.classResources[payload.name].files;
+      const prevAss_re = state.classResources[payload.name].resources;
 
       return {
         ...state,
@@ -260,7 +304,7 @@ const course = (state = initialState, action) => {
           ...state.classResources,
           [payload.name]: {
             ...state.classResources[payload.name],
-            files: prevAss_re.filter((file) => file.id !== payload.id),
+            resources: prevAss_re.filter((file) => file.Key !== payload.file),
           },
         },
       };

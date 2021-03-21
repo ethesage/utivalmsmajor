@@ -36,7 +36,7 @@ export const getCurrentCourse = (course, id) => async (dispatch) => {
     : await axiosInstance.get(`/admin/course/${id}`);
 
   dispatch({
-    type: 'GET_CURRENT_COURSE',
+    type: 'GET_CURRENT_COURSE_ADMIN',
     payload: course ? currCourse : currCourse.data.data,
   });
 };
@@ -143,38 +143,35 @@ export const getCurrentCourseCohort = (courseCohortId, name) => async (
 
   const useObject = courses.data.data;
 
-  const data_ = await useObject?.Course?.Classes.reduce(async (acc, cur) => {
-    const resources = await axiosInstance.get(
-      `/file?key=Course/${useObject.Course.name}/classes/${cur.title}/resources/`
-    );
+  const matArray = await Promise.all(
+    useObject.Course.Classes.map(async (cls) => {
+      const resources = await axiosInstance.get(
+        `/file?key=Courses/${useObject.Course.name}/classes/${cls.title}/resources/`
+      );
 
-    const assignments = await axiosInstance.get(
-      `/file?key=Course/${useObject.Course.name}/classes/${cur.title}/assignments/`
-    );
+      const assignments = await axiosInstance.get(
+        `/file?key=Courses/${useObject.Course.name}/classes/${cls.title}/assignments/`
+      );
 
-    const allSubmittedAssignment = await axiosInstance.get(
-      `/file?key=Course/${useObject.Course.name}/cohorts/${useObject.Cohort.cohort}/resources/`
-    );
+      return {
+        [cls.title]: {
+          resources: resources.data.data,
+          assignments: assignments.data.data,
+          submittedAssignment: null,
+          allSubmittedAssignment: null,
+        },
+      };
 
-    return {
-      ...acc,
-      [cur.title]: {
-        resources: resources.data.data,
-        assignments: assignments.data.data,
-        submittedAssignment: null,
-        allSubmittedAssignment: allSubmittedAssignment.data.data,
-      },
-    };
-  }, {});
+      //
+    })
+  );
 
-  // https://utiva-app.s3.amazonaws.com/
+  const r_arr = await matArray.reduce((acc, cur) => ({ ...acc, ...cur }), {});
 
-  if (data_) {
-    dispatch({
-      type: 'CREATE_CLASS_RESOURCES',
-      payload: data_,
-    });
-  }
+  dispatch({
+    type: 'CREATE_CLASS_RESOURCES',
+    payload: r_arr,
+  });
 
   // create a list of the class name so we can add the class resources
   dispatch({

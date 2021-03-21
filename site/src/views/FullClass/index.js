@@ -111,9 +111,7 @@ function FullClass({ gapi }) {
                     title={data?.title}
                     course={currentCourse}
                     currentClass={data}
-                    gapi={gapi}
                     isStudent={isStudent}
-                    folderId={currentCourse?.CourseCohort?.folderId}
                   />
                 </>
               )}
