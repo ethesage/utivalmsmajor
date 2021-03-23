@@ -20,14 +20,14 @@ const Viewer = ({ docs, close }) => {
   };
 
   return docs ? (
-    <div className='doc-view'>
+    <div className="doc-view">
       {loading && <p>Loading...</p>}
 
       <iframe
         onLoad={handleLoad}
         onError={handleError}
         title="docs"
-        src={`http://docs.google.com/gview?url=${docs}&embedded=true`}
+        src={`https://docs.google.com/gview?url=${docs}&embedded=true`}
         style={{ width: '100%', height: '100%' }}
         frameBorder="0"
       ></iframe>
