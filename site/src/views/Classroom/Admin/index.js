@@ -53,6 +53,7 @@ const Classroom = ({ full = false, gapi }) => {
                   cohortId={cohortId}
                   currentCourse={currentCourse}
                   completedPayment={true}
+                  courseCohortId={currentCohort.id}
                 />
               ))}
             </div>

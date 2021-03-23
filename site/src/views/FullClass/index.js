@@ -98,6 +98,7 @@ function FullClass({ gapi }) {
                     addAssignment={() => {
                       history.push(`${pathname}/add-assignment`);
                     }}
+                    courseCohortId={currentCourse.CourseCohort.id}
                     editClass={() => setEditClass(!editClass)}
                     completedPayment={data && !(Object.keys(data).length === 3)}
                   />

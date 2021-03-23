@@ -74,7 +74,7 @@ const Assignment = ({ gapi }) => {
         getStudentSubmittedAssignments(
           currentClass.title,
           currentClass.id,
-          currentClass?.courseCohortId,
+          currentCourse?.courseCohortId,
           currentCourse.Course.name,
           currentCourse.Cohort.cohort,
           user
@@ -114,7 +114,7 @@ const Assignment = ({ gapi }) => {
         classId: currentClass.id,
         classResourcesId: assignment[0].id,
         resourceLink: fileName,
-        courseCohortId: currentClass?.courseCohortId,
+        courseCohortId: currentCourse?.courseCohortId,
         size: files.size.toString(),
       });
 
@@ -193,6 +193,7 @@ const Assignment = ({ gapi }) => {
                 completedPayment={
                   currentClass && !(Object.keys(currentClass).length === 3)
                 }
+                courseCohortId={currentCourse.courseCohortId}
               />
               <div className="btn_sec_con flex-row j-start">
                 <div className="btn_sec">

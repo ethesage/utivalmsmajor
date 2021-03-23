@@ -42,9 +42,10 @@ function Classes({
   addAssignment,
   completedPayment,
   currentCourse,
+  courseCohortId,
   editClass,
 }) {
-  const { title, description, link, courseCohortId } = data;
+  const { title, description, link } = data;
   const { isStudent, isAdmin, isTrainer } = useSelector((state) => state.auth);
   const [showResourceDrop, setShowResourceDrop] = useState(false);
   const [currentFile, setCurrentFile] = useState();

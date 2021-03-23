@@ -48,6 +48,7 @@ const Classroom = ({ full = false, gapi }) => {
                     setOpenedRef={setOpenedRef}
                     currentCourse={currentCourse}
                     folderId={currentCourse.CourseCohort.folderId}
+                    courseCohortId={currentCourse.CourseCohort.id}
                     completedPayment={
                       user.role === 'student'
                         ? i < currentCourse.Course.Classes.length / 2
