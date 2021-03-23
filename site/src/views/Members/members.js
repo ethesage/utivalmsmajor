@@ -23,7 +23,7 @@ import './style.scss';
 const Members = ({ courseId }) => {
   const dispatch = useDispatch();
   const { enrolledStudents } = useSelector((state) => state.member);
-  const { isAdmin } = useSelector((state) => state.auth);
+  const { isAdmin, isStudent } = useSelector((state) => state.auth);
   const allStudents = useSelector((state) => state.students);
   const modalRef = useRef();
   const inner_modalRef = useRef();
@@ -171,22 +171,24 @@ const Members = ({ courseId }) => {
         <nav className="nav_sec flex-row j-space">
           <h3>
             {!loading && enrolledStudents?.members.length} Total Members{' '}
-            <CSVLink
-              filename={`total-students-${date}.csv`}
-              data={
-                enrolledStudents?.members?.map((rep, i) => ({
-                  'S/N': i + 1,
-                  'Full Name': `${rep?.User?.firstName} ${rep?.User?.lastName}`,
-                  email: rep?.User?.email,
-                  'linked In': rep?.User?.linkedIn,
-                  Occupation: rep?.User?.occupation,
-                  'Phone Number': rep?.User?.phoneNumber?.toString(),
-                  Company: rep?.User?.company,
-                })) || []
-              }
-            >
-              <Download />
-            </CSVLink>
+            {!isStudent && (
+              <CSVLink
+                filename={`total-students-${date}.csv`}
+                data={
+                  enrolledStudents?.members?.map((rep, i) => ({
+                    'S/N': i + 1,
+                    'Full Name': `${rep?.User?.firstName} ${rep?.User?.lastName}`,
+                    email: rep?.User?.email,
+                    'linked In': rep?.User?.linkedIn,
+                    Occupation: rep?.User?.occupation,
+                    'Phone Number': rep?.User?.phoneNumber?.toString(),
+                    Company: rep?.User?.company,
+                  })) || []
+                }
+              >
+                <Download />
+              </CSVLink>
+            )}
           </h3>
 
           {isAdmin && (
