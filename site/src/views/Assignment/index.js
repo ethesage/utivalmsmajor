@@ -92,6 +92,7 @@ const Assignment = ({ gapi }) => {
 
     const fileName = files.name;
     const path = `Courses/${currentCourse.Course.name}/cohorts/${currentCourse.Cohort.cohort}/submitted-assignments/${user.id}`;
+
     const file = await toBase64(files);
 
     try {
@@ -130,7 +131,9 @@ const Assignment = ({ gapi }) => {
         );
       }
     } catch (err) {
-      axiosInstance.delete(`/file?path=${path}/${fileName}`);
+      axiosInstance.delete(
+        `/file?path=${encodeURIComponent(`${path}/${fileName}`)}`
+      );
 
       addToast('Error Uploading file', {
         appearance: 'error',

@@ -158,7 +158,9 @@ const AddAssignment = ({ title, course, currentClass }) => {
       }
     } catch (err) {
       progressDialog.current.close();
-      axiosInstance.delete(`/file?path=${path}/${fileName}`);
+      axiosInstance.delete(
+        `/file?path=${encodeURIComponent(`${path}/${fileName}`)}`
+      );
 
       addToast('Error Uploding File', {
         appearance: 'error',
@@ -174,7 +176,7 @@ const AddAssignment = ({ title, course, currentClass }) => {
 
     try {
       await axiosInstance.delete(`class/assignment/${resourceId}`);
-      await axiosInstance.delete(`/file?path=${file}`);
+      await axiosInstance.delete(`/file?path=${encodeURIComponent(file)}`);
 
       dispatch(deleteAssignmnet(title, file));
       return true;

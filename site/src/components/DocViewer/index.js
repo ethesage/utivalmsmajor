@@ -27,7 +27,9 @@ const Viewer = ({ docs, close }) => {
         onLoad={handleLoad}
         onError={handleError}
         title="docs"
-        src={`https://docs.google.com/gview?url=${docs}&embedded=true`}
+        src={`https://docs.google.com/gview?url=${encodeURIComponent(
+          docs
+        )}&embedded=true`}
         style={{ width: '100%', height: '100%' }}
         frameBorder="0"
       ></iframe>
