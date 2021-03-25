@@ -149,6 +149,7 @@ const AddAssignment = ({ title, course, currentClass }) => {
             Key: `${path}/${fileName}`,
             Size: files.size,
             ...assData,
+            ...res.data.data,
           })
         );
 
