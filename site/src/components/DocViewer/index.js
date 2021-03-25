@@ -16,7 +16,7 @@ const Viewer = ({ docs, close }) => {
 
   const handleError = (e) => {
     setLoading(false);
-    close();
+    close(e);
   };
 
   return docs ? (

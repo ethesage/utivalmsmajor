@@ -339,7 +339,10 @@ const AddAssignment = ({ title, course, currentClass }) => {
         <Confirm
           text="Are you sure?"
           onClick={deleteFile}
-          close={() => deleteDialog.current.close()}
+          close={(e) => {
+            // e.preventDefault();
+            deleteDialog.current.close();
+          }}
           closeText="Successfuly Deleted"
         />
       </Modal>
