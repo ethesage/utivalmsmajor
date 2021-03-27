@@ -43,6 +43,7 @@ export const quickCheckout = async (req, res) => {
           include: [
             {
               model: models.CohortClassDays,
+              where: { courseCohortId },
               attributes: ['date', 'time'],
               order: [['date', 'ASC']],
             },
