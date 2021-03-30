@@ -5,16 +5,16 @@ import './style.scss';
 
 const data = [
   {
-    title: 'Self-paced Learning',
-    desc: 'At your convenience',
+    title: 'Collaborative Learning',
+    desc: 'Learn with and partner with others',
   },
   {
     title: 'Live classes',
-    desc: 'Learn with Others',
+    desc: 'Being there is the essence of knowledge',
   },
   {
-    title: 'Virtual Internship',
-    desc: 'Hands-on Project-based Internship',
+    title: 'Virtual Project',
+    desc: 'The best way to improve your skill is by doing',
   },
 ];
 
