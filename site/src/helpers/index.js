@@ -51,6 +51,7 @@ const patterns = {
   initialSplitAmount: number,
   paymentType: shortText,
   currency_type: shortText,
+  whatsAppLink: /^(https?:\/\/)?chat\.whatsapp\.com\/(?:invite\/)?([a-zA-Z0-9_-]{22})$/,
 };
 
 export const validate = (field, Regex) => {
