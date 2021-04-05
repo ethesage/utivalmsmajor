@@ -155,11 +155,12 @@ class Mailer {
     this.templateTemp = Temp;
   }
 
-  getCohortmail(name, user, dateObj) {
-    const mailData = courseEmails[name] && courseEmails[name](user, dateObj);
+  getCohortmail(name, user, dateObj, whatsAppLink) {
+    const mailData =
+      courseEmails[name] && courseEmails[name](user, dateObj, whatsAppLink);
     if (mailData) {
       this.templateTemp =
-        courseEmails[name] && courseEmails[name](user, dateObj);
+        courseEmails[name] && courseEmails[name](user, dateObj, whatsAppLink);
       return this;
     }
     return null;

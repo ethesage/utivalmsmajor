@@ -1,6 +1,7 @@
+/* eslint-disable indent */
 import moment from 'moment';
 
-const dataAccelerator = (user, dateObj) => {
+const dataAccelerator = (user, dateObj, whatsAppLink) => {
   const html = `<!DOCTYPE html>
     <html lang="en">
       <head>
@@ -149,10 +150,18 @@ const dataAccelerator = (user, dateObj) => {
                 head start.
               </li>
 
-              <li style="margin-bottom:5px;font-size:0.9em">
-                Kindly join the <a href="https://chat.whatsapp.com/K4E9yotG019Ey2gIJJ3Uis">CLASS CHAT ROOM</a>. Please note that this is very
-                important as all your class discussions will be taking place here.
-              </li>
+              ${
+                whatsAppLink
+                  ? `<li style="margin-bottom:5px;font-size:0.9em">
+                    Kindly join the{' '}
+                    <a href="https://chat.whatsapp.com/K4E9yotG019Ey2gIJJ3Uis">
+                      CLASS CHAT ROOM
+                    </a>
+                    . Please note that this is very important as all your class
+                    discussions will be taking place here.
+                  </li>`
+                  : ''
+              }
 
               <li style="margin-bottom:5px;font-size:0.9em">
                 Finally, come with lots of enthusiasm as this is the beginning
@@ -185,7 +194,7 @@ const dataAccelerator = (user, dateObj) => {
   };
 };
 
-const dataIncubator = (user, dateObj) => {
+const dataIncubator = (user, dateObj, whatsAppLink) => {
   const html = `
     <!DOCTYPE html>
       <html lang="en">
@@ -291,13 +300,17 @@ const dataIncubator = (user, dateObj) => {
               head start.
             </li>
   
-            <li style="margin-bottom:5px;font-size:0.9em">
+            ${
+              whatsAppLink
+                ? `<li style="margin-bottom:5px;font-size:0.9em">
               Kindly join the
               <a href="https://chat.whatsapp.com/LyVZQOU6PK51eRIZ2Ka7w7"
                 >CLASS CHAT ROOM</a
               >. Please note that this is very important as all your class
               discussions will be taking place here.
-            </li>
+            </li>`
+                : ''
+            }
   
             <li style="margin-bottom:5px;font-size:0.9em">
               Finally, come with lots of enthusiasm as this is the beginning
@@ -329,7 +342,7 @@ const dataIncubator = (user, dateObj) => {
   };
 };
 
-const carrerStarters = (user, dateObj) => {
+const carrerStarters = (user, dateObj, whatsAppLink) => {
   const html = `
       <!DOCTYPE html>
         <html lang="en">
@@ -488,13 +501,17 @@ const carrerStarters = (user, dateObj) => {
             head start.
           </li>
 
-          <li style="margin-bottom:5px;font-size:0.9em">
+          ${
+            whatsAppLink
+              ? `<li style="margin-bottom:5px;font-size:0.9em">
             Kindly join the
             <a href="https://chat.whatsapp.com/KKTm66CxNdIGYaEmVAftur"
               >CLASS CHAT ROOM</a
             >. Please note that this is very important as all your class
             discussions will be taking place here.
-          </li>
+          </li>`
+              : ''
+          }
 
           <li style="margin-bottom:5px;font-size:0.9em">
             Finally, come with lots of enthusiasm as this is the beginning
@@ -526,7 +543,7 @@ const carrerStarters = (user, dateObj) => {
   };
 };
 
-const designSchool = (user, dateObj) => {
+const designSchool = (user, dateObj, whatsAppLink) => {
   const html = `
     <!DOCTYPE html>
     <html lang="en">
@@ -606,13 +623,17 @@ const designSchool = (user, dateObj) => {
                 business, so be early for your classes.
             </li>
 
-            <li style="margin-bottom:5px;font-size:0.9em">
+           ${
+             whatsAppLink
+               ? `<li style="margin-bottom:5px;font-size:0.9em">
                 Kindly join the
                 <a href="https://chat.whatsapp.com/FO0WCeE9bKQE6RaBOlPkSX"
                 >CLASS CHAT ROOM</a
                 >. Please note that this is very important as all your class
                 discussions will be taking place here.
-            </li>
+            </li>`
+               : ''
+           }
 
             <li style="margin-bottom:5px;font-size:0.9em">
                 Finally, come with lots of enthusiasm as we've got the best value
@@ -645,7 +666,7 @@ const designSchool = (user, dateObj) => {
   };
 };
 
-const projectManagement = (user, dateObj) => {
+const projectManagement = (user, dateObj, whatsAppLink) => {
   const html = `
       <!DOCTYPE html>
       <html lang="en">
@@ -752,13 +773,17 @@ const projectManagement = (user, dateObj) => {
           </ol>
 
           <div>
-            <p>
+            ${
+              whatsAppLink
+                ? `<p>
               One more thing, to ensure effective communication with the rest of
               the class, kindly join your class
               <a href="https://chat.whatsapp.com/FO0WCeE9bKQE6RaBOlPkSX"
                 >GROUP CHAT HERE</a
               >
-            </p>
+            </p>`
+                : ''
+            }
 
             <p>See you in class on ${moment(dateObj.date).format('Do')}, 
             ${user.firstName}.
@@ -779,7 +804,7 @@ const projectManagement = (user, dateObj) => {
   };
 };
 
-const productSchool = (user, dateObj) => {
+const productSchool = (user, dateObj, whatsAppLink) => {
   const html = `
         <!DOCTYPE html>
         <html lang="en">
@@ -863,14 +888,18 @@ const productSchool = (user, dateObj) => {
                   communication.
                 </li>
 
-                <li style="margin-bottom:5px;font-size:0.9em">
+               ${
+                 whatsAppLink
+                   ? `<li style="margin-bottom:5px;font-size:0.9em">
                   Kindly join the
                   <a
                     href="https://utiva-dot-yamm-track.appspot.com/Redirect?ukey=1y98fSpOCNuBUtltc9eWiEENvi4pzi6oLphMdORRb5d0-402738929&key=YAMMID-80415176&link=https%3A%2F%2Fchat.whatsapp.com%2FBvZ79BHH6NGJIt9tdbH79m"
                     >CLASS CHAT ROOM</a
                   >. Please note that this is very important as all your class
                   discussions will be taking place here.
-                </li>
+                </li>`
+                   : ''
+               }
               </ol>
 
               <div>
@@ -907,7 +936,7 @@ const productSchool = (user, dateObj) => {
   };
 };
 
-const bigDataPython = (user, dateObj) => {
+const bigDataPython = (user, dateObj, whatsAppLink) => {
   const html = `
         <!DOCTYPE html>
         <html lang="en">
@@ -1027,7 +1056,9 @@ const bigDataPython = (user, dateObj) => {
             can get a head start
           </li>
 
-          <li style="margin-bottom:5px;font-size:0.9em">
+          ${
+            whatsAppLink
+              ? `<li style="margin-bottom:5px;font-size:0.9em">
             Kindly join the
             <a href="https://chat.whatsapp.com/Be3hBog5Q5f514HIAxI2BR"
               >CLASS CHAT ROOM</a
@@ -1038,7 +1069,9 @@ const bigDataPython = (user, dateObj) => {
           <li style="margin-bottom:5px;font-size:0.9em">
             Finally, come with lots of enthusiasm as this is the beginning of an
             exciting journey.
-          </li>
+          </li>`
+              : ''
+          }
         </ol>
 
         <div>
@@ -1066,11 +1099,18 @@ const bigDataPython = (user, dateObj) => {
 };
 
 export default {
-  'Data Accelerator': (name, dateObj) => dataAccelerator(name, dateObj),
-  'Project Management': (name, dateObj) => projectManagement(name, dateObj),
-  'Data Incubator': (name, dateObj) => dataIncubator(name, dateObj),
-  'Career Starters Program': (name, dateObj) => carrerStarters(name, dateObj),
-  'Design School': (name, dateObj) => designSchool(name, dateObj),
-  'Product School': (name, dateObj) => productSchool(name, dateObj),
-  'Big Data With Python': (name, dateObj) => bigDataPython(name, dateObj),
+  'Data Accelerator': (name, dateObj, whatsAppLink) =>
+    dataAccelerator(name, dateObj, whatsAppLink),
+  'Project Management': (name, dateObj, whatsAppLink) =>
+    projectManagement(name, dateObj, whatsAppLink),
+  'Data Incubator': (name, dateObj, whatsAppLink) =>
+    dataIncubator(name, dateObj, whatsAppLink),
+  'Career Starters Program': (name, dateObj, whatsAppLink) =>
+    carrerStarters(name, dateObj, whatsAppLink),
+  'Design School': (name, dateObj, whatsAppLink) =>
+    designSchool(name, dateObj, whatsAppLink),
+  'Product School': (name, dateObj, whatsAppLink) =>
+    productSchool(name, dateObj, whatsAppLink),
+  'Big Data With Python': (name, dateObj, whatsAppLink) =>
+    bigDataPython(name, dateObj, whatsAppLink),
 };

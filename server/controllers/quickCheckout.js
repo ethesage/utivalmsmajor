@@ -87,7 +87,8 @@ export const quickCheckout = async (req, res) => {
         {
           date: course.Classes[0].CohortClassDays[0].dataValues.date,
           time: course.Classes[0].CohortClassDays[0].dataValues.time,
-        }
+        },
+        cour.whatsAppLink
       );
 
       if (resp) {
@@ -129,7 +130,8 @@ export const quickCheckout = async (req, res) => {
         {
           date: course.Classes[0].CohortClassDays[0].dataValues.date,
           time: course.Classes[0].CohortClassDays[0].dataValues.time,
-        }
+        },
+        cour.whatsAppLink
       );
 
       if (resp) {
