@@ -19,11 +19,15 @@ export const getEnrolledCourses = (
     const matArray = await Promise.all(
       useObject.Course.Classes.map(async (cls) => {
         const resources = await axiosInstance.get(
-          `/file?key=Courses/${useObject.Course.name}/classes/${cls.title}/resources/`
+          `/file?key=${encodeURIComponent(
+            `Courses/${useObject.Course.name}/classes/${cls.title}/resources/`
+          )}`
         );
 
         const assignments = await axiosInstance.get(
-          `/file?key=Courses/${useObject.Course.name}/classes/${cls.title}/assignments/`
+          `/file?key=${encodeURIComponent(
+            `Courses/${useObject.Course.name}/classes/${cls.title}/assignments/`
+          )}`
         );
 
         return {

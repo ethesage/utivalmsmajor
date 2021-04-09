@@ -65,6 +65,7 @@ const useFetch = (dispatch, initailLoadingState, reload) => {
           return;
         }
 
+        
         setStarted(true);
         setError(true);
         setLoading(false);

@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       totalStudent: DataTypes.INTEGER,
       totalClasses: DataTypes.INTEGER,
-      folderId: DataTypes.STRING,
+      whatsAppLink: DataTypes.TEXT,
       progress: DataTypes.INTEGER,
       paymentType: DataTypes.STRING,
     },

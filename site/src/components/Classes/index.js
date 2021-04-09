@@ -128,7 +128,9 @@ function Classes({
 
   const delete_file = async () => {
     try {
-      const res = await axiosInstance.delete(`/file?path=${currentFile}`);
+      const res = await axiosInstance.delete(
+        `/file?path=${encodeURIComponent(currentFile)}`
+      );
       if (res) {
         dropType === 'resource'
           ? dispatch(deleteResources(title, currentFile))
