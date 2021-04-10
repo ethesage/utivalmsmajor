@@ -16,15 +16,16 @@
 <!-- TABLE OF CONTENTS -->
 ## Table of Contents
 
-* [Vision](#vision)
-  * [Built With](#built-with)
-* [API Spec](#api-spec)
-  * [Users](#users)
-* [API Endpoints](#api-endponts)
-  * [Login](#login)
-  * [Registration](#registration)
-* [License](#license)
-* [Authors](#authors)
+- [Table of Contents](#table-of-contents)
+- [Vision](#vision)
+  - [Built With](#built-with)
+- [API Spec](#api-spec)
+  - [Users (for authentication)](#users-for-authentication)
+- [API Endpoints](#api-endpoints)
+  - [Login:](#login)
+  - [Registration:](#registration)
+- [License](#license)
+  - [Authors](#authors)
 
 <!-- ABOUT THE PROJECT -->
 ## Vision
@@ -106,5 +107,6 @@ Distributed under the MIT License. See `LICENSE` for more information.
 ### Authors
 
 * [Jude chinoso (cvj)](https://github.com/cvjude)
-* [Amos Oruaroghene (amoskeyz)](https://github.com/amoskeyz) 
+* [Amos Oruaroghene (amoskeyz)](https://github.com/amoskeyz)
+* [Teri Eyenike (terieyenike)](https://github.com/terieyenike)
 
