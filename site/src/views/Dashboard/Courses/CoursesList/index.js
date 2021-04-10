@@ -12,24 +12,26 @@ const CousreCard = ({ data }) => {
   const { isCompleted, CourseCohort, Course, Cohort, progress } = data;
 
   return (
-    <div className="p_cx_cd">
-      <Link className="img-sec" to={`/courses/overview/${CourseCohort?.id}`}>
-        <Image image={Course.thumbnail} imgClass="img cover" lazyLoad={true} />
+    <div className='p_cx_cd'>
+      <Link className='img-sec' to={`/courses/overview/${CourseCohort?.id}`}>
+        <Image image={Course.thumbnail} imgClass='img cover' lazyLoad={true} />
       </Link>
-      <div className="txt-sec flex-col flex-grow">
-        <div className="title_sec flex-row j-space">
-          <h3 className="theme-color">{Course.name}</h3>
-          {isStudent && isCompleted ? <img src={medal} alt="" /> : ''}
+      <div className='txt-sec flex-col flex-grow'>
+        <div className='title_sec flex-row j-space'>
+          <Link to={`/courses/classroom/${CourseCohort?.id}`}>
+            <h3 className='theme-color'>{Course.name}</h3>
+          </Link>
+          {isStudent && isCompleted ? <img src={medal} alt='' /> : ''}
         </div>
 
         {isStudent ? (
           <>
-            <div className="w-full">
+            <div className='w-full'>
               <small>Completion level</small>
               <Progress
-                className="slim"
+                className='slim'
                 percent={progress ? progress : 0}
-                status="error"
+                status='error'
                 theme={{
                   success: {
                     symbol: '‍',
@@ -58,7 +60,7 @@ const CousreCard = ({ data }) => {
         ) : null}
 
         {/* {!isStudent ? ( */}
-        <div className="chx flex-col al-start">
+        <div className='chx flex-col al-start'>
           <strong>{<p>{Cohort?.cohort} Cohort</p>}</strong>
           <small>{CourseCohort?.dateRange}</small>
         </div>
@@ -72,8 +74,8 @@ const CourseList = () => {
   const enrolledcourses = useSelector((state) => state.member.enrolledcourses);
 
   return (
-    <div className="main flex-col cx_list_con j-start al-start">
-      <section className="course_list">
+    <div className='main flex-col cx_list_con j-start al-start'>
+      <section className='course_list'>
         {enrolledcourses.map((course, i) => (
           <CousreCard data={course} key={`enrolled_c_${i}`} />
         ))}
