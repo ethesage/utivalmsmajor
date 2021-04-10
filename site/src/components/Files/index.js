@@ -29,7 +29,8 @@ const Files = ({
     }
   }, [currentFile]);
 
-  const close = () => {
+  const close = (e) => {
+    e && e.preventDefault();
     setCurrentFile(null);
     // modalRef.current.close()
   };

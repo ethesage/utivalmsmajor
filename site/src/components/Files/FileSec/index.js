@@ -80,7 +80,7 @@ const FileSec = ({
               <ul>
                 <li onClick={view}>View</li>
                 <li>
-                  <a href={`${s3url}/${file.Key}`} download>
+                  <a href={`${s3url}/${encodeURIComponent(file.Key)}`} download>
                     Download
                   </a>
                 </li>

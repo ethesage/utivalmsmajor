@@ -104,7 +104,7 @@ export const getAllCourseCohorts = async (req, res) => {
       'dateRange',
       'totalStudent',
       'courseId',
-      'folderId',
+      'whatsAppLink',
       'paymentType',
     ],
     include: [
@@ -138,7 +138,7 @@ export const getCourseCohort = async (req, res) => {
 
   const resource = await models.CourseCohort.findOne({
     where: { id },
-    attributes: ['id', 'expiresAt', 'dateRange', 'folderId', 'paymentType'],
+    attributes: ['id', 'expiresAt', 'dateRange', 'paymentType'],
     include: [
       {
         model: models.Cohort,

@@ -14,12 +14,11 @@ function HeadSection({
   isAdmin,
   courseId,
   addAssignment,
+  classResources,
 }) {
   const { title } = data;
 
-  const assignment = data?.ClassResources?.filter(
-    (res) => res.type === 'assignment'
-  );
+  const assignment = classResources[data?.title].assignments;
 
   return (
     <div className="cx_header hx-main flex-row j-space relative">
@@ -49,7 +48,7 @@ function HeadSection({
                   addAssignment();
                 }}
               >
-                {assignment?.length > 0 ? 'Add Assignment' : 'Edit Assignment'}
+                {assignment?.length <= 0 ? 'Add Assignment' : 'Edit Assignment'}
               </Link>
             </div>
           ) : null}
