@@ -18,7 +18,9 @@ const CousreCard = ({ data }) => {
       </Link>
       <div className='txt-sec flex-col flex-grow'>
         <div className='title_sec flex-row j-space'>
-          <h3 className='theme-color'>{Course.name}</h3>
+          <Link to={`/courses/overview/${CourseCohort?.id}`}>
+            <h3 className='theme-color'>{Course.name}</h3>
+          </Link>
           {isStudent && isCompleted ? <img src={medal} alt='' /> : ''}
         </div>
 
