@@ -278,7 +278,7 @@ function Classes({
                         />
                         <ResourceBtn
                           img={recording}
-                          text={'Class Recordings'}
+                          text={'Class Recording'}
                           color='theme'
                           link={link}
                           ext
