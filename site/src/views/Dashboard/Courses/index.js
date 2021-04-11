@@ -37,27 +37,27 @@ const Courses = ({ gapi }) => {
   }, [dispatch, fetch, userType, enrolledcourses]);
 
   return (
-    <section className="dash-con mx_courx flex-col al-start j-start">
+    <section className='dash-con mx_courx flex-col al-start j-start'>
       <BreadCrumb />
       {loading ? (
-        <div className="img">
+        <div className='img'>
           <Loader tempLoad={true} full={false} />
         </div>
       ) : error ? (
         <p>An Error Occurred</p>
       ) : enrolledcourses.length === 0 ? (
-        <div className="nt_found img flex-col">
-          <img src={not_found} alt="Not found" />
+        <div className='nt_found img flex-col'>
+          <img src={not_found} alt='Not found' />
           {isStudent ? (
-            <p className="text">You are yet to enrol for any course</p>
+            <p className='text'>You are yet to enrol for any course</p>
           ) : (
-            <p className="text">You have not been assigned any Courses</p>
+            <p className='text'>You have not been assigned any Courses</p>
           )}
           {isStudent && (
             <Button
-              link="/all-courses"
-              text="Start Learning"
-              className="flex-row"
+              link='/all-courses'
+              text='Start Learning'
+              className='flex-row'
             />
           )}
         </div>
@@ -79,15 +79,13 @@ const Courses = ({ gapi }) => {
 
             <Route
               exact
-              path={`${path}/classroom/:courseId/:classroom/add-assignment`}
-            >
+              path={`${path}/classroom/:courseId/:classroom/add-assignment`}>
               <FullClass gapi={gapi} />
             </Route>
 
             <Route
               exact
-              path={`${path}/assignment/:courseId/:classroom/:assignmentId?`}
-            >
+              path={`${path}/assignment/:courseId/:classroom/:assignmentId?`}>
               <Assignment gapi={gapi} />
             </Route>
             <Route
