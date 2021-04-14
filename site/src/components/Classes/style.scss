@@ -245,3 +245,29 @@
     }
   }
 }
+
+.modal-pnt {
+  width: 90vw;
+  max-width: 1000px;
+
+  .modal-chl {
+    width: 90%;
+    padding: 30% 0;
+
+    iframe {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 5px;
+      top: 0;
+    }
+  }
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  &::after {
+    color: #000;
+    font-size: 2em !important;
+  }
+}

@@ -24,6 +24,7 @@ import RevielDrop from '../RevielDrop';
 import HeadSection from './headSection';
 import Trainer from './trainers';
 import ClassVideos from './classVideos';
+import ClassVideoModal from './classVideoModal';
 import { toBase64, uploadProgress } from 'helpers';
 import './style.scss';
 
@@ -56,6 +57,7 @@ function Classes({
   const { currentCohort } = useSelector((state) => state.admin);
   const dispatch = useDispatch();
   const modalRef = useRef();
+  const watchVideoRef = useRef();
   const deleteDialog = useRef();
   const startclass = useRef();
   const progressDialog = useRef();
@@ -205,6 +207,10 @@ function Classes({
     }
   };
 
+  const watchVideos = () => {
+    watchVideoRef.current.open();
+  };
+
   return (
     <>
       <div
@@ -279,6 +285,15 @@ function Classes({
                           handleClick={joinclass}
                         />
                       </div>
+
+                      {!full && isStudent && (
+                        <ResourceBtn
+                          img={play}
+                          text={'Watch Video'}
+                          color="theme"
+                          handleClick={watchVideos}
+                        />
+                      )}
 
                       {classResources[title]?.assignments.length > 0 &&
                         isStudent && (
@@ -433,9 +448,14 @@ function Classes({
             classId={classId}
             currentCohort={currentCohort}
           />
+
+          <Modal ref={watchVideoRef}>
+            <ClassVideoModal data={data.CohortClassVideos} />
+          </Modal>
         </>
       )}
     </>
   );
 }
+
 export default Classes;
