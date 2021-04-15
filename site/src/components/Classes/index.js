@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useLayoutEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useToasts } from 'react-toast-notifications';
@@ -66,6 +66,15 @@ function Classes({
 
   const list_desc =
     currentCourse?.list_desc || currentCourse?.Course?.list_desc;
+
+  // check the route if it contains #class-videos
+  // inside useLayoutEffect with no dependency array
+  // document.querySelector('#class-videos).scrollIntoView()
+
+  useLayoutEffect(() => {}, [
+
+  ], [])
+
 
   useEffect(() => {
     if (!openedRef) return;
@@ -235,12 +244,12 @@ function Classes({
           {completedPayment && (
             <div className={`cx_lis-content ${full ? ' full' : ''}`}>
               {assData?.length > 0 ? (
-                <div className='inf_x'>
+                <div className="inf_x">
                   <h3>{assData[0].title}</h3>
                   <p>{assData[0].description}</p>
 
                   <div
-                    className='flex-row j-start'
+                    className="flex-row j-start"
                     style={{ marginTop: '20px' }}>
                     <p>
                       <strong>Points:</strong> {assData[0].point}
@@ -252,46 +261,49 @@ function Classes({
                   </div>
                 </div>
               ) : (
-                <div className='inf_x'>
+                <div className="inf_x">
                   {/* <p>{title}</p> */}
                   <Editor
                     key={description}
                     readOnly={true}
                     data={description}
-                    mode='no-edit'
+                    mode="no-edit"
                   />
                 </div>
               )}
 
               {showResources ? (
-                <div className='btns'>
-                  <div className='reg_text'>
-                    <div className='btn_sec_con flex-row j-start'>
-                      <div className='btn_sec'>
+                <div className="btns">
+                  <div className="reg_text">
+                    <div className="btn_sec_con flex-row j-start">
+                      <div className="btn_sec">
                         <ResourceBtn
                           img={play}
                           text={isAdmin ? 'Class Link' : 'Join Class'}
-                          color='theme'
+                          color="theme"
                           link={link}
                           ext
                           handleClick={joinclass}
                         />
+                      </div>
+
+                      <div className="btn_sec">
                         <ResourceBtn
                           img={recording}
                           text={'Class Recording'}
-                          color='theme'
-                          link={link}
+                          color="theme"
+                          link={`/#class-videos`}
                           ext
                         />
                       </div>
 
                       {classResources[title]?.assignments.length > 0 &&
                         isStudent && (
-                          <div className='btn_sec'>
+                          <div className="btn_sec">
                             <ResourceBtn
                               img={assignment}
-                              text='Assignment'
-                              color='off'
+                              text="Assignment"
+                              color="off"
                               link={
                                 isAdmin
                                   ? `/admin/courses/all-assignments/${courseId}/${cohortId}/${data.id}`
@@ -307,15 +319,15 @@ function Classes({
 
                   <Trainer isAdmin={isAdmin} full={full} data={data} />
 
-                  <div className='reg_text'>
+                  <div className="reg_text">
                     <h4>Resources</h4>
-                    <div className='btn_sec_con flex-row j-start'>
-                      <div className='btn_sec'>
+                    <div className="btn_sec_con flex-row j-start">
+                      <div className="btn_sec">
                         <ResourceBtn
                           img={material}
                           text={`${isStudent ? 'Download' : 'Class'} Materials`}
-                          color='secondary'
-                          link=''
+                          color="secondary"
+                          link=""
                           handleClick={viewResources}
                         />
                       </div>
@@ -328,7 +340,7 @@ function Classes({
 
               {!full ? (
                 <Link
-                  className='view'
+                  className="view"
                   to={
                     isAdmin
                       ? `/admin/courses/classroom/${courseId}/${cohortId}/${data.id}`
@@ -340,7 +352,7 @@ function Classes({
             </div>
           )}
           {!completedPayment && (
-            <div className='cx_lis-content '>
+            <div className="cx_lis-content ">
               <p>You do not have access to this class</p>
             </div>
           )}
@@ -351,8 +363,8 @@ function Classes({
 
         {!isStudent && completedPayment ? (
           <RevielDrop open={showResourceDrop}>
-            <div className='class_file_con'>
-              <div className='box-shade' data-open={showResourceDrop}>
+            <div className="class_file_con">
+              <div className="box-shade" data-open={showResourceDrop}>
                 <h3>
                   {dropType === 'resource'
                     ? 'Resource Materials'
@@ -381,11 +393,11 @@ function Classes({
           </RevielDrop>
         ) : (
           <Modal ref={modalRef}>
-            <div className='class_file_con'>
+            <div className="class_file_con">
               <h3>Resource Materials</h3>
               <Files
                 files={classResources[title].resources}
-                errorMsg='No materials available yet'
+                errorMsg="No materials available yet"
                 showdrag={false}
               />
             </div>
@@ -396,10 +408,10 @@ function Classes({
         <>
           <Modal ref={deleteDialog}>
             <Confirm
-              text='Are you sure?'
+              text="Are you sure?"
               onClick={delete_file}
               close={() => deleteDialog.current.close()}
-              closeText='Successfuly Deleted'
+              closeText="Successfuly Deleted"
             />
           </Modal>
 
@@ -417,14 +429,14 @@ function Classes({
                 margin: 'auto',
                 borderRadius: '10px',
               }}
-              className='s_btn flex-row loader'>
+              className="s_btn flex-row loader">
               {(isTrainer || isAdmin) && (
-                <p className='loader_con_main'>Loading class...</p>
+                <p className="loader_con_main">Loading class...</p>
               )}
               {wait ? (
                 <div>This class is yet to start</div>
               ) : (
-                <p className='loader_con_main'>Loading class...</p>
+                <p className="loader_con_main">Loading class...</p>
               )}
             </div>
           </Modal>

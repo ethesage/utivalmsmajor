@@ -7,6 +7,7 @@ import Plus from 'assets/icons/plus';
 import Remove from 'assets/icons/remove';
 import './style.scss';
 
+
 function ClassVideos({ data, full, isStudent, classId, currentCohort }) {
   const [addPrevVideo, setAddPrevVideo] = useState(false);
   const [prevVideo, setPrevVideo] = useState('');
@@ -59,7 +60,7 @@ function ClassVideos({ data, full, isStudent, classId, currentCohort }) {
   return (
     full &&
     (data.CohortClassVideos.length > 0 || !isStudent) && (
-      <div className="prev_vid_cn reg_text">
+      <div className="prev_vid_cn reg_text" id="#class-videos">
         <nav className="flex-row j-space">
           <h4 className="theme-color">
             Class recordings
@@ -71,8 +72,7 @@ function ClassVideos({ data, full, isStudent, classId, currentCohort }) {
               onClick={() => {
                 setAddPrevVideo(!addPrevVideo);
                 setPrevVideo('');
-              }}
-            >
+              }}>
               {!addPrevVideo ? <Plus /> : <Remove />}
             </div>
           )}
@@ -105,8 +105,7 @@ function ClassVideos({ data, full, isStudent, classId, currentCohort }) {
             <div
               className={`frame_con ${!isStudent ? 'allowHover' : ''}`}
               key={`prev_vid_data_${prevVideo.id.split('-')[0]}`}
-              ref={(ref) => (vidrefs[prevVideo.id] = ref)}
-            >
+              ref={(ref) => (vidrefs[prevVideo.id] = ref)}>
               <div className="rm" onClick={() => removeVideo(prevVideo.id)}>
                 <Remove />
               </div>
@@ -115,8 +114,7 @@ function ClassVideos({ data, full, isStudent, classId, currentCohort }) {
                 src={`https://player.vimeo.com/video/${prevVideo.link}`}
                 frameBorder="0"
                 allow="autoplay; fullscreen"
-                allowFullScreen
-              ></iframe>
+                allowFullScreen></iframe>
             </div>
           ))}
         </div>
