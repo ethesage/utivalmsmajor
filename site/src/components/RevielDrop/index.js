@@ -22,6 +22,22 @@ const RevielDrop = ({
     e.preventDefault();
     e.stopPropagation();
 
+    function findMainParent(e) {
+      const newparent = e?.target?.parentElement || e?.parentElement;
+
+      if (
+        e?.className?.includes('rx_header') ||
+        e?.target?.className?.includes('rx_header')
+      )
+        return e;
+
+      if (newparent) {
+        return findMainParent(newparent);
+      }
+    }
+
+    e = findMainParent(e);
+
     if (closeOthers) {
       const elements = document.querySelectorAll('.rx_header ');
 
@@ -39,7 +55,11 @@ const RevielDrop = ({
     mainRef.current.classList.toggle('open');
     openClassName && mainRef.current.classList.toggle(openClassName);
 
-    if (e.target.classList.contains('active')) runOnOpen();
+    if (
+      e?.className?.includes('active') ||
+      e?.target?.className?.includes('active')
+    )
+      runOnOpen();
     else runOnClose();
   }
 
@@ -67,30 +87,6 @@ const RevielDrop = ({
 
   return (
     <div className={`drop-rev ${containerClassName}`}>
-      {/* {header &&
-        React.cloneElement(header, {
-          ...functionToUse,
-          ref: headRef,
-          className: `rx_header ${header.props.className}${
-            showArrow ? ' showArrow' : ''
-          }`,
-        })} */}
-
-      {/* {header && (
-        <div
-          style={{ display: 'contents' }}
-          {...functionToUse}
-          className="rx_header"
-          ref={headRef}
-        >
-          {React.cloneElement(header, {
-            className: `${header.props.className}${
-              showArrow ? 'rx_header showArrow' : ''
-            }`,
-          })}
-        </div>
-      )} */}
-
       {header && (
         <div
           // style={{ display: 'contents' }}

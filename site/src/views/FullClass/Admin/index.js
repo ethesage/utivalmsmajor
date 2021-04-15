@@ -78,6 +78,7 @@ function FullClass({ gapi }) {
                     full={true}
                     gapi={gapi}
                     isStudent={isStudent}
+                    currentCourse={currentCourse}
                     folderId={currentCohort?.folderId}
                     courseId={courseId}
                     addAssignment={() => {

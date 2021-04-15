@@ -197,7 +197,11 @@ export const updateUser = async (req, res) => {
 
     fileName = fileName || `${user.email.split('@')[0]}`;
 
-    const image = await uploadImage(data.profilePic, `media/${fileName}`);
+    const image = await uploadImage(
+      data.profilePic,
+      `media/${fileName}`,
+      data.mime
+    );
 
     // eslint-disable-next-line prefer-destructuring
     data.profilePic = image.Location;
