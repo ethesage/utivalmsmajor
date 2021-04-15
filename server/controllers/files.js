@@ -20,9 +20,9 @@ const {
 
 export const createFile = async (req, res) => {
   // const { id } = req.session.user;
-  const { file, path, fileName } = req.body;
+  const { file, path, fileName, mime } = req.body;
 
-  const fileUpload = await uploadData(file, path, fileName);
+  const fileUpload = await uploadData(file, path, fileName, mime);
 
   return successStat(res, 201, 'data', fileUpload);
 };

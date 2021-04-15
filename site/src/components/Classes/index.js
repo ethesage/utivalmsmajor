@@ -24,7 +24,7 @@ import RevielDrop from '../RevielDrop';
 import HeadSection from './headSection';
 import Trainer from './trainers';
 import ClassVideos from './classVideos';
-import { toBase64, uploadProgress } from 'helpers';
+import { uploadProgress } from 'helpers';
 import './style.scss';
 
 function Classes({
@@ -162,25 +162,24 @@ function Classes({
   const upload = async (files) => {
     const fileName = files.name;
     const path = `Courses/${currentCourse.name}/classes/${data.title}/resources`;
-    const file = await toBase64(files);
+
+    const type = files.type;
+    const formData = new FormData();
+
+    formData.append('file', files);
+    formData.append('path', path);
+    formData.append('fileName', fileName);
+    formData.append('mime', type);
 
     progressDialog.current.open();
 
     try {
-      await axiosInstance.post(
-        'file/create',
-        {
-          file,
-          path,
-          fileName,
+      await axiosInstance.post('file/create', formData, {
+        onUploadProgress: uploadProgress(setProgress),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
         },
-        {
-          onUploadProgress: uploadProgress(setProgress),
-          headers: {
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-        }
-      );
+      });
 
       setProgress(100);
 

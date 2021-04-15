@@ -9,7 +9,7 @@ import {
 } from 'g_actions/member';
 import Input from 'components/Input';
 import Modal from 'components/Modal';
-import { axiosInstance, uploadProgress, toBase64 } from 'helpers';
+import { axiosInstance, uploadProgress } from 'helpers';
 import useBreadcrumbs from 'Hooks/useBreadCrumbs';
 import Confirm from 'components/Confirm';
 import ProgressBar from 'components/ProgressBar';
@@ -114,24 +114,23 @@ const AddAssignment = ({ title, course, currentClass }) => {
   const upload = async (files) => {
     progressDialog.current.open();
     const fileName = files.name;
-    const file = await toBase64(files);
     let path = `Courses/${course.Course.name}/classes/${currentClass.title}/assignments`;
 
+    const type = files.type;
+    const formData = new FormData();
+
+    formData.append('file', files);
+    formData.append('path', path);
+    formData.append('fileName', fileName);
+    formData.append('mime', type);
+
     try {
-      await axiosInstance.post(
-        'file/create',
-        {
-          file,
-          path,
-          fileName,
+      await axiosInstance.post('file/create', formData, {
+        onUploadProgress: uploadProgress(setProgress),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
         },
-        {
-          onUploadProgress: uploadProgress(setProgress),
-          headers: {
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-        }
-      );
+      });
 
       const res = await axiosInstance.post(
         `class/assignment/${currentClass.id}`,

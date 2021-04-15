@@ -1,5 +1,5 @@
 import AWS from 'aws-sdk';
-import isBase64 from 'is-base64';
+// import isBase64 from 'is-base64';
 import bluebird from 'bluebird';
 import {
   AWS_SECRET_ACCESS_KEY,
@@ -91,44 +91,23 @@ export function validateJoi(object, schema, req, res, next, name) {
   return next();
 }
 
-export const uploadImage = async (url, fileName) => {
-  try {
-    if (!isBase64(url, { mimeRequired: true })) {
-      throw Error('Invalid base64 image');
-    }
-    const buffer = new Buffer.from(
-      url.replace(/^data:image\/\w+;base64,/, ''),
-      'base64'
-    );
-    const data = {
-      ACL: 'public-read',
-      Key: fileName,
-      Body: buffer,
-      ContentEncoding: 'base64',
-      ContentType: 'image/jpeg',
-    };
-    return s3.upload(data).promise();
-  } catch (err) {
-    return err.message;
-  }
-};
-
-export const uploadData = async (file, path, fileName) => {
-  // if (!isBase64(file, { mimeRequired: true })) {
-  //   throw Error('Invalid base64 Data');
-  // }
-
-  const buffer = new Buffer.from(file.split('base64,')[1], 'base64');
-
+const uploadFunc = async (url, fileName, mime) => {
   const data = {
     ACL: 'public-read',
-    Key: `${path}/${fileName}`,
-    Body: buffer,
-    ContentEncoding: 'base64',
+    Key: fileName,
+    Body: url,
+    // ContentEncoding: 'base64',
+    ContentType: mime,
   };
 
   return s3.upload(data).promise();
 };
+
+export const uploadImage = async (url, fileName, mime) =>
+  uploadFunc(url, fileName, mime);
+
+export const uploadData = async (file, path, fileName, mime) =>
+  uploadFunc(file, `${path}/${fileName}`, mime);
 
 export const getFolderListings = async (key) =>
   s3.listObjects({ Bucket: 'utiva-app', Delimiter: '', Prefix: key }).promise();
