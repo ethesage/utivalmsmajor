@@ -19,7 +19,7 @@ import {
 import { useToasts } from 'react-toast-notifications';
 import Button from 'components/Button';
 import 'components/ViewGrade/style.scss';
-import { axiosInstance, s3url, toBase64, uploadProgress } from 'helpers';
+import { axiosInstance, s3url, uploadProgress } from 'helpers';
 import './style.scss';
 
 const Assignment = ({ gapi }) => {
@@ -93,23 +93,21 @@ const Assignment = ({ gapi }) => {
     const fileName = files.name;
     const path = `Courses/${currentCourse.Course.name}/cohorts/${currentCourse.Cohort.cohort}/submitted-assignments/${user.id}`;
 
-    const file = await toBase64(files);
+    const type = files.type;
+    const formData = new FormData();
+
+    formData.append('file', files);
+    formData.append('path', path);
+    formData.append('fileName', fileName);
+    formData.append('mime', type);
 
     try {
-      await axiosInstance.post(
-        'file/create',
-        {
-          file,
-          path,
-          fileName,
+      await axiosInstance.post('file/create', formData, {
+        onUploadProgress: uploadProgress(setProgress),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
         },
-        {
-          onUploadProgress: uploadProgress(setProgress),
-          headers: {
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-        }
-      );
+      });
 
       const res = await axiosInstance.post('assignment/submit', {
         classId: currentClass.id,

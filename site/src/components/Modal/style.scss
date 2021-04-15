@@ -31,7 +31,7 @@
 
   .apx_close {
     position: absolute;
-    top: -50px;
+    right: 0px;
 
     @include for-size(phone-only) {
       top: -50px;
