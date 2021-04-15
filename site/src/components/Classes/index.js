@@ -208,8 +208,8 @@ function Classes({
   };
 
   const watchVideos = (e) => {
-    e.stopPropagation()
-    e.preventDefault()
+    e.stopPropagation();
+    e.preventDefault();
     watchVideoRef.current.open();
   };
 
@@ -289,14 +289,14 @@ function Classes({
                       </div>
 
                       {!full && isStudent && (
-                      <div className="btn_sec">
-                        <ResourceBtn
-                          img={play}
-                          text={'Class Recording'}
-                          color="theme"
-                          handleClick={watchVideos}
-                        />
-                      </div>
+                        <div className="btn_sec">
+                          <ResourceBtn
+                            img={play}
+                            text={'Class Recording'}
+                            color="theme"
+                            handleClick={watchVideos}
+                          />
+                        </div>
                       )}
 
                       {classResources[title]?.assignments.length > 0 &&

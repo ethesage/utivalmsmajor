@@ -28,7 +28,7 @@ const Classroom = ({ full = false, gapi }) => {
   return (
     <>
       <NavBar />
-      <section className='cx_listnx img'>
+      <section className="cx_listnx img">
         {!currentCourse ? (
           <Loader tempLoad={true} full={false} />
         ) : (
