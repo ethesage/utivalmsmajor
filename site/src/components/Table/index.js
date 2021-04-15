@@ -1,29 +1,29 @@
-import React, { memo } from "react";
-import "./style.scss";
+import React, { memo } from 'react';
+import './style.scss';
 
 const Table = ({ children, keys, usedefaultTh }) => {
   let tbody;
   let thead;
 
   if (Array.isArray(children)) {
-    if (children.length > 2) throw new Error("Only 2 children are allowed");
+    if (children.length > 2) throw new Error('Only 2 children are allowed');
   }
 
   thead = Array.isArray(children)
     ? children.filter(
         (child) =>
-          typeof child !== "function" && child.type.name === "TableHead"
+          typeof child !== 'function' && child.type.name === 'TableHead'
       )
-    : typeof children !== "function" &&
-      children.type.name === "TableHead" &&
+    : typeof children !== 'function' &&
+      children.type.name === 'TableHead' &&
       children;
 
   tbody = Array.isArray(children)
     ? children.filter(
         (child) =>
-          typeof child === "function" || child.type.name === "TableBody"
+          typeof child === 'function' || child.type.name === 'TableBody'
       )[0]
-    : (typeof children === "function" || children.type.name === "TableBody") &&
+    : (typeof children === 'function' || children.type.name === 'TableBody') &&
       children;
 
   return (
@@ -34,14 +34,14 @@ const Table = ({ children, keys, usedefaultTh }) => {
             <tr>
               {keys.map((tkey, i) => (
                 <th key={`table_head_${i}`} style={{ textAlign: tkey.align }}>
-                  {typeof tkey === "string" ? tkey : tkey.name}
+                  {typeof tkey === 'string' ? tkey : tkey.name}
                 </th>
               ))}
             </tr>
           </thead>
         )}
         {thead}
-        {typeof tbody === "function" ? tbody({ keys }) : tbody}
+        {typeof tbody === 'function' ? tbody({ keys }) : tbody}
       </table>
     </div>
   );
@@ -76,16 +76,18 @@ const Trow = ({ values, keys, attr = {} }) => {
           style={{ textAlign: key.align }}
           {...attr}
         >
-          {values[typeof key === "string" ? key : key.name]}
+          {values[typeof key === 'string' ? key : key.name]}
         </td>
       ))}
     </tr>
   );
 };
 
-export default {
+const table = {
   Table: memo(Table),
   Head: memo(TableHead),
   Body: memo(TableBody),
   Trow: memo(Trow),
 };
+
+export default table;

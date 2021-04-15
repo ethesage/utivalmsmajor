@@ -1,4 +1,4 @@
-export default [
+const faq = [
   {
     title: 'Payment',
     link: '',
@@ -104,3 +104,5 @@ export default [
     ],
   },
 ];
+
+export default faq;

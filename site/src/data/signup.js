@@ -1,4 +1,4 @@
-export default [
+const data = [
   {
     name: 'firstName',
     placeHolder: 'First Name',
@@ -75,3 +75,5 @@ export default [
     attr: { autoComplete: 'new-password' },
   },
 ];
+
+export default data;

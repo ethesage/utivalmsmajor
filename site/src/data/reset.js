@@ -1,4 +1,4 @@
-export default [
+const data = [
   {
     placeHolder: 'Password',
     name: 'password',
@@ -16,3 +16,5 @@ export default [
       'password should be at least 8 characters, with one Capital a symbol and a number',
   },
 ];
+
+export default data;

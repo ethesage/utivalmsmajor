@@ -1,4 +1,4 @@
-export default [
+const data = [
   {
     name: 'cohort',
     placeHolder: '',
@@ -47,3 +47,5 @@ export default [
     label: 'To',
   },
 ];
+
+export default data;

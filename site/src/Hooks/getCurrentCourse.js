@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import useFetch from 'Hooks/useFetch';
 import { getEnrolledCourses } from 'g_actions/member';
 
-export default () => {
+const GetCurrentCourse = () => {
   const { courseId } = useParams();
   const dispatch = useDispatch();
   const { currentCourse, enrolledcourses } = useSelector(
@@ -41,3 +41,5 @@ export default () => {
 
   return [loading, error, currentCourse];
 };
+
+export default GetCurrentCourse;

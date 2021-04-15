@@ -3,7 +3,7 @@ import useFetch from 'Hooks/useFetch';
 import { useDispatch, useSelector } from 'react-redux';
 import { getNgnConversionRate } from 'g_actions/generals';
 
-export default () => {
+const GetConversionRate = () => {
   const dispatch = useDispatch();
   const { exchange_rate_ngn } = useSelector((state) => state.generals);
   const [loading, , fetch] = useFetch(dispatch, !!!exchange_rate_ngn, true);
@@ -20,3 +20,5 @@ export default () => {
 
   return [loading, { USD_NGN: 400 }];
 };
+
+export default GetConversionRate;

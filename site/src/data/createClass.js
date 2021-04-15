@@ -1,4 +1,4 @@
-export default [
+const data = [
   {
     name: 'title',
     placeHolder: '',
@@ -29,3 +29,5 @@ export default [
     type: 'date',
   },
 ];
+
+export default data;
