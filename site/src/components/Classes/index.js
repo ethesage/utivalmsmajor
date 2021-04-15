@@ -15,6 +15,7 @@ import ProgressBar from 'components/ProgressBar';
 import { axiosInstance } from 'helpers';
 import Confirm from 'components/Confirm';
 import play from 'assets/icons/course/play.png';
+// import recording from 'assets/icons/course/'
 import material from 'assets/icons/course/material.png';
 import assignment from 'assets/icons/course/assignment.png';
 import Modal from '../Modal';
@@ -206,7 +207,9 @@ function Classes({
     }
   };
 
-  const watchVideos = () => {
+  const watchVideos = (e) => {
+    e.stopPropagation()
+    e.preventDefault()
     watchVideoRef.current.open();
   };
 
@@ -286,12 +289,14 @@ function Classes({
                       </div>
 
                       {!full && isStudent && (
+                      <div className="btn_sec">
                         <ResourceBtn
                           img={play}
-                          text={'Watch Video'}
+                          text={'Class Recording'}
                           color="theme"
                           handleClick={watchVideos}
                         />
+                      </div>
                       )}
 
                       {classResources[title]?.assignments.length > 0 &&

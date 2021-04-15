@@ -11,7 +11,7 @@ function ClassVideoModal({ data }) {
 
   if (!length || length === 0) {
     return (
-      <div className="flex-row">
+      <div className="flex-row modal-pnt" style={{background: 'white', padding: '50px'}}>
         <p>No videos uploded yet</p>
       </div>
     );
