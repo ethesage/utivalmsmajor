@@ -32,10 +32,7 @@
   .apx_close {
     position: absolute;
     right: 0px;
-
-    @include for-size(phone-only) {
-      top: -50px;
-    }
+    top: -50px;
 
     svg {
       width: 25px;

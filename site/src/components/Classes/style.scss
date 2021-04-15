@@ -100,22 +100,12 @@
         }
 
         .btn_sec_con {
-          @include for-size(phone-only) {
-            flex-direction: column;
-            align-items: flex-start;
-
-            .btn_sec {
-              &:first-child {
-                margin-bottom: 20px;
-              }
-            }
-          }
+          flex-wrap: wrap;
+          margin: -15px;
         }
 
         .btn_sec {
-          &:first-child {
-            margin-right: 30px;
-          }
+          padding: 15px;
         }
       }
     }
