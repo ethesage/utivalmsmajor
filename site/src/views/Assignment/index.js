@@ -202,7 +202,7 @@ const Assignment = ({ gapi }) => {
                     img={assignmentIcon}
                     text="Download Assignment"
                     color="off"
-                    link={`/${s3url}/${assignmentFile.Key}`}
+                    link={`${s3url}/${encodeURIComponent(assignmentFile.Key)}`}
                     attr={{ download: true }}
                     useLink={false}
                   />
