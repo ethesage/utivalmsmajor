@@ -62,7 +62,7 @@ export const create = async (req, res) => {
     });
   }
 
-  await createFileFolder(`Course/${name}/classes/`)
+  await createFileFolder(`Course/${name}/classes/`);
 
   return successStat(res, 201, 'data', {
     course,
@@ -415,6 +415,7 @@ export const addCourseCohortProgress = async (req, res) => {
 
 export const getCohortCourse = async (req, res) => {
   const { courseCohortId } = req.params;
+  const { iscourseUrl } = req.query;
   // const { offset, limit } = calculateLimitAndOffset(currentPage, pageLimit);
   // const id = req?.session?.user?.id ;
   let user;
@@ -426,13 +427,29 @@ export const getCohortCourse = async (req, res) => {
   //   limit,
   // };
 
+  let couseCohortWhereClause = {};
+  let couseWhereClause = {};
+
+  if (iscourseUrl) {
+    // note that what was sent here was the course in place of the cpursecohortId
+    couseWhereClause = {
+      where: {
+        id: courseCohortId,
+      },
+    };
+  } else {
+    couseCohortWhereClause = {
+      where: { id: courseCohortId },
+    };
+  }
+
   const query = user
     ? [
         {
           model: models.CourseCohort,
           // order: [['createdAt']],
           // limit: 1,
-          where: { id: courseCohortId },
+          ...couseCohortWhereClause,
           attributes: ['id', 'paymentType'],
         },
         {
@@ -448,7 +465,7 @@ export const getCohortCourse = async (req, res) => {
     : [
         {
           model: models.CourseCohort,
-          where: { id: courseCohortId },
+          ...couseCohortWhereClause,
           // order: [['createdAt']],
           // limit: 1,
           attributes: ['id', 'paymentType'],
@@ -462,6 +479,7 @@ export const getCohortCourse = async (req, res) => {
   const rows = await models.Course.findOne({
     // ...sqlQueryMap,
     // where: { category },
+    ...couseWhereClause,
     include: [...query],
   });
 

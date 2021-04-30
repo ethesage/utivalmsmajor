@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Helmet from 'react-helmet';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import getCurrencyRate from 'Hooks/getConvertionRate';
 import Input from 'components/Input';
 import { check, checkoutCourse, addPurchaseCourse } from 'g_actions/courses';
@@ -14,6 +14,10 @@ const Details = ({ proceed, match, set, setPaymentAmount }) => {
   const { push } = useHistory();
   const dispatch = useDispatch();
   const btnRef = useRef();
+  const location = useLocation();
+
+  const params = new URLSearchParams(location.search);
+  const iscourseUrl = params.get('course');
 
   const [loading, rate] = getCurrencyRate();
   const [paymentType, setPaymentType] = useState();
@@ -21,13 +25,13 @@ const Details = ({ proceed, match, set, setPaymentAmount }) => {
 
   const checkout = async () => {
     btnRef.current.classList.add('loader');
-    const value = await dispatch(check(match.params.courseCohortId));
+    const value = await dispatch(check(purchaseCourse.CourseCohorts[0].id));
 
     if (value?.message === 'Not Enrolled') {
-      set(match.params.courseCohortId);
+      set(purchaseCourse.CourseCohorts[0].id);
       setPaymentAmount(amountToPay);
       proceed(1);
-    } else push(`/courses/overview/${match.params.courseCohortId}`);
+    } else push(`/courses/overview/${purchaseCourse.CourseCohorts[0].id}`);
     // /
   };
 
@@ -77,7 +81,9 @@ const Details = ({ proceed, match, set, setPaymentAmount }) => {
   useEffect(() => {
     (async () => {
       if (!purchaseCourse) {
-        await dispatch(addPurchaseCourse(match.params.courseCohortId));
+        await dispatch(
+          addPurchaseCourse(match.params.courseCohortId, iscourseUrl)
+        );
       } else await dispatch(checkoutCourse(purchaseCourse));
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps

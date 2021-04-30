@@ -108,11 +108,15 @@ export const purchaseCourse = (course) => async (dispatch) => {
   });
 };
 
-export const addPurchaseCourse = (courseCohortId) => async (dispatch) => {
+export const addPurchaseCourse = (courseCohortId, iscourseUrl) => async (
+  dispatch
+) => {
   let p_course;
   try {
     p_course = await axiosInstance.get(
-      `/course/getCohortCourse/${courseCohortId}`
+      `/course/getCohortCourse/${courseCohortId}${
+        iscourseUrl ? `?iscourseUrl=${iscourseUrl}` : ''
+      }`
     );
   } catch (error) {
     return error;
