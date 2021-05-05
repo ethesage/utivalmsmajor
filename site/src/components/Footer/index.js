@@ -50,7 +50,7 @@ const extras = [
 ];
 
 const Footer = () => {
-  const year = new Date().getFullYear()
+
   return (
     <>
       <img src={buildings} alt="" className="buildings" />
@@ -94,7 +94,7 @@ const Footer = () => {
             </div>
           </div>
           <div className="reserved flex-row">
-            <p>&copy; {year} Utiva. All right reserved</p>
+            <p>&copy; {new Date().getFullYear()} 2021 Utiva. All right reserved</p>
           </div>
         </div>
       </section>
