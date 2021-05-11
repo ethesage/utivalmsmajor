@@ -447,8 +447,8 @@ export const getCohortCourse = async (req, res) => {
     ? [
         {
           model: models.CourseCohort,
-          // order: [['createdAt']],
-          // limit: 1,
+          order: [['createdAt', 'DESC']],
+          limit: 1,
           ...couseCohortWhereClause,
           attributes: ['id', 'paymentType'],
         },
@@ -466,8 +466,8 @@ export const getCohortCourse = async (req, res) => {
         {
           model: models.CourseCohort,
           ...couseCohortWhereClause,
-          // order: [['createdAt']],
-          // limit: 1,
+          order: [['createdAt', 'DESC']],
+          limit: 1,
           attributes: ['id', 'paymentType'],
         },
         {
