@@ -482,9 +482,24 @@ export const getCohortCourse = async (req, res) => {
     ...couseWhereClause,
     include: [...query],
   });
+
   // if (!rows[0]) return errorStat(res, 404, "Course Not Found");
 
   // const paginationMeta = paginate(currentPage, count, rows, pageLimit);
 
-  return successStat(res, 200, 'data', rows);
+  const trainers = await models.sequelize.query(
+    `Select DISTINCT on ("User.id") "User"."id" AS "User.id", "CohortTrainer"."id", "User"."firstName" AS "User.firstName",
+    "User"."lastName" AS "User.lastName", "User"."profilePic" AS "User.profilePic",
+    "User"."bio" AS "User.bio" from "CohortTrainers" as "CohortTrainer" join "Users" as "User" ON "CohortTrainer"."userId" = "User"."id"
+    where "CohortTrainer"."courseCohortId" = '${courseCohortId}' AND "CohortTrainer"."courseId" = '${rows.id}'`,
+    {
+      nest: true,
+    }
+  );
+
+  // if (!rows[0]) return errorStat(res, 404, "Course Not Found");
+
+  // const paginationMeta = paginate(currentPage, count, rows, pageLimit);
+
+  return successStat(res, 200, 'data', { rows, CohortTrainers: trainers });
 };
