@@ -5,7 +5,6 @@ import Details from './Details';
 import Payment from './Payment';
 
 const Purchase = (props) => {
-  // console.log(props, '.....')
   const [currentPage, setPage] = useState(0);
   const [id, setId] = useState(0);
   const [paymentAmount, setPaymentAmount] = useState();
@@ -19,7 +18,6 @@ const Purchase = (props) => {
     />,
     <Payment back={setPage} corhortId={id} paymentAmount={paymentAmount} />,
   ];
-  // const disRef = useRef();
 
   useEffect(() => {
     return () => {};

@@ -22,7 +22,7 @@ const index = () => {
             value of Big Data Analytics to your current role.
           </p>
           <div>
-            <h2>Technology Education</h2>
+            <h2>Technology Education.</h2>
             <p>Helping you accelerate your career</p>
           </div>
         </div>

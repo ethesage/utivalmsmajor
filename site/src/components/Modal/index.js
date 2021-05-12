@@ -48,8 +48,16 @@ const Modal = forwardRef(
         <div className="apx_in relative">
           {useButton && (
             <button
+<<<<<<< HEAD
               className="apx_close -top-12 md:-left-12 right-0 md:right-auto absolute"
               onClick={close}
+=======
+              className="apx_close"
+              onClick={(e) => {
+                e.preventDefault();
+                close();
+              }}
+>>>>>>> develop
             >
               <Close fill="black" width="30px" height="30px" />
             </button>

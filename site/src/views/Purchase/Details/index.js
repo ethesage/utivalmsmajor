@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Helmet from 'react-helmet';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
+import { useHistory, useLocation } from 'react-router-dom';
 import getCurrencyRate from 'Hooks/getConvertionRate';
 import Input from 'components/Input';
 import { check, checkoutCourse, addPurchaseCourse } from 'g_actions/courses';
@@ -24,6 +24,10 @@ const Details = ({ proceed, match, set, setPaymentAmount }) => {
   const dispatch = useDispatch();
   const btnRef = useRef();
   const { addToast } = useToasts;
+  const location = useLocation();
+
+  const params = new URLSearchParams(location.search);
+  const iscourseUrl = params.get('course');
 
   const [loading, rate] = getCurrencyRate();
   const [paymentType, setPaymentType] = useState();
@@ -34,7 +38,7 @@ const Details = ({ proceed, match, set, setPaymentAmount }) => {
 
   const checkout = async () => {
     btnRef.current.classList.add('loader');
-    const value = await dispatch(check(match.params.courseCohortId));
+    const value = await dispatch(check(purchaseCourse.CourseCohorts[0].id));
 
     if (couponDetails) {
       // add the user to the used coupon table
@@ -43,12 +47,21 @@ const Details = ({ proceed, match, set, setPaymentAmount }) => {
     if (value.message === 'Not Enrolled') {
       set(match.params.courseCohortId);
       setPaymentAmount(amountToPay - couponDetails);
+    if (value?.message === 'Not Enrolled') {
+      set(purchaseCourse.CourseCohorts[0].id);
+      setPaymentAmount(amountToPay - couponDetails);
       proceed(1);
-    } else push(`/courses/overview/${match.params.courseCohortId}`);
+    } else push(`/courses/overview/${purchaseCourse.CourseCohorts[0].id}`);
     // /
   };
 
   useEffect(() => {
+    if (purchaseCourse?.type === 'free') {
+      setAmountToPay(purchaseCourse?.cost);
+      setPaymentType('full');
+      return;
+    }
+
     if (!paymentType) return;
 
     if (paymentType === 'split') {
@@ -88,7 +101,9 @@ const Details = ({ proceed, match, set, setPaymentAmount }) => {
   useEffect(() => {
     (async () => {
       if (!purchaseCourse) {
-        await dispatch(addPurchaseCourse(match.params.courseCohortId));
+        await dispatch(
+          addPurchaseCourse(match.params.courseCohortId, iscourseUrl)
+        );
       } else await dispatch(checkoutCourse(purchaseCourse));
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -196,7 +211,7 @@ const Details = ({ proceed, match, set, setPaymentAmount }) => {
                   {chooseCurrency(purchaseCourse?.cost)}
                 </h1>
 
-                {purchaseCourse?.CourseCohorts[0].paymentType === 'split' && (
+                {purchaseCourse?.CourseCohorts[0].paymentType === 'split' && purchaseCourse?.type !== 'free' && (
                   // {true && (
                   <div className="summary split_sec">
                     <h3 className="font-semibold text-xs mb-2.5">

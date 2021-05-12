@@ -1,7 +1,13 @@
-import models from "../database/models";
-import helpers from "../helpers";
+import models from '../database/models';
+import helpers from '../helpers';
 
-const { successStat, errorStat } = helpers;
+const {
+  successStat,
+  errorStat,
+  getFolderListings,
+  deleteImage,
+  uploadData,
+} = helpers;
 
 /**
  * / @static
@@ -13,96 +19,98 @@ const { successStat, errorStat } = helpers;
  */
 
 export const createFile = async (req, res) => {
-  const { id } = req.session.user;
-  try {
-    const file = await models.File.create({
-      ...req.body.file,
-      userId: id
-    });
+  // const { id } = req.session.user;
+  const { file, path, fileName, mime } = req.body;
 
-    return successStat(res, 201, 'data', { ...file.dataValues, message: 'File Successfully Created' });
-  } catch (e) {
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
-  }
+  const fileUpload = await uploadData(file, path, fileName, mime);
+
+  return successStat(res, 201, 'data', fileUpload);
 };
 
 export const getFile = async (req, res) => {
   const { fileId } = req.body.file;
   const { id } = req.session.user;
 
-  try {
-    const file = await models.File.findOne({
-      where: {
-        userId: id,
-        id: fileId
-      }
-    });
+  const file = await models.File.findOne({
+    where: {
+      userId: id,
+      id: fileId,
+    },
+  });
 
-    if (!file) return errorStat(res, 404, 'File not found');
+  if (!file) return errorStat(res, 404, 'File not found');
 
-    return successStat(res, 200, 'data', file);
-  } catch (e) {
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
-  }
+  return successStat(res, 200, 'data', file);
 };
 
 export const getAllFiles = async (req, res) => {
-  const { id } = req.session.user;
+  const { key } = req.query;
 
-  try {
-    const files = await models.File.findAll({
-      where: { userId: id }
-    });
+  const fileList = await getFolderListings(key);
 
-    if (!files[0]) return errorStat(res, 404, 'No file found');
+  const content =
+    fileList &&
+    fileList.Contents.reduce((acc, list) => {
+      if (list.Key !== key) {
+        acc.push({
+          Key: list.Key,
+          Size: list.Size,
+        });
+      }
 
-    return successStat(res, 200, 'data', files);
-  } catch (e) {
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
-  }
+      return acc;
+    }, []);
+
+  // console.log(content);
+
+  return successStat(res, 200, 'data', content);
+};
+
+export const getOneFile = async (req, res) => {
+  const { key } = req.query;
+
+  const fileList = await getFolderListings(key);
+
+  const content =
+    fileList &&
+    fileList.Contents.reduce((acc, list) => {
+      acc.push({
+        Key: list.Key,
+        Size: list.Size,
+      });
+
+      return acc;
+    }, []);
+
+  // console.log(content);
+
+  return successStat(res, 200, 'data', content);
 };
 
 export const updateFile = async (req, res) => {
   const { fileId, name } = req.body.file;
   const { id } = req.session.user;
 
-  try {
-    const file = await models.File.findOne({
-      where: {
-        id: fileId,
-        userId: id
-      }
-    });
+  const file = await models.File.findOne({
+    where: {
+      id: fileId,
+      userId: id,
+    },
+  });
 
-    if (!file) return errorStat(res, 404, 'File not found');
+  if (!file) return errorStat(res, 404, 'File not found');
 
-    await file.update({
-      name
-    });
+  await file.update({
+    name,
+  });
 
-    return successStat(res, 200, 'data', file);
-  } catch (e) {
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
-  }
+  return successStat(res, 200, 'data', file);
 };
 
 export const deleteFile = async (req, res) => {
-  const { fileId } = req.body.file;
-  const { id } = req.session.user;
-  try {
-    const file = await models.File.findOne({
-      where: {
-        id: fileId,
-        userId: id
-      }
-    });
+  const { path } = req.query;
 
-    if (!file) return errorStat(res, 404, 'File not found');
+  await deleteImage(path);
 
-    await file.destroy();
-
-    return successStat(res, 200, 'data', 'Delete Successful');
-  } catch (e) {
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
-  }
+  return successStat(res, 200, 'data', 'Delete Successful');
 };

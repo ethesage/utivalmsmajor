@@ -1,26 +1,29 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import Sekeleton from "react-skeleton-loader";
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import Sekeleton from 'react-skeleton-loader';
+import moment from 'moment';
+import { CSVLink } from 'react-csv';
 import {
   getEnrolledMembers,
   enrollStudents,
   deleteStudent,
-} from "g_actions/member";
-import useFetch from "Hooks/useFetch";
-import { getAllStudents } from "g_actions/student";
-import MemberCard from "components/Member";
-import Modal from "components/Modal";
-import Input from "components/Input";
-import Button from "components/Button";
-import user_icon from "assets/user_icon.png";
-import Close from "assets/icons/closeX";
-import { stringSearch, axiosInstance } from "helpers";
-import "./style.scss";
+} from 'g_actions/member';
+import useFetch from 'Hooks/useFetch';
+import { getAllStudents } from 'g_actions/student';
+import MemberCard from 'components/Member';
+import Modal from 'components/Modal';
+import Input from 'components/Input';
+import Button from 'components/Button';
+import user_icon from 'assets/user_icon.png';
+import Close from 'assets/icons/closeX';
+import Download from 'assets/icons/download';
+import { stringSearch, axiosInstance } from 'helpers';
+import './style.scss';
 
 const Members = ({ courseId }) => {
   const dispatch = useDispatch();
   const { enrolledStudents } = useSelector((state) => state.member);
-  const { isAdmin } = useSelector((state) => state.auth);
+  const { isAdmin, isStudent } = useSelector((state) => state.auth);
   const allStudents = useSelector((state) => state.students);
   const modalRef = useRef();
   const inner_modalRef = useRef();
@@ -32,6 +35,7 @@ const Members = ({ courseId }) => {
   const [s_loading, , s_fetch] = useFetch(dispatch, !!!allStudents);
   const single_student_modal = useRef();
   const [currentStudent, setCurrentStudent] = useState();
+  const [date] = useState(moment().format('YYYY-MM-DD'));
 
   useEffect(() => {
     if (allStudents) return;
@@ -55,7 +59,7 @@ const Members = ({ courseId }) => {
     </div>
   );
 
-  const NoClass = () => <div>No members enrolled yet</div>;
+  const NoClass = () => <div>No students enrolled yet</div>;
 
   const handleImgError = (e) => {
     e.target.src = user_icon;
@@ -66,7 +70,7 @@ const Members = ({ courseId }) => {
   };
 
   const enroll = async () => {
-    inner_modalRef.current.classList.add("spinner1");
+    inner_modalRef.current.classList.add('spinner1');
 
     try {
       await axiosInstance.post(`/checkout/quickcheckout/${courseId}`, {
@@ -84,9 +88,9 @@ const Members = ({ courseId }) => {
       setStudents([]);
       modalRef.current.close();
 
-      inner_modalRef.current.classList.remove("spinner1");
+      inner_modalRef.current.classList.remove('spinner1');
     } catch (err) {
-      inner_modalRef.current.classList.remove("spinner1");
+      inner_modalRef.current.classList.remove('spinner1');
       return;
     }
   };
@@ -107,7 +111,7 @@ const Members = ({ courseId }) => {
   };
 
   const handleSearch = ({ target: { name, value } }) => {
-    if (value !== "") {
+    if (value !== '') {
       const searchResult = allStudents.filter(
         ({ firstName, lastName, email }) =>
           stringSearch(value, firstName) ||
@@ -121,7 +125,7 @@ const Members = ({ courseId }) => {
   };
 
   const handleMembersSearch = ({ target: { name, value } }) => {
-    if (value !== "") {
+    if (value !== '') {
       const searchResult = enrolledStudents.members.filter(
         ({ User: { firstName, lastName, email } }) =>
           stringSearch(value, firstName) ||
@@ -136,7 +140,7 @@ const Members = ({ courseId }) => {
   };
 
   const removeStudentFromCourse = async (id) => {
-    document.querySelector("body").classList.add("spinner3");
+    document.querySelector('body').classList.add('spinner3');
 
     try {
       await axiosInstance.patch(`/admin/delete-student`, {
@@ -146,9 +150,9 @@ const Members = ({ courseId }) => {
 
       setFilteredMembers([]);
       dispatch(deleteStudent(id));
-      document.querySelector("body").classList.remove("spinner3");
+      document.querySelector('body').classList.remove('spinner3');
     } catch (err) {
-      document.querySelector("body").classList.remove("spinner3");
+      document.querySelector('body').classList.remove('spinner3');
     }
   };
 
@@ -165,7 +169,27 @@ const Members = ({ courseId }) => {
     <>
       <section className="members">
         <nav className="nav_sec flex-row j-space">
-          <h3>{!loading && enrolledStudents?.members.length} Total Members</h3>
+          <h3>
+            {!loading && enrolledStudents?.members.length} Total Members{' '}
+            {!isStudent && (
+              <CSVLink
+                filename={`total-students-${date}.csv`}
+                data={
+                  enrolledStudents?.members?.map((rep, i) => ({
+                    'S/N': i + 1,
+                    'Full Name': `${rep?.User?.firstName} ${rep?.User?.lastName}`,
+                    email: rep?.User?.email,
+                    'linked In': rep?.User?.linkedIn,
+                    Occupation: rep?.User?.occupation,
+                    'Phone Number': rep?.User?.phoneNumber?.toString(),
+                    Company: rep?.User?.company,
+                  })) || []
+                }
+              >
+                <Download />
+              </CSVLink>
+            )}
+          </h3>
 
           {isAdmin && (
             <Button
@@ -178,7 +202,7 @@ const Members = ({ courseId }) => {
           )}
         </nav>
 
-        <div style={{ marginTop: "30px", maxWidth: "300px" }}>
+        <div style={{ marginTop: '30px', maxWidth: '300px' }}>
           <Input
             placeHolder="Search by name or email"
             name="search"
@@ -228,8 +252,8 @@ const Members = ({ courseId }) => {
                 <>
                   <strong
                     style={{
-                      marginBottom: "10px",
-                      cursor: "pointer",
+                      marginBottom: '10px',
+                      cursor: 'pointer',
                     }}
                   >
                     <small className="theme-color" onClick={enroll}>
@@ -237,7 +261,7 @@ const Members = ({ courseId }) => {
                     </small>
                   </strong>
 
-                  <strong style={{ marginBottom: "10px", cursor: "pointer" }}>
+                  <strong style={{ marginBottom: '10px', cursor: 'pointer' }}>
                     <small className="theme-color" onClick={removeAll}>
                       Remove All
                     </small>
@@ -295,7 +319,7 @@ const Members = ({ courseId }) => {
             ) : (
               <div
                 className="spinner2"
-                style={{ height: "100px", width: "100%" }}
+                style={{ height: '100px', width: '100%' }}
               ></div>
             )}
           </div>

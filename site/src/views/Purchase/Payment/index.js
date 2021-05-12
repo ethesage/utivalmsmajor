@@ -10,7 +10,7 @@ import { addStudentCourse } from 'g_actions/mainCourse';
 import Modal from 'components/Modal';
 import './style.scss';
 
-const Payment = ({ back, paymentAmount }) => {
+const Payment = ({ back, paymentAmount, mainText, doneFunc, fromSplit }) => {
   const { push } = useHistory();
   const disRef = useRef();
 
@@ -19,34 +19,60 @@ const Payment = ({ back, paymentAmount }) => {
   const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (courses?.purchaseCourse?.type === 'free') {
-      dispatch(
-        checkout(courses.purchaseCourse.CourseCohorts[0].id),
-        paymentAmount
-      );
-      dispatch(
-        addStudentCourse(courses.purchaseCourse, [
-          { courseCohortId: courses.purchaseCourse.CourseCohorts[0].id },
-        ])
-      );
-      done();
-    }
+    if (!user) return;
+
+    const moveIfFree = async () => {
+      if (courses?.purchaseCourse?.type === 'free') {
+        try {
+          document.querySelector('body').classList.add('spinner1');
+          await dispatch(
+            checkout(courses.purchaseCourse.CourseCohorts[0].id),
+            paymentAmount
+          );
+          dispatch(
+            addStudentCourse(courses.purchaseCourse, [
+              { courseCohortId: courses.purchaseCourse.CourseCohorts[0].id },
+            ])
+          );
+
+          push(
+            `/courses/overview/${courses.purchaseCourse.CourseCohorts[0].id}`
+          );
+          document.querySelector('body').classList.remove('spinner1');
+        } catch (err) {
+          push(
+            `/courses/overview/${courses.purchaseCourse.CourseCohorts[0].id}`
+          );
+          document.querySelector('body').classList.remove('spinner1');
+        }
+      }
+    };
+
+    moveIfFree();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [user]);
 
   const goBack = () => {
     back(0);
   };
 
   function done() {
-    if (disRef.current.open) return;
+    if (doneFunc) {
+      doneFunc();
+      return;
+    }
+
     disRef.current.open();
   }
 
   return (
     <div className="payment container --small mx-auto">
       {/* <dialog ref={disRef} className="d_s_c"> */}
-      <Modal ref={disRef}>
+      <Modal ref={disRef} runOnClose={() =>
+          push(
+            `/courses/overview/${courses.purchaseCourse.CourseCohorts[0].id}`
+          )
+        }>
         <div className="flex flex-col p-7 bg-white rounded w-4/5 mx-auto max-w-lg">
           <img src={approved} alt="approved" className="w-full" />
           <div className="reg_text mb-5">
@@ -75,9 +101,17 @@ const Payment = ({ back, paymentAmount }) => {
 
           {courses.purchaseCourse.type !== 'free' && (
             <>
-              <Flutterwave done={done} paymentAmount={paymentAmount} />
+              <Flutterwave
+                done={done}
+                paymentAmount={paymentAmount}
+                back={fromSplit ? () => back() : () => {}}
+              />
 
-              <Stripe done={done} paymentAmount={paymentAmount} />
+              <Stripe
+                done={done}
+                paymentAmount={paymentAmount}
+                back={fromSplit ? () => back() : () => {}}
+              />
             </>
           )}
 

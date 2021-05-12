@@ -1,8 +1,6 @@
-@import "../../../../media";
+@import '../../../../media';
 
 .cx_list_con {
-  height: 100%;
-  flex-grow: 1;
   width: 100%;
 
   .nt_found {
@@ -31,7 +29,6 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-gap: 30px;
-  height: 100%;
   width: 100%;
   position: relative;
 

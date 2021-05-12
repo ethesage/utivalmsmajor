@@ -1,12 +1,12 @@
-import React, { useEffect, useRef } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { Link, useHistory } from "react-router-dom";
-import getCurrencyRate from "Hooks/getConvertionRate";
-import Image from "../../components/Image";
-import { purchaseCourse } from "../../g_actions/courses";
-import "./style.scss";
+import React, { useEffect, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
+import getCurrencyRate from 'Hooks/getConvertionRate';
+import Image from 'components/Image';
+import { purchaseCourse } from 'g_actions/courses';
+import './style.scss';
 
-const CourseCard = ({ data, size = "" }) => {
+const CourseCard = ({ data, size = '' }) => {
   const {
     thumbnail,
     name,
@@ -17,7 +17,7 @@ const CourseCard = ({ data, size = "" }) => {
     level,
     learnMore,
     CourseCohorts,
-    classname = "",
+    classname = '',
     type,
     currency_type,
   } = data;
@@ -31,26 +31,32 @@ const CourseCard = ({ data, size = "" }) => {
 
   useEffect(() => {
     const position = () => {
-      const smallerScreen = window.matchMedia("(max-width: 1000px)");
+      const smallerScreen = window.matchMedia('(max-width: 1000px)');
 
       if (smallerScreen.matches) {
-        cousrecard.current.classList.add("smaller");
+        cousrecard.current.classList.add('smaller');
       } else {
-        cousrecard.current.classList.remove("smaller");
+        cousrecard.current.classList.remove('smaller');
       }
     };
 
     position();
 
-    window.addEventListener("resize", position);
+    window.addEventListener('resize', position);
 
     return () => {
-      window.removeEventListener("resize", position);
+      window.removeEventListener('resize', position);
     };
   }, []);
 
   const handleClick = (e) => {
     e.preventDefault();
+
+    if (user && data?.StudentCourses?.length > 0) {
+      history.push(`/courses/overview/${CourseCohorts[0].id}`);
+      return;
+    }
+
     dispatch(purchaseCourse(data));
     history.push(`/purchase/${CourseCohorts[0].id}`);
   };
@@ -70,13 +76,13 @@ const CourseCard = ({ data, size = "" }) => {
       <div className="text_cont flex-col al-start">
         <div className="text-sec">
           <h2>{name}</h2>
-          <p className="clipped-text" style={{ "--number": 4 }}>
+          <p className="clipped-text" style={{ '--number': 4 }}>
             {description}
           </p>
           <div className="c_inf flex-row j-space">
             <small>{duration} Weeks</small>
             <small>
-              {"> "}
+              {'> '}
               {level}
             </small>
             <small>{value}</small>
@@ -88,20 +94,20 @@ const CourseCard = ({ data, size = "" }) => {
         <div className="en_rl flex-row j-space">
           {!loading && (
             <div className="cst">
-              {currency_type === "local" ? (
+              {currency_type === 'local' ? (
                 <>
                   <p>
-                    {type === "free" ? "Free" : `₦ ${cost.toLocaleString()}`}
+                    {type === 'free' ? 'Free' : `₦ ${cost.toLocaleString()}`}
                   </p>
-                  {type !== "free" && (
+                  {type !== 'free' && (
                     <small>${Math.round(cost / rate.USD_NGN)}</small>
                   )}
                 </>
               ) : (
                 <>
-                  {type !== "free" && <p>${Math.round(cost / rate.USD_NGN)}</p>}
+                  {type !== 'free' && <p>${Math.round(cost / rate.USD_NGN)}</p>}
                   <small>
-                    {type === "free" ? "Free" : `₦ ${cost.toLocaleString()}`}
+                    {type === 'free' ? 'Free' : `₦ ${cost.toLocaleString()}`}
                   </small>
                 </>
               )}
@@ -111,8 +117,8 @@ const CourseCard = ({ data, size = "" }) => {
           <div className="link btn">
             <Link to="/" onClick={handleClick}>
               {user && data?.StudentCourses?.length > 0
-                ? "View Course"
-                : "Enroll Now"}
+                ? 'View Course'
+                : 'Enroll Now'}
             </Link>
           </div>
         </div>

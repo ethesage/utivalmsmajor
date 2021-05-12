@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   const Assignment = sequelize.define(
-    "Assignment",
+    'Assignment',
     {
       id: {
         type: DataTypes.UUID,
@@ -17,24 +17,25 @@ module.exports = (sequelize, DataTypes) => {
       submitDate: DataTypes.DATE,
       gradeDate: DataTypes.DATE,
       courseCohortId: DataTypes.UUID,
+      size: DataTypes.TEXT,
     },
     {}
   );
   Assignment.associate = (models) => {
     // associations can be defined here
     Assignment.belongsTo(models.Classes, {
-      foreignKey: "classId",
-      onDelete: "CASCADE",
+      foreignKey: 'classId',
+      onDelete: 'CASCADE',
     });
 
     Assignment.belongsTo(models.User, {
-      foreignKey: "studentId",
-      onDelete: "CASCADE",
+      foreignKey: 'studentId',
+      onDelete: 'CASCADE',
     });
 
     Assignment.belongsTo(models.ClassResources, {
-      foreignKey: "classResourcesId",
-      onDelete: "CASCADE",
+      foreignKey: 'classResourcesId',
+      onDelete: 'CASCADE',
     });
   };
   return Assignment;

@@ -1,15 +1,15 @@
-import AWS from "aws-sdk";
-import isBase64 from "is-base64";
-import bluebird from "bluebird";
+import AWS from 'aws-sdk';
+// import isBase64 from 'is-base64';
+import bluebird from 'bluebird';
 import {
   AWS_SECRET_ACCESS_KEY,
   AWS_ACCESS_KEY_ID,
   AWS_REGION,
   AWS_BUCKET_NAME,
   ENCRYPTION_SECRET,
-} from "../config/envVariables";
+} from '../config/envVariables';
 
-const Cryptr = require("cryptr");
+const Cryptr = require('cryptr');
 
 const config = {
   aws: {
@@ -81,7 +81,7 @@ export function validateJoi(object, schema, req, res, next, name) {
       res,
       400,
       error.details.map((detail) => {
-        const message = detail.message.replace(/"/gi, "");
+        const message = detail.message.replace(/"/gi, '');
         return message;
       })
     );
@@ -91,26 +91,41 @@ export function validateJoi(object, schema, req, res, next, name) {
   return next();
 }
 
-export const uploadImage = async (url, fileName) => {
-  try {
-    if (!isBase64(url, { mimeRequired: true })) {
-      throw Error("Invalid base64 image");
-    }
-    const buffer = new Buffer.from(
-      url.replace(/^data:image\/\w+;base64,/, ""),
-      "base64"
-    );
-    const data = {
-      ACL: "public-read",
-      Key: fileName,
-      Body: buffer,
-      ContentEncoding: "base64",
-      ContentType: "image/jpeg",
-    };
-    return s3.upload(data).promise();
-  } catch (err) {
-    return err.message;
-  }
+const uploadFunc = async (url, fileName, mime) => {
+  const data = {
+    ACL: 'public-read',
+    Key: fileName,
+    Body: url,
+    // ContentEncoding: 'base64',
+    ContentType: mime,
+  };
+
+  return s3.upload(data).promise();
+};
+
+export const uploadImage = async (url, fileName, mime) =>
+  uploadFunc(url, fileName, mime);
+
+export const uploadData = async (file, path, fileName, mime) =>
+  uploadFunc(file, `${path}/${fileName}`, mime);
+
+export const getFolderListings = async (key) =>
+  s3.listObjects({ Bucket: 'utiva-app', Delimiter: '', Prefix: key }).promise();
+
+export const createFileFolder = async (path) => {
+  const params = {
+    Key: path,
+  };
+
+  return s3.putObject(params).promise();
+};
+
+export const deleteImage = async (path) => {
+  const deleteParam = {
+    Key: path,
+  };
+
+  return s3.deleteObject(deleteParam).promise();
 };
 
 export const encryptQuery = (string) => {
@@ -118,7 +133,9 @@ export const encryptQuery = (string) => {
     const cryptr = new Cryptr(ENCRYPTION_SECRET);
     const encryptedString = cryptr.encrypt(string);
     return encryptedString;
-  } catch (error) {}
+  } catch (error) {
+    //
+  }
 };
 
 export const decrypt = (string) => {
@@ -132,7 +149,7 @@ export const decrypt = (string) => {
 };
 
 const shuffleArray = (array) => {
-  for (let i = array.length - 1; i > 0; i--) {
+  for (let i = array.length - 1; i > 0; i -= 1) {
     const j = Math.floor(Math.random() * (i + 1));
     const temp = array[i];
     array[i] = array[j];
@@ -142,10 +159,10 @@ const shuffleArray = (array) => {
 };
 
 export const generatePassword = (passwordLength, coupon) => {
-  const numberChars = "0123456789";
-  const upperChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  const lowerChars = "abcdefghijklmnopqrstuvwxyz";
-  const symbols = "!@#$%&*";
+  const numberChars = '0123456789';
+  const upperChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const lowerChars = 'abcdefghijklmnopqrstuvwxyz';
+  const symbols = '!@#$%&*';
 
   const allChars = coupon
     ? upperChars
@@ -158,5 +175,5 @@ export const generatePassword = (passwordLength, coupon) => {
   randPasswordArray = randPasswordArray.fill(allChars, 4);
   return shuffleArray(
     randPasswordArray.map((x) => x[Math.floor(Math.random() * x.length)])
-  ).join("");
+  ).join('');
 };

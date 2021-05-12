@@ -177,7 +177,7 @@ const Profile = () => {
     };
 
     let formData = new FormData();
-    formData.append('profilePic', _value);
+    formData.append('profilePic', files[0]);
 
     try {
       const response = await axiosInstance.patch(

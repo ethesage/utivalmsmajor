@@ -61,7 +61,6 @@ export const getCourse = (page, link, category) => async (dispatch) => {
 };
 
 export const mapCourse = (courses, category) => async (dispatch) => {
-  // console.log(courses, '...//')
   dispatch({
     type: 'MAP_COURSES',
     payload: { category, data: courses },
@@ -81,9 +80,6 @@ export const resetHomePageCourse = () => async (dispatch) => {
   });
 };
 
-
 export const addTransaction = (data) => async (dispatch) => {
-  await axiosInstance.post(
-    'transaction/addtransaction', data
-  );
+  await axiosInstance.post('transaction/addtransaction', data);
 };

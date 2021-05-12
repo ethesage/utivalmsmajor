@@ -39,6 +39,7 @@ const Drag = ({ className, children, handleImage }) => {
 
   const handleChange = (e) => {
     handleImage(e.target.files[0]);
+    document.querySelector('#file_upload').value = '';
   };
 
   return (

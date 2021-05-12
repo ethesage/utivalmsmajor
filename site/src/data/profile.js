@@ -1,4 +1,4 @@
-export default [
+const data = [
   {
     name: 'firstName',
     placeHolder: 'First Name',
@@ -57,3 +57,5 @@ export default [
     itype: 'select',
   },
 ];
+
+export default data;

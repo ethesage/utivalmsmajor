@@ -1,0 +1,50 @@
+@import '../../media';
+
+.payment_comp {
+  border-left: 3px solid color(approved);
+  padding: 5px;
+  box-shadow: 0 0 5px rgba(#000, 0.1);
+  width: 250px;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 20;
+  background: white;
+
+  div {
+    position: relative;
+  }
+
+  h1 {
+    margin-bottom: 10px;
+  }
+
+  p,
+  .pay {
+    font-size: 0.75em;
+    margin-bottom: 5px;
+  }
+
+  .pay {
+    background: color(approved);
+    width: 100%;
+    text-align: center;
+    color: white;
+    padding: 5px;
+  }
+
+  .close {
+    position: absolute;
+    top: 0px;
+    width: 24px;
+    height: 24px;
+    right: 0px;
+    border-radius: 100%;
+    line-height: 1.1em;
+    font-size: 1.1em;
+  }
+}
+
+.py-modal {
+  // background: white;
+}

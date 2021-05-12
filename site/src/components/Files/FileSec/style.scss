@@ -1,4 +1,4 @@
-@import "../../../media";
+@import '../../../media';
 
 .file_card {
   width: 100%;
@@ -39,6 +39,7 @@
 
     .txt-sec {
       width: 90%;
+      color: color(text);
       h2 {
         font-size: 0.9em;
       }

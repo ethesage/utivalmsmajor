@@ -1,4 +1,4 @@
-export default [
+const data = [
   {
     name: 'bio',
     placeHolder: 'Text',
@@ -13,3 +13,5 @@ export default [
     required: false,
   },
 ];
+
+export default data;

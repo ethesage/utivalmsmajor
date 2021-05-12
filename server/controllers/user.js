@@ -197,7 +197,11 @@ export const updateUser = async (req, res) => {
 
     fileName = fileName || `${user.email.split('@')[0]}`;
 
-    const image = await uploadImage(data.profilePic, `media/${fileName}`);
+    const image = await uploadImage(
+      data.profilePic,
+      `media/${fileName}`,
+      data.mime
+    );
 
     // eslint-disable-next-line prefer-destructuring
     data.profilePic = image.Location;
@@ -232,7 +236,7 @@ export const reset = async (req, res) => {
     return errorStat(res, 401, 'Password is Incorrect please try again');
   }
 
-  await exixtingUser.update({ password: hashPassword(password) });
+  await exixtingUser.update({ password: await hashPassword(password) });
 
   return successStat(res, 200, 'message', 'reset Successful');
 };

@@ -4,7 +4,7 @@ import useFetch from 'Hooks/useFetch';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCurrentCourse } from 'g_actions/admin';
 
-export default () => {
+const GetCCAdmin = () => {
   const { courseId } = useParams();
   const dispatch = useDispatch();
   const { currentCourse } = useSelector((state) => state.admin);
@@ -21,3 +21,5 @@ export default () => {
 
   return [loading, error, currentCourse];
 };
+
+export default GetCCAdmin;

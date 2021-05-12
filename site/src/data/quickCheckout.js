@@ -1,6 +1,7 @@
 const data = [
   {
     name: 'fullName',
+<<<<<<< HEAD
     label: 'Full Name',
     errorMsg: 'name should be greater than 2 characters',
     placeHolder: '',
@@ -18,6 +19,22 @@ const data = [
     // required: true,
     type: 'password',
     placeHolder: '',
+=======
+    placeHolder: 'Full Name',
+    errorMsg: 'name should be greater than 2 characters',
+  },
+  {
+    name: 'email',
+    placeHolder: 'Email',
+    errorMsg: 'email should be of the format johndoe@gmail.com',
+  },
+  {
+    name: 'password',
+    placeHolder: 'Enter Password',
+    errorMsg: '',
+    // required: true,
+    type: 'password',
+>>>>>>> develop
   },
 ];
 

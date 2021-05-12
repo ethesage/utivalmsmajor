@@ -34,6 +34,7 @@ const FlutterPay = ({ done, paymentAmount }) => {
     <div className="card_btn">
       <button
         onClick={() => {
+          back();
           handleFlutterPayment({
             callback: (response) => {
               if (response.status === 'successful') {
@@ -94,4 +95,4 @@ const FlutterPay = ({ done, paymentAmount }) => {
   );
 };
 
-export default FlutterPay;
+export default Flutterwave;

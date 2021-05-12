@@ -5,16 +5,18 @@ import {
   getFile,
   getAllFiles,
   updateFile,
-  deleteFile
+  deleteFile,
+  getOneFile,
 } from '../../controllers/files';
 import middlewares from '../../middlewares';
 
 const {
   validate,
-  createFileSchema,
+  // createFileSchema,
   getFileSchema,
   updateFileSchema,
-  usession
+  // getAllFileSchema,
+  usession,
 } = middlewares;
 
 const fileRoutes = express();
@@ -22,35 +24,38 @@ const fileRoutes = express();
 fileRoutes.post(
   '/create',
   usession.can(''),
-  validate(createFileSchema),
+  // validate(createFileSchema),
   createFile
-);
-
-fileRoutes.get(
-  '/:fileId',
-  usession.can(''),
-  validate(getFileSchema),
-  getFile
 );
 
 fileRoutes.get(
   '/',
   usession.can(''),
+  // validate(getAllFileSchema),
   getAllFiles
 );
 
+fileRoutes.get(
+  '/one',
+  usession.can(''),
+  // validate(getAllFileSchema),
+  getOneFile
+);
+
 fileRoutes.patch(
-  '/:fileId',
+  '/:path',
   usession.can(''),
   validate(updateFileSchema),
   updateFile
 );
 
 fileRoutes.delete(
-  '/:fileId',
+  '/',
   usession.can(''),
-  validate(getFileSchema),
+  // validate(getFileSchema),
   deleteFile
 );
+
+fileRoutes.get('/:fileId', usession.can(''), validate(getFileSchema), getFile);
 
 export default fileRoutes;

@@ -49,6 +49,11 @@ const patterns = {
   jobRole: text,
   vimeo: /vimeo\.com\/(\d+)/,
   list_desc: shortText,
+  finalSplitAmount: number,
+  initialSplitAmount: number,
+  paymentType: shortText,
+  currency_type: shortText,
+  whatsAppLink: /^(https?:\/\/)?chat\.whatsapp\.com\/(?:invite\/)?([a-zA-Z0-9_-]{22})$/,
 };
 
 export const validate = (field, Regex) => {
@@ -185,3 +190,14 @@ export const weeks = {
 export const stringSearch = (val, string) => {
   return string && string.toLowerCase().search(val.toLowerCase()) !== -1;
 };
+
+export const uploadProgress = (setPercentage) => {
+  return function (progressEvent) {
+    var percentCompleted = Math.round(
+      (progressEvent.loaded * 100) / progressEvent.total
+    );
+    setPercentage(percentCompleted);
+  };
+};
+
+export const s3url = 'https://utiva-app.s3.amazonaws.com';

@@ -1,4 +1,4 @@
-export default [
+const data = [
   {
     name: 'title',
     placeHolder: '',
@@ -15,3 +15,5 @@ export default [
     type: 'textarea',
   },
 ];
+
+export default data;

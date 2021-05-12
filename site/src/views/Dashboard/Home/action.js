@@ -59,7 +59,6 @@ export const getCourse = (page, link) => async (dispatch) => {
 };
 
 export const mapCourse = (courses) => async (dispatch) => {
-  // console.log(courses, '...//')
   dispatch({
     type: 'MAP_COURSES',
     payload: courses,

@@ -51,6 +51,9 @@ const Classroom = ({ full = false, gapi }) => {
                   setOpenedRef={setOpenedRef}
                   folderId={currentCohort.folderId}
                   cohortId={cohortId}
+                  currentCourse={currentCourse}
+                  completedPayment={true}
+                  courseCohortId={currentCohort.id}
                 />
               ))}
             </div>

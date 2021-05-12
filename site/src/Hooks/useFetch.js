@@ -25,7 +25,7 @@ const useFetch = (dispatch, initailLoadingState, reload) => {
       try {
         setStarted(true);
         setLoading(true);
-        await dispatch(cb);
+        dispatch ? await dispatch(cb) : await cb();
 
         if (!mounted.current) return;
 
@@ -53,6 +53,7 @@ const useFetch = (dispatch, initailLoadingState, reload) => {
           return;
         }
 
+        
         setStarted(true);
         setError(true);
         setLoading(false);

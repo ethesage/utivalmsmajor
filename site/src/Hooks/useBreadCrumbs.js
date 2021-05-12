@@ -52,7 +52,6 @@ const useBreadCrumbs = (crumb, start) => {
     };
 
     if (Array.isArray(crumb)) {
-      // console.log(crumb);
       addCrumbToList(crumb, true);
     } else addCrumbToList(crumb);
 

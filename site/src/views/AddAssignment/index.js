@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useCallback } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 import { useToasts } from 'react-toast-notifications';
@@ -9,7 +9,7 @@ import {
 } from 'g_actions/member';
 import Input from 'components/Input';
 import Modal from 'components/Modal';
-import { axiosInstance } from 'helpers';
+import { axiosInstance, uploadProgress } from 'helpers';
 import useBreadcrumbs from 'Hooks/useBreadCrumbs';
 import Confirm from 'components/Confirm';
 import ProgressBar from 'components/ProgressBar';
@@ -20,7 +20,7 @@ import Files from 'components/Files';
 import './style.scss';
 import Button from 'components/Button';
 
-const AddAssignment = ({ title, course, currentClass, gapi, folderId }) => {
+const AddAssignment = ({ title, course, currentClass }) => {
   const submitBtn = useRef();
   const dispatch = useDispatch();
   const progressDialog = useRef();
@@ -28,13 +28,12 @@ const AddAssignment = ({ title, course, currentClass, gapi, folderId }) => {
   const [progress, setProgress] = useState(0);
   const { addToast } = useToasts();
   const { classResources } = useSelector((state) => state.member);
+
   const assignment = currentClass?.ClassResources?.filter(
     (res) => res.type === 'assignment'
   );
 
-  const resourceAssignment = classResources[title].assignment;
-
-  //
+  const resourceAssignment = classResources[title]?.assignments;
 
   useBreadcrumbs(
     [
@@ -85,80 +84,88 @@ const AddAssignment = ({ title, course, currentClass, gapi, folderId }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resourceAssignment]);
 
-  const getFiles = useCallback(
-    async (id) => {
-      if (!gapi) return;
-      return await gapi.gapi.get(
-        null,
-        id,
-        'id, name, iconLink, webContentLink, size, webViewLink, parents'
-      );
-    },
-    [gapi]
-  );
-
-  const handleChange = ({ target: { name, value } }) => {
-    setAssData({ ...assData, [name]: value });
-  };
-
   useEffect(() => {
-    if (!resourceAssignment) {
-      if (assignment.length === 0) {
-        dispatch(getAssignments(title, null));
-      }
+    const resoureObj = resourceAssignment.reduce((acc, cur) => {
+      const splitname = cur.Key.split('/');
 
+      return { ...acc, [splitname[splitname.length - 1]]: cur };
+    }, {});
+
+    assignment &&
       assignment.forEach(async (resource) => {
-        const file = await getFiles(resource.link);
-
         dispatch(
           getAssignments(title, {
             ...resource,
+            ...resoureObj[resource.link],
             resourceId: resource.id,
-            ...file,
             comments: null,
           })
         );
       });
-    }
 
     return () => {};
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const handleChange = ({ target: { name, value } }) => {
+    setAssData({ ...assData, [name]: value });
+  };
+
   const upload = async (files) => {
     progressDialog.current.open();
-    let file;
+    const fileName = files.name;
+    let path = `Courses/${course.Course.name}/classes/${currentClass.title}/assignments`;
+
+    const type = files.type;
+    const formData = new FormData();
+
+    formData.append('file', files);
+    formData.append('path', path);
+    formData.append('fileName', fileName);
+    formData.append('mime', type);
 
     try {
-      file = await gapi.gapi.upload(files, setProgress, folderId);
+      await axiosInstance.post('file/create', formData, {
+        onUploadProgress: uploadProgress(setProgress),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      });
 
       const res = await axiosInstance.post(
         `class/assignment/${currentClass.id}`,
         {
-          link: file.id,
+          link: fileName,
         }
       );
 
       if (res) {
-        file = await getFiles(file.id);
-        file.resourceId = res.data.data.id;
+        // file = await getFiles(file.id);
+        // file.resourceId = res.data.data.id;
         setProgress(100);
-        dispatch(getAssignments(title, { ...file, ...assData }));
+        dispatch(
+          getAssignments(title, {
+            Key: `${path}/${fileName}`,
+            Size: files.size,
+            ...assData,
+            ...res.data.data,
+          })
+        );
 
         setTimeout(function () {
           progressDialog.current.close();
         }, 2000);
       }
     } catch (err) {
-      console.log(err);
       progressDialog.current.close();
+      axiosInstance.delete(
+        `/file?path=${encodeURIComponent(`${path}/${fileName}`)}`
+      );
 
       addToast('Error Uploding File', {
         appearance: 'error',
         autoDismiss: true,
       });
-
-      file && (await gapi.gapi.deleteFile(file.id));
     }
   };
 
@@ -168,14 +175,12 @@ const AddAssignment = ({ title, course, currentClass, gapi, folderId }) => {
     const resourceId = file.resourceId;
 
     try {
-      const res = await axiosInstance.delete(`class/assignment/${resourceId}`);
-      if (res) {
-        dispatch(deleteAssignmnet(title, file.id));
-        await gapi.gapi.deleteFile(file.id);
-        return true;
-      }
+      await axiosInstance.delete(`class/assignment/${resourceId}`);
+      await axiosInstance.delete(`/file?path=${encodeURIComponent(file)}`);
+
+      dispatch(deleteAssignmnet(title, file));
+      return true;
     } catch (err) {
-      console.log(err);
       addToast('Error Deleting file', {
         appearance: 'error',
         autoDismiss: true,
@@ -187,7 +192,7 @@ const AddAssignment = ({ title, course, currentClass, gapi, folderId }) => {
   const submit = async (e) => {
     e.preventDefault();
 
-    if (!resourceAssignment[0]) {
+    if (!resourceAssignment[0].id) {
       addToast('Please upload a file', {
         appearance: 'error',
         autoDismiss: true,
@@ -208,7 +213,7 @@ const AddAssignment = ({ title, course, currentClass, gapi, folderId }) => {
 
     try {
       await axiosInstance.patch(
-        `class/assignment/edit/${resourceAssignment[0].resourceId}`,
+        `class/assignment/edit/${resourceAssignment[0].id}`,
         {
           ...newData,
           link: resourceAssignment[0].link,
@@ -231,8 +236,6 @@ const AddAssignment = ({ title, course, currentClass, gapi, folderId }) => {
         autoDismiss: true,
       });
     } catch (err) {
-      console.log(err);
-
       submitBtn.current.children[0].innerHTML = 'Assign';
       submitBtn.current.classList.remove('loader');
       addToast('Unable to create assignment', {
@@ -260,7 +263,7 @@ const AddAssignment = ({ title, course, currentClass, gapi, folderId }) => {
             <Input
               placeHolder=""
               handleChange={handleChange}
-              value={assData.title}
+              value={assData?.title}
               shouldValidate={false}
               name="title"
             />
@@ -270,7 +273,7 @@ const AddAssignment = ({ title, course, currentClass, gapi, folderId }) => {
               type="textarea"
               placeHolder=""
               handleChange={handleChange}
-              value={assData.description}
+              value={assData?.description}
               shouldValidate={false}
               name="description"
             />
@@ -278,7 +281,7 @@ const AddAssignment = ({ title, course, currentClass, gapi, folderId }) => {
             <Files
               useErrorMessage={false}
               files={resourceAssignment}
-              showdrag={classResources[title]?.assignment?.length === 0}
+              showdrag={classResources[title]?.assignments?.length === 0}
               deleteFile={() => deleteDialog.current.open()}
               handleImage={upload}
             >
@@ -301,7 +304,7 @@ const AddAssignment = ({ title, course, currentClass, gapi, folderId }) => {
               type="date"
               placeHolder="Due Date"
               value={
-                moment(assData.dueDate).format(
+                moment(assData?.dueDate).format(
                   'YYYY-MM-DD'
                 ) /**moment(time, 'HH:mm').format('hh:mm A') */
               }
@@ -315,7 +318,7 @@ const AddAssignment = ({ title, course, currentClass, gapi, folderId }) => {
             <dt>Point</dt>
             <Input
               placeHolder="Point"
-              value={assData.point}
+              value={assData?.point}
               handleChange={handleChange}
               shouldValidate={false}
               name="point"
@@ -336,7 +339,10 @@ const AddAssignment = ({ title, course, currentClass, gapi, folderId }) => {
         <Confirm
           text="Are you sure?"
           onClick={deleteFile}
-          close={() => deleteDialog.current.close()}
+          close={(e) => {
+            // e.preventDefault();
+            deleteDialog.current.close();
+          }}
           closeText="Successfuly Deleted"
         />
       </Modal>

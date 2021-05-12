@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-import Joi from "@hapi/joi";
+import Joi from '@hapi/joi';
 
 export const createCourse = Joi.object().keys({
   name: Joi.string().required(),
@@ -18,6 +18,7 @@ export const createCourse = Joi.object().keys({
   list_desc: Joi.string(),
   initialSplitAmount: Joi.number(),
   finalSplitAmount: Joi.number(),
+  currency_type: Joi.string(),
   //   status: Joi.string(),
   // extLink: Joi.string().required(),
   // totalClasses: Joi.number().required(),
@@ -60,6 +61,10 @@ export const getCourseDescriptionSchema = Joi.object().keys({
   title: Joi.string(),
   description: Joi.string(),
   courseId: Joi.string(),
+});
+
+export const deleteDescriptionSchema = Joi.object().keys({
+  courseDescriptionId: Joi.string().uuid().trim(),
 });
 
 export const getAllCourseSchema = Joi.object().keys({

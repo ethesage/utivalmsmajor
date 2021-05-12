@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import NavBar from 'components/DashNav';
-import useGoogle from 'Hooks/useGoogle';
 import SideBar from 'components/SideBar';
 import Modal from 'components/Modal';
 import google from 'assets/icons/google.png';
@@ -8,9 +7,7 @@ import './style.scss';
 
 const MainView = ({ children, type }) => {
   const [open, setOpen] = useState(false);
-  const [signedIn, setSignedIn] = useState(false);
   const modalRef = useRef();
-  const { gapi, signIn } = useGoogle({ updateSignInStatus });
 
   const openBar = () => {
     setOpen(!open);
@@ -18,17 +15,6 @@ const MainView = ({ children, type }) => {
 
   const close = () => {
     setOpen(false);
-  };
-
-  function updateSignInStatus(isSignedIn) {
-    if (!isSignedIn) modalRef.current.open();
-    setSignedIn(isSignedIn);
-  }
-
-  const signin = async () => {
-    const res = await signIn();
-    modalRef.current.close();
-    setSignedIn(res);
   };
 
   useEffect(() => {
@@ -75,7 +61,7 @@ const MainView = ({ children, type }) => {
       <section className="dh-main flex justify-start items-start flex-col px-5 lg:px-16 flex-grow overflow-hidden mt-20">
         <div className="content xl:container mx-auto h-full flex-grow flex-center flex-col w-screen">
           <NavBar open={openBar} grow={open} />
-          {React.cloneElement(children, { gapi: { gapi, signedIn } })}
+          {children}
         </div>
         <div className="w-full text-center p-8">
           (c) 2020 Utiva All Rights Reserved

@@ -1,4 +1,4 @@
-export default [
+const data = [
   {
     placeHolder: 'Old password',
     name: 'oldPassword',
@@ -23,3 +23,5 @@ export default [
     required: true,
   },
 ];
+
+export default data;

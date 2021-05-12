@@ -6,7 +6,7 @@ import helpers from '../helpers';
 
 config();
 // const isProd = process.env.NODE_ENV === "production";
-const isProd = true;
+// const isProd = true;
 
 const log = debug('dev');
 const { errorStat, generateToken, verifyToken } = helpers;
@@ -87,19 +87,18 @@ module.exports.main = function easySessionMain(connect, opts) {
 
   /**
    * @Function
+   * @param {Object} req - Call back to be run if successful
    * @param {Object} res - Call back to be run if successful
-   * @param {Object} cb - Call back to be run if successful
    * @description logs out the user by destroting the user session
    * @returns {null} null
    * @memberof Helper
    */
-  Session.prototype.logout = async function logout(res, cb) {
-    this.regenerate((err) => (err ? new Error(err) : cb));
-    res.cookie('uti_va', '', {
-      maxAge: 0,
-      sameSite: true,
-      secure: false,
-    });
+  Session.prototype.logout = async function logout(req, res) {
+    if (req) {
+      req.session = null;
+      res.clearCookie('uti_va', { domain: process.env.domain });
+      res.clearCookie('utiva', { domain: process.env.domain });
+    }
   };
 
   /**

@@ -1,11 +1,12 @@
 /* eslint-disable import/prefer-default-export */
-import Joi from "@hapi/joi";
+import Joi from '@hapi/joi';
 
 export const submitAssignmentSchema = Joi.object().keys({
   classResourcesId: Joi.string().uuid().trim().required(),
   classId: Joi.string().uuid().trim().required(),
   resourceLink: Joi.string().trim().required(),
   courseCohortId: Joi.string().uuid().trim().required(),
+  size: Joi.string().required(),
 });
 
 export const gradeAssignmentSchema = Joi.object().keys({

@@ -1,4 +1,4 @@
-export default [
+const data = [
   { name: 'Jan', value: 0 },
   { name: 'Feb', value: 0 },
   { name: 'Mar', value: 0 },
@@ -12,3 +12,5 @@ export default [
   { name: 'Nov', value: 0 },
   { name: 'Dec', value: 0 },
 ];
+
+export default data;

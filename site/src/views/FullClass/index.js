@@ -4,6 +4,7 @@ import { NavLink, useParams, useLocation, useHistory } from 'react-router-dom';
 import GetCurrentCourse from 'Hooks/getCurrentCourse';
 import Loader from 'components/Loading';
 import Classes from 'components/Classes';
+import PaymentComplete from 'components/CompletePayment';
 // import ResourceBtn from 'components/ResourceButton';
 import useBreadcrumbs from 'Hooks/useBreadCrumbs';
 import NavBar from 'components/CourseNav';
@@ -57,7 +58,6 @@ function FullClass({ gapi }) {
   const data = currentCourse?.Course?.Classes.find(
     (classrum) => classrum.id === classroom
   );
-
   // const ass = data?.ClassResources.filter((res) => res.type === 'assignment');
 
   return (
@@ -98,25 +98,11 @@ function FullClass({ gapi }) {
                     addAssignment={() => {
                       history.push(`${pathname}/add-assignment`);
                     }}
+                    courseCohortId={currentCourse.CourseCohort.id}
                     editClass={() => setEditClass(!editClass)}
+                    completedPayment={data && !(Object.keys(data).length === 3)}
                   />
-                  {/* {isStudent && ass.length > 0 && (
-                    <div className="btns">
-                      <div className="reg_text">
-                        <h4>Activities</h4>
-                        <div className="btn_sec_con flex-row j-start">
-                          <div className="btn_sec">
-                            <ResourceBtn
-                              img={assignment}
-                              text="Submit Assignment"
-                              color="approved"
-                              link={`/courses/assignment/${courseId}/${classroom}`}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )} */}
+
                   <div className="prev_courses"></div>
                 </>
               )}
@@ -126,13 +112,21 @@ function FullClass({ gapi }) {
                     title={data?.title}
                     course={currentCourse}
                     currentClass={data}
-                    gapi={gapi}
                     isStudent={isStudent}
-                    folderId={currentCourse?.CourseCohort?.folderId}
                   />
                 </>
               )}
             </div>
+
+            <PaymentComplete
+              paymentComplete={data && !(Object.keys(data).length === 3)}
+              details={{
+                ...currentCourse,
+                courseCohort: [currentCourse.courseCohort],
+                type: 'paid',
+              }}
+              full
+            />
           </Layout>
         )}
       </div>

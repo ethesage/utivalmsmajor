@@ -2,12 +2,11 @@
 /* eslint-disable import/prefer-default-export */
 // import sequelize from "sequelize";
 import { paginate, calculateLimitAndOffset } from 'paginate-info';
-import sequelize from 'sequelize';
 import models from '../database/models';
 import helpers from '../helpers';
 // import  from "../helpers"
 
-const { successStat, errorStat, uploadImage } = helpers;
+const { successStat, errorStat, uploadImage, createFileFolder } = helpers;
 
 // const { Op, literal } = sequelize;
 
@@ -21,7 +20,7 @@ const { successStat, errorStat, uploadImage } = helpers;
  */
 
 export const create = async (req, res) => {
-  const { courseDescription } = req.body.course;
+  const { courseDescription, name } = req.body.course;
 
   const { id } = req.session.user;
 
@@ -62,6 +61,8 @@ export const create = async (req, res) => {
       ignoreDuplicates: true,
     });
   }
+
+  await createFileFolder(`Course/${name}/classes/`);
 
   return successStat(res, 201, 'data', {
     course,
@@ -238,6 +239,22 @@ export const updateCourseDescription = async (req, res) => {
   return successStat(res, 200, 'data', courseDescription);
 };
 
+export const deleteCourseDescription = async (req, res) => {
+  const { courseDescriptionId } = req.body.course;
+
+  const courseDescription = await models.CourseDescription.findOne({
+    where: { id: courseDescriptionId },
+  });
+
+  if (!courseDescription) {
+    return errorStat(res, 404, 'Course Description not found');
+  }
+
+  await courseDescription.destroy();
+
+  return successStat(res, 200, 'message', 'Successfully deleted');
+};
+
 export const createCourseDescription = async (req, res) => {
   const courseDescription = await models.CourseDescription.create(
     req.body.course
@@ -398,7 +415,7 @@ export const addCourseCohortProgress = async (req, res) => {
 
 export const getCohortCourse = async (req, res) => {
   const { courseCohortId } = req.params;
-  // console.log()
+  const { iscourseUrl } = req.query;
   // const { offset, limit } = calculateLimitAndOffset(currentPage, pageLimit);
   // const id = req?.session?.user?.id ;
   let user;
@@ -410,12 +427,34 @@ export const getCohortCourse = async (req, res) => {
   //   limit,
   // };
 
+  let couseCohortWhereClause = {};
+  let couseWhereClause = {};
+
+  if (iscourseUrl) {
+    // note that what was sent here was the course in place of the cpursecohortId
+    couseWhereClause = {
+      where: {
+        id: courseCohortId,
+      },
+    };
+  } else {
+    couseCohortWhereClause = {
+      where: { id: courseCohortId },
+    };
+  }
+
   const query = user
     ? [
         {
           model: models.CourseCohort,
-          where: { id: courseCohortId },
+          order: [['createdAt', 'DESC']],
+          limit: 1,
+          ...couseCohortWhereClause,
           attributes: ['id', 'paymentType'],
+        },
+        {
+          model: models.CourseDescription,
+          attributes: ['courseId', 'title', 'description'],
         },
         {
           model: models.StudentCourse,
@@ -426,32 +465,26 @@ export const getCohortCourse = async (req, res) => {
     : [
         {
           model: models.CourseCohort,
-          where: { id: courseCohortId },
-          // order: [['createdAt']],
-          // limit: 1,
+          ...couseCohortWhereClause,
+          order: [['createdAt', 'DESC']],
+          limit: 1,
           attributes: ['id', 'paymentType'],
+        },
+        {
+          model: models.CourseDescription,
+          attributes: ['courseId', 'title', 'description'],
         },
       ];
 
   const rows = await models.Course.findOne({
     // ...sqlQueryMap,
     // where: { category },
+    ...couseWhereClause,
     include: [...query],
   });
-
-  const trainers = await models.sequelize.query(
-    `Select DISTINCT on ("User.id") "User"."id" AS "User.id", "CohortTrainer"."id", "User"."firstName" AS "User.firstName",
-    "User"."lastName" AS "User.lastName", "User"."profilePic" AS "User.profilePic",
-    "User"."bio" AS "User.bio" from "CohortTrainers" as "CohortTrainer" join "Users" as "User" ON "CohortTrainer"."userId" = "User"."id"
-    where "CohortTrainer"."courseCohortId" = '${courseCohortId}' AND "CohortTrainer"."courseId" = '${rows.id}'`,
-    {
-      nest: true,
-    }
-  );
-
   // if (!rows[0]) return errorStat(res, 404, "Course Not Found");
 
   // const paginationMeta = paginate(currentPage, count, rows, pageLimit);
 
-  return successStat(res, 200, 'data', { rows, CohortTrainers: trainers });
+  return successStat(res, 200, 'data', rows);
 };

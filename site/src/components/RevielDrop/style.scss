@@ -1,4 +1,4 @@
-@import "../../media";
+@import '../../media';
 
 .drop-rev {
   .drop-open {
@@ -36,7 +36,7 @@
   &.showArrow {
     > * {
       &:after {
-        content: "\25BC";
+        content: '\25BC';
         font-size: 0.8em;
         color: color(theme);
         position: absolute;
@@ -48,7 +48,7 @@
       &.active {
         border: none;
         &:after {
-          content: "\25B2";
+          content: '\25B2';
         }
       }
     }

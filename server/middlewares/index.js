@@ -16,6 +16,7 @@ import {
   getCourseSchema,
   getAllCourseSchema,
   getCourseDescriptionSchema,
+  deleteDescriptionSchema,
   getAllMainCourseSchema,
   addCourseCohortProgressSchema,
 } from './validators/schemas/course';
@@ -47,6 +48,7 @@ import {
   createFileSchema,
   getFileSchema,
   updateFileSchema,
+  getAllFileSchema
 } from './validators/schemas/files';
 
 import {
@@ -75,7 +77,7 @@ import {
   getCouponSchema,
   useCouponSchema,
   updateCouponSchema,
-  deleteCouponSchema 
+  deleteCouponSchema,
 } from './validators/schemas/coupon';
 
 import { idSchema, deleteStudentSchema } from './validators/schemas/general';
@@ -146,5 +148,7 @@ export default {
   getCouponSchema,
   useCouponSchema,
   updateCouponSchema,
-  deleteCouponSchema 
+  deleteCouponSchema,
+  deleteDescriptionSchema,
+  getAllFileSchema
 };

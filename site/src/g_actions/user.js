@@ -30,7 +30,6 @@ export const login = () => async (dispatch) => {
 
     dispatch(doneloading());
   } catch (err) {
-    console.log(err);
     dispatch(doneloading());
   }
 

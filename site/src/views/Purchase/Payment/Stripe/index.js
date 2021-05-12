@@ -9,7 +9,7 @@ import sstripe from 'assets/icons/stripe.svg';
 // recreating the `Stripe` object on every render.
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_API_KEY);
 
-const Stripe = ({ paymentAmount }) => {
+const Stripe = ({ paymentAmount, back }) => {
   const dispatch = useDispatch();
   const loadsstripe = useRef();
   const { courses } = useSelector((state) => state);
@@ -17,6 +17,7 @@ const Stripe = ({ paymentAmount }) => {
   const [, rate] = getCurrencyRate();
 
   const handleClick = async (event) => {
+    back();
     loadsstripe.current.open();
     // Get Stripe.js instance
     const stripe = await stripePromise;
@@ -41,8 +42,6 @@ const Stripe = ({ paymentAmount }) => {
       (await stripe.redirectToCheckout({
         sessionId: response.data.id,
       }));
-
-    // console.log(result, "......");
 
     if (result?.error) {
       // If `redirectToCheckout` fails due to a browser or network
