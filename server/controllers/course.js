@@ -437,6 +437,12 @@ export const getCohortCourse = async (req, res) => {
         id: courseCohortId,
       },
     };
+
+    // add the order and limit when its a single course
+    couseCohortWhereClause = {
+      order: [['createdAt', 'DESC']],
+      limit: 1,
+    };
   } else {
     couseCohortWhereClause = {
       where: { id: courseCohortId },
@@ -447,8 +453,6 @@ export const getCohortCourse = async (req, res) => {
     ? [
         {
           model: models.CourseCohort,
-          order: [['createdAt', 'DESC']],
-          limit: 1,
           ...couseCohortWhereClause,
           attributes: ['id', 'paymentType'],
         },
@@ -466,8 +470,6 @@ export const getCohortCourse = async (req, res) => {
         {
           model: models.CourseCohort,
           ...couseCohortWhereClause,
-          order: [['createdAt', 'DESC']],
-          limit: 1,
           attributes: ['id', 'paymentType'],
         },
         {
