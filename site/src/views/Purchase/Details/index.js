@@ -44,15 +44,11 @@ const Details = ({ proceed, match, set, setPaymentAmount }) => {
       // add the user to the used coupon table
     }
 
-    if (value.message === 'Not Enrolled') {
-      set(match.params.courseCohortId);
-      setPaymentAmount(amountToPay - couponDetails);
     if (value?.message === 'Not Enrolled') {
       set(purchaseCourse.CourseCohorts[0].id);
       setPaymentAmount(amountToPay - couponDetails);
       proceed(1);
     } else push(`/courses/overview/${purchaseCourse.CourseCohorts[0].id}`);
-    // /
   };
 
   useEffect(() => {
@@ -125,13 +121,13 @@ const Details = ({ proceed, match, set, setPaymentAmount }) => {
     setLoadingCoupon(true);
 
     try {
-      // const data = await axiosInstance.get('/coupon_details/{couponValue}')
-      const data = { value: 7000 };
+      const data = await axiosInstance.get('/coupon_details/{couponValue}');
+      // const data = { value: 7000 };
 
-      setTimeout(() => {
-        setCouponDetails(data.value > amountToPay ? amountToPay : data.value);
-        setLoadingCoupon(false);
-      }, 3000);
+      // setTimeout(() => {
+      setCouponDetails(data.value > amountToPay ? amountToPay : data.value);
+      setLoadingCoupon(false);
+      // }, 3000);
     } catch (err) {
       addToast(
         err.response && err.response.status === 409
@@ -211,58 +207,61 @@ const Details = ({ proceed, match, set, setPaymentAmount }) => {
                   {chooseCurrency(purchaseCourse?.cost)}
                 </h1>
 
-                {purchaseCourse?.CourseCohorts[0].paymentType === 'split' && purchaseCourse?.type !== 'free' && (
-                  // {true && (
-                  <div className="summary split_sec">
-                    <h3 className="font-semibold text-xs mb-2.5">
-                      How do you want to Pay?
-                    </h3>
-                    <div
-                      className="sel-p-type relative"
-                      data-active={paymentType === 'full'}
-                      onClick={() => setPaymentType('full')}
-                    >
-                      <small>Full Payment</small>
-                      <p className="text-sm">
-                        You will pay{' '}
-                        <strong>{chooseCurrency(purchaseCourse?.cost)}</strong>{' '}
-                        now
-                      </p>
-                      <div className="absolute ch_mk top-2.5 right-2.5 border border-gray-400 w-5 h-5 flex-center rounded-full">
-                        <img
-                          src={checkMark}
-                          alt="check mark"
-                          className="hidden"
-                        />
+                {purchaseCourse?.CourseCohorts[0].paymentType === 'split' &&
+                  purchaseCourse?.type !== 'free' && (
+                    // {true && (
+                    <div className="summary split_sec">
+                      <h3 className="font-semibold text-xs mb-2.5">
+                        How do you want to Pay?
+                      </h3>
+                      <div
+                        className="sel-p-type relative"
+                        data-active={paymentType === 'full'}
+                        onClick={() => setPaymentType('full')}
+                      >
+                        <small>Full Payment</small>
+                        <p className="text-sm">
+                          You will pay{' '}
+                          <strong>
+                            {chooseCurrency(purchaseCourse?.cost)}
+                          </strong>{' '}
+                          now
+                        </p>
+                        <div className="absolute ch_mk top-2.5 right-2.5 border border-gray-400 w-5 h-5 flex-center rounded-full">
+                          <img
+                            src={checkMark}
+                            alt="check mark"
+                            className="hidden"
+                          />
+                        </div>
+                      </div>
+                      <div
+                        className="sel-p-type relative"
+                        data-active={paymentType === 'split'}
+                        onClick={() => setPaymentType('split')}
+                      >
+                        <small>Part Payment</small>
+                        <p className="text-sm">
+                          You will pay{' '}
+                          <strong>
+                            {chooseCurrency(purchaseCourse?.initialSplitAmount)}
+                          </strong>{' '}
+                          now and{' '}
+                          <strong>
+                            {chooseCurrency(purchaseCourse?.finalSplitAmount)}
+                          </strong>{' '}
+                          later
+                        </p>
+                        <div className="absolute ch_mk top-2.5 right-2.5 border border-gray-400  w-5 h-5 flex-center rounded-full">
+                          <img
+                            src={checkMark}
+                            alt="check mark"
+                            className="hidden"
+                          />
+                        </div>
                       </div>
                     </div>
-                    <div
-                      className="sel-p-type relative"
-                      data-active={paymentType === 'split'}
-                      onClick={() => setPaymentType('split')}
-                    >
-                      <small>Part Payment</small>
-                      <p className="text-sm">
-                        You will pay{' '}
-                        <strong>
-                          {chooseCurrency(purchaseCourse?.initialSplitAmount)}
-                        </strong>{' '}
-                        now and{' '}
-                        <strong>
-                          {chooseCurrency(purchaseCourse?.finalSplitAmount)}
-                        </strong>{' '}
-                        later
-                      </p>
-                      <div className="absolute ch_mk top-2.5 right-2.5 border border-gray-400  w-5 h-5 flex-center rounded-full">
-                        <img
-                          src={checkMark}
-                          alt="check mark"
-                          className="hidden"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                )}
+                  )}
 
                 {amountToPay && (
                   <div className="summary mt-3">

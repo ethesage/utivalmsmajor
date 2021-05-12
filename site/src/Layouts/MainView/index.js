@@ -1,13 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import NavBar from 'components/DashNav';
 import SideBar from 'components/SideBar';
-import Modal from 'components/Modal';
-import google from 'assets/icons/google.png';
 import './style.scss';
 
 const MainView = ({ children, type }) => {
   const [open, setOpen] = useState(false);
-  const modalRef = useRef();
 
   const openBar = () => {
     setOpen(!open);
@@ -37,24 +34,6 @@ const MainView = ({ children, type }) => {
 
   return (
     <main className="dashboard flex justify-center items-start h-full w-full relative bg-v_light">
-      <Modal ref={modalRef} useButton={false}>
-        <section className="g_signup flex-col flex-center shadow w-screen mx-3.5 h-72 max-w-sm rounded-lg p-7 bg-white">
-          <p className="text-sm text-txt mb-5">
-            To better participate in this course please signin to access google
-            drive materials for this course
-          </p>
-          <p className="text-sm text-txt">
-            click on the button below to signin.
-          </p>
-          <button
-            className="flex-center bg-light w-full px-5 py-2.5 rounded-md shadow mt-5"
-            onClick={signin}
-          >
-            <img src={google} alt="google" className="w-6 mr-2.5 md:mr-5" />
-            <p className="text-txt text-xs md:text-sm">Google</p>
-          </button>
-        </section>
-      </Modal>
       <aside className={`dh-aside ${open ? ' open' : ''}`}>
         <SideBar close={close} type={type} />
       </aside>

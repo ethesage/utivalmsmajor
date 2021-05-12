@@ -5,7 +5,7 @@ import { checkout } from 'g_actions/courses';
 import paystack from 'assets/icons/Flutterwave.png';
 import { addStudentCourse, addTransaction } from 'g_actions/mainCourse';
 
-const FlutterPay = ({ done, paymentAmount }) => {
+const FlutterPay = ({ done, paymentAmount, back }) => {
   const dispatch = useDispatch();
   const { auth, courses } = useSelector((state) => state);
 
@@ -95,4 +95,4 @@ const FlutterPay = ({ done, paymentAmount }) => {
   );
 };
 
-export default Flutterwave;
+export default FlutterPay;

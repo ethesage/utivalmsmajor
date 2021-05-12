@@ -3,22 +3,12 @@ import { Route, Switch, useHistory } from 'react-router-dom';
 import LazyLoad from 'components/SiteLoader';
 import { useSelector } from 'react-redux';
 import Layout from 'Layouts/MainView';
-<<<<<<< HEAD
-import Courses from './Courses';
-import FAQ from '../FAQ';
-import Home from './Home';
-import Files from '../Files';
-import Settings from '../Settings';
-// import NavBar from 'components/CourseNav';
-=======
-import './style.scss';
 
 const Courses = lazy(() => import('./Courses'));
 const FAQ = lazy(() => import('../FAQ'));
 const Home = lazy(() => import('./Home'));
 const Files = lazy(() => import('../Files'));
 const Settings = lazy(() => import('../Settings'));
->>>>>>> develop
 
 const Dashboard = () => {
   const { isAdmin } = useSelector((state) => state.auth);

@@ -72,7 +72,6 @@ export const check = (courseCohortId) => async (dispatch) => {
 
 export const checkout = (courseCohortId, amount) => async (dispatch) => {
   let checkout;
-<<<<<<< HEAD
   try {
     checkout = await axiosInstance.post(
       `/checkout/quickcheckout/${courseCohortId}`,
@@ -81,14 +80,6 @@ export const checkout = (courseCohortId, amount) => async (dispatch) => {
   } catch (error) {
     return error;
   }
-=======
-
-  checkout = await axiosInstance.post(
-    `/checkout/quickcheckout/${courseCohortId}`,
-    { amount }
-  );
-
->>>>>>> develop
   return checkout;
 };
 
@@ -119,29 +110,24 @@ export const purchaseCourse = (course) => async (dispatch) => {
   });
 };
 
-export const addPurchaseCourse = (courseCohortId, iscourseUrl) => async (
-  dispatch
-) => {
-  let p_course;
-  try {
-    p_course = await axiosInstance.get(
-      `/course/getCohortCourse/${courseCohortId}${
-        iscourseUrl ? `?iscourseUrl=${iscourseUrl}` : ''
-      }`
-    );
-  } catch (error) {
-    return error;
-  }
+export const addPurchaseCourse =
+  (courseCohortId, iscourseUrl) => async (dispatch) => {
+    let p_course;
+    try {
+      p_course = await axiosInstance.get(
+        `/course/getCohortCourse/${courseCohortId}${
+          iscourseUrl ? `?iscourseUrl=${iscourseUrl}` : ''
+        }`
+      );
+    } catch (error) {
+      return error;
+    }
 
-  dispatch({
-    type: 'PURCHASE_COURSE',
-<<<<<<< HEAD
-    payload: p_course.data.data && {
-      ...p_course.data.data.rows,
-      CohortTrainers: p_course.data.data.CohortTrainers,
-    },
-=======
-    payload: p_course.data.data,
->>>>>>> develop
-  });
-};
+    dispatch({
+      type: 'PURCHASE_COURSE',
+      payload: p_course.data.data && {
+        ...p_course.data.data.rows,
+        CohortTrainers: p_course.data.data.CohortTrainers,
+      },
+    });
+  };
