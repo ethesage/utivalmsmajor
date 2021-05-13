@@ -50,6 +50,7 @@ const extras = [
 ];
 
 const Footer = () => {
+
   return (
     <>
       <img src={buildings} alt="" className="buildings" />
