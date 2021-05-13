@@ -94,7 +94,7 @@ const Footer = () => {
             </div>
           </div>
           <div className="reserved flex-row">
-            <p>&copy; {new Date().getFullYear()} 2021 Utiva. All right reserved</p>
+            <p>&copy; {new Date().getFullYear()} Utiva. All right reserved</p>
           </div>
         </div>
       </section>
