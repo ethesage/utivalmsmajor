@@ -190,7 +190,7 @@ export const updateUser = async (req, res) => {
 
   const data = req.body.user;
 
-  if (data.profilePic && !data.profilePic.includes('media')) {
+  if (data.profilePic && typeof data.profilePic === 'object') {
     let fileName =
       user.profilePic &&
       user.profilePic.split('https://utiva-app.s3.amazonaws.com/media/')[1];

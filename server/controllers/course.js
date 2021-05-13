@@ -194,7 +194,7 @@ export const updateCourse = async (req, res) => {
 
   if (
     req.body.course.thumbnail &&
-    !req.body.course.thumbnail.includes('media')
+    typeof req.body.course.thumbnail === 'object'
   ) {
     let fileName =
       course.thumbnail &&

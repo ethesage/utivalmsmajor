@@ -1,3 +1,4 @@
+/* eslint-disable newline-per-chained-call */
 import Joi from '@hapi/joi';
 
 export const signUpSchema = Joi.object().keys({
@@ -35,7 +36,7 @@ export const loginSchema = Joi.object({
   firstName: Joi.string(),
   lastName: Joi.string(),
   phoneNumber: Joi.string(),
-  profilePic: Joi.string(),
+  profilePic: Joi.alternatives().try(Joi.string(), Joi.object().keys()),
   type: Joi.string(),
 });
 
@@ -56,7 +57,7 @@ export const updateUserSchema = Joi.object().keys({
   bio: Joi.string(),
   phoneNumber: Joi.number(),
   linkedin: Joi.string().trim(),
-  profilePic: Joi.string(),
+  profilePic: Joi.alternatives().try(Joi.string(), Joi.object().keys()),
   occupation: Joi.string().trim(),
   firstentry: Joi.boolean(),
 });
