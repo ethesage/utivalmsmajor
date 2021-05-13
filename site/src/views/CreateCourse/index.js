@@ -1,17 +1,17 @@
-import React, { useRef, useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { useToasts } from "react-toast-notifications";
-import { axiosInstance, toBase64 } from "helpers";
-import Loader from "components/Loading";
-import { addCourse, editCourse } from "g_actions/admin";
-import getCurrentCourse from "Hooks/getCCAdmin";
-import useInput from "Hooks/useInput";
-import Nav from "components/InnerHeader";
-import data from "data/createCourse";
-import Button from "components/Button";
-import Input from "components/InputType";
-import "./style.scss";
+import React, { useRef, useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useToasts } from 'react-toast-notifications';
+import { axiosInstance, toBase64 } from 'helpers';
+import Loader from 'components/Loading';
+import { addCourse, editCourse } from 'g_actions/admin';
+import getCurrentCourse from 'Hooks/getCCAdmin';
+import useInput from 'Hooks/useInput';
+import Nav from 'components/InnerHeader';
+import data from 'data/createCourse';
+import Button from 'components/Button';
+import Input from 'components/InputType';
+import './style.scss';
 
 const CreateCourse = ({ edit }) => {
   const submitButton = useRef();
@@ -29,7 +29,7 @@ const CreateCourse = ({ edit }) => {
 
   useEffect(() => {
     (async () => {
-      const selects = await axiosInstance.get("/admin/cat-names");
+      const selects = await axiosInstance.get('/admin/cat-names');
 
       setCategories(selects.data.data.categories);
       setLevels(selects.data.data.levels);
@@ -40,57 +40,54 @@ const CreateCourse = ({ edit }) => {
 
   const text = edit
     ? {
-        loading: "Editing...",
-        reg: "Edit",
+        loading: 'Editing...',
+        reg: 'Edit',
       }
     : {
-        loading: "Creating...",
-        reg: "Create",
+        loading: 'Creating...',
+        reg: 'Create',
       };
 
-  const [
-    handleSubmit,
-    handleChange,
-    inputTypes,
-    validateSelf,
-    setInputTypes,
-  ] = useInput({
-    inputs: data,
-    submitButton,
-    initials: courseId
-      ? currentCourse || { list_desc: "Day" }
-      : {
-          list_desc: "Day",
-          initialSplitAmount: "0",
-          finalSplitAmount: "0",
-          currency_type: "local",
-        },
-    btnText: text,
-    cb: async (inputs) => {
-      const formData = new FormData();
+  const [handleSubmit, handleChange, inputTypes, validateSelf, setInputTypes] =
+    useInput({
+      inputs: data,
+      submitButton,
+      initials: courseId
+        ? currentCourse || { list_desc: 'Day' }
+        : {
+            list_desc: 'Day',
+            initialSplitAmount: '0',
+            finalSplitAmount: '0',
+            currency_type: 'local',
+          },
+      btnText: text,
+      cb: async (inputs) => {
+        const formData = new FormData();
 
-      Object.keys(inputs).forEach((input) =>
-        formData.append(input, inputs[input])
-      );
+        Object.keys(inputs).forEach((input) =>
+          formData.append(input, inputs[input])
+        );
 
-      const slug = edit ? `/course/update/${courseId}` : "/course/create";
-      const method = edit ? "patch" : "post";
+        const slug = edit ? `/course/update/${courseId}` : '/course/create';
+        const method = edit ? 'patch' : 'post';
 
-      const resp = await axiosInstance[method](slug, formData);
+        const resp = await axiosInstance[method](slug, formData);
 
-      addToast(edit ? "Successfully Edited" : `Successfully Created`, {
-        appearance: "success",
-        autoDismiss: true,
-      });
+        addToast(edit ? 'Successfully Edited' : `Successfully Created`, {
+          appearance: 'success',
+          autoDismiss: true,
+        });
 
-      submitButton.current.children[0].innerHTML = text.reg;
-      submitButton.current.classList.remove("loader");
+        submitButton.current.children[0].innerHTML = text.reg;
+        submitButton.current.classList.remove('loader');
 
-      edit
-        ? dispatch(editCourse(resp.data.data))
-        : dispatch(addCourse({ ...resp.data.data.course, CourseCohorts: [] }));
-    },
-  });
+        edit
+          ? dispatch(editCourse(resp.data.data))
+          : dispatch(
+              addCourse({ ...resp.data.data.course, CourseCohorts: [] })
+            );
+      },
+    });
 
   useEffect(() => {
     if (!currentCourse) return;
@@ -101,7 +98,7 @@ const CreateCourse = ({ edit }) => {
       Object.keys(inputTypes).reduce(
         (acc, input) => ({
           ...acc,
-          [input]: currentCourse[input] ? currentCourse[input] : "",
+          [input]: currentCourse[input] ? currentCourse[input] : '',
         }),
         {}
       )
@@ -116,7 +113,7 @@ const CreateCourse = ({ edit }) => {
     const _value = await toBase64(files[0]);
     setImgSrc(_value);
 
-    handleChange({ target: { name: "thumbnail", value: _value } });
+    handleChange({ target: { name: 'thumbnail', value: files[0] } });
   };
 
   const selects = {
@@ -139,7 +136,7 @@ const CreateCourse = ({ edit }) => {
   return (
     <section className="cre_cx">
       <Nav>
-        <h3 className="cx_hdr">{edit ? "Edit Course" : "Create New Course"}</h3>
+        <h3 className="cx_hdr">{edit ? 'Edit Course' : 'Create New Course'}</h3>
       </Nav>
 
       <form className="">
@@ -258,7 +255,7 @@ const CreateCourse = ({ edit }) => {
               id="image_profile"
               name="thumbnail"
               accept="image/png, image/jpeg"
-              style={{ display: "none" }}
+              style={{ display: 'none' }}
               onChange={image_handler}
             />
           </div>
@@ -268,7 +265,7 @@ const CreateCourse = ({ edit }) => {
           btnRef={submitButton}
           onClick={handleSubmit}
           className="s_btn flex-row mx-auto"
-          text={edit ? "Edit" : "Create"}
+          text={edit ? 'Edit' : 'Create'}
         />
       </form>
     </section>

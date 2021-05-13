@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useToasts } from 'react-toast-notifications';
+import imageCompression from 'browser-image-compression';
 import axois from 'axios';
 import { axiosInstance, toBase64 } from 'helpers';
 import useInput from 'Hooks/useInput';
@@ -164,8 +165,15 @@ const Profile = () => {
   const image_handler = async (e) => {
     const { files } = e.target;
     const _value = await toBase64(files[0]);
+    const prevImg = imgSrc;
     setImgSrc(_value);
     setModal(true);
+    open();
+    setProgress(0);
+
+    const options = {
+      maxSizeMB: 2, // (default: Number.POSITIVE_INFINITY)
+    };
 
     const config = {
       onUploadProgress: function (progressEvent) {
@@ -176,21 +184,33 @@ const Profile = () => {
       },
     };
 
-    let formData = new FormData();
-    formData.append('profilePic', files[0]);
+    imageCompression(files[0], options)
+      .then(async function (compressedFile) {
+        let formData = new FormData();
+        formData.append('profilePic', compressedFile);
 
-    try {
-      const response = await axiosInstance.patch(
-        '/user/update',
-        formData,
-        config
-      );
-      if (response) {
-        setProgress(100);
-        dispatch(login());
-        modalRef.current && modalRef.current.close();
-      }
-    } catch (err) {}
+        const response = await axiosInstance.patch(
+          '/user/update',
+          formData,
+          config
+        );
+
+        if (response) {
+          setProgress(100);
+          dispatch(login());
+          modalRef.current && modalRef.current.close();
+        }
+      })
+      .catch(function (error) {
+        modalRef.current.close();
+        document.querySelector('#image_profile').value = '';
+
+        addToast(`An error occured, please retry`, {
+          appearance: 'error',
+          autoDismiss: true,
+        });
+        setImgSrc(prevImg);
+      });
   };
 
   return (
