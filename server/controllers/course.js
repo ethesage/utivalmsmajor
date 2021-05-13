@@ -485,7 +485,7 @@ export const getCohortCourse = async (req, res) => {
     include: [...query],
   });
 
-  // if (!rows[0]) return errorStat(res, 404, "Course Not Found");
+  if (!rows) return errorStat(res, 404, 'Course Not Found');
 
   // const paginationMeta = paginate(currentPage, count, rows, pageLimit);
 

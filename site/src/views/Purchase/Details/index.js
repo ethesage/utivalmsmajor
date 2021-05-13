@@ -9,21 +9,21 @@ import { check, checkoutCourse, addPurchaseCourse } from 'g_actions/courses';
 import Experience from 'assets/icons/experience';
 import Clock from 'assets/icons/clock';
 import Button from 'components/Button';
-import { format_comma, axiosInstance } from 'helpers';
+import { format_comma, axiosInstance, validate } from 'helpers';
 import loading_icon from 'assets/loader.gif';
 import checkMark from 'assets/check_mark.png';
 import Spinner from 'components/Spinner';
 import './style.scss';
 import TrainerCardList from 'components/TrainerCardList';
 
-const Details = ({ proceed, match, set, setPaymentAmount }) => {
+const Details = ({ proceed, match, set, setPaymentAmount, setUsedCoupon }) => {
   const { checkoutData, purchaseCourse } = useSelector(
     (state) => state.courses
   );
   const { push } = useHistory();
   const dispatch = useDispatch();
   const btnRef = useRef();
-  const { addToast } = useToasts;
+  const { addToast } = useToasts();
   const location = useLocation();
 
   const params = new URLSearchParams(location.search);
@@ -33,20 +33,21 @@ const Details = ({ proceed, match, set, setPaymentAmount }) => {
   const [paymentType, setPaymentType] = useState();
   const [amountToPay, setAmountToPay] = useState();
   const [enterCoupon, setEnterCoupon] = useState(false);
-  const [couponDetails, setCouponDetails] = useState(0);
+  const [couponDetails, setCouponDetails] = useState({
+    code: '',
+    value: 0,
+  });
   const [loadingCoupon, setLoadingCoupon] = useState(false);
+  const [validateSelf, setValidateSef] = useState(false);
 
   const checkout = async () => {
     btnRef.current.classList.add('loader');
     const value = await dispatch(check(purchaseCourse.CourseCohorts[0].id));
 
-    if (couponDetails) {
-      // add the user to the used coupon table
-    }
-
     if (value?.message === 'Not Enrolled') {
       set(purchaseCourse.CourseCohorts[0].id);
-      setPaymentAmount(amountToPay - couponDetails);
+      setPaymentAmount(amountToPay - couponDetails.value);
+      if (couponDetails.value > 0) setUsedCoupon(couponDetails);
       proceed(1);
     } else push(`/courses/overview/${purchaseCourse.CourseCohorts[0].id}`);
   };
@@ -117,17 +118,21 @@ const Details = ({ proceed, match, set, setPaymentAmount }) => {
 
   const fetchCouponDetails = async (e) => {
     e.preventDefault();
-    setCouponDetails(0);
+
+    if (!validate(couponDetails.code, 'coupon')) {
+      return setValidateSef(true);
+    }
+
     setLoadingCoupon(true);
 
     try {
-      const data = await axiosInstance.get('/coupon_details/{couponValue}');
-      // const data = { value: 7000 };
+      const data = await axiosInstance.get(`/coupon/${couponDetails.code}`);
 
-      // setTimeout(() => {
-      setCouponDetails(data.value > amountToPay ? amountToPay : data.value);
+      setCouponDetails((prev) => ({
+        ...prev,
+        value: data.value > amountToPay ? amountToPay : data.value,
+      }));
       setLoadingCoupon(false);
-      // }, 3000);
     } catch (err) {
       addToast(
         err.response && err.response.status === 409
@@ -140,6 +145,10 @@ const Details = ({ proceed, match, set, setPaymentAmount }) => {
       );
       setLoadingCoupon(false);
     }
+  };
+
+  const handleChange = ({ target }) => {
+    setCouponDetails((prev) => ({ ...prev, code: target.value }));
   };
 
   return purchaseCourse && !loading ? (
@@ -282,7 +291,7 @@ const Details = ({ proceed, match, set, setPaymentAmount }) => {
                           <p>Discount</p>
                           <p>
                             {couponDetails
-                              ? `- ${chooseCurrency(couponDetails)}`
+                              ? `- ${chooseCurrency(couponDetails.value)}`
                               : '-'}
                           </p>
                         </div>
@@ -291,7 +300,9 @@ const Details = ({ proceed, match, set, setPaymentAmount }) => {
                           <p className="font-semibold">
                             {purchaseCourse?.type === 'free'
                               ? 'Free'
-                              : chooseCurrency(amountToPay - couponDetails)}
+                              : chooseCurrency(
+                                  amountToPay - couponDetails.value
+                                )}
                           </p>
                         </div>
                       </div>
@@ -300,8 +311,7 @@ const Details = ({ proceed, match, set, setPaymentAmount }) => {
                           className="mb-2 text-xs mt-2 text-theme underline cursor-pointer"
                           onClick={toggleCoupon}
                         >
-                          Enter Coupon{' '}
-                          {enterCoupon && <span>(Press enter to apply)</span>}
+                          Enter Coupon
                           {loadingCoupon && (
                             <img
                               src={loading_icon}
@@ -312,8 +322,24 @@ const Details = ({ proceed, match, set, setPaymentAmount }) => {
                         </p>
 
                         {enterCoupon && (
-                          <form onSubmit={fetchCouponDetails}>
-                            <Input name="coupon" placeHolder="" />
+                          <form>
+                            <Input
+                              name="coupon"
+                              placeHolder=""
+                              attr={{ autoFocus: true }}
+                              value={couponDetails.code}
+                              handleChange={handleChange}
+                              validateSelf={validateSelf}
+                              errorMsg="Enter valid coupon details"
+                              required
+                            />
+
+                            <button
+                              onClick={fetchCouponDetails}
+                              className="text-xs bg-theme text-white rounded-md px-5 py-1.5 mt-2"
+                            >
+                              Apply
+                            </button>
                           </form>
                         )}
                         <div className="flex justify-end mt-5">

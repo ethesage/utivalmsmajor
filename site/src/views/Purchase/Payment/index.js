@@ -8,7 +8,6 @@ import approved from 'assets/approved.png';
 import { checkout } from 'g_actions/courses';
 import { addStudentCourse } from 'g_actions/mainCourse';
 import Modal from 'components/Modal';
-import './style.scss';
 
 const Payment = ({ back, paymentAmount, mainText, doneFunc, fromSplit }) => {
   const { push } = useHistory();

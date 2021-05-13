@@ -62,6 +62,8 @@ export const getCouponCode = async (req, res) => {
 
   if (!couponDetails) return errorStat(res, 404, 'Coupon Not Found');
 
+  if (couponDetails.expired) return errorStat(res, 400, 'Expired Coupon Code');
+
   return successStat(res, 201, 'data', couponDetails);
 };
 

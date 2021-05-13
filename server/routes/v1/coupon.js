@@ -6,7 +6,7 @@ import {
   getCouponCode,
   useCouponCode,
   updateCouponCode,
-  deleteCouponCode
+  deleteCouponCode,
 } from '../../controllers/coupon';
 import middlewares from '../../middlewares';
 
@@ -37,19 +37,9 @@ couponRoutes.get(
   getAllCouponCode
 );
 
-couponRoutes.get(
-  '/:couponId',
-  usession.can('coupon:crud'),
-  validate(getCouponSchema),
-  getCouponCode
-);
+couponRoutes.get('/:couponId', validate(getCouponSchema), getCouponCode);
 
-couponRoutes.post(
-  '/usecode',
-  usession.can(''),
-  validate(useCouponSchema),
-  useCouponCode
-);
+couponRoutes.post('/usecode', validate(useCouponSchema), useCouponCode);
 
 couponRoutes.patch(
   '/update',

@@ -8,6 +8,7 @@ const Purchase = (props) => {
   const [currentPage, setPage] = useState(0);
   const [id, setId] = useState(0);
   const [paymentAmount, setPaymentAmount] = useState();
+  const [usedCoupon, setUsedCoupon] = useState();
 
   const pages = [
     <Details
@@ -15,8 +16,14 @@ const Purchase = (props) => {
       match={props.match}
       set={setId}
       setPaymentAmount={setPaymentAmount}
+      setUsedCoupon={setUsedCoupon}
     />,
-    <Payment back={setPage} corhortId={id} paymentAmount={paymentAmount} />,
+    <Payment
+      back={setPage}
+      corhortId={id}
+      paymentAmount={paymentAmount}
+      usedCoupon={usedCoupon}
+    />,
   ];
 
   useEffect(() => {

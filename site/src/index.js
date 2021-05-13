@@ -8,6 +8,7 @@ import store from './store';
 import * as serviceWorker from './serviceWorker';
 import { login } from './g_actions/user';
 import './index.scss';
+import './tailwind.scss';
 
 const Appz = () => {
   const dispatch = useDispatch();
