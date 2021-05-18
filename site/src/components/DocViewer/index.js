@@ -37,4 +37,7 @@ const Viewer = ({ docs, close }) => {
   ) : null;
 };
 
+//docs.google.com/viewer?url=https%3A%2F%2Fwww.pridemagazineng.com%2FprideMagNG_consumer_brands_2020.pdf&embedded=true&hl=en
+// try this url later
+
 export default Viewer;

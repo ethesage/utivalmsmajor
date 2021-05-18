@@ -1,5 +1,10 @@
 import React, { Suspense, lazy, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  useHistory,
+} from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useToasts } from 'react-toast-notifications';
 import { hot } from 'react-hot-loader';
@@ -25,6 +30,7 @@ const Home = lazy(() => import('./views/HomePage'));
 function App() {
   const dispatch = useDispatch();
   const { addToast } = useToasts();
+  const history = useHistory();
 
   useEffect(() => {
     axiosInstance.interceptors.response.use(
@@ -34,13 +40,15 @@ function App() {
       function (err) {
         if (window.location.href.includes('signin')) return;
 
-        console.log(window.location.href.includes('signin'));
-
         if (err.response && err.response.status === 401) {
           addToast('Session expired, please login again', {
             appearance: 'error',
             autoDismiss: true,
           });
+
+          history.push(
+            `/${window.location.pathname}?redirect=${window.location.pathname}`
+          );
           dispatch(log_out());
 
           return;
@@ -49,7 +57,7 @@ function App() {
         }
       }
     );
-  }, [addToast, dispatch]);
+  }, [addToast, dispatch, history]);
 
   return (
     <main className="App">

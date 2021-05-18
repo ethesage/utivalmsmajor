@@ -1,79 +1,126 @@
-import React from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import ProfileCheck from 'components/ProfileCheck';
-import Classes from 'components/NextClassTrainer';
-import CountSection from './CountSection';
-import Layout from 'Layouts/HomeGrid';
 import Welcome from './Welcome';
-import girl from 'assets/utiva viretnship programme.png';
-import UserClases from 'components/UserMainClass';
-import './style.scss';
+import EduInfo from 'components/EduInfo';
+import img from 'assets/homepage/girl.png';
 
-const InfoSec = ({ txt, children, useSubtitle = true }) => (
-  <div className="info_fx flex-col">
-    <nav className="c_card_nav flex-row j-space _text">
-      <h2>{txt}</h2>
-      <p>{txt && useSubtitle && `View All ${txt}`}</p>
-    </nav>
-    {children}
-  </div>
-);
-
-const Home = ({ gapi }) => {
+const Home = () => {
   const { user, isStudent } = useSelector((state) => state.auth);
+  const currentScroll = useRef();
+  const headRef = useRef();
+  const [slided, setSlided] = useState();
+
+  useEffect(() => {
+    let reqId;
+
+    const scroll =
+      window.requestAnimationFrame ||
+      function (callback) {
+        window.setTimeout(callback, 1000 / 60);
+      };
+
+    const loop = () => {
+      if (currentScroll.current !== window.scrollY) {
+        currentScroll.current = window.scrollY;
+
+        const navPosition = headRef.current?.getBoundingClientRect().y;
+
+        if (currentScroll.current > 80) {
+          if (navPosition < 60) {
+            setSlided(true);
+          }
+        } else {
+          setSlided(false);
+        }
+      }
+
+      reqId = scroll(loop);
+    };
+
+    loop();
+
+    return () => {
+      window.cancelAnimationFrame(reqId);
+    };
+  }, [currentScroll]);
 
   return (
     <main className="dash-con dash-home">
-      <ProfileCheck user={user} />
+      <div className="mb-5">
+        <div className="h-10">
+          <h3
+            className={`text-theme text-2xl md:text-3xl mb-2 transition-all duration-300 whitespace-pre-wrap ${
+              slided
+                ? 'static sm:fixed container top-0 z-50 p-0 h-20 flex items-center animate-fade ml-14 lg:ml-0'
+                : 'static mr-2.5'
+            }`}
+            ref={headRef}
+          >
+            Hello{' '}
+            <strong>
+              {user.firstName}{' '}
+              <span role="img" aria-label="wave">
+                👋
+              </span>
+            </strong>
+          </h3>
+        </div>
+        <p className="text-sm">
+          Stay safe and wear your nosemask{' '}
+          <span role="img" aria-label="nose-mask">
+            😷
+          </span>{' '}
+        </p>
+      </div>
 
+      <ProfileCheck user={user} />
       <Welcome user={user} />
 
-      <Layout>
-        <CountSection />
-      </Layout>
+      <EduInfo isStudent={isStudent} />
 
-      {isStudent ? (
-        <UserClases />
-      ) : (
-        <Layout>
-          <InfoSec txt="Next Classes" useSubtitle={false}>
-            <Classes />
-          </InfoSec>
+      <div className="bg-white p-1 py-5 sm:p-5 rounded-md mb-16 flex-center">
+        <div className="max-w-7xl flex flex-wrap -mx-3.5 h-auto md:h-96">
+          <div className="w-full md:max-w-2/5 xl:max-w-3/10 px-3.5">
+            <img
+              src={img}
+              alt="omotola"
+              className="object-cover w-full max-h-80 rounded-md"
+            />
+          </div>
+          <div className="px-3.5 md:max-w-3/5 xl:max-w-7/10 flex flex-col justify-between mt-10 md:mt-0">
+            <h2 className="dancing-script text-3xl text-theme mb-7 md:mb-0">
+              Meet Omotola
+            </h2>
 
-          {/* <InfoSec txt="Files">
-            <Files />
-          </InfoSec>
+            <div>
+              <p className="mb-5 text-sm">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam
+                faucibus condimentum augue ac varius. Sed at tellus quis magna
+                faucibus commodo. In interdum sollicitudin purus sed dapibus.
+                Aliquam erat volutpat. Morbi lectus urna, tincidunt eu tincidunt
+                in.
+              </p>
 
-          <InfoSec txt=""></InfoSec> */}
-        </Layout>
-      )}
-
-      {isStudent ? (
-        <>
-          <div className="adv flex-row j-space">
-            <div className="text_sec _text flex-col j-space al-start">
-              <div className="info">
-                <h2 className="theme-color">Utiva Virtenship Programme</h2>
-                <p>
-                  A platform that helps students gain on-the-job experience by
-                  engaging with real-life projects and business cases developed
-                  by leading technology companies.
+              <div className="p-3 rounded-md bg-sec-shade flex items-center">
+                <p className="text-7xl mr-5 ">“</p>
+                <p className="text-sm">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam
+                  faucibus condimentum augue ac varius. Sed at tellus quis magna
+                  faucibus commodo. In interdum sollicitudin purus sed dapibus.
+                  Aliquam erat volutpat. Morbi lectus urna, tincidunt eu
+                  tincidunt in.
                 </p>
               </div>
-              <a className="theme-color" href="https://utiva.io" target="_">
-                Learn More
-              </a>
             </div>
-            <div className="img_sec">
-              <img
-                src={girl}
-                alt="utiva Vertenship Programme"
-                className="img contain"
-              />
-            </div>
+
+            <footer className="text-sm mt-9 md:mt-0">
+              <p className="font-bold text-theme">Omotola Adekanbi</p>
+              <p>Academy Director, Utiva</p>
+            </footer>
           </div>
-        </>
-      ) : null}
+        </div>
+      </div>
     </main>
   );
 };

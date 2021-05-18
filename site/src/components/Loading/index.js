@@ -26,7 +26,7 @@ const Loader = ({ tempLoad, full }) => {
   return (
     <>
       {tempLoad ? (
-        <main className="loader_con_main flex-col" style={styles}>
+        <main className="loader_con_main flex-center flex-col" style={styles}>
           <div>
             <div className="loader_main">
               <svg viewBox="0 0 80 80">

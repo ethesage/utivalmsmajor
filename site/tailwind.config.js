@@ -20,13 +20,19 @@ module.exports = {
         txt_fade: '#6f6f6f',
         light_fade: '#f7f7f7',
         v_light: '#f0f5ff',
+        v_light_sec: '#FFF2DA',
+        'sec-shade': 'rgba(160, 121, 0, 0.15)',
       },
       animation: {
         'spin-fast': 'spin 0.3s linear infinite',
       },
       maxWidth: {
         '1/4': '25%',
+        '3/10': '30%',
+        '2/5': '40%',
         '1/2': '50%',
+        '3/5': '60%',
+        '7/10': '70%',
         '3/4': '75%',
       },
       maxHeight: {

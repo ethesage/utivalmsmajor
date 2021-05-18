@@ -32,6 +32,10 @@ abbr[title] {
   }
 }
 
+.dancing-script {
+  font-family: 'Dancing Script', cursive;
+}
+
 .clipped-text {
   display: -webkit-box;
   -webkit-line-clamp: var(--number);
@@ -124,6 +128,21 @@ abbr[title] {
     /*         font-size: 12px; */
     /* 				font-weight:600; */
     /* 				filter: blur(0); */
+  }
+}
+
+.animate-fade {
+  animation: fade 0.3s ease;
+}
+
+@keyframes fade {
+  0% {
+    opacity: 0.08;
+    filter: blur(5px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
   }
 }
 

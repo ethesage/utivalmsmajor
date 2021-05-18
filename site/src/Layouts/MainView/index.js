@@ -33,14 +33,14 @@ const MainView = ({ children, type }) => {
   }, []);
 
   return (
-    <main className="dashboard flex justify-center items-start h-full w-full relative bg-v_light">
+    <main className="dashboard flex justify-start items-start h-full w-full relative bg-v_light">
       <aside className={`dh-aside ${open ? ' open' : ''}`}>
         <SideBar close={close} type={type} />
       </aside>
-      <section className="dh-main flex justify-start items-start flex-col px-5 lg:px-16 flex-grow overflow-hidden mt-20">
+      <section className="dh-main flex justify-start items-start flex-col px-5 lg:px-16 flex-grow">
         <div className="content xl:container mx-auto h-full flex-grow flex-center flex-col w-screen">
           <NavBar open={openBar} grow={open} />
-          {children}
+          <div className="content-sec w-full">{children}</div>
         </div>
         <div className="w-full text-center p-8">
           (c) 2020 Utiva All Rights Reserved
