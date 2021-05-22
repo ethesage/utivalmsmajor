@@ -58,22 +58,26 @@ module.exports = (sequelize, DataTypes) => {
     User.hasMany(models.CohortTrainer, {
       foreignKey: 'userId',
       onDelete: 'CASCADE',
+      hooks: true,
     });
 
     User.hasMany(models.StudentCourse, {
       as: 'userId',
       foreignKey: 'studentId',
       onDelete: 'CASCADE',
+      hooks: true,
     });
 
     User.hasMany(models.AssignmentComment, {
       foreignKey: 'userId',
       onDelete: 'CASCADE',
+      hooks: true,
     });
 
     User.hasMany(models.Assignment, {
       foreignKey: 'studentId',
       onDelete: 'CASCADE',
+      hooks: true,
     });
   };
 

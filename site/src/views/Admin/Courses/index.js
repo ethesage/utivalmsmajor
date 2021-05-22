@@ -13,6 +13,9 @@ import Overview from 'components/OverView/Admin';
 import Classroom from 'views/Classroom/Admin';
 import FullClass from 'views/FullClass/Admin';
 import AllAssignments from 'views/AllAssignments/Admin';
+
+import AddClassView from 'views/AddClass/AddClassView';
+
 import StudyPlan from '../../StudyPlan/Admin';
 import Members from '../../Members/Admin';
 import './style.scss';
@@ -78,7 +81,7 @@ const Courses = () => {
               <Classroom />
             </Route>
             <Route exact path={`${path}/classroom/:courseId/:cohortId/add`}>
-              <Classroom />
+              <AddClassView />
             </Route>
             <Route
               exact

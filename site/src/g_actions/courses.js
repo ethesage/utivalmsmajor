@@ -18,28 +18,28 @@ export const getcategories = () => async (dispatch) => {
   let categories;
   try {
     categories = await axiosInstance.get('/category');
+
+    dispatch({
+      type: 'GET_CATEGORIES',
+      payload: categories.data.Categories,
+    });
   } catch (error) {
     return error;
   }
-
-  dispatch({
-    type: 'GET_CATEGORIES',
-    payload: categories.data.Categories,
-  });
 };
 
 export const getSingleCourse = (slug) => async (dispatch) => {
   let course;
   try {
     course = await axiosInstance.get(`/course/view/${slug}`);
+
+    dispatch({
+      type: 'GET_CURRENT_COURSE',
+      payload: course.data.course,
+    });
   } catch (error) {
     return error;
   }
-
-  dispatch({
-    type: 'GET_CURRENT_COURSE',
-    payload: course.data.course,
-  });
 };
 
 export const getAllCourses = (page) => async (dispatch) => {
@@ -48,14 +48,14 @@ export const getAllCourses = (page) => async (dispatch) => {
     course = await axiosInstance.get(
       `/course/view?pageLimit=10&currentPage=${page}`
     );
+
+    dispatch({
+      type: 'GET_ALL_COURSES',
+      payload: course.data.course,
+    });
   } catch (error) {
     return error;
   }
-
-  dispatch({
-    type: 'GET_ALL_COURSES',
-    payload: course.data.course,
-  });
 };
 
 export const check = (courseCohortId) => async (dispatch) => {
@@ -64,10 +64,11 @@ export const check = (courseCohortId) => async (dispatch) => {
     isCheck = await axiosInstance.get(
       `/checkout/checkstatus/${courseCohortId}`
     );
+
+    return isCheck.data.data;
   } catch (error) {
     return error;
   }
-  return isCheck.data.data;
 };
 
 export const checkout = (courseCohortId, amount) => async (dispatch) => {
@@ -90,10 +91,11 @@ export const chargeCard = (data) => async (dispatch) => {
       `/stripe/create-checkout-session`,
       data
     );
+
+    return checkout.data;
   } catch (error) {
     return error;
   }
-  return checkout.data;
 };
 
 export const checkoutCourse = (course) => async (dispatch) => {
@@ -119,15 +121,15 @@ export const addPurchaseCourse =
           iscourseUrl ? `?iscourseUrl=${iscourseUrl}` : ''
         }`
       );
+
+      dispatch({
+        type: 'PURCHASE_COURSE',
+        payload: p_course.data.data && {
+          ...p_course.data.data.rows,
+          CohortTrainers: p_course.data.data.CohortTrainers,
+        },
+      });
     } catch (error) {
       return error;
     }
-
-    dispatch({
-      type: 'PURCHASE_COURSE',
-      payload: p_course.data.data && {
-        ...p_course.data.data.rows,
-        CohortTrainers: p_course.data.data.CohortTrainers,
-      },
-    });
   };

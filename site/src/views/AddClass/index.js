@@ -1,27 +1,27 @@
-import React, { useRef, useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import React, { useRef, useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 // import { useDebounce } from 'use-debounce';
-import { useSelector, useDispatch } from "react-redux";
-import moment from "moment";
-import { useToasts } from "react-toast-notifications";
-import { getAllTrainers } from "g_actions/trainer";
-import { addClass, editClass } from "g_actions/admin";
-import { updateResourceName, createResourceName } from "g_actions/member";
-import TrainerIcon from "assets/icons/addTrainer";
-import Editor from "components/Editor";
-import Modal from "components/Modal";
-import Input from "components/Input";
-import useInput from "Hooks/useInput";
-import useFetch from "Hooks/useFetch";
-import { axiosInstance } from "helpers";
-import Close from "assets/icons/closeX";
-import user_icon from "assets/user_icon.png";
-import Button from "components/Button";
-import data from "data/createClass";
-import { stringSearch } from "helpers";
-import "./style.scss";
+import { useSelector, useDispatch } from 'react-redux';
+import moment from 'moment';
+import { useToasts } from 'react-toast-notifications';
+import { getAllTrainers } from 'g_actions/trainer';
+import { addClass, editClass } from 'g_actions/admin';
+import { updateResourceName, createResourceName } from 'g_actions/member';
+import TrainerIcon from 'assets/icons/addTrainer';
+import Editor from 'components/Editor';
+import Modal from 'components/Modal';
+import Input from 'components/Input';
+import useInput from 'Hooks/useInput';
+import useFetch from 'Hooks/useFetch';
+import { axiosInstance } from 'helpers';
+import Close from 'assets/icons/closeX';
+import user_icon from 'assets/user_icon.png';
+import Button from 'components/Button';
+import data from 'data/createClass';
+import { stringSearch } from 'helpers';
+import './style.scss';
 
-const AddAssignment = ({ editedClass, edit, name, courseId, mainCohortId }) => {
+const AddClass = ({ editedClass, edit, name, courseId, mainCohortId }) => {
   const dispatch = useDispatch();
   const { addToast } = useToasts();
   const submitButton = useRef();
@@ -53,12 +53,12 @@ const AddAssignment = ({ editedClass, edit, name, courseId, mainCohortId }) => {
 
   const text = edit
     ? {
-        loading: "Editing...",
-        reg: "Edit",
+        loading: 'Editing...',
+        reg: 'Edit',
       }
     : {
-        loading: "Creating...",
-        reg: "Create",
+        loading: 'Creating...',
+        reg: 'Create',
       };
 
   const [handleSubmit, handleChange, inputTypes, validateSelf] = useInput({
@@ -69,7 +69,7 @@ const AddAssignment = ({ editedClass, edit, name, courseId, mainCohortId }) => {
           ...editedClass,
           date:
             editedClass?.CohortClassDays[0]?.date &&
-            moment(editedClass?.CohortClassDays[0]?.date).format("YYYY-MM-DD"),
+            moment(editedClass?.CohortClassDays[0]?.date).format('YYYY-MM-DD'),
           time: editedClass?.CohortClassDays[0]?.time,
         } || {}
       : {},
@@ -77,10 +77,10 @@ const AddAssignment = ({ editedClass, edit, name, courseId, mainCohortId }) => {
     cb: async (inputs) => {
       if (!trainers) {
         submitButton.current.children[0].innerHTML = text.reg;
-        submitButton.current.classList.remove("loader");
+        submitButton.current.classList.remove('loader');
 
-        return addToast("Please select a trainers", {
-          appearance: "warning",
+        return addToast('Please select a trainers', {
+          appearance: 'warning',
           autoDismiss: true,
         });
       }
@@ -88,16 +88,16 @@ const AddAssignment = ({ editedClass, edit, name, courseId, mainCohortId }) => {
       let description = await desRef.current.getDesc();
 
       if (description.blocks.length === 0) {
-        return addToast("Please select a trainers", {
-          appearance: "warning",
+        return addToast('Please select a trainers', {
+          appearance: 'warning',
           autoDismiss: true,
         });
       }
 
       description = JSON.stringify(description);
 
-      const slug = edit ? `/class/update/${editedClass.id}` : "/class/create";
-      const method = edit ? "patch" : "post";
+      const slug = edit ? `/class/update/${editedClass.id}` : '/class/create';
+      const method = edit ? 'patch' : 'post';
       const s_data = edit
         ? {
             ...inputs,
@@ -120,13 +120,13 @@ const AddAssignment = ({ editedClass, edit, name, courseId, mainCohortId }) => {
 
       const resp = await axiosInstance[method](slug, s_data);
 
-      addToast(edit ? "Successfully Edited" : `Successfully Created`, {
-        appearance: "success",
+      addToast(edit ? 'Successfully Edited' : `Successfully Created`, {
+        appearance: 'success',
         autoDismiss: true,
       });
 
       submitButton.current.children[0].innerHTML = text.reg;
-      submitButton.current.classList.remove("loader");
+      submitButton.current.classList.remove('loader');
 
       edit
         ? dispatch(editClass(resp.data.data, name))
@@ -153,7 +153,7 @@ const AddAssignment = ({ editedClass, edit, name, courseId, mainCohortId }) => {
   };
 
   const handleSearch = ({ target: { name, value } }) => {
-    if (value !== "") {
+    if (value !== '') {
       const searchResult = allTrainers.filter(
         ({ firstName, lastName, email }) =>
           stringSearch(value, firstName) ||
@@ -195,7 +195,7 @@ const AddAssignment = ({ editedClass, edit, name, courseId, mainCohortId }) => {
               <Editor
                 readOnly={false}
                 data={editedClass?.description}
-                mode={editedClass?.description ? "edit-desc" : ""}
+                mode={editedClass?.description ? 'edit-desc' : ''}
                 ref={desRef}
               />
 
@@ -220,7 +220,7 @@ const AddAssignment = ({ editedClass, edit, name, courseId, mainCohortId }) => {
           </div>
 
           <Button
-            text={edit ? "Edit" : "Create Class"}
+            text={edit ? 'Edit' : 'Create Class'}
             className="flex-row"
             onClick={handleSubmit}
             btnRef={submitButton}
@@ -235,7 +235,7 @@ const AddAssignment = ({ editedClass, edit, name, courseId, mainCohortId }) => {
                 name="date"
                 type="date"
                 placeHolder=""
-                value={inputTypes["date"]}
+                value={inputTypes['date']}
                 required={true}
                 handleChange={handleChange}
                 validateSelf={validateSelf}
@@ -251,11 +251,11 @@ const AddAssignment = ({ editedClass, edit, name, courseId, mainCohortId }) => {
               name="time"
               type="time"
               placeHolder=""
-              value={inputTypes["time"]}
+              value={inputTypes['time']}
               required={true}
               handleChange={handleChange}
               validateSelf={validateSelf}
-              attr={{ min: moment().format("YYYY-MM-DD") }}
+              attr={{ min: moment().format('YYYY-MM-DD') }}
               showAsterix={false}
             />
           </div>
@@ -359,7 +359,7 @@ const AddAssignment = ({ editedClass, edit, name, courseId, mainCohortId }) => {
           ) : (
             <div
               className="spinner2"
-              style={{ height: "100px", width: "100%" }}
+              style={{ height: '100px', width: '100%' }}
             ></div>
           )}
         </div>
@@ -368,4 +368,4 @@ const AddAssignment = ({ editedClass, edit, name, courseId, mainCohortId }) => {
   );
 };
 
-export default AddAssignment;
+export default AddClass;

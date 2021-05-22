@@ -1,12 +1,7 @@
-import React, { Suspense, lazy, useEffect } from 'react';
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  useHistory,
-} from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import React, { Suspense, lazy, useEffect, useRef } from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
+import { useDispatch } from 'react-redux';
 import { hot } from 'react-hot-loader';
 import Login from './views/Auth/Login';
 import Forgot from './views/Auth/Forgot';
@@ -16,7 +11,6 @@ import SignUp from './views/Auth/SignUp';
 import Loader from './components/Loading';
 import Protected from './components/Protected';
 import AProtected from './components/Protected/AdminProtected';
-import { log_out } from 'g_actions/user';
 import { axiosInstance } from 'helpers';
 import './App.css';
 
@@ -30,7 +24,7 @@ const Home = lazy(() => import('./views/HomePage'));
 function App() {
   const dispatch = useDispatch();
   const { addToast } = useToasts();
-  const history = useHistory();
+  const time = useRef();
 
   useEffect(() => {
     axiosInstance.interceptors.response.use(
@@ -38,26 +32,27 @@ function App() {
         return response;
       },
       function (err) {
-        if (window.location.href.includes('signin')) return;
+        if (
+          window.location.href.includes('signin') ||
+          window.location.href.includes('signup')
+        )
+          return;
 
         if (err.response && err.response.status === 401) {
-          addToast('Session expired, please login again', {
-            appearance: 'error',
-            autoDismiss: true,
-          });
-
-          history.push(
-            `/${window.location.pathname}?redirect=${window.location.pathname}`
-          );
-          dispatch(log_out());
-
-          return;
+          if (time.current) return;
+          time.current = setTimeout(() => {
+            addToast('Session expired, please login again', {
+              appearance: 'error',
+              autoDismiss: true,
+            });
+            window.location.href = `/auth/signin?redirect=${window.location.pathname}`;
+          }, 5);
         } else {
           return Promise.reject(err);
         }
       }
     );
-  }, [addToast, dispatch, history]);
+  }, [addToast, dispatch]);
 
   return (
     <main className="App">

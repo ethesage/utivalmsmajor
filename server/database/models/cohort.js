@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
 module.exports = (sequelize, DataTypes) => {
   const Cohort = sequelize.define(
-    "Cohort",
+    'Cohort',
     {
       id: {
         type: DataTypes.UUID,
@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       totalCourse: DataTypes.INTEGER,
       status: {
         type: DataTypes.STRING,
-        values: ["ongoing", "finished"],
+        values: ['ongoing', 'finished'],
       },
     },
     {}
@@ -21,12 +21,14 @@ module.exports = (sequelize, DataTypes) => {
   Cohort.associate = (models) => {
     // associations can be defined here
     Cohort.hasMany(models.StudentCourse, {
-      foreignKey: "cohortId",
-      onDelete: "CASCADE",
+      foreignKey: 'cohortId',
+      onDelete: 'CASCADE',
+      hooks: true,
     });
     Cohort.hasMany(models.CohortTrainer, {
-      foreignKey: "cohortId",
-      onDelete: "CASCADE",
+      foreignKey: 'cohortId',
+      onDelete: 'CASCADE',
+      hooks: true,
     });
 
     // Cohort.hasMany(models.Trainer, {
@@ -35,8 +37,9 @@ module.exports = (sequelize, DataTypes) => {
     // });
 
     Cohort.hasMany(models.CourseCohort, {
-      foreignKey: "cohortId",
-      onDelete: "CASCADE",
+      foreignKey: 'cohortId',
+      onDelete: 'CASCADE',
+      hooks: true,
     });
   };
   return Cohort;

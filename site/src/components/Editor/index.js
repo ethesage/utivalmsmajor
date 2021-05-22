@@ -3,6 +3,7 @@ import React, {
   useRef,
   forwardRef,
   useImperativeHandle,
+  memo,
 } from 'react';
 import EditorJs from 'react-editor-js';
 import ReadOnly from '../ReadOnly';
@@ -90,4 +91,4 @@ const Editor = forwardRef(({ data, readOnly, mode }, ref) => {
   );
 });
 
-export default Editor;
+export default memo(Editor);

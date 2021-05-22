@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   const Course = sequelize.define(
-    "Course",
+    'Course',
     {
       id: {
         type: DataTypes.UUID,
@@ -32,28 +32,33 @@ module.exports = (sequelize, DataTypes) => {
   Course.associate = (models) => {
     // associations can be defined here
     Course.hasMany(models.CourseDescription, {
-      foreignKey: "courseId",
-      onDelete: "CASCADE",
+      foreignKey: 'courseId',
+      onDelete: 'CASCADE',
+      hooks: true,
     });
 
     Course.hasMany(models.StudentCourse, {
-      foreignKey: "courseId",
-      onDelete: "CASCADE",
+      foreignKey: 'courseId',
+      onDelete: 'CASCADE',
+      hooks: true,
     });
 
     Course.hasMany(models.CourseProgress, {
-      foreignKey: "courseId",
-      onDelete: "CASCADE",
+      foreignKey: 'courseId',
+      onDelete: 'CASCADE',
+      hooks: true,
     });
 
     Course.hasMany(models.CourseCohort, {
-      foreignKey: "courseId",
-      onDelete: "CASCADE",
+      foreignKey: 'courseId',
+      onDelete: 'CASCADE',
+      hooks: true,
     });
 
     Course.hasMany(models.Classes, {
-      foreignKey: "courseId",
-      onDelete: "CASCADE",
+      foreignKey: 'courseId',
+      onDelete: 'CASCADE',
+      hooks: true,
     });
   };
   return Course;

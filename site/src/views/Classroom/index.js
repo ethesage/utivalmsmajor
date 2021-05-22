@@ -37,7 +37,7 @@ const Classroom = ({ full = false, gapi }) => {
               {currentCourse.Course.Classes.map((class_room, i) => {
                 return (
                   <Classes
-                    key={`cx_listnx_${i}`}
+                    key={class_room.id}
                     trainers={``}
                     data={class_room}
                     courseId={courseId}

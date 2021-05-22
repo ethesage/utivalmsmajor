@@ -71,38 +71,33 @@ export const addClass = (newClass, name) => async (dispatch) => {
   });
 };
 
-export const addPrevVideoFn = (
-  link,
-  courseName,
-  classId,
-  courseCohortId
-) => async (dispatch) => {
-  let video;
+export const addPrevVideoFn =
+  (link, courseName, classId, courseCohortId) => async (dispatch) => {
+    let video;
 
-  try {
-    video = await axiosInstance.post('admin/add-prev-videos', {
-      link,
-      classId,
-      courseCohortId,
+    try {
+      video = await axiosInstance.post('admin/add-prev-videos', {
+        link,
+        classId,
+        courseCohortId,
+      });
+
+      dispatch({
+        type: courseName ? 'ADD_NEW_VIDEO' : 'MEMBER_ADD_NEW_VIDEO',
+        payload: { video: video.data.data, courseName, classId },
+      });
+    } catch (err) {}
+  };
+
+export const removePrevVideoFn =
+  (courseName, classId, videoId) => async (dispatch) => {
+    await axiosInstance.delete(`admin/prev-videos/${videoId}`);
+
+    dispatch({
+      type: courseName ? 'REMOVE_VIDEO' : 'MEMBER_REMOVE_VIDEO',
+      payload: { courseName, classId, videoId },
     });
-  } catch (err) {}
-
-  dispatch({
-    type: courseName ? 'ADD_NEW_VIDEO' : 'MEMBER_ADD_NEW_VIDEO',
-    payload: { video: video.data.data, courseName, classId },
-  });
-};
-
-export const removePrevVideoFn = (courseName, classId, videoId) => async (
-  dispatch
-) => {
-  await axiosInstance.delete(`admin/prev-videos/${videoId}`);
-
-  dispatch({
-    type: courseName ? 'REMOVE_VIDEO' : 'MEMBER_REMOVE_VIDEO',
-    payload: { courseName, classId, videoId },
-  });
-};
+  };
 
 export const editClass = (newClass, name) => async (dispatch) => {
   dispatch({
@@ -134,52 +129,58 @@ export const deleteCourseDescription = (data, name) => async (dispatch) => {
   });
 };
 
-export const getCurrentCourseCohort = (courseCohortId, name) => async (
-  dispatch
-) => {
-  let courses;
+export const getCurrentCourseCohort =
+  (courseCohortId, name) => async (dispatch) => {
+    let courses;
 
-  courses = await axiosInstance.get(`/admin/course-cohort/${courseCohortId}`);
+    courses = await axiosInstance.get(`/admin/course-cohort/${courseCohortId}`);
 
-  const useObject = courses.data.data;
+    const useObject = courses.data.data;
 
-  const matArray = await Promise.all(
-    useObject.Course.Classes.map(async (cls) => {
-      const resources = await axiosInstance.get(
-        `/file?key=${encodeURIComponent(
-          `Courses/${useObject.Course.name}/classes/${cls.title}/resources/`
-        )}`
-      );
+    const matArray = await Promise.all(
+      useObject.Course.Classes.map(async (cls) => {
+        const resources = await axiosInstance.get(
+          `/file?key=${encodeURIComponent(
+            `Courses/${useObject.Course.name}/classes/${cls.title}/resources/`
+          )}`
+        );
 
-      const assignments = await axiosInstance.get(
-        `/file?key=${encodeURIComponent(
-          `Courses/${useObject.Course.name}/classes/${cls.title}/assignments/`
-        )}`
-      );
+        const assignments = await axiosInstance.get(
+          `/file?key=${encodeURIComponent(
+            `Courses/${useObject.Course.name}/classes/${cls.title}/assignments/`
+          )}`
+        );
 
-      return {
-        [cls.title]: {
-          resources: resources.data.data,
-          assignments: assignments.data.data,
-          submittedAssignment: null,
-          allSubmittedAssignment: null,
-        },
-      };
+        return {
+          [cls.title]: {
+            resources: resources.data.data,
+            assignments: assignments.data.data,
+            submittedAssignment: null,
+            allSubmittedAssignment: null,
+          },
+        };
 
-      //
-    })
-  );
+        //
+      })
+    );
 
-  const r_arr = await matArray.reduce((acc, cur) => ({ ...acc, ...cur }), {});
+    const r_arr = await matArray.reduce((acc, cur) => ({ ...acc, ...cur }), {});
 
+    dispatch({
+      type: 'CREATE_CLASS_RESOURCES',
+      payload: r_arr,
+    });
+
+    // create a list of the class name so we can add the class resources
+    dispatch({
+      type: 'ADD_CURRENT_COHORT',
+      payload: { courseCohort: courses.data.data, name },
+    });
+  };
+
+export const deleteClass = (name, id) => async (dispatch) => {
   dispatch({
-    type: 'CREATE_CLASS_RESOURCES',
-    payload: r_arr,
-  });
-
-  // create a list of the class name so we can add the class resources
-  dispatch({
-    type: 'ADD_CURRENT_COHORT',
-    payload: { courseCohort: courses.data.data, name },
+    type: 'DELETE_CLASS',
+    payload: { name, id },
   });
 };

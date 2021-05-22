@@ -20,6 +20,8 @@ function Login() {
   const history = useHistory();
   const location = useLocation();
 
+  const redirect = new URLSearchParams(location.search).get('redirect');
+
   const [handleSubmit, handleChange, inputTypes, validateSelf] = useInput({
     inputs: data,
     submitButton,
@@ -33,12 +35,13 @@ function Login() {
         autoDismiss: true,
       });
 
-      const redirectUrl = location?.search?.split('redirect=')[1];
-
       dispatch(login());
-      redirectUrl
-        ? history.push(redirectUrl)
-        : response.data.user.role === 'admin'
+
+      if (redirect) {
+        return history.push(redirect);
+      }
+
+      response.data.user.role === 'admin'
         ? history.push('/admin')
         : history.push('/');
     },
