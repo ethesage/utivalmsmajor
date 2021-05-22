@@ -61,6 +61,7 @@ function Classes({
   const dispatch = useDispatch();
   const modalRef = useRef();
   const watchVideoRef = useRef();
+  const removeClassRef = useRef();
   const deleteDialog = useRef();
   const startclass = useRef();
   const progressDialog = useRef();
@@ -215,6 +216,10 @@ function Classes({
     watchVideoRef.current.open();
   };
 
+  const remove_class = (file) => {
+    removeClassRef.current.open();
+  };
+
   const removeClass = async () => {
     setLoadRemoveClass(true);
 
@@ -224,6 +229,7 @@ function Classes({
       await axiosInstance.delete(`/class/${classId}`);
 
       dispatch(deleteClass(courseName, classId));
+      return true;
     } catch (err) {
       addToast('Error Removing Classs', {
         appearance: 'error',
@@ -321,7 +327,7 @@ function Classes({
                           borderRadius: '5px',
                           marginBottom: '20px',
                         }}
-                        onClick={removeClass}
+                        onClick={remove_class}
                       >
                         Remove class
                       </button>
@@ -519,6 +525,15 @@ function Classes({
 
           <Modal ref={watchVideoRef}>
             <ClassVideoModal data={data.CohortClassVideos} />
+          </Modal>
+
+          <Modal ref={removeClassRef}>
+            <Confirm
+              text="Are you sure?"
+              onClick={removeClass}
+              close={() => removeClassRef.current.close()}
+              closeText="Successfuly Deleted"
+            />
           </Modal>
         </>
       )}
