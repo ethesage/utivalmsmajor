@@ -86,10 +86,10 @@ export const deleteStudent = (id) => async (dispatch) => {
   });
 };
 
-export const countDetails = () => async (dispatch) => {
+export const countDetails = (type) => async (dispatch) => {
   let counts;
   try {
-    counts = await axiosInstance.get(`/student/all/dashboard`);
+    counts = await axiosInstance.get(`/${type}/all/dashboard`);
 
     dispatch({
       type: 'COUNTS',

@@ -13,26 +13,30 @@ import './style.scss';
 const ClassesSec = ({ data }) => {
   return (
     <div className="next_class_staff flex-row al-start j-space">
-      <img src={data.thumbnail} alt="" className="main_img" />
+      <img src={data?.thumbnail} alt="" className="main_img" />
       <div className="text-sec">
-        <h2>HR Analtytics</h2>
+        <h2>{data.name}</h2>
 
         <div className="info_sec">
           {/* <div className="info flex-row j-start">
             <img src={week} alt="" /> <p>Week 2</p>
           </div> */}
-          <div className="info flex-row j-start">
-            <img src={calender} alt="" />{' '}
-            <p>
-              <Moment format="Do MMMM YYYY">{data.date}</Moment>
-            </p>
-          </div>
-          <div className="info flex-row j-start">
-            <img src={clock} alt="" />{' '}
-            <p>
-              <time>{moment(data.time, 'HH:mm').format('hh:mm A')}</time>
-            </p>
-          </div>
+          {data.date && (
+            <>
+              <div className="info flex-row j-start">
+                <img src={calender} alt="" />{' '}
+                <p>
+                  <Moment format="Do MMMM YYYY">{data.date}</Moment>
+                </p>
+              </div>
+              <div className="info flex-row j-start">
+                <img src={clock} alt="" />{' '}
+                <p>
+                  <time>{moment(data.time, 'HH:mm').format('hh:mm A')}</time>
+                </p>
+              </div>
+            </>
+          )}
         </div>
 
         <Button
