@@ -1,4 +1,4 @@
-import { hashPassword, comparePassword } from "./passwordHash";
+import { hashPassword, comparePassword } from './passwordHash';
 import {
   errorStat,
   successStat,
@@ -8,8 +8,10 @@ import {
   getFolderListings,
   uploadData,
   deleteImage,
-} from "./Utilities";
-import { generateToken, verifyToken } from "./auth";
+  createFileFolder,
+  emptyS3Directory,
+} from './Utilities';
+import { generateToken, verifyToken } from './auth';
 
 export default {
   hashPassword,
@@ -23,5 +25,7 @@ export default {
   generatePassword,
   getFolderListings,
   deleteImage,
-  uploadData
+  uploadData,
+  createFileFolder,
+  emptyS3Directory,
 };
