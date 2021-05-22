@@ -54,8 +54,9 @@ const ProfileBio = () => {
             required={data[0].required}
             handleChange={handleChange}
             validateSelf={validateSelf}
+            attr={{ maxLength: 250 }}
           />
-          <small>Max 300 words</small>
+          <small>Max 250 words</small>
 
           <Input
             name={data[1].name}

@@ -2,7 +2,7 @@ const data = [
   {
     name: 'bio',
     placeHolder: 'Text',
-    errorMsg: 'Your bio should be greater than 2 but less than 300 words',
+    errorMsg: 'Your bio should be greater than 2 but less than 250 words',
     required: false,
     type: 'textarea',
   },

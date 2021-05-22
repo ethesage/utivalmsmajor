@@ -122,6 +122,23 @@ const course = (state = initialState, action) => {
         },
       };
 
+    case 'DELETE_CLASS':
+      return {
+        ...state,
+        currentCohort: {
+          ...state.currentCohort,
+          [payload.name]: {
+            ...state.currentCohort[payload.name],
+            Course: {
+              ...state.currentCohort[payload.name].Course,
+              Classes: state.currentCohort[payload.name].Course.Classes.filter(
+                (cl) => cl.id !== payload.id
+              ),
+            },
+          },
+        },
+      };
+
     case 'ADD_NEW_VIDEO':
       currentCohort = state.currentCohort[payload.courseName];
       currentCourse = state.currentCohort[payload.courseName].Course;
@@ -175,20 +192,6 @@ const course = (state = initialState, action) => {
                 return e_class;
               }),
             },
-          },
-        },
-      };
-
-    case 'DELETE_CLASS':
-      return {
-        ...state,
-        currentCohort: {
-          ...state.currentCohort,
-          [payload.name]: {
-            ...state.currentCohort[payload.name],
-            Classes: state.currentCohort[payload.name].Classes.filter(
-              (e_class) => e_class.id !== payload.newClass.id
-            ),
           },
         },
       };

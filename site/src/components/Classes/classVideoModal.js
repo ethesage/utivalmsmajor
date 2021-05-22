@@ -29,7 +29,7 @@ function ClassVideoModal({ data }) {
         slidesPerView={1}
       >
         {data.map((vid, i) => (
-          <SwiperSlide className="modal-chl">
+          <SwiperSlide className="modal-chl" key={`video_modal_${i}`}>
             <iframe
               title={`${data.id}_previous_video_${i}`}
               src={`https://player.vimeo.com/video/${vid.link}`}

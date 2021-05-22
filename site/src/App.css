@@ -3,3 +3,51 @@
   height: 100%;
   width: 100%;
 }
+
+.del-loader {
+  width: 100%;
+}
+
+.del-loader .animate-pulse {
+  display: flex;
+}
+
+.del-loader .animate-pulse .ball {
+  border-radius: 100%;
+  width: 40px;
+  height: 40px;
+  background: gray;
+}
+
+.del-loader .animate-pulse .flex-1 {
+  flex-grow: 1;
+  margin-left: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.del-loader .animate-pulse .flex-1 div {
+  height: 10px;
+  background: gray;
+  border-radius: 5px;
+}
+
+.del-loader .animate-pulse .flex-1 .div-1 {
+  width: 75%;
+}
+
+.del-loader .animate-pulse .flex-1 .div-2 {
+  width: 50%;
+  margin-top: 5px;
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.5;
+  }
+}

@@ -45,6 +45,7 @@ const Drag = ({ className, children, handleImage }) => {
   return (
     <>
       <label
+        key={new Date()}
         htmlFor="file_upload"
         className={`${className} drag_container`}
         onDragEnter={handleDragIn}

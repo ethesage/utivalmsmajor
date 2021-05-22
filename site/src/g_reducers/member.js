@@ -271,13 +271,17 @@ const course = (state = initialState, action) => {
 
     case 'DELETE_SUBMITTED_ASSIGNMENT':
       const prevAs = state.classResources[payload.name].submittedAssignment;
+
       return {
         ...state,
         classResources: {
           ...state.classResources,
           [payload.name]: {
             ...state.classResources[payload.name],
-            submittedAssignment: prevAs.filter((ass) => ass.id !== payload.id),
+            submittedAssignment: prevAs.filter((ass) => {
+              const id = ass.id || ass.resourceId;
+              return id !== payload.id;
+            }),
           },
         },
       };
