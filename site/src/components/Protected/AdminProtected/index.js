@@ -6,8 +6,6 @@ import { useSelector } from 'react-redux';
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const { user, isAdmin, loading } = useSelector((state) => state.auth);
 
-
-
   return (
     <Route
       {...rest}
@@ -19,7 +17,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
         ) : (
           <Redirect
             to={{
-              pathname: `/signin?redirect=${window.location.pathname}`,
+              pathname: `/signin`,
             }}
           />
         )

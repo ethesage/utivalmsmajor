@@ -7,7 +7,7 @@ const Welcome = ({ user }) => {
   return (
     <>
       {open ? (
-        <div className="welcome max-w-5xl mt-8 mb-16">
+        <section className="welcome max-w-5xl mt-8 mb-16">
           <h1 className="text-theme text-2xl mb-3">
             Welcome to the Utiva Learning Platform
           </h1>
@@ -25,7 +25,7 @@ const Welcome = ({ user }) => {
             We also help companies both in Africa and abroad access technology
             savvy talents through our remote model or for product dev.
           </p>
-        </div>
+        </section>
       ) : null}
     </>
   );

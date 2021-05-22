@@ -7,7 +7,7 @@ const ProfileCheck = ({ user }) => {
   return (
     <>
       {!(user.bio && user.linkedin && user.profilePic) ? (
-        <div className="flex mt-10 sm:flex-row justify-between items-center px-2 py-2 rounded-md flex-col bg-white">
+        <section className="flex mt-10 sm:flex-row justify-between items-center px-2 py-2 rounded-md flex-col bg-white">
           <p className="text-center sm:text-left">
             Your profile is incomplete. Please update your profile
           </p>
@@ -17,7 +17,7 @@ const ProfileCheck = ({ user }) => {
             link={link}
             text="Update Profile"
           />
-        </div>
+        </section>
       ) : null}
     </>
   );

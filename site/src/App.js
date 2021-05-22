@@ -45,7 +45,7 @@ function App() {
               appearance: 'error',
               autoDismiss: true,
             });
-            window.location.href = `/auth/signin?redirect=${window.location.pathname}`;
+            window.location.href = `/signin?redirect=${window.location.pathname}`;
           }, 5);
         } else {
           return Promise.reject(err);

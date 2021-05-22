@@ -4,6 +4,7 @@ import ProfileCheck from 'components/ProfileCheck';
 import Welcome from './Welcome';
 import EduInfo from 'components/EduInfo';
 import img from 'assets/homepage/girl.png';
+import Performance from './Performance';
 
 const Home = () => {
   const { user, isStudent } = useSelector((state) => state.auth);
@@ -47,7 +48,7 @@ const Home = () => {
 
   return (
     <main className="dash-con dash-home">
-      <div className="mb-5">
+      <section className="mb-5">
         <div className="h-10">
           <h3
             className={`text-theme text-2xl md:text-3xl mb-2 transition-all duration-300 whitespace-pre-wrap ${
@@ -72,14 +73,14 @@ const Home = () => {
             😷
           </span>{' '}
         </p>
-      </div>
+      </section>
 
       <ProfileCheck user={user} />
       <Welcome user={user} />
 
       <EduInfo isStudent={isStudent} />
 
-      <div className="bg-white p-1 py-5 sm:p-5 rounded-md mb-16 flex-center">
+      <section className="bg-white p-1 py-5 sm:p-5 rounded-md mb-16 flex-center">
         <div className="max-w-7xl flex flex-wrap -mx-3.5 h-auto md:h-96">
           <div className="w-full md:max-w-2/5 xl:max-w-3/10 px-3.5">
             <img
@@ -120,7 +121,9 @@ const Home = () => {
             </footer>
           </div>
         </div>
-      </div>
+      </section>
+
+      <Performance />
     </main>
   );
 };
