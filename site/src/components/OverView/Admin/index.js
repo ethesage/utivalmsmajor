@@ -4,7 +4,6 @@ import Loader from 'components/Loading';
 import Nav from 'components/AdminHeader';
 import NavBar from '../../CourseNav';
 import Edit from './Edit';
-import '../style.scss';
 import './style.scss';
 
 const Overview = () => {

@@ -13,11 +13,14 @@
   }
 
   .dh-main {
+    // min-height: calc(100vh - 100px);
+    min-height: 100vh;
+
     .content {
       width: calc(100vw - 40px);
 
       .content-sec {
-        min-height: calc(100vh - 100px);
+        // min-height: calc(100vh - 100px);
       }
 
       @screen lg {

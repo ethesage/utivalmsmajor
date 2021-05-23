@@ -1,54 +1,41 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import PaymentComplete from 'components/CompletePayment';
 import GetCurrentCourse from 'Hooks/getCurrentCourse';
-import useBreadcrumbs from 'Hooks/useBreadCrumbs';
-import Loader from 'components/Loading';
-import Classes from 'components/Classes';
 import NavBar from 'components/CourseNav';
+import Title from 'components/Title';
 import './style.scss';
+import ClassData from 'components/ClassData';
 
-const Classroom = ({ full = false, gapi }) => {
-  const { courseId } = useParams();
+const Classroom = () => {
   const currentCourse = useSelector((state) => state.member.currentCourse);
   const { user } = useSelector((state) => state.auth);
-  const [openedRef, setOpenedRef] = useState();
+  const { courseId } = useParams();
 
   GetCurrentCourse();
 
-  useBreadcrumbs(
-    {
-      name: currentCourse?.Course?.name,
-      link: `/courses/classroom/${courseId}`,
-    },
-    !!currentCourse
-  );
-
   return (
     <>
-      <NavBar />
-      <section className="cx_listnx img">
+      <Title text="Course" />
+      <NavBar currentCourse={currentCourse} />
+      <section className=" max-w-4xl ">
         {!currentCourse ? (
-          <Loader tempLoad={true} full={false} />
+          <div>
+            <Loader tempLoad={true} full={false} />
+            <Loader tempLoad={true} full={false} />
+          </div>
         ) : (
           <>
-            <div>
+            <div className="mt-16">
               {currentCourse.Course.Classes.map((class_room, i) => {
                 return (
-                  <Classes
+                  <ClassData
                     key={class_room.id}
-                    trainers={``}
                     data={class_room}
                     courseId={courseId}
-                    full={full}
-                    index={i}
-                    gapi={gapi}
-                    openedRef={openedRef}
-                    setOpenedRef={setOpenedRef}
                     currentCourse={currentCourse}
-                    folderId={currentCourse.CourseCohort.folderId}
-                    courseCohortId={currentCourse.CourseCohort.id}
+                    index={i}
                     completedPayment={
                       user.role === 'student'
                         ? i < currentCourse.Course.Classes.length / 2
@@ -83,5 +70,19 @@ const Classroom = ({ full = false, gapi }) => {
     </>
   );
 };
+
+function Loader() {
+  return (
+    <div className="animate-pulse flex space-x-4 mb-10">
+      <div className="flex-1 space-y-4 py-1">
+        <div className="h-4 bg-white rounded w-1/4"></div>
+        <div className="space-y-2">
+          <div className="h-36 bg-white rounded"></div>
+          <div className="h-4 bg-white rounded w-5/6"></div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default Classroom;

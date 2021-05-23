@@ -12,6 +12,7 @@ import Loader from './components/Loading';
 import Protected from './components/Protected';
 import AProtected from './components/Protected/AdminProtected';
 import { axiosInstance } from 'helpers';
+import 'react-sweet-progress/lib/style.css';
 import './App.css';
 
 const Purchase = lazy(() => import('./views/Purchase'));
@@ -57,7 +58,6 @@ function App() {
   return (
     <main className="App">
       <Router>
-        <Loader />
         <Suspense fallback={<Loader tempLoad={true} full={true} />}>
           <Switch>
             <Route exact path="/signin" component={Login} />

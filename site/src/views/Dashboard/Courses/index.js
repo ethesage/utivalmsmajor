@@ -12,15 +12,13 @@ import Classroom from 'views/Classroom';
 import FullClass from 'views/FullClass';
 import Assignment from 'views/Assignment';
 import AllAssignments from 'views/AllAssignments/index';
-import BreadCrumb from 'components/BreadCrumbs';
-import useBreadcrumbs from 'Hooks/useBreadCrumbs';
 import StudyPlan from '../../StudyPlan';
 import Members from '../../Members';
 import './style.scss';
 
 const Courses = ({ gapi }) => {
   let { path } = useRouteMatch();
-  useBreadcrumbs({ name: 'My Courses', link: '/courses' }, true);
+  // useBreadcrumbs({ name: 'My Courses', link: '/courses' }, true);
   const dispatch = useDispatch();
   const { isStudent } = useSelector((state) => state.auth);
   const enrolledcourses = useSelector((state) => state.member.enrolledcourses);
@@ -38,7 +36,6 @@ const Courses = ({ gapi }) => {
 
   return (
     <section className="dash-con mx_courx flex-col al-start j-start">
-      <BreadCrumb />
       {loading ? (
         <div className="img">
           <Loader tempLoad={true} full={false} />

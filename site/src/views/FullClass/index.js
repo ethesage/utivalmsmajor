@@ -6,11 +6,11 @@ import Loader from 'components/Loading';
 import Classes from 'components/Classes';
 import PaymentComplete from 'components/CompletePayment';
 // import ResourceBtn from 'components/ResourceButton';
-import useBreadcrumbs from 'Hooks/useBreadCrumbs';
 import NavBar from 'components/CourseNav';
 // import assignment from 'assets/icons/course/assignment.png';
 import Layout from 'Layouts/SideNavListLayout';
 import AddAssignment from '../AddAssignment';
+import Title from 'components/Title';
 import './style.scss';
 
 function FullClass({ gapi }) {
@@ -22,27 +22,7 @@ function FullClass({ gapi }) {
   const currentCourse = useSelector((state) => state.member.currentCourse);
   const { isStudent } = useSelector((state) => state.auth);
 
-  const curWeek = currentCourse?.Course?.Classes?.find(
-    (classr) => classr.id === classroom
-  );
-
   GetCurrentCourse();
-
-  useBreadcrumbs(
-    addAssignment
-      ? null
-      : [
-          {
-            name: currentCourse?.Course?.name,
-            link: `/courses/classroom/${courseId}`,
-          },
-          {
-            name: `${curWeek?.title}`,
-            link: `/courses/classroom/${courseId}/${classroom}`,
-          },
-        ],
-    !!currentCourse
-  );
 
   const list_desc =
     currentCourse?.list_desc || currentCourse?.Course?.list_desc;
@@ -62,6 +42,7 @@ function FullClass({ gapi }) {
 
   return (
     <>
+      <Title text="Course" />
       <NavBar />
       <div className="cx_listnx_full flex-row al-start">
         {!currentCourse ? (

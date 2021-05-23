@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import moment from 'moment';
 
 let text = /[^\n]{2,}/;
 let shortText = /[^\n]{2,}/;
@@ -205,3 +206,31 @@ export const uploadProgress = (setPercentage, multiplier = 1) => {
 };
 
 export const s3url = process.env.s3Url;
+
+export const filterDate = (date) => {
+  if (!date) return null;
+  const dates = date.split(' - ');
+
+  const endDateYear = parseInt(dates[1].split(' ')[2]);
+  const endDateMonth = moment.monthsShort().indexOf(dates[1].split(' ')[0]) + 1;
+  const endDateDate = parseInt(dates[1].split(' ')[1]);
+
+  const endDate = `${endDateYear}-${endDateMonth}-${endDateDate}`;
+
+  const startDateDate = parseInt(dates[0].split(' ')[1]);
+  const startDateMonth =
+    moment.monthsShort().indexOf(dates[0].split(' ')[0]) + 1;
+
+  const monthDiff = endDateMonth - startDateMonth;
+
+  const expectedStartMonthYear = moment(endDate)
+    .subtract(monthDiff, 'months')
+    .format('YYYY');
+
+  return {
+    startDate: moment(
+      `${expectedStartMonthYear}-${startDateMonth}-${startDateDate}`
+    ).format('YYYY-MM-DD'),
+    endDate: moment(endDate).format('YYYY-MM-DD'),
+  };
+};

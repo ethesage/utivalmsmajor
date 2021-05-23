@@ -1,72 +1,34 @@
-import { useRef, useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import ProfileCheck from 'components/ProfileCheck';
 import Welcome from './Welcome';
+import Title from 'components/Title';
 import EduInfo from 'components/EduInfo';
 import img from 'assets/homepage/girl.png';
 import Performance from './Performance';
+import oando from 'assets/oando.png';
 
 const Home = () => {
   const { user, isStudent } = useSelector((state) => state.auth);
-  const currentScroll = useRef();
-  const headRef = useRef();
-  const [slided, setSlided] = useState();
-
-  useEffect(() => {
-    let reqId;
-
-    const scroll =
-      window.requestAnimationFrame ||
-      function (callback) {
-        window.setTimeout(callback, 1000 / 60);
-      };
-
-    const loop = () => {
-      if (currentScroll.current !== window.scrollY) {
-        currentScroll.current = window.scrollY;
-
-        const navPosition = headRef.current?.getBoundingClientRect().y;
-
-        if (currentScroll.current > 80) {
-          if (navPosition < 60) {
-            setSlided(true);
-          }
-        } else {
-          setSlided(false);
-        }
-      }
-
-      reqId = scroll(loop);
-    };
-
-    loop();
-
-    return () => {
-      window.cancelAnimationFrame(reqId);
-    };
-  }, [currentScroll]);
 
   return (
     <main className="dash-con dash-home">
       <section className="mb-5">
-        <div className="h-10">
-          <h3
-            className={`text-theme text-2xl md:text-3xl mb-2 transition-all duration-300 whitespace-pre-wrap ${
-              slided
-                ? 'static sm:fixed container top-0 z-50 p-0 h-20 flex items-center animate-fade ml-14 lg:ml-0'
-                : 'static mr-2.5'
-            }`}
-            ref={headRef}
-          >
-            Hello{' '}
-            <strong>
-              {user.firstName}{' '}
-              <span role="img" aria-label="wave">
-                👋
-              </span>
-            </strong>
-          </h3>
-        </div>
+        <Title
+          crumbs={false}
+          bold={false}
+          spx={false}
+          text={
+            <>
+              Hello{' '}
+              <strong>
+                {user.firstName}{' '}
+                <span role="img" aria-label="wave">
+                  👋
+                </span>
+              </strong>{' '}
+            </>
+          }
+        />
         <p className="text-sm">
           Stay safe and wear your nosemask{' '}
           <span role="img" aria-label="nose-mask">
@@ -115,9 +77,13 @@ const Home = () => {
               </div>
             </div>
 
-            <footer className="text-sm mt-9 md:mt-0">
-              <p className="font-bold text-theme">Omotola Adekanbi</p>
-              <p>Academy Director, Utiva</p>
+            <footer className="text-sm mt-9 md:mt-0 w-full flex flex-wrap justify-between">
+              <div>
+                <p className="font-bold text-theme">Omotola Adekanbi</p>
+                <p>Academy Director, Utiva</p>
+              </div>
+
+              <img src={oando} alt="Oando" />
             </footer>
           </div>
         </div>

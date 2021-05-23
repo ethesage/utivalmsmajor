@@ -97,3 +97,49 @@ export function position_bar(data, id) {
 
   return chart;
 }
+
+export const position_labeled_pie = (
+  data,
+  id,
+  name,
+  font = 20,
+  special,
+  specialVal
+) => {
+  const chart = am4core.create(id, am4charts.PieChart);
+  chart.data = data;
+
+  chart.innerRadius = am4core.percent(65);
+
+  //Add and configure Series
+  var pieSeries = chart.series.push(new am4charts.PieSeries());
+  pieSeries.dataFields.value = 'value';
+  pieSeries.dataFields.category = 'type';
+
+  //removes ticks
+  pieSeries.labels.template.disabled = true;
+  pieSeries.ticks.template.disabled = true;
+  pieSeries.slices.template.tooltipText = '';
+
+  //This creates initial animation
+  pieSeries.hiddenState.properties.opacity = 1;
+  pieSeries.hiddenState.properties.endAngle = -90;
+  pieSeries.hiddenState.properties.startAngle = -90;
+
+  var label = chart.seriesContainer.createChild(am4core.Label);
+  label.text = special ? specialVal : `${data[0].value}%`;
+  label.horizontalCenter = 'middle';
+  label.verticalCenter = 'middle';
+  label.fontSize = font;
+  label.fontWeight = 'bold';
+  label.fill = am4core.color('#0F078E');
+
+  var colorSet = new am4core.ColorSet();
+  colorSet.list = ['#0F078E', '#CB7C07'].map(function (color) {
+    return new am4core.color(color);
+  });
+
+  pieSeries.colors = colorSet;
+
+  return chart;
+};

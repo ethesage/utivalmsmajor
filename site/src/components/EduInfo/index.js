@@ -3,7 +3,6 @@ import Moment from 'react-moment';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { getNextClasses } from 'views/Dashboard/Home/action';
-import no_course from 'assets/dashboard/no_course.png';
 import VideoIcon from 'assets/icons/video';
 import Clock from 'assets/icons/clock';
 import './style.scss';
@@ -76,15 +75,28 @@ const AssignmentSec = ({ data, idx }) => (
 );
 
 const Loader = () => (
-  <div class="border border-v_light px-2 py-2 rounded-md mb-3 shadow">
-    <div class="animate-pulse flex space-x-4">
-      <div class="rounded-full bg-v_light h-12 w-12"></div>
-      <div class="flex-1 space-y-4 py-1">
-        <div class="h-4 bg-v_light rounded w-3/4"></div>
-        <div class="space-y-2">
-          <div class="h-4 bg-v_light rounded"></div>
-          <div class="h-4 bg-v_light rounded w-5/6"></div>
+  <div className="border border-v_light px-2 py-2 rounded-md mb-3 shadow">
+    <div className="animate-pulse flex space-x-4">
+      <div className="rounded-full bg-v_light h-12 w-12"></div>
+      <div className="flex-1 space-y-4 py-1">
+        <div className="h-2 bg-v_light rounded w-1/4"></div>
+        <div className="space-y-2">
+          <div className="h-4 bg-v_light rounded"></div>
         </div>
+      </div>
+    </div>
+  </div>
+);
+
+const Loader2 = () => (
+  <div className="border border-v_light px-2 py-2 rounded-md mb-3 shadow">
+    <div className="animate-pulse flex space-x-4">
+      <div className="rounded-md bg-v_light h-12 w-12"></div>
+      <div className="flex-1 space-y-4 py-1">
+        <div className="space-y-2">
+          <div className="h-4 bg-v_light rounded"></div>
+        </div>
+        <div className="h-4 bg-v_light rounded w-3/4"></div>
       </div>
     </div>
   </div>
@@ -111,10 +123,10 @@ const Classes = ({ isStudent }) => {
             <h2 className="mb-5">Next Live Class</h2>
 
             <div className="overflow-auto h-64 flex flex-col">
-              {true ? (
+              {!nextclasses ? (
                 [1, 2, 3].map((i) => <Loader key={`load_${i}`} />)
               ) : nextclasses.length === 0 ? (
-                <NoClass />
+                <NoClass text="No live classes yet" />
               ) : (
                 nextclasses.map((nextclass, i) => {
                   return (
@@ -136,23 +148,25 @@ const Classes = ({ isStudent }) => {
           <div className="flex flex-col bg-white rounded-md p-6 flex-grow w-full">
             <h2 className="mb-5">Assignments</h2>
 
-            {true ? (
-              [1, 2, 3].map((i) => <Loader key={`load_${i}`} />)
-            ) : nextclasses.length === 0 ? (
-              <NoClass />
-            ) : (
-              nextclasses.map((nextclass, i) => {
-                return (
-                  !!nextclass && (
-                    <AssignmentSec
-                      key={`next_classes_${i}`}
-                      data={nextclass}
-                      idx={i}
-                    />
-                  )
-                );
-              })
-            )}
+            <div className="overflow-auto h-64 flex flex-col">
+              {!nextclasses ? (
+                [1, 2, 3].map((i) => <Loader2 key={`load_${i}`} />)
+              ) : nextclasses.length === 0 ? (
+                <NoClass text="No Assigment given yet" />
+              ) : (
+                nextclasses.map((nextclass, i) => {
+                  return (
+                    !!nextclass && (
+                      <AssignmentSec
+                        key={`next_classes_${i}`}
+                        data={nextclass}
+                        idx={i}
+                      />
+                    )
+                  );
+                })
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -160,13 +174,10 @@ const Classes = ({ isStudent }) => {
   );
 };
 
-function NoClass() {
+function NoClass({ text }) {
   return (
-    <div className="next_class flex-row ">
-      <img src={no_course} alt="" className="" />
-      <div className="text-sec flex-col">
-        <h2>You have no new classes</h2>
-      </div>
+    <div className="flex-center w-full h-full">
+      <h2>{text}</h2>
     </div>
   );
 }

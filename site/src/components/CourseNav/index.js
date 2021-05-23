@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import './style.scss';
+import { filterDate } from 'helpers';
+import moment from 'moment';
+import banner from 'assets/layout/banner.png';
 
-const CourseNav = () => {
+const CourseNav = ({ currentCourse }) => {
   const { courseId, cohortId } = useParams();
   const { isStudent, isTrainer } = useSelector((state) => state.auth);
 
@@ -15,16 +17,21 @@ const CourseNav = () => {
     return () => {};
   }, []);
 
+  const dateData = {
+    startDate: filterDate(currentCourse?.CourseCohort?.dateRange)?.startDate,
+    endDate: filterDate(currentCourse?.CourseCohort?.dateRange)?.endDate,
+  };
+
   let links = [];
 
   const base_links = [
     { link: `/courses/overview/${courseId}`, title: 'Overview' },
-    { link: `/courses/classroom/${courseId}`, title: 'Classroom' },
+    { link: `/courses/classroom/${courseId}`, title: 'Lesson' },
   ];
 
   const user_links = [
     { link: `/courses/study-plan/${courseId}`, title: 'Study Plan' },
-    { link: `/courses/members/${courseId}`, title: 'Co-learners' },
+    { link: `/courses/members/${courseId}`, title: 'Co-Learners' },
   ];
 
   const t_link = [
@@ -38,7 +45,7 @@ const CourseNav = () => {
     },
     {
       link: `/admin/courses/classroom/${courseId}/${cohortId}`,
-      title: 'Classroom',
+      title: 'Lesson',
     },
     {
       link: `/admin/courses/students/${courseId}/${cohortId}`,
@@ -63,14 +70,40 @@ const CourseNav = () => {
   }
 
   return (
-    <nav className="cx_det__nav">
-      <ul className="flex-row j-start scrolled_ver">
+    <nav className="mb-16">
+      <div className="p-4 relative bg-theme z-0 rounded-md mb-4">
+        {currentCourse?.Course?.name && (
+          <div className="flex justify-between md:items-center flex-col md:flex-row">
+            <h4 className="text-white text-2xl z-10 ">
+              {currentCourse?.Course?.name}
+            </h4>
+
+            <div className="z-10 ">
+              <p className="text-white text-base md:text-xl mt-3 md:mt-0">
+                {currentCourse?.Cohort?.cohort} Cohort
+              </p>
+              <small className="text-xs text-secondary font-semibold">
+                {moment(dateData?.startDate).format('MMM DD, YYYY')} -{' '}
+                {moment(dateData?.endDate).format('MMM DD, YYYY')}
+              </small>
+            </div>
+          </div>
+        )}
+
+        <img
+          src={banner}
+          alt="banner"
+          className="absolute w-full h-full object-cover top-0 z-0 left-0"
+        />
+      </div>
+
+      <ul className="flex scrolled_ver overflow-auto rounded-md shadow bg-white">
         {links.map((link, i) => (
-          <li key={`nav_cx_${i}`} className="cx_nav_item">
+          <li key={`nav_cx_${i}`} className="p-3 mr-10">
             <NavLink
               to={`${link.link}`}
-              className="cx_linz"
-              activeClassName="__active"
+              className=" whitespace-nowrap text-sm"
+              activeClassName="text-theme font-semibold"
             >
               {link.title}
             </NavLink>

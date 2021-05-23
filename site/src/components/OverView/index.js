@@ -1,70 +1,70 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import moment from 'moment';
 import GetCurrentCourse from 'Hooks/getCurrentCourse';
-import useBreadcrumbs from 'Hooks/useBreadCrumbs';
-import Loader from 'components/Loading';
-import CourseCard from '../ActiveCourseCard';
-import Facilitators from '../Facilitators';
 import NavBar from '../CourseNav';
-import './style.scss';
+import Title from 'components/Title';
+import { filterDate } from 'helpers';
 
 const Overview = () => {
-  const { courseId } = useParams();
-  const { isStudent } = useSelector((state) => state.auth);
   const [loading, error, currentCourse] = GetCurrentCourse();
 
-  useBreadcrumbs(
-    {
-      name: currentCourse?.Course?.name,
-      link: `/courses/overview/${courseId}`,
-    },
-    !!currentCourse
-  );
+  const dateData = {
+    startDate: filterDate(currentCourse?.CourseCohort?.dateRange)?.startDate,
+    endDate: filterDate(currentCourse?.CourseCohort?.dateRange)?.endDate,
+  };
 
   return (
     <>
-      <NavBar />
-      <section className="cx_ovx">
+      <Title text="Course" />
+
+      <NavBar currentCourse={currentCourse} />
+      <section className="course-overview">
         {loading ? (
-          <Loader tempLoad={true} full={false} />
+          <div>
+            <div className="flex justify-center space-x-4 mb-6">
+              <LoaderSlim height={5} width="1/2" />
+              <LoaderSlim height={5} width="1/2" />
+            </div>
+
+            <LoaderSlim height={44} width="full" />
+          </div>
         ) : error || currentCourse.length === 0 ? (
           <div>Course Not found</div>
         ) : (
           <>
-            <div className="ac_crd">
-              <CourseCard
-                course={currentCourse.Course}
-                cohort={currentCourse.Cohort}
-                isStudent={isStudent}
-                range={currentCourse.CourseCohort.dateRange}
-                progress={
-                  isStudent
-                    ? currentCourse.progress
-                    : currentCourse.CourseCohort.progress
-                }
-              />
-              <Facilitators trainers={currentCourse.Course.Classes} />
+            <div className="-m-3 flex flex-wrap">
+              <div className="p-3 w-full sm:w-1/2 text-sm">
+                <small className="text-theme">Course Title</small>
+                <p className="bg-white p-3 mt-2 rounded-md">
+                  {currentCourse.Course.name}
+                </p>
+              </div>
+              <div className="p-3 w-full sm:w-1/2 text-sm">
+                <small className="text-theme">Duration</small>
+                <p className="bg-white p-3 mt-2 rounded-md">
+                  Start:{' '}
+                  <strong className="mr-4">
+                    {moment(dateData?.startDate).format('MMM DD, YYYY')}
+                  </strong>
+                  End:{' '}
+                  <strong>
+                    {moment(dateData?.endDate).format('MMM DD, YYYY')}
+                  </strong>
+                </p>
+              </div>
             </div>
 
-            <div className="info_sec _text">
-              <div className="info">
-                <h2>{currentCourse.Course.name}</h2>
-                <p>{currentCourse.Course.description}</p>
-              </div>
+            <div className="mt-16">
+              <small className="text-theme">Course Description</small>
 
-              <div className="list_info">
-                <h2>What you will {isStudent ? 'learn' : 'teach'}</h2>
+              <ol className="p-5 bg-white text-sm rounded-md min-h-xs mt-2 list-decimal pl-10">
                 {currentCourse.Course.CourseDescriptions.map((classr, i) => (
-                  <div className="list" key={`descriptors_${i}`}>
-                    <span className="flex-row">
-                      <p>{i + 1}</p>
-                    </span>
+                  <li className="list mb-4" key={`descriptors_${i}`}>
                     <h3>{classr.title}</h3>
                     <p>{classr.description}</p>
-                  </div>
+                  </li>
                 ))}
-              </div>
+              </ol>
             </div>
           </>
         )}
@@ -72,5 +72,15 @@ const Overview = () => {
     </>
   );
 };
+
+function LoaderSlim({ height, width }) {
+  return (
+    <div className={`animate-pulse flex w-${width}`}>
+      <div className="flex-1 space-y-4 py-1">
+        <div className={`h-${height} bg-white rounded`}></div>
+      </div>
+    </div>
+  );
+}
 
 export default Overview;
