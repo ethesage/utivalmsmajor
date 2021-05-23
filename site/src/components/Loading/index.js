@@ -25,7 +25,7 @@ const Loader = ({ tempLoad, full }) => {
     <>
       {tempLoad ? (
         <main className="loader_con_main flex-center flex-col" style={styles}>
-          <div className="loader">
+          <div className="loader-full">
             <div>
               <ul>
                 <li>
