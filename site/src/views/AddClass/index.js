@@ -8,7 +8,7 @@ import AddNewClass from './AddClassView';
 import { ToastProvider } from 'react-toast-notifications';
 import './style.scss';
 
-const Classroom = () => {
+const Classroom = (props) => {
   const { courseId } = useParams();
   const { pathname } = useLocation();
   const [loading, error, currentCohort, currentCourse] = GetCurrentCohort();
@@ -27,7 +27,7 @@ const Classroom = () => {
         currentCohort={currentCohort}
         currentCourse={currentCourse}
         link={`${pathname}/add`}
-        text="Add Class"
+        text={props.edit ? null : 'Add Class'}
       />
       <NavBar />
       <section className="cx_listnx img">
@@ -39,6 +39,7 @@ const Classroom = () => {
               name={currentCourse?.name}
               courseId={courseId}
               mainCohortId={currentCohort?.Cohort?.id}
+              {...props}
             />
           </ToastProvider>
         )}
