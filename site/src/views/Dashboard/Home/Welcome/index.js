@@ -13,7 +13,7 @@ const Welcome = ({ user }) => {
           </h1>
 
           <p
-            className="text-sm lg:text-base whitespace-pre-wrap"
+            className="text-sm lg:text-base text-justify"
             style={{
               fontSize: '14.5px',
             }}
