@@ -3,7 +3,7 @@ import { Route, Redirect } from 'react-router-dom';
 import Loader from '../../../components/Loading';
 import { useSelector } from 'react-redux';
 
-const PrivateRoute = ({ component: Component, ...rest }) => {
+const PrivateRoute = ({ comp: Component, ...rest }) => {
   const { user, isAdmin, loading } = useSelector((state) => state.auth);
 
   return (

@@ -205,8 +205,6 @@ export const uploadProgress = (setPercentage, multiplier = 1) => {
   };
 };
 
-export const s3url = process.env.s3Url;
-
 export const filterDate = (date) => {
   if (!date) return null;
   const dates = date.split(' - ');
@@ -234,3 +232,4 @@ export const filterDate = (date) => {
     endDate: moment(endDate).format('YYYY-MM-DD'),
   };
 };
+export const s3url = process.env.REACT_APP_s3Url;

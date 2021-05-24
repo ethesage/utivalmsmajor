@@ -1,6 +1,4 @@
-import React from 'react';
 import ReactDOM from 'react-dom';
-import { ParallaxProvider } from 'react-scroll-parallax';
 import { ToastProvider } from 'react-toast-notifications';
 import { Provider, useDispatch } from 'react-redux';
 import App from './App';
@@ -19,9 +17,7 @@ const Appz = () => {
 ReactDOM.render(
   <Provider store={store}>
     <ToastProvider>
-      <ParallaxProvider>
-        <Appz />
-      </ParallaxProvider>
+      <Appz />
     </ToastProvider>
   </Provider>,
   document.getElementById('root')

@@ -443,24 +443,26 @@ function Classes({
                     ? 'Resource Materials'
                     : 'Class assignment'}
                 </h3>
-                <Files
-                  files={
-                    dropType === 'resource'
-                      ? classResources[title]?.resources
-                      : classResources[title]?.assignment
-                  }
-                  showdrag={
-                    dropType === 'resource' && full ? true : false
-                    // : !!!classResources[title].files
-                  }
-                  errorMsg={
-                    dropType === 'resource'
-                      ? 'No materials for this class yet'
-                      : 'No assignment Yet'
-                  }
-                  deleteFile={deleteFIle}
-                  handleImage={upload}
-                />
+                {showResourceDrop && (
+                  <Files
+                    files={
+                      dropType === 'resource'
+                        ? classResources[title]?.resources
+                        : classResources[title]?.assignment
+                    }
+                    showdrag={
+                      dropType === 'resource' && full ? true : false
+                      // : !!!classResources[title].files
+                    }
+                    errorMsg={
+                      dropType === 'resource'
+                        ? 'No materials for this class yet'
+                        : 'No assignment Yet'
+                    }
+                    deleteFile={deleteFIle}
+                    handleImage={upload}
+                  />
+                )}
               </div>
             </div>
           </RevielDrop>
