@@ -303,14 +303,12 @@ export const deleteClass = async (req, res) => {
     where: { id: foundClass.courseId },
   });
 
-  // await foundClass.destroy();
+  await foundClass.destroy();
 
   // remove all the class resources
   const classResourceLink = `Courses/${course.name}/classes/${foundClass.title}/`;
 
   await emptyS3Directory(classResourceLink);
-
-  // await deleteImage(classResourceLink);
 
   return successStat(res, 201, 'data', 'Delete Successful');
 };

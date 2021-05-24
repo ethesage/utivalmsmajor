@@ -192,7 +192,7 @@ const AddAssignment = ({ title, course, currentClass }) => {
   const submit = async (e) => {
     e.preventDefault();
 
-    if (!resourceAssignment[0].id) {
+    if (!resourceAssignment[0]?.id) {
       addToast('Please upload a file', {
         appearance: 'error',
         autoDismiss: true,

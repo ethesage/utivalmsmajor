@@ -194,4 +194,4 @@ export const uploadProgress = (setPercentage, multiplier = 1) => {
   };
 };
 
-export const s3url = process.env.s3Url;
+export const s3url = process.env.REACT_APP_s3Url;

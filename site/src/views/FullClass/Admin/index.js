@@ -9,6 +9,7 @@ import NavBar from 'components/CourseNav';
 import Layout from 'Layouts/SideNavListLayout';
 import AddClass from 'views/AddClass';
 import AddAssignment from '../../AddAssignment';
+import { ToastProvider } from 'react-toast-notifications';
 import '../style.scss';
 
 function FullClass({ gapi }) {
@@ -42,7 +43,7 @@ function FullClass({ gapi }) {
   }
 
   return (
-    <>
+    <ToastProvider>
       <Nav
         currentCohort={currentCohort}
         currentCourse={currentCourse}
@@ -101,7 +102,7 @@ function FullClass({ gapi }) {
                   name={currentCourse?.name}
                   courseId={courseId}
                   mainCohortId={currentCohort?.Cohort?.id}
-                  key={data?.id}
+                  // key={data?.id}
                 />
               )}
 
@@ -114,7 +115,7 @@ function FullClass({ gapi }) {
                     gapi={gapi}
                     isStudent={isStudent}
                     folderId={currentCohort?.folderId}
-                    key={data?.id}
+                    // key={data?.id}
                   />
                 </>
               )}
@@ -122,7 +123,7 @@ function FullClass({ gapi }) {
           </Layout>
         )}
       </div>
-    </>
+    </ToastProvider>
   );
 }
 export default FullClass;
