@@ -33,7 +33,7 @@ const MainView = ({ children, type }) => {
   }, []);
 
   return (
-    <main className="dashboard flex-row al-start">
+    <main className="dashboard flex justify-start items-start h-full w-full relative bg-v_light">
       <aside className={`dh-aside ${open ? ' open' : ''}`}>
         <SideBar close={close} type={type} />
       </aside>

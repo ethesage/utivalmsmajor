@@ -5,7 +5,7 @@
   "description": "Online learning platform for the future",
   "dependencies": {
     "@amcharts/amcharts4": "^4.10.4",
-    "@craco/craco": "^6.1.1",
+    "@craco/craco": "^6.1.2",
     "@editorjs/checklist": "^1.1.0",
     "@editorjs/code": "^2.5.0",
     "@editorjs/delimiter": "^1.1.0",
@@ -110,7 +110,7 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "postcss": "^7.0.35",
     "redux-devtools-extension": "^2.13.8",
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.3"
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.1.2"
   },
   "keywords": [
     ""
