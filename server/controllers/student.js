@@ -280,7 +280,7 @@ export const getStudentDashboard = async (req, res) => {
   const { id } = req.session.user;
 
   const completed = await models.StudentCourse.count({
-    where: { studentId: id, progess: 'finished' },
+    where: { studentId: id, status: 'finished' },
   });
 
   const ongoing = await models.StudentCourse.count({

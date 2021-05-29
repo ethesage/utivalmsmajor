@@ -42,7 +42,9 @@ const MainView = ({ children, type }) => {
           <NavBar open={openBar} grow={open} />
           {children}
         </div>
-        <div className="dash-footer">(c) 2020 Utiva All Rights Reserved</div>
+        <div className="dash-footer">
+          (c) {new Date().getFullYear()} Utiva All Rights Reserved
+        </div>
       </section>
     </main>
   );
