@@ -43,7 +43,7 @@ const MainView = ({ children, type }) => {
           <div className="content-sec w-full">{children}</div>
         </div>
         <div className="w-full text-center p-8">
-          (c) 2020 Utiva All Rights Reserved
+          (c) {new Date().getFullYear()} Utiva All Rights Reserved
         </div>
       </section>
     </main>

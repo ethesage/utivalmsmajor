@@ -28,7 +28,7 @@ export const createCourse = Joi.object().keys({
       description: Joi.string().required(),
     })
   ),
-  thumbnail: Joi.string(),
+  thumbnail: Joi.alternatives().try(Joi.string(), Joi.object().keys()),
 });
 
 export const getCourseSchema = Joi.object().keys({
@@ -47,7 +47,7 @@ export const getCourseSchema = Joi.object().keys({
   list_desc: Joi.string(),
   //   status: Joi.string(),
   extLink: Joi.string(),
-  thumbnail: Joi.alternatives(Joi.string(), Joi.object()),
+  thumbnail: Joi.alternatives().try(Joi.string(), Joi.object().keys()),
   type: Joi.string().required(),
   //   link: Joi.string().required(),
   category: Joi.string().required(),
