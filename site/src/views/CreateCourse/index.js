@@ -78,8 +78,10 @@ const CreateCourse = ({ edit }) => {
           autoDismiss: true,
         });
 
-        submitButton.current.children[0].innerHTML = text.reg;
-        submitButton.current.classList.remove('loader');
+        if (submitButton.current) {
+          submitButton.current.children[0].innerHTML = text.reg;
+          submitButton.current.classList.remove('loader');
+        }
 
         edit
           ? dispatch(editCourse(resp.data.data))
