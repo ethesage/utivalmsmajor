@@ -3,7 +3,6 @@ import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getEnrolledCourses } from 'g_actions/member';
 import useFetch from 'Hooks/useFetch';
-import Button from 'components/Button';
 import Overview from 'components/OverView';
 import not_found from 'assets/not_found.png';
 import Loader from 'components/Loading';
@@ -14,7 +13,6 @@ import Assignment from 'views/Assignment';
 import AllAssignments from 'views/AllAssignments/index';
 import StudyPlan from '../../StudyPlan';
 import Members from '../../Members';
-import './style.scss';
 
 const Courses = ({ gapi }) => {
   let { path } = useRouteMatch();
@@ -35,27 +33,31 @@ const Courses = ({ gapi }) => {
   }, [dispatch, fetch, userType, enrolledcourses]);
 
   return (
-    <section className="dash-con mx_courx flex-col al-start j-start">
+    <section className="flex flex-grow flex-col">
       {loading ? (
         <div className="img">
           <Loader tempLoad={true} full={false} />
         </div>
       ) : error ? (
-        <p>An Error Occurred</p>
+        <div className="flex-grow flex-center flex-col text-theme">
+          <p>An Error Occurred</p>
+          <p>Please refresh this window</p>
+        </div>
       ) : enrolledcourses.length === 0 ? (
-        <div className="nt_found img flex-col">
-          <img src={not_found} alt="Not found" />
+        <div className="flex-grow flex-center flex-col text-theme">
+          <img src={not_found} className="w-60 mb-5" alt="Not found" />
           {isStudent ? (
-            <p className="text">You are yet to enrol for any course</p>
+            <p>You are yet to enrol for any course</p>
           ) : (
-            <p className="text">You have not been assigned any Courses</p>
+            <p>You have not been assigned any Courses</p>
           )}
           {isStudent && (
-            <Button
-              link="/all-courses"
-              text="Start Learning"
-              className="flex-row"
-            />
+            <a
+              className="py-2 px-5 mt-2 rounded-md text-white bg-secondary text-sm"
+              href="https://utiva.io"
+            >
+              Start Learning
+            </a>
           )}
         </div>
       ) : (

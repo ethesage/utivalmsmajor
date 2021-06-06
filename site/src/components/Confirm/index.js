@@ -31,7 +31,14 @@ const Confirm = ({ text, close, onClick, closeText }) => {
   }, [close, confirmed]);
 
   return (
-    <div className="confirm_dx">
+    <div
+      className="bg-white rounded-md p-7"
+      style={{
+        width: '90vw',
+        maxWidth: '400px',
+        minWidth: '250px',
+      }}
+    >
       {confirmed ? (
         <div className="uxp_done flex-col">
           <img src={check} alt="successful" />
@@ -39,14 +46,22 @@ const Confirm = ({ text, close, onClick, closeText }) => {
         </div>
       ) : (
         <>
-          <p className="mn_txt">{text}</p>
-          <div className="flex-row">
-            <button className="clx_btn" ref={btnRef} onClick={handleClick}>
-              <p>Yes</p>
-            </button>
-            <p className="clx_btn" onClick={close}>
-              No
-            </p>
+          <p className="text-center mb-10">{text}</p>
+          <div className="-mx-3.5">
+            <div className="w-1/2 px-3.5 inline-block">
+              <button
+                className="w-full text-center bg-theme text-white p-2 rounded-sm"
+                ref={btnRef}
+                onClick={handleClick}
+              >
+                <p>Yes</p>
+              </button>
+            </div>
+            <div className="w-1/2 px-3.5 inline-block rounded-sm transition-all duration-300 hover:bg-light_shade hover:text-white">
+              <p className="w-full text-center p-2" onClick={close}>
+                No
+              </p>
+            </div>
           </div>
         </>
       )}

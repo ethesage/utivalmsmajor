@@ -89,7 +89,7 @@ const Home = () => {
         </div>
       </section>
 
-      <Performance />
+      {isStudent && <Performance />}
     </main>
   );
 };

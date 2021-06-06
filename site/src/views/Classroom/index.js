@@ -13,43 +13,40 @@ const Classroom = () => {
   const { user } = useSelector((state) => state.auth);
   const { courseId } = useParams();
 
-  GetCurrentCourse();
+  const [loading] = GetCurrentCourse();
 
   return (
     <>
-      <Title text="Course" />
+      <Title text="Course" loading={loading} />
       <NavBar currentCourse={currentCourse} />
-      <section className=" max-w-4xl ">
+      <section className="max-w-5xl">
         {!currentCourse ? (
           <div>
-            <Loader tempLoad={true} full={false} />
             <Loader tempLoad={true} full={false} />
           </div>
         ) : (
           <>
-            <div className="mt-16">
-              {currentCourse.Course.Classes.map((class_room, i) => {
-                return (
-                  <ClassData
-                    key={class_room.id}
-                    data={class_room}
-                    courseId={courseId}
-                    currentCourse={currentCourse}
-                    index={i}
-                    completedPayment={
-                      user.role === 'student'
-                        ? i < currentCourse.Course.Classes.length / 2
-                          ? true
-                          : currentCourse &&
-                            (currentCourse.paymentComplete ||
-                              null === currentCourse.paymentComplete)
-                        : //if its a trainer then true
-                          true
-                    }
-                  />
-                );
-              })}
-            </div>
+            {currentCourse.Course.Classes.map((class_room, i) => {
+              return (
+                <ClassData
+                  key={class_room.id}
+                  data={class_room}
+                  courseId={courseId}
+                  currentCourse={currentCourse}
+                  index={i}
+                  completedPayment={
+                    user.role === 'student'
+                      ? i < currentCourse.Course.Classes.length / 2
+                        ? true
+                        : currentCourse &&
+                          (currentCourse.paymentComplete ||
+                            null === currentCourse.paymentComplete)
+                      : //if its a trainer then true
+                        true
+                  }
+                />
+              );
+            })}
             {user.role === 'student' && (
               <PaymentComplete
                 paymentComplete={

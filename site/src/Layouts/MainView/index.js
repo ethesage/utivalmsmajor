@@ -38,9 +38,11 @@ const MainView = ({ children, type }) => {
         <SideBar close={close} type={type} />
       </aside>
       <section className="dh-main flex justify-start items-start flex-col px-5 lg:px-16 flex-grow">
-        <div className="content xl:container mx-auto h-full flex-grow flex-col w-screen">
+        <div className="content xl:container mx-auto h-full flex flex-grow flex-col w-screen">
           <NavBar open={openBar} grow={open} />
-          <div className="content-sec w-full">{children}</div>
+          <div className="content-sec flex flex-col flex-grow w-full">
+            {children}
+          </div>
         </div>
         <div className="w-full text-center p-8">
           (c) {new Date().getFullYear()} Utiva All Rights Reserved

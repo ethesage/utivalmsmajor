@@ -1,76 +1,56 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useRef, useEffect, useState } from 'react';
+import moment from 'moment';
 import { useSelector, useDispatch } from 'react-redux';
 import { useToasts } from 'react-toast-notifications';
-import moment from 'moment';
 import {
   getResources,
-  deleteAssignmnet,
   deleteResources,
   studentProgress,
   courseProgress,
 } from 'g_actions/member';
-import { deleteClass } from 'g_actions/admin';
 import Editor from 'components/Editor';
 import ProgressBar from 'components/ProgressBar';
 import { axiosInstance } from 'helpers';
-import Confirm from 'components/Confirm';
-import play from 'assets/icons/course/play.png';
-import video from 'assets/icons/course/video.png';
-import material from 'assets/icons/course/material.png';
-import assignment from 'assets/icons/course/assignment.png';
 import Modal from '../Modal';
 import Files from 'components/Files';
-import ResourceBtn from '../ResourceButton';
-import RevielDrop from '../RevielDrop';
-import HeadSection from './headSection';
 import Trainer from './trainers';
-import ClassVideos from './classVideos';
-import ClassVideoModal from './classVideoModal';
 import { uploadProgress } from 'helpers';
-import './style.scss';
+import Live from 'assets/icons/class/live';
+import Video from 'assets/icons/class/video';
+import Button from 'components/Button';
+import ClassVideos from './classVideos';
+import Close from 'assets/icons/close';
+import Plus from 'assets/icons/plus';
 
 function Classes({
   data,
-  courseId,
-  open = false,
-  showArrow = true,
-  full,
-  index,
-  showResources = true,
-  cohortId,
-  assData,
   openedRef,
-  setOpenedRef,
-  addAssignment,
   completedPayment,
   currentCourse,
   courseCohortId,
-  editClass,
 }) {
-  const { title, description, link } = data;
+  const { title, description, link, CohortClassDays } = data;
   const { isStudent, isAdmin, isTrainer } = useSelector((state) => state.auth);
   const [showResourceDrop, setShowResourceDrop] = useState(false);
-  const [currentFile, setCurrentFile] = useState();
+  const [playLarge, setPlayLarge] = useState();
   const [wait, setWait] = useState(false);
-  const [loadRemoveClass, setLoadRemoveClass] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [dropType, setDropType] = useState();
   const { classResources } = useSelector((state) => state.member);
-  const { currentCohort } = useSelector((state) => state.admin);
   const dispatch = useDispatch();
-  const modalRef = useRef();
-  const watchVideoRef = useRef();
-  const removeClassRef = useRef();
-  const deleteDialog = useRef();
   const startclass = useRef();
   const progressDialog = useRef();
   const { addToast } = useToasts();
   const classRef = useRef();
   const classId = data.id;
 
-  const list_desc =
-    currentCourse?.list_desc || currentCourse?.Course?.list_desc;
+  const date = CohortClassDays[0]?.date;
+  const time = CohortClassDays[0]?.date;
+
+  const closeLargePlayer = () => {
+    setPlayLarge(false);
+  };
+
+  const classType = 'video';
 
   useEffect(() => {
     if (!openedRef) return;
@@ -82,21 +62,6 @@ function Classes({
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openedRef]);
-
-  const dropDrop = (type) => {
-    dropType === type || !dropType
-      ? setShowResourceDrop(!showResourceDrop)
-      : setShowResourceDrop(true);
-    setDropType(type);
-  };
-
-  const viewResources = (e) => {
-    e.preventDefault();
-
-    if (!isStudent) {
-      dropDrop('resource');
-    } else modalRef.current.open();
-  };
 
   const joinclass = async () => {
     setWait(false);
@@ -132,17 +97,14 @@ function Classes({
     }
   };
 
-  const delete_file = async () => {
+  const delete_file = async (file) => {
     try {
       const res = await axiosInstance.delete(
-        `/file?path=${encodeURIComponent(currentFile)}`
+        `/file?path=${encodeURIComponent(file)}`
       );
       if (res) {
-        dropType === 'resource'
-          ? dispatch(deleteResources(title, currentFile))
-          : dispatch(deleteAssignmnet(title, currentFile));
+        dispatch(deleteResources(title, file));
 
-        setCurrentFile(null);
         return true;
       }
     } catch (err) {
@@ -153,11 +115,6 @@ function Classes({
       });
       return false;
     }
-  };
-
-  const deleteFIle = (file) => {
-    setCurrentFile(file);
-    deleteDialog.current.open();
   };
 
   const openclass = (state) => {
@@ -210,286 +167,180 @@ function Classes({
     }
   };
 
-  const watchVideos = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-    watchVideoRef.current.open();
-  };
+  // completedPayment
 
-  const remove_class = (file) => {
-    removeClassRef.current.open();
-  };
+  // {!completedPayment && (
+  //   <div className="cx_lis-content ">
+  //     <p>You do not have access to this class</p>
+  //   </div>
+  // )}
 
-  const removeClass = async () => {
-    setLoadRemoveClass(true);
-
-    const courseName = currentCourse?.name || currentCourse?.Course?.name;
-
-    try {
-      await axiosInstance.delete(`/class/${classId}`);
-
-      dispatch(deleteClass(courseName, classId));
-      return true;
-    } catch (err) {
-      addToast('Error Removing Classs', {
-        appearance: 'error',
-        autoDismiss: true,
-      });
-
-      setLoadRemoveClass(false);
-    }
-  };
-
-  return loadRemoveClass ? (
-    <div
-      className={`cx_listnx_con ${!completedPayment ? 'greyed' : ''}`}
-      ref={classRef}
-      key={`inner_${classId}`}
-    >
-      <RevielDrop
-        open={false}
-        showArrow={false}
-        header={
-          <div className="cx_header hx-main flex-row j-space relative">
-            <div className="del-loader">
-              <div className="animate-pulse flex space-x-4">
-                <div className="ball"></div>
-                <div className="flex-1 py-1">
-                  <div className="div-1"></div>
-                  <div className="div-2"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        }
-      ></RevielDrop>
-    </div>
-  ) : (
+  return (
     <>
-      <div
-        className={`cx_listnx_con ${!completedPayment ? 'greyed' : ''}`}
-        ref={classRef}
-        key={`inner_${classId}`}
-      >
-        <RevielDrop
-          open={open}
-          showArrow={showArrow}
-          runOnOpen={() => {
-            setOpenedRef && setOpenedRef(classRef);
-          }}
-          runOnClose={() => setShowResourceDrop(false)}
-          header={
-            <HeadSection
-              index={index}
-              full={full}
-              list_desc={list_desc}
-              cohortId={cohortId}
-              data={data}
-              classResources={classResources}
-              isAdmin={isAdmin}
-              isTrainer={isTrainer}
-              courseId={courseId}
-              addAssignment={addAssignment}
-            />
-          }
-        >
-          {completedPayment && (
-            <div className={`cx_lis-content ${full ? ' full' : ''}`}>
-              {assData?.length > 0 ? (
-                <div className="inf_x">
-                  <h3>{assData[0].title}</h3>
-                  <p>{assData[0].description}</p>
+      <div className="-m-10">
+        <div className="flex flex-wrap">
+          {classType === 'live' && (
+            <div className="w-full max-w-md p-10">
+              <div className="h-80 bg-theme shadow rounded-md sticky top-20"></div>
+            </div>
+          )}
 
-                  <div
-                    className="flex-row j-start"
-                    style={{ marginTop: '20px' }}
-                  >
-                    <p>
-                      <strong>Points:</strong> {assData[0].point}
-                    </p>{' '}
-                    <p style={{ marginLeft: '10px' }}>
-                      <strong>DueDate:</strong>{' '}
-                      {moment(assData[0]?.dueDate).format('YYYY-MM-DD')}
-                    </p>
-                  </div>
-                </div>
-              ) : (
-                <div className="inf_x">
-                  {/* <p>{title}</p> */}
-
-                  {!full && isAdmin && (
-                    <div>
-                      <button
-                        style={{
-                          color: 'white',
-                          background: '#fbaf1b',
-                          padding: '5px 10px',
-                          borderRadius: '5px',
-                          marginBottom: '20px',
-                        }}
-                        onClick={remove_class}
-                      >
-                        Remove class
-                      </button>
-                    </div>
-                  )}
-
-                  <Editor
-                    key={description}
-                    readOnly={true}
-                    data={description}
-                    mode="no-edit"
-                  />
-                </div>
+          <div className="p-10 flex-grow max-w-4xl">
+            <div className="text-gray-500 flex text-sm items-center my-5">
+              {classType === 'live' && (
+                <>
+                  <Live className="fill-current mr-5" /> <p>Live Class</p>{' '}
+                </>
               )}
+              {classType === 'video' && (
+                <>
+                  <Video className="fill-current mr-5" /> <p>Video Class</p>{' '}
+                </>
+              )}
+            </div>
 
-              {showResources ? (
-                <div className="btns">
-                  <div className="reg_text">
-                    <div className="btn_sec_con flex-row j-start">
-                      <div className="btn_sec">
-                        <ResourceBtn
-                          img={play}
-                          text={isAdmin ? 'Class Link' : 'Join Class'}
-                          color="theme"
-                          link={link}
-                          ext
-                          handleClick={joinclass}
-                        />
-                      </div>
+            <div>
+              <div className="pb-14">
+                <h1 className="text-theme mb-7">
+                  <strong>{data.title}</strong>{' '}
+                </h1>
 
-                      {!full && isStudent && (
-                        <div className="btn_sec">
-                          <ResourceBtn
-                            img={video}
-                            text={'Class Recording'}
-                            color="theme"
-                            handleClick={watchVideos}
-                          />
+                <Editor
+                  key={description}
+                  readOnly={true}
+                  data={description}
+                  mode="no-edit"
+                />
+              </div>
+
+              <div className="border-b border-t border-gray-200 py-14 w-full">
+                {classType === 'live' && (
+                  <>
+                    <h1 className="text-theme mb-7">
+                      <strong>Class Schedule</strong>{' '}
+                    </h1>
+
+                    <div className="-m-3.5">
+                      <div className="flex flex-wrap items-center justify-between w-full max-w-3xl">
+                        <div className="p-3.5 flex flex-wrap text-sm">
+                          <span className="inline-block mr-5">
+                            <strong className="mr-3">Date: </strong>
+                            {date
+                              ? moment(date).format('Do MMMM YYYY')
+                              : 'Not set yet'}
+                          </span>
+                          <span>
+                            <strong className="mr-3">Time: </strong>
+                            <span className="uppercase">
+                              {time
+                                ? moment(time).format('HH:MM a')
+                                : 'Not set yet'}
+                            </span>
+                          </span>
                         </div>
-                      )}
-
-                      {classResources[title]?.assignments.length > 0 &&
-                        isStudent && (
-                          <div className="btn_sec">
-                            <ResourceBtn
-                              img={assignment}
-                              text="Assignment"
-                              color="off"
-                              link={
-                                isAdmin
-                                  ? `/admin/courses/all-assignments/${courseId}/${cohortId}/${data.id}`
-                                  : isTrainer
-                                  ? `/courses/all-assignments/${courseId}/${data.id}`
-                                  : `/courses/assignment/${courseId}/${data.id}`
-                              }
-                            />
-                          </div>
-                        )}
-                    </div>
-                  </div>
-
-                  <Trainer isAdmin={isAdmin} full={full} data={data} />
-
-                  <div className="reg_text">
-                    <h4>Resources</h4>
-                    <div className="btn_sec_con flex-row j-start">
-                      <div className="btn_sec">
-                        <ResourceBtn
-                          img={material}
-                          text={`${isStudent ? 'Download' : 'Class'} Materials`}
-                          color="secondary"
-                          link=""
-                          handleClick={viewResources}
-                        />
+                        <div className="p-3.5">
+                          <Button
+                            text="Enter Class"
+                            className="use-theme"
+                            onClick={joinclass}
+                          ></Button>
+                        </div>
                       </div>
                     </div>
+                  </>
+                )}
+
+                {classType === 'video' && (
+                  <div
+                    className={`class-video-section flex flex-col ${
+                      playLarge ? 'play-large' : ''
+                    }`}
+                  >
+                    <div className="w-full relative vid">
+                      <div className="vid-section w-full">
+                        <video
+                          src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+                          className="w-full h-full object-contain bg-black rounded-sm"
+                        ></video>
+                      </div>
+                    </div>
+
+                    {playLarge && (
+                      <button
+                        className="fixed p-2 top-2 left-2 bg-white"
+                        onClick={closeLargePlayer}
+                      >
+                        <Close className="w-5 h-5" />
+                      </button>
+                    )}
+
+                    {playLarge && (
+                      <div className="container mt-10 flex-grow overflow-auto text-txt">
+                        <h1 className="mb-7">
+                          <strong>{data.title}</strong>{' '}
+                        </h1>
+
+                        <Editor
+                          key={description}
+                          readOnly={true}
+                          data={description}
+                          mode="no-edit"
+                        />
+                      </div>
+                    )}
                   </div>
-                </div>
-              ) : (
-                ''
-              )}
-
-              {!full ? (
-                <Link
-                  className="view"
-                  to={
-                    isAdmin
-                      ? `/admin/courses/classroom/${courseId}/${cohortId}/${data.id}`
-                      : `/courses/classroom/${courseId}/${data.id}`
-                  }
-                >
-                  View full outline
-                </Link>
-              ) : null}
-            </div>
-          )}
-          {!completedPayment && (
-            <div className="cx_lis-content ">
-              <p>You do not have access to this class</p>
-            </div>
-          )}
-        </RevielDrop>
-        {/** For  a student show the modal pop up for the class materails and assignments
-         * but for a trainer show this as a section underneat, this then helps to show the modal for uploading or deleting. Since we don't want overlapping modals
-         */}
-
-        {!isStudent && completedPayment ? (
-          <RevielDrop open={showResourceDrop}>
-            <div className="class_file_con">
-              <div className="box-shade" data-open={showResourceDrop}>
-                <h3>
-                  {dropType === 'resource'
-                    ? 'Resource Materials'
-                    : 'Class assignment'}
-                </h3>
-                {showResourceDrop && (
-                  <Files
-                    files={
-                      dropType === 'resource'
-                        ? classResources[title]?.resources
-                        : classResources[title]?.assignment
-                    }
-                    showdrag={
-                      dropType === 'resource' && full ? true : false
-                      // : !!!classResources[title].files
-                    }
-                    errorMsg={
-                      dropType === 'resource'
-                        ? 'No materials for this class yet'
-                        : 'No assignment Yet'
-                    }
-                    deleteFile={deleteFIle}
-                    handleImage={upload}
-                  />
                 )}
               </div>
+
+              <div className="border-b border-gray-200 py-14 w-full">
+                <h1 className="text-theme mb-7">
+                  <strong>
+                    Trainer{data?.CohortTrainers.length > 1 ? 's' : ''}
+                  </strong>
+                </h1>
+
+                <Trainer isAdmin={isAdmin} data={data} />
+              </div>
+
+              <div className="py-14">
+                <div className="flex justify-between items-center">
+                  <h1 className="text-theme mb-7">
+                    <strong>Resources</strong>
+                  </h1>
+
+                  <Plus className="w-8 h-8 fill-current text-theme" />
+                </div>
+
+                <div className="btn_sec_con flex-row j-start">
+                  <Files
+                    files={classResources[title].resources}
+                    errorMsg="No materials available yet"
+                    showdrag={false}
+                    isStudent={isStudent}
+                    deleteFile={delete_file}
+                    // errorMsg={
+                    //   dropType === 'resource'
+                    //     ? 'No materials for this class yet'
+                    //     : 'No assignment Yet'
+                    // }
+                    // deleteFile={deleteFIle}
+                    // handleImage={upload}
+                  />
+                </div>
+              </div>
+
+              {classType === 'live' && (
+                <div className="border-t border-gray-200 py-14 w-full">
+                  <ClassVideos data={data} isStudent={isStudent} />
+                </div>
+              )}
             </div>
-          </RevielDrop>
-        ) : (
-          <Modal ref={modalRef}>
-            <div className="class_file_con">
-              <h3>Resource Materials</h3>
-              <Files
-                files={classResources[title].resources}
-                errorMsg="No materials available yet"
-                showdrag={false}
-              />
-            </div>
-          </Modal>
-        )}
+          </div>
+        </div>
       </div>
+
       {completedPayment && (
         <>
-          <Modal ref={deleteDialog}>
-            <Confirm
-              text="Are you sure?"
-              onClick={delete_file}
-              close={() => deleteDialog.current.close()}
-              closeText="Successfuly Deleted"
-            />
-          </Modal>
-
           <Modal ref={progressDialog}>
             <ProgressBar progress={progress * 0.95} />
           </Modal>
@@ -515,27 +366,6 @@ function Classes({
                 <p className="loader_con_main">Loading class...</p>
               )}
             </div>
-          </Modal>
-
-          <ClassVideos
-            data={data}
-            full={full}
-            isStudent={isStudent}
-            classId={classId}
-            currentCohort={currentCohort}
-          />
-
-          <Modal ref={watchVideoRef}>
-            <ClassVideoModal data={data.CohortClassVideos} />
-          </Modal>
-
-          <Modal ref={removeClassRef}>
-            <Confirm
-              text="Are you sure?"
-              onClick={removeClass}
-              close={() => removeClassRef.current.close()}
-              closeText="Successfuly Deleted"
-            />
           </Modal>
         </>
       )}

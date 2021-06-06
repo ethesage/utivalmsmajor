@@ -4,6 +4,7 @@ import GetCurrentCourse from 'Hooks/getCurrentCourse';
 import NavBar from '../CourseNav';
 import Title from 'components/Title';
 import { filterDate } from 'helpers';
+import { LoaderSlim } from 'components/Loaders';
 
 const Overview = () => {
   const [loading, error, currentCourse] = GetCurrentCourse();
@@ -72,15 +73,5 @@ const Overview = () => {
     </>
   );
 };
-
-function LoaderSlim({ height, width }) {
-  return (
-    <div className={`animate-pulse flex w-${width}`}>
-      <div className="flex-1 space-y-4 py-1">
-        <div className={`h-${height} bg-white rounded`}></div>
-      </div>
-    </div>
-  );
-}
 
 export default Overview;

@@ -37,7 +37,7 @@ function App() {
           window.location.href.includes('signin') ||
           window.location.href.includes('signup')
         )
-          return;
+          return Promise.reject(err);
 
         if (err.response && err.response.status === 401) {
           if (time.current) return;

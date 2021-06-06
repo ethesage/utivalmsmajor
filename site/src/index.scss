@@ -53,6 +53,11 @@ abbr[title] {
   @apply py-2.5 px-5 text-white bg-secondary rounded-md
     fill-current transition-all duration-300 inline-block;
 
+  &.use-theme {
+    @apply bg-theme;
+    box-shadow: 0px 5px 10px rgba(#0f078e, 0.2);
+  }
+
   &:disabled {
     box-shadow: none;
     @apply bg-gray-400 cursor-not-allowed;
@@ -181,11 +186,6 @@ abbr[title] {
   }
 }
 
-.box-shade {
-  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-}
-
 .stu_main {
   div {
     height: 250px;
@@ -259,6 +259,21 @@ abbr[title] {
   background-attachment: local, local, scroll, scroll;
 }
 
+.class-data-card {
+  .remove-class {
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.3s ease;
+  }
+
+  &:hover {
+    .remove-class {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}
+
 .uxp_done {
   img {
     width: 50px;
@@ -326,36 +341,6 @@ abbr[title] {
 @keyframes spinner {
   to {
     transform: translate(-50%, -50%) rotate(360deg);
-  }
-}
-
-.trainer {
-  margin-bottom: 15px;
-  cursor: pointer;
-
-  img {
-    width: 60px;
-    height: 60px;
-    border-radius: 100%;
-    object-fit: cover;
-    margin-right: 20px;
-  }
-
-  &:hover {
-    background: #f6f6f6;
-  }
-
-  p {
-    font-size: 0.9em;
-  }
-
-  small {
-    font-size: 0.75em;
-  }
-
-  p,
-  small {
-    color: color(theme);
   }
 }
 
@@ -556,4 +541,33 @@ abbr[title] {
 
 .smooth-scroll {
   scroll-behavior: smooth;
+}
+
+.class-video-section {
+  &.play-large {
+    @apply fixed w-screen h-screen top-0 bottom-0 left-0 z-50 bg-v_light;
+    min-width: 100vw;
+    min-height: 100vw;
+
+    // .vid-section {
+    //   max-height: 70vh;
+    // }
+
+    .vid {
+      padding: 60% 0 0;
+
+      @screen md {
+        padding: 37% 0 0;
+      }
+    }
+  }
+
+  .vid {
+    padding: 52.25% 0 0;
+  }
+
+  .vid-section {
+    @apply absolute top-0 h-full;
+    min-height: unset;
+  }
 }

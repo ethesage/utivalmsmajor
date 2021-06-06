@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Progress } from 'react-sweet-progress';
 import medal from 'assets/icons/medal.png';
+import banner from 'assets/layout/small-banner.png';
 import 'react-sweet-progress/lib/style.css';
 import { filterDate } from 'helpers';
 import moment from 'moment';
@@ -20,16 +21,16 @@ const MainCourse = ({ data }) => {
         className="rounded-md shadow-md overflow-hidden block"
         to={`/courses/overview/${CourseCohort?.id}`}
       >
-        <div
-          className="h-32"
-          style={{
-            backgroundImage: `url(${Course.thumbnail})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-        >
-          <div className="p-4 pt-7 w-full text-gradient h-full flex items-end">
-            <h3 className="theme-color text-white font-bold">{Course.name}</h3>
+        <div className="h-32 bg-theme relative">
+          <img
+            src={banner}
+            alt="banner"
+            className="absolute w-full h-full object-cover top-0 z-0 left-0"
+          />
+          <div className="p-4 pt-7 w-full h-full flex items-center">
+            <h3 className="theme-color text-white font-bold z-10">
+              {Course.name}
+            </h3>
           </div>
         </div>
 

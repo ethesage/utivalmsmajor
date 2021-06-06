@@ -67,11 +67,14 @@ const Payment = ({ back, paymentAmount, mainText, doneFunc, fromSplit }) => {
   return (
     <div className="payment container --small mx-auto">
       {/* <dialog ref={disRef} className="d_s_c"> */}
-      <Modal ref={disRef} runOnClose={() =>
+      <Modal
+        ref={disRef}
+        runOnClose={() =>
           push(
             `/courses/overview/${courses.purchaseCourse.CourseCohorts[0].id}`
           )
-        }>
+        }
+      >
         <div className="flex flex-col p-7 bg-white rounded w-4/5 mx-auto max-w-lg">
           <img src={approved} alt="approved" className="w-full" />
           <div className="reg_text mb-5">
@@ -94,9 +97,13 @@ const Payment = ({ back, paymentAmount, mainText, doneFunc, fromSplit }) => {
       {/* {true ? ( */}
       {user ? (
         <div className="payment_con mx-auto text-center w-full max-w-2xl rounded-md md:py-8 md:px-5">
-          <p className="con_msg">
-            Congratulations! Continue your paymant using
-          </p>
+          {!mainText ? (
+            <p className="con_msg">
+              Congratulations! Continue your paymant using
+            </p>
+          ) : (
+            mainText
+          )}
 
           {courses.purchaseCourse.type !== 'free' && (
             <>

@@ -1,6 +1,4 @@
-import React from 'react';
-
-const remove = () => {
+const remove = ({ className }) => {
   return (
     <svg
       version="1.1"
@@ -10,6 +8,7 @@ const remove = () => {
       y="0px"
       viewBox="0 0 512 512"
       style={{ enableBackground: 'new 0 0 512 512' }}
+      className={className}
     >
       <g>
         <g>

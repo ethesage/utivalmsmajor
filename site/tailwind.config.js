@@ -10,6 +10,7 @@ module.exports = {
       colors: {
         theme: '#0f078e',
         'light-theme': '#0f078e',
+        tomato: '#c61932',
         secondary: '#fbaf1b',
         off: '#1976d2',
         approved: '#09ac23',
@@ -80,6 +81,7 @@ module.exports = {
         'screen-xl': '1280px',
         unset: 'unset',
       },
+      visibility: ['hover'],
     },
   },
   variants: {

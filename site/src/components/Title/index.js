@@ -1,7 +1,14 @@
 import { useRef, useState, useEffect } from 'react';
 import BreadCrumb from 'components/BreadCrumbs';
 
-const WithBreadCrumbs = ({ crumbs = true, text, bold = true, spx = true }) => {
+const WithBreadCrumbs = ({
+  crumbs = true,
+  text,
+  bold = true,
+  spx = true,
+  sideEL,
+  loading,
+}) => {
   const [slided, setSlided] = useState();
   const currentScroll = useRef();
   const headRef = useRef();
@@ -41,8 +48,8 @@ const WithBreadCrumbs = ({ crumbs = true, text, bold = true, spx = true }) => {
   }, [currentScroll]);
 
   return (
-    <div className={`${spx ? 'mb-5' : ''}`}>
-      <div className="h-10">
+    <div className={`${spx ? 'mb-5' : ''} z-20`}>
+      <div className="h-10 z-0">
         <h3
           className={`text-theme text-2xl mb-2 transition-all duration-300 whitespace-pre-wrap ${
             slided
@@ -55,7 +62,17 @@ const WithBreadCrumbs = ({ crumbs = true, text, bold = true, spx = true }) => {
         </h3>
       </div>
 
-      {crumbs && <BreadCrumb />}
+      {crumbs && !loading && (
+        <div className="-m-3">
+          <div className="flex flex-wrap justify-between items-center">
+            <div className="p-3">
+              <BreadCrumb />
+            </div>
+
+            {sideEL && <div className="p-3">{sideEL}</div>}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

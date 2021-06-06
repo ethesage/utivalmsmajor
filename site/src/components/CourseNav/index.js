@@ -70,8 +70,11 @@ const CourseNav = ({ currentCourse }) => {
   }
 
   return (
-    <nav className="mb-16">
-      <div className="p-4 relative bg-theme z-0 rounded-md mb-4">
+    <nav className="mb-16 sticky top-20 z-10">
+      <div
+        className="p-4 relative bg-theme z-0 rounded-md"
+        style={{ minHeight: '84px' }}
+      >
         {currentCourse?.Course?.name && (
           <div className="flex justify-between md:items-center flex-col md:flex-row">
             <h4 className="text-white text-2xl z-10 ">
@@ -97,6 +100,8 @@ const CourseNav = ({ currentCourse }) => {
         />
       </div>
 
+      <div className="w-full h-4 bg-v_light"></div>
+
       <ul className="flex scrolled_ver overflow-auto rounded-md shadow bg-white">
         {links.map((link, i) => (
           <li key={`nav_cx_${i}`} className="p-3 mr-10">
@@ -110,6 +115,8 @@ const CourseNav = ({ currentCourse }) => {
           </li>
         ))}
       </ul>
+
+      <div className="w-full h-4 bg-v_light"></div>
     </nav>
   );
 };

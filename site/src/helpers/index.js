@@ -233,3 +233,19 @@ export const filterDate = (date) => {
   };
 };
 export const s3url = process.env.REACT_APP_s3Url;
+
+export const errorhandler = (toast, err, errMsg) => {
+  let msg;
+
+  err?.response?.status === 500
+    ? (msg = 'An error occured')
+    : (msg =
+        errMsg ||
+        err?.response?.data?.error ||
+        'Network Error please try again');
+
+  toast(msg, {
+    appearance: 'error',
+    autoDismiss: true,
+  });
+};
