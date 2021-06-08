@@ -169,6 +169,8 @@ const AddAssignment = ({ title, course, currentClass }) => {
     }
   };
 
+  console.log(resourceAssignment);
+
   const deleteFile = async () => {
     const file = resourceAssignment[0];
 
@@ -176,7 +178,7 @@ const AddAssignment = ({ title, course, currentClass }) => {
 
     try {
       await axiosInstance.delete(`class/assignment/${resourceId}`);
-      await axiosInstance.delete(`/file?path=${encodeURIComponent(file)}`);
+      await axiosInstance.delete(`/file?path=${encodeURIComponent(file.Key)}`);
 
       dispatch(deleteAssignmnet(title, file));
       return true;
