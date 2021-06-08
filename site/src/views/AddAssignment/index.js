@@ -169,8 +169,6 @@ const AddAssignment = ({ title, course, currentClass }) => {
     }
   };
 
-  console.log(resourceAssignment);
-
   const deleteFile = async () => {
     const file = resourceAssignment[0];
 
