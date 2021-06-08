@@ -176,7 +176,7 @@ const AddAssignment = ({ title, course, currentClass }) => {
 
     try {
       await axiosInstance.delete(`class/assignment/${resourceId}`);
-      await axiosInstance.delete(`/file?path=${encodeURIComponent(file)}`);
+      await axiosInstance.delete(`/file?path=${encodeURIComponent(file.Key)}`);
 
       dispatch(deleteAssignmnet(title, file));
       return true;
@@ -192,7 +192,7 @@ const AddAssignment = ({ title, course, currentClass }) => {
   const submit = async (e) => {
     e.preventDefault();
 
-    if (!resourceAssignment[0].id) {
+    if (!resourceAssignment[0]?.id) {
       addToast('Please upload a file', {
         appearance: 'error',
         autoDismiss: true,

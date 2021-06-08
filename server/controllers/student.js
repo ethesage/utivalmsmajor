@@ -279,23 +279,19 @@ export const getSingleStudentCourse = async (req, res) => {
 export const getStudentDashboard = async (req, res) => {
   const { id } = req.session.user;
 
-  try {
-    const completed = await models.StudentCourse.count({
-      where: { studentId: id, status: 'finished' },
-    });
+  const completed = await models.StudentCourse.count({
+    where: { studentId: id, status: 'finished' },
+  });
 
-    const ongoing = await models.StudentCourse.count({
-      where: { studentId: id, status: 'ongoing' },
-    });
+  const ongoing = await models.StudentCourse.count({
+    where: { studentId: id, status: 'ongoing' },
+  });
 
-    const course = await models.StudentCourse.count({
-      where: { studentId: id },
-    });
+  const course = await models.StudentCourse.count({
+    where: { studentId: id },
+  });
 
-    return successStat(res, 200, 'data', { course, ongoing, completed });
-  } catch (e) {
-    errorStat(res, 500, 'Operation Failed, Please Try Again');
-  }
+  return successStat(res, 200, 'data', { course, ongoing, completed });
 };
 
 export const allCourseStudents = async (req, res) => {

@@ -19,6 +19,7 @@ const Files = ({
   errorMsg,
   showOpt,
   viewgrade,
+  key_name,
 }) => {
   const [currentFile, setCurrentFile] = useState();
   const modalRef = useRef();
@@ -78,6 +79,7 @@ const Files = ({
 
       {showdrag && (
         <Drag
+          key={new Date()}
           className="add_file"
           children={children}
           handleImage={handleImage}

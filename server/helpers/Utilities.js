@@ -110,7 +110,9 @@ export const uploadData = async (file, path, fileName, mime) =>
   uploadFunc(file, `${path}/${fileName}`, mime);
 
 export const getFolderListings = async (key) =>
-  s3.listObjects({ Bucket: 'utiva-app', Delimiter: '', Prefix: key }).promise();
+  s3
+    .listObjects({ Bucket: AWS_BUCKET_NAME, Delimiter: '', Prefix: key })
+    .promise();
 
 export const createFileFolder = async (path) => {
   const params = {
@@ -176,4 +178,28 @@ export const generatePassword = (passwordLength, coupon) => {
   return shuffleArray(
     randPasswordArray.map((x) => x[Math.floor(Math.random() * x.length)])
   ).join('');
+};
+
+export const emptyS3Directory = async (dir) => {
+  const listParams = {
+    Bucket: AWS_BUCKET_NAME,
+    Prefix: dir,
+  };
+
+  const listedObjects = await s3.listObjectsV2(listParams).promise();
+
+  if (listedObjects.Contents.length === 0) return;
+
+  const deleteParams = {
+    Bucket: AWS_BUCKET_NAME,
+    Delete: { Objects: [] },
+  };
+
+  listedObjects.Contents.forEach(({ Key }) => {
+    deleteParams.Delete.Objects.push({ Key });
+  });
+
+  await s3.deleteObjects(deleteParams).promise();
+
+  if (listedObjects.IsTruncated) await emptyS3Directory(AWS_BUCKET_NAME, dir);
 };

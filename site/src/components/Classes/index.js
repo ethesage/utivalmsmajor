@@ -10,12 +10,13 @@ import {
   studentProgress,
   courseProgress,
 } from 'g_actions/member';
+import { deleteClass } from 'g_actions/admin';
 import Editor from 'components/Editor';
 import ProgressBar from 'components/ProgressBar';
 import { axiosInstance } from 'helpers';
 import Confirm from 'components/Confirm';
 import play from 'assets/icons/course/play.png';
-import video from 'assets/icons/course/video.png'
+import video from 'assets/icons/course/video.png';
 import material from 'assets/icons/course/material.png';
 import assignment from 'assets/icons/course/assignment.png';
 import Modal from '../Modal';
@@ -52,6 +53,7 @@ function Classes({
   const [showResourceDrop, setShowResourceDrop] = useState(false);
   const [currentFile, setCurrentFile] = useState();
   const [wait, setWait] = useState(false);
+  const [loadRemoveClass, setLoadRemoveClass] = useState(false);
   const [progress, setProgress] = useState(0);
   const [dropType, setDropType] = useState();
   const { classResources } = useSelector((state) => state.member);
@@ -59,6 +61,7 @@ function Classes({
   const dispatch = useDispatch();
   const modalRef = useRef();
   const watchVideoRef = useRef();
+  const removeClassRef = useRef();
   const deleteDialog = useRef();
   const startclass = useRef();
   const progressDialog = useRef();
@@ -213,11 +216,60 @@ function Classes({
     watchVideoRef.current.open();
   };
 
-  return (
+  const remove_class = (file) => {
+    removeClassRef.current.open();
+  };
+
+  const removeClass = async () => {
+    setLoadRemoveClass(true);
+
+    const courseName = currentCourse?.name || currentCourse?.Course?.name;
+
+    try {
+      await axiosInstance.delete(`/class/${classId}`);
+
+      dispatch(deleteClass(courseName, classId));
+      return true;
+    } catch (err) {
+      addToast('Error Removing Classs', {
+        appearance: 'error',
+        autoDismiss: true,
+      });
+
+      setLoadRemoveClass(false);
+    }
+  };
+
+  return loadRemoveClass ? (
+    <div
+      className={`cx_listnx_con ${!completedPayment ? 'greyed' : ''}`}
+      ref={classRef}
+      key={`inner_${classId}`}
+    >
+      <RevielDrop
+        open={false}
+        showArrow={false}
+        header={
+          <div className="cx_header hx-main flex-row j-space relative">
+            <div className="del-loader">
+              <div className="animate-pulse flex space-x-4">
+                <div className="ball"></div>
+                <div className="flex-1 py-1">
+                  <div className="div-1"></div>
+                  <div className="div-2"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      ></RevielDrop>
+    </div>
+  ) : (
     <>
       <div
         className={`cx_listnx_con ${!completedPayment ? 'greyed' : ''}`}
         ref={classRef}
+        key={`inner_${classId}`}
       >
         <RevielDrop
           open={open}
@@ -264,6 +316,24 @@ function Classes({
               ) : (
                 <div className="inf_x">
                   {/* <p>{title}</p> */}
+
+                  {!full && isAdmin && (
+                    <div>
+                      <button
+                        style={{
+                          color: 'white',
+                          background: '#fbaf1b',
+                          padding: '5px 10px',
+                          borderRadius: '5px',
+                          marginBottom: '20px',
+                        }}
+                        onClick={remove_class}
+                      >
+                        Remove class
+                      </button>
+                    </div>
+                  )}
+
                   <Editor
                     key={description}
                     readOnly={true}
@@ -373,24 +443,26 @@ function Classes({
                     ? 'Resource Materials'
                     : 'Class assignment'}
                 </h3>
-                <Files
-                  files={
-                    dropType === 'resource'
-                      ? classResources[title]?.resources
-                      : classResources[title]?.assignment
-                  }
-                  showdrag={
-                    dropType === 'resource' ? true : false
-                    // : !!!classResources[title].files
-                  }
-                  errorMsg={
-                    dropType === 'resource'
-                      ? 'No materials for this class yet'
-                      : 'No assignment Yet'
-                  }
-                  deleteFile={deleteFIle}
-                  handleImage={upload}
-                />
+                {showResourceDrop && (
+                  <Files
+                    files={
+                      dropType === 'resource'
+                        ? classResources[title]?.resources
+                        : classResources[title]?.assignment
+                    }
+                    showdrag={
+                      dropType === 'resource' && full ? true : false
+                      // : !!!classResources[title].files
+                    }
+                    errorMsg={
+                      dropType === 'resource'
+                        ? 'No materials for this class yet'
+                        : 'No assignment Yet'
+                    }
+                    deleteFile={deleteFIle}
+                    handleImage={upload}
+                  />
+                )}
               </div>
             </div>
           </RevielDrop>
@@ -455,6 +527,15 @@ function Classes({
 
           <Modal ref={watchVideoRef}>
             <ClassVideoModal data={data.CohortClassVideos} />
+          </Modal>
+
+          <Modal ref={removeClassRef}>
+            <Confirm
+              text="Are you sure?"
+              onClick={removeClass}
+              close={() => removeClassRef.current.close()}
+              closeText="Successfuly Deleted"
+            />
           </Modal>
         </>
       )}

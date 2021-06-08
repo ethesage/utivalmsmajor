@@ -11,7 +11,7 @@ const Confirm = ({ text, close, onClick, closeText }) => {
     const confirm = await onClick();
     setConfirmed(confirm);
 
-    !confirm && btnRef.current.classList.remove('loader');
+    !confirm && btnRef.current?.classList?.remove('loader');
   };
 
   useEffect(() => {
@@ -23,7 +23,7 @@ const Confirm = ({ text, close, onClick, closeText }) => {
     const time = setTimeout(function () {
       close();
       setConfirmed(false);
-    }, 1000);
+    }, 200);
 
     return () => {
       clearTimeout(time);

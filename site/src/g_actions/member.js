@@ -1,75 +1,75 @@
 import { axiosInstance } from '../helpers';
 
-export const getEnrolledCourses = (
-  id,
-  data,
-  userType = 'student',
-  user
-) => async (dispatch) => {
-  let courses;
+export const getEnrolledCourses =
+  (id, data, userType = 'student', user) =>
+  async (dispatch) => {
+    let courses;
 
-  const slug = userType === 'student' ? userType : 'trainer/course';
-  const courseId = id ? `/${id}` : '';
+    const slug = userType === 'student' ? userType : 'trainer/course';
+    const courseId = id ? `/${id}` : '';
 
-  courses = data ? data : await axiosInstance.get(`/${slug}${courseId}`);
+    courses = data ? data : await axiosInstance.get(`/${slug}${courseId}`);
 
-  if (id) {
-    const useObject = data ? data : courses.data.data;
+    if (id) {
+      const useObject = data ? data : courses.data.data;
 
-    const matArray = await Promise.all(
-      useObject.Course.Classes.map(async (cls) => {
-        const resources = await axiosInstance.get(
-          `/file?key=${encodeURIComponent(
-            `Courses/${useObject.Course.name}/classes/${cls.title}/resources/`
-          )}`
-        );
+      const matArray = await Promise.all(
+        useObject.Course.Classes.map(async (cls) => {
+          const resources = await axiosInstance.get(
+            `/file?key=${encodeURIComponent(
+              `Courses/${useObject.Course.name}/classes/${cls.title}/resources/`
+            )}`
+          );
 
-        const assignments = await axiosInstance.get(
-          `/file?key=${encodeURIComponent(
-            `Courses/${useObject.Course.name}/classes/${cls.title}/assignments/`
-          )}`
-        );
+          const assignments = await axiosInstance.get(
+            `/file?key=${encodeURIComponent(
+              `Courses/${useObject.Course.name}/classes/${cls.title}/assignments/`
+            )}`
+          );
 
-        return {
-          [cls.title]: {
-            resources: resources.data.data,
-            assignments: assignments.data.data,
-            submittedAssignment: null,
-            allSubmittedAssignment: null,
-          },
-        };
+          return {
+            [cls.title]: {
+              resources: resources.data.data,
+              assignments: assignments.data.data,
+              submittedAssignment: null,
+              allSubmittedAssignment: null,
+            },
+          };
 
-        //
-      })
-    );
+          //
+        })
+      );
 
-    const data_ = await matArray.reduce((acc, cur) => ({ ...acc, ...cur }), {});
+      const data_ = await matArray.reduce(
+        (acc, cur) => ({ ...acc, ...cur }),
+        {}
+      );
 
+      dispatch({
+        type: 'CREATE_CLASS_RESOURCES',
+        payload: data_,
+      });
+    }
+
+    // create a list of the class name so we can add the class resources
     dispatch({
-      type: 'CREATE_CLASS_RESOURCES',
-      payload: data_,
+      type: id ? 'GET_CURRENT_COURSE_MEMBER' : 'GET_ENROLLED_COURSES',
+      payload: data ? courses : courses.data.data,
     });
-  }
-
-  // create a list of the class name so we can add the class resources
-  dispatch({
-    type: id ? 'GET_CURRENT_COURSE_MEMBER' : 'GET_ENROLLED_COURSES',
-    payload: data ? courses : courses.data.data,
-  });
-};
+  };
 
 export const getEnrolledMembers = (id, data) => async (dispatch) => {
   let members;
   try {
     members = await axiosInstance.get(`/student/allstudents/${id}`);
+
+    dispatch({
+      type: 'GET_ALL_ENROLLED_STUDENTS',
+      payload: { members: members.data.data, courseId: id },
+    });
   } catch (error) {
     return error;
   }
-
-  dispatch({
-    type: 'GET_ALL_ENROLLED_STUDENTS',
-    payload: { members: members.data.data, courseId: id },
-  });
 };
 
 export const enrollStudents = (data) => async (dispatch) => {
@@ -86,32 +86,32 @@ export const deleteStudent = (id) => async (dispatch) => {
   });
 };
 
-export const countDetails = () => async (dispatch) => {
+export const countDetails = (type) => async (dispatch) => {
   let counts;
   try {
-    counts = await axiosInstance.get(`/student/all/dashboard`);
+    counts = await axiosInstance.get(`/${type}/all/dashboard`);
+
+    dispatch({
+      type: 'COUNTS',
+      payload: counts.data.data,
+    });
   } catch (error) {
     return error;
   }
-
-  dispatch({
-    type: 'COUNTS',
-    payload: counts.data.data,
-  });
 };
 
 export const getClassDays = (id) => async (dispatch) => {
   let classdays;
   try {
     classdays = await axiosInstance.get(`/student/classdays/${id}`);
+
+    dispatch({
+      type: 'GET_ALL_CLASS_DAYS',
+      payload: classdays.data.data,
+    });
   } catch (error) {
     return error;
   }
-
-  dispatch({
-    type: 'GET_ALL_CLASS_DAYS',
-    payload: classdays.data.data,
-  });
 };
 
 export const getResources = (name, file) => async (dispatch) => {
@@ -175,30 +175,25 @@ export const getSubmittedAssignments = (name, file) => async (dispatch) => {
   });
 };
 
-export const getStudentSubmittedAssignments = (
-  name,
-  classId,
-  courseCohortId,
-  CourseName,
-  CohortName,
-  user
-) => async (dispatch) => {
-  const response = await axiosInstance.get(
-    `assignment/class/student/${classId}/${courseCohortId}`
-  );
+export const getStudentSubmittedAssignments =
+  (name, classId, courseCohortId, CourseName, CohortName, user) =>
+  async (dispatch) => {
+    const response = await axiosInstance.get(
+      `assignment/class/student/${classId}/${courseCohortId}`
+    );
 
-  dispatch({
-    type: 'GET_STUDENT_ASSIGNMENT',
-    payload: {
-      name,
-      data: response.data.data.map((res) => ({
-        ...res,
-        Key: `Courses/${CourseName}/cohorts/${CohortName}/submitted-assignments/${user.id}/${res.resourceLink}`,
-        Size: res.size,
-      })),
-    },
-  });
-};
+    dispatch({
+      type: 'GET_STUDENT_ASSIGNMENT',
+      payload: {
+        name,
+        data: response.data.data.map((res) => ({
+          ...res,
+          Key: `Courses/${CourseName}/cohorts/${CohortName}/submitted-assignments/${user.id}/${res.resourceLink}`,
+          Size: res.size,
+        })),
+      },
+    });
+  };
 
 export const updateSubmittedAssignments = (name, file) => async (dispatch) => {
   dispatch({
@@ -214,29 +209,24 @@ export const deleteSubmittedAssignment = (name, id) => async (dispatch) => {
   });
 };
 
-export const getAllsubmittedAssignment = (
-  name,
-  classId,
-  cohortId,
-  courseName,
-  cohortName
-) => async (dispatch) => {
-  const response = await axiosInstance.get(
-    `/assignment/class/submitted/all/${classId}/${cohortId}`
-  );
+export const getAllsubmittedAssignment =
+  (name, classId, cohortId, courseName, cohortName) => async (dispatch) => {
+    const response = await axiosInstance.get(
+      `/assignment/class/submitted/all/${classId}/${cohortId}`
+    );
 
-  dispatch({
-    type: 'GET_ALL_SUBMITTED_ASSIGNMENTS',
-    payload: {
-      name,
-      data: response.data.data.map((res) => ({
-        ...res,
-        Key: `Courses/${courseName}/cohorts/${cohortName}/submitted-assignments/${res.studentId}/${res.resourceLink}`,
-        Size: res.size,
-      })),
-    },
-  });
-};
+    dispatch({
+      type: 'GET_ALL_SUBMITTED_ASSIGNMENTS',
+      payload: {
+        name,
+        data: response.data.data.map((res) => ({
+          ...res,
+          Key: `Courses/${courseName}/cohorts/${cohortName}/submitted-assignments/${res.studentId}/${res.resourceLink}`,
+          Size: res.size,
+        })),
+      },
+    });
+  };
 
 export const gradeAssignment = (name, Id, grade) => async (dispatch) => {
   dispatch({
@@ -245,23 +235,22 @@ export const gradeAssignment = (name, Id, grade) => async (dispatch) => {
   });
 };
 
-export const studentProgress = (courseCohortId, classId) => async (
-  dispatch
-) => {
-  let members;
-  const data = {
-    courseCohortId,
-    classId,
+export const studentProgress =
+  (courseCohortId, classId) => async (dispatch) => {
+    let members;
+    const data = {
+      courseCohortId,
+      classId,
+    };
+
+    try {
+      members = await axiosInstance.post('/student/addprogress', data);
+
+      return members.data;
+    } catch (error) {
+      return error;
+    }
   };
-
-  try {
-    members = await axiosInstance.post('/student/addprogress', data);
-
-    return members.data;
-  } catch (error) {
-    return error;
-  }
-};
 
 export const courseProgress = (courseCohortId, classId) => async (dispatch) => {
   let members;

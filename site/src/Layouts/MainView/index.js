@@ -1,13 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import NavBar from 'components/DashNav';
 import SideBar from 'components/SideBar';
-import Modal from 'components/Modal';
-import google from 'assets/icons/google.png';
 import './style.scss';
 
 const MainView = ({ children, type }) => {
   const [open, setOpen] = useState(false);
-  const modalRef = useRef();
 
   const openBar = () => {
     setOpen(!open);
@@ -37,19 +34,6 @@ const MainView = ({ children, type }) => {
 
   return (
     <main className="dashboard flex-row al-start">
-      <Modal ref={modalRef} useButton={false}>
-        <section className="g_signup flex-col box-shade">
-          <p className="intro">
-            To better participate in this course please signin to access google
-            drive materials for this course
-          </p>
-          <p className="ext">click on the button below to signin.</p>
-          <button className="flex-row">
-            <img src={google} alt="google" />
-            <p>Google</p>
-          </button>
-        </section>
-      </Modal>
       <aside className={`dh-aside ${open ? ' open' : ''}`}>
         <SideBar close={close} type={type} />
       </aside>
@@ -58,7 +42,9 @@ const MainView = ({ children, type }) => {
           <NavBar open={openBar} grow={open} />
           {children}
         </div>
-        <div className="dash-footer">(c) 2020 Utiva All Rights Reserved</div>
+        <div className="dash-footer">
+          (c) {new Date().getFullYear()} Utiva All Rights Reserved
+        </div>
       </section>
     </main>
   );

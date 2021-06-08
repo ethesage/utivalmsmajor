@@ -30,6 +30,7 @@ const d_data = [
 const CountSection = () => {
   const counts = useSelector((state) => state.member.counts);
   const dispatch = useDispatch();
+  const { isTrainer } = useSelector((state) => state.auth);
 
   const stateCount =
     counts && d_data.map((pre) => ({ ...pre, num: counts[pre.link] }));
@@ -38,9 +39,9 @@ const CountSection = () => {
 
   useEffect(() => {
     (async () => {
-      await dispatch(countDetails());
+      await dispatch(countDetails(isTrainer ? 'trainer' : 'student'));
     })();
-  }, [dispatch]);
+  }, [dispatch, isTrainer]);
 
   useEffect(() => {
     if (!counts) return;

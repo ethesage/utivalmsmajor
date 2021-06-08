@@ -360,7 +360,7 @@ export const addCourseCohortProgress = async (req, res) => {
     where: { courseCohortId, id: classId },
     include: [
       {
-        model: models.Trainer,
+        model: models.CohortTrainer,
         where: { userId: id },
       },
     ],

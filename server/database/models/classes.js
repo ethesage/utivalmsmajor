@@ -25,24 +25,29 @@ module.exports = (sequelize, DataTypes) => {
     Classes.hasMany(models.CohortClassDays, {
       foreignKey: 'classId',
       onDelete: 'CASCADE',
+      hooks: true,
     });
 
     Classes.hasMany(models.CohortClassVideo, {
       foreignKey: 'classId',
       onDelete: 'CASCADE',
+      hooks: true,
     });
 
     Classes.hasMany(models.ClassResources, {
       foreignKey: 'classId',
       onDelete: 'CASCADE',
+      hooks: true,
     });
     Classes.hasMany(models.CohortTrainer, {
       foreignKey: 'classId',
       onDelete: 'CASCADE',
+      hooks: true,
     });
     Classes.hasMany(models.Assignment, {
       foreignKey: 'classId',
       onDelete: 'CASCADE',
+      hooks: true,
     });
     // Classes.hasMany(models.StudentCourse, {
     //   foreignKey: 'courseCohortId',

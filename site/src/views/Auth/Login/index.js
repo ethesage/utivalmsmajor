@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { useToasts } from 'react-toast-notifications';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import useInput from 'Hooks/useInput';
 import Input from 'components/Input';
@@ -17,6 +17,9 @@ function Login() {
   const { addToast } = useToasts();
   const dispatch = useDispatch();
   const history = useHistory();
+  const location = useLocation();
+
+  const redirect = new URLSearchParams(location.search).get('redirect');
 
   const [handleSubmit, handleChange, inputTypes, validateSelf] = useInput({
     inputs: data,
@@ -32,6 +35,11 @@ function Login() {
       });
 
       dispatch(login());
+
+      if (redirect) {
+        return history.push(redirect);
+      }
+
       response.data.user.role === 'admin'
         ? history.push('/admin')
         : history.push('/');

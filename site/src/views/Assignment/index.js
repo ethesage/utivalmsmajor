@@ -101,9 +101,11 @@ const Assignment = ({ gapi }) => {
     formData.append('fileName', fileName);
     formData.append('mime', type);
 
+    setProgress(0);
+
     try {
       await axiosInstance.post('file/create', formData, {
-        onUploadProgress: uploadProgress(setProgress),
+        onUploadProgress: uploadProgress(setProgress, 0.95),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -117,17 +119,17 @@ const Assignment = ({ gapi }) => {
         size: files.size.toString(),
       });
 
-      if (res) {
-        dispatch(
-          getSubmittedAssignments(currentClass.title, {
-            isGraded: false,
-            resourceId: res.data.data.id,
-            comments: null,
-            Key: `${path}/${fileName}`,
-            Size: files.size,
-          })
-        );
-      }
+      setProgress(100);
+
+      dispatch(
+        getSubmittedAssignments(currentClass.title, {
+          isGraded: false,
+          resourceId: res.data.data.id,
+          comments: null,
+          Key: `${path}/${fileName}`,
+          Size: files.size,
+        })
+      );
     } catch (err) {
       axiosInstance.delete(
         `/file?path=${encodeURIComponent(`${path}/${fileName}`)}`
@@ -154,16 +156,23 @@ const Assignment = ({ gapi }) => {
     ].submittedAssignment.find((file) => file.Key === currentFile);
 
     try {
-      const res = await axiosInstance.delete(
-        `assignment/${resource.resourceId}`
+      await axiosInstance.delete(
+        `assignment/${resource.resourceId || resource.id}`
       );
-      if (res) {
-        dispatch(deleteSubmittedAssignment(currentClass.title, currentFile));
-        await gapi.gapi.deleteFile(currentFile);
-        setCurrentFile(null);
 
-        return true;
-      }
+      dispatch(
+        deleteSubmittedAssignment(
+          currentClass.title,
+          resource.resourceId || resource.id
+        )
+      );
+
+      await axiosInstance.delete(
+        `/file?path=${encodeURIComponent(`${resource.Key}`)}`
+      );
+      setCurrentFile(null);
+
+      return true;
     } catch (err) {
       addToast('Error Deleting file', {
         appearance: 'error',

@@ -6,7 +6,8 @@ let shortText = /[^\n]{2,}/;
 let number = /^[0-9]{1,}$/;
 
 const patterns = {
-  email: /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:]|])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:)+)\])/,
+  email:
+    /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:]|])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:)+)\])/,
   password: /[^\n]+/,
   fullName: /^([a-zA-Z]{2,}\s[a-zA-Z]{1,}'?-?[a-zA-Z]{2,}\s?([a-zA-Z]{1,})?)/,
   cpassword: /[^\n]{6,}/,
@@ -22,7 +23,8 @@ const patterns = {
   gender: /^(?!none)([\w. -])+$/,
   comment: /[^\n]{2,}/,
   grade: /^[0-9]{1,}$/,
-  linkedin: /(ftp|http|https):\/\/?((www|\w\w)\.)?linkedin.com(\w+:{0,1}\w*@)?(\S+)(:([0-9])+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/,
+  linkedin:
+    /(ftp|http|https):\/\/?((www|\w\w)\.)?linkedin.com(\w+:{0,1}\w*@)?(\S+)(:([0-9])+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/,
   bio: text,
   cohort: text,
   folderId: text,
@@ -51,7 +53,8 @@ const patterns = {
   initialSplitAmount: number,
   paymentType: shortText,
   currency_type: shortText,
-  whatsAppLink: /^(https?:\/\/)?chat\.whatsapp\.com\/(?:invite\/)?([a-zA-Z0-9_-]{22})$/,
+  whatsAppLink:
+    /^(https?:\/\/)?chat\.whatsapp\.com\/(?:invite\/)?([a-zA-Z0-9_-]{22})$/,
 };
 
 export const validate = (field, Regex) => {
@@ -181,13 +184,14 @@ export const stringSearch = (val, string) => {
   return string && string.toLowerCase().search(val.toLowerCase()) !== -1;
 };
 
-export const uploadProgress = (setPercentage) => {
+export const uploadProgress = (setPercentage, multiplier = 1) => {
   return function (progressEvent) {
     var percentCompleted = Math.round(
       (progressEvent.loaded * 100) / progressEvent.total
     );
-    setPercentage(percentCompleted);
+
+    setPercentage(percentCompleted * multiplier);
   };
 };
 
-export const s3url = 'https://utiva-app.s3.amazonaws.com';
+export const s3url = process.env.REACT_APP_s3Url;
