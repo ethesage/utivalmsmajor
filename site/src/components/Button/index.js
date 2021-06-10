@@ -1,8 +1,8 @@
-import React from "react";
-import { useHistory } from "react-router-dom";
-import "./style.scss";
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+import './style.scss';
 
-const Button = ({ className = "", link, onClick, text, btnRef }) => {
+const Button = ({ className = '', link, onClick, text, btnRef }) => {
   const history = useHistory();
 
   const handleClick = (e) => {

@@ -1,8 +1,8 @@
-@import "../../media";
+@import '../../media';
 
 $distance: 0px;
 %selected {
-  color: white;
+  color: white !important;
   background: color(theme);
 }
 
@@ -11,26 +11,37 @@ $distance: 0px;
   position: relative;
   margin-bottom: 20px;
 
-  &.required {
-    &::before {
-      content: "*";
-      color: red;
-      position: absolute;
-      left: -10px;
-      top: -5px;
-    }
+  .t_label {
+    margin-bottom: 10px;
+    display: inline-block;
+    font-weight: bold;
   }
 
-  input[type="date"]::before {
+  input[type='date']::before {
     // color: #999;
     position: absolute;
     background: inherit;
     width: 60%;
     content: attr(placeholder);
   }
-  input[type="date"]:focus::before {
-    content: "" !important;
+  input[type='date']:focus::before,
+  input:not([value=''])::before {
+    content: '' !important;
     background: none;
+  }
+
+  &.check {
+    width: auto;
+  }
+
+  input[type='checkbox'] {
+    display: block;
+    width: auto;
+    margin-right: 10px;
+  }
+
+  input[type='checkbox'] + label {
+    font-size: 0.8em;
   }
 
   .input-type {
@@ -45,11 +56,40 @@ $distance: 0px;
     position: relative;
 
     &::-webkit-input-placeholder {
-      color: color(text);
+      color: rgba(color(text), 0.8);
     }
 
     .select {
       position: relative;
+
+      .search-input {
+        width: 100%;
+        border: 1px solid #c7c7c7;
+        margin-bottom: 5px;
+        position: relative;
+        border-radius: 4px;
+        padding: 10px;
+        position: sticky;
+        top: 10px;
+        background: white;
+        margin-top: 10px;
+        font-size: 16px;
+
+        &::before {
+          content: '';
+          position: absolute;
+          top: -11px;
+          left: -8px;
+          width: calc(100% + 16px);
+          height: 10px;
+          background: white;
+        }
+
+        input {
+          border: none;
+        }
+      }
+
       .currentValue {
         display: flex;
         justify-content: space-between;
@@ -59,9 +99,14 @@ $distance: 0px;
         font-size: 1em;
         color: color(text);
         position: relative;
+        text-transform: capitalize;
+
+        p {
+          padding-right: 10px;
+        }
 
         &::after {
-          content: "\25BC";
+          content: '\25BC';
           font-size: 0.9em;
           color: color(theme);
         }
@@ -74,8 +119,8 @@ $distance: 0px;
       }
 
       .dropDownButtons {
-        z-index: 4;
-        top: 100%;
+        // z-index: 4;
+        top: -10%;
         position: absolute;
         box-shadow: 0 0 3px rgba(black, 0.3);
         background: white;
@@ -84,11 +129,15 @@ $distance: 0px;
         border-radius: 4px;
         padding: 10px 8px;
         max-height: 400px;
-        transform: scale(1, 0);
+        left: -30px;
+        // transform: scale(1, 0);
         // transition: transform 0.2s ease-in-out;
-        transition: 0.3s cubic-bezier(0.25, 0.1, 0.3, 1.5) 0.3s;
+        // transition: 0.3s cubic-bezier(0.25, 0.1, 0.3, 1.5) 0.3s;
+        transition: visibility 0.4s ease, top 0.3s ease, opacity 0.2s ease;
         transform-origin: top;
         overflow: hidden;
+        visibility: hidden;
+        opacity: 0;
 
         @include for-size(tablet-landscape-up) {
           overflow: scroll;
@@ -113,7 +162,7 @@ $distance: 0px;
 
           &:hover {
             @extend %selected;
-            background: lighten(color(theme), 10%);
+            background: rgba(color(theme), 0.1);
           }
         }
 
@@ -123,7 +172,10 @@ $distance: 0px;
       }
 
       .open-drop {
-        transform: scale(1, 1);
+        // transform: scale(1, 1);
+        top: 0%;
+        visibility: visible;
+        opacity: 1;
       }
     }
 

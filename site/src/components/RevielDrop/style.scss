@@ -1,0 +1,56 @@
+@import '../../media';
+
+.drop-rev {
+  .drop-open {
+    opacity: 0;
+    position: absolute;
+    transition: 0.3s ease;
+    visibility: hidden;
+    z-index: -10;
+
+    &.click-type {
+      height: 0;
+      position: static;
+
+      &.open {
+        height: 100%;
+      }
+    }
+
+    &.open {
+      opacity: 1;
+      visibility: visible;
+      z-index: 1;
+    }
+  }
+}
+
+.rx_header {
+  width: 100%;
+  border: none;
+  outline: none;
+  transition: 0.2s;
+  position: relative;
+  font-size: 1em;
+
+  &.showArrow {
+    > * {
+      &:after {
+        content: '\25BC';
+        font-size: 0.8em;
+        color: color(theme);
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      &.active {
+        border: none;
+        &:after {
+          content: '\25B2';
+        }
+      }
+    }
+  }
+}

@@ -6,7 +6,9 @@ import reducers from './reducers';
 const middleware = [thunk];
 const store = createStore(
   reducers,
-  composeWithDevTools(applyMiddleware(...middleware))
+  process.env.NODE_ENV === 'development'
+    ? composeWithDevTools(applyMiddleware(...middleware))
+    : applyMiddleware(...middleware)
 );
 
 if (process.env.NODE_ENV !== 'production') {

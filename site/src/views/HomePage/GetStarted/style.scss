@@ -1,4 +1,4 @@
-@import "../../../media";
+@import '../../../media';
 
 .home_page .gt_str {
   .gt_str_sec {
@@ -12,6 +12,7 @@
 
     @include for-size(tablet-landscape-up) {
       height: 70vw;
+      margin-top: 50px;
     }
 
     @include for-size(mid-phone) {
@@ -41,6 +42,9 @@
           position: relative;
           height: 100%;
 
+          display: grid;
+          grid-template-columns: 15% 80%;
+
           @include for-size(smaller-desktop) {
             margin-right: 40%;
           }
@@ -57,7 +61,7 @@
         }
 
         &:nth-child(1) {
-          background: #6dcb84;
+          background: #120c64;
           .num {
             span {
               &::before {
@@ -65,20 +69,20 @@
               }
 
               &::after {
-                content: "";
+                content: '';
                 display: none;
               }
             }
             .num-con {
-              background: #6dcb84;
+              background: #120c64;
             }
           }
         }
 
         &:nth-child(2) {
-          background: #1d3d79;
+          background: #fbaf1b;
           .num .num-con {
-            background: #1d3d79;
+            background: #fbaf1b;
           }
         }
 
@@ -92,10 +96,10 @@
               }
             }
             .num-con {
-              background: #09ac23;
+              background: #120c64;
             }
           }
-          background: #09ac23;
+          background: #120c64;
         }
 
         .num {
@@ -108,7 +112,7 @@
             position: relative;
 
             &::before {
-              content: "";
+              content: '';
               position: absolute;
               height: 100%;
               width: 2px;
@@ -120,7 +124,7 @@
             }
 
             &::after {
-              content: "";
+              content: '';
               position: absolute;
               height: 100%;
               width: 20px;
@@ -147,7 +151,7 @@
             }
           }
 
-          @include for-size(tablet-landscape-up) {
+          @include for-size(smaller-desktop) {
             width: 25%;
             font-size: 0.8em;
           }
@@ -158,20 +162,24 @@
 
           h2 {
             width: 40%;
-            @include for-size(tablet-landscape-up) {
+            font-size: 1.5em;
+            @include for-size(smaller-desktop) {
               font-size: 1em;
             }
           }
 
           p {
             width: 45%;
-            @include for-size(tablet-landscape-up) {
+            font-size: 1.3em;
+            @include for-size(smaller-desktop) {
               font-size: 0.8em;
             }
           }
 
           @include for-size(mid-phone) {
             flex-direction: column;
+            justify-content: center;
+            margin-left: 20px;
             h2,
             p {
               width: 100%;

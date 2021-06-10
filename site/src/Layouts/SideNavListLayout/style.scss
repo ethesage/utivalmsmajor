@@ -1,0 +1,55 @@
+@import '../../media';
+
+.side_list_layout {
+  width: 100%;
+  @include for-size(tablet-portrait-up) {
+    flex-direction: column;
+  }
+
+  .side_list {
+    // margin-right: 50px;
+    padding-right: 50px;
+    @include for-size(phone-only) {
+      margin-right: 20px;
+      // margin-bottom: 30px;
+      width: 100%;
+    }
+
+    ul {
+      @include for-size(tablet-portrait-up) {
+        width: 100%;
+        display: flex;
+        overflow-x: auto;
+        padding: 10px 0;
+      }
+      li {
+        margin: 0px 10px 15px 0;
+        @include for-size(tablet-portrait-up) {
+          margin-bottom: 10px;
+        }
+        .side_link {
+          color: color(text);
+          white-space: nowrap;
+          font-size: 0.9em;
+          padding: 5px 20px;
+
+          @include for-size(smaller-desktop) {
+            font-size: 0.8em;
+            padding: 6px 20px;
+          }
+
+          @include for-size(phone-only) {
+            display: block;
+          }
+
+          &.active {
+            background: color(secondary);
+            color: white;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+          }
+        }
+      }
+    }
+  }
+}

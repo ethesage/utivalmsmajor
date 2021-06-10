@@ -1,0 +1,57 @@
+@import '../../media';
+
+.files_ {
+  @include for-size(phone-only) {
+    flex-direction: column;
+  }
+
+  @include for-size(phone-only) {
+  }
+
+  .file_sec {
+    width: 100%;
+    // padding-bottom: 30px;
+
+    .add_file {
+      display: none;
+
+      @include for-size(smaller-desktop) {
+        display: block;
+      }
+    }
+
+    .upload_sec {
+      .file_con {
+        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        max-height: 500px;
+        height: 500px;
+        overflow-y: hidden;
+        max-width: 700px;
+        width: 100%;
+
+        .info_con_sec {
+          height: 500px;
+        }
+
+        @include for-size(smaller-desktop) {
+          .info_con_sec {
+            height: 400px;
+          }
+        }
+      }
+
+      .drag_upload {
+        height: 200px;
+        width: 200px;
+        background: rgba(color(theme), 0.1);
+        border-radius: 10px;
+        margin-left: 50px;
+
+        @include for-size(smaller-desktop) {
+          display: none;
+        }
+      }
+    }
+  }
+}

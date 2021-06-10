@@ -1,6 +1,7 @@
 @import "../../../media";
 
 .details {
+  margin-bottom: 50px;
   .container {
     .details_con {
       display: grid;
@@ -24,6 +25,7 @@
       border-radius: 5px;
       height: 250px;
       margin-right: 50px;
+      // max-width: 300px;
 
       @include for-size(tablet-portrait-up) {
         margin-right: 30px;
@@ -31,11 +33,13 @@
 
       @include for-size(phone-only) {
         margin: 0 0 40px;
+        justify-content: center;
       }
 
       img {
         width: auto;
         border-radius: 10px;
+        max-width: 350px;
 
         @include for-size(tablet-portrait-up) {
           width: 100%;
@@ -50,7 +54,7 @@
       height: 100%;
       h2 {
         font-size: 1.1em;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
         color: color(theme);
         @include for-size(phone-only) {
           font-size: 1em;
@@ -67,7 +71,7 @@
       }
 
       .c_inf {
-        margin: 10px 0;
+        margin: 10px 0 30px;
         flex-wrap: wrap;
         max-width: 300px;
 
@@ -122,13 +126,31 @@
 
       .checkout {
         margin-top: 50px;
-        .header,
+        .cx-hdx,
         .input-div {
           margin-bottom: 20px;
         }
 
         .btn {
           width: 100%;
+        }
+      }
+
+      &.split_sec {
+        h3 {
+          margin-bottom: 10px;
+        }
+
+        .sel-p-type {
+          border: 1px solid rgba(#000, 0.1);
+          margin-bottom: 10px;
+          border-radius: 5px;
+          padding: 10px;
+          cursor: pointer;
+
+          &[data-active="true"] {
+            border-color: rgba(color(theme), 0.4);
+          }
         }
       }
     }

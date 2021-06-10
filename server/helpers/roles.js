@@ -12,11 +12,11 @@ export default {
       inherits: ['guest'],
     },
     trainer: {
-      can: [''],
+      can: ['trainer', 'class:crud'],
       inherits: ['student'],
     },
     admin: {
-      can: ['admin:create'],
+      can: ['course:crud', 'classRoom:crud', 'admin:create', 'coupon:crud'],
       inherits: ['trainer'],
     },
     tech: {

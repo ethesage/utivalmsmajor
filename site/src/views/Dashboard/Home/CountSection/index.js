@@ -1,38 +1,55 @@
-import React, { useState } from "react";
-import course from "../../../../assets/icons/dasboard/course.png";
-import completed from "../../../../assets/icons/dasboard/completed.png";
-import ongoing from "../../../../assets/icons/dasboard/ongoing.png";
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import CountCard from 'components/CountCard';
+import course from 'assets/icons/dashboard/course.png';
+import completed from 'assets/icons/dashboard/completed.png';
+import ongoing from 'assets/icons/dashboard/ongoing.png';
+import { countDetails } from 'g_actions/member';
 
-const CountCard = ({ data: { title, num, img } }) => (
-  <div className="c_card count flex-col al-start j-start">
-    <p className="c_title">{title}</p>
-    <div className="c_img-sec flex-row j-space">
-      <p>{num}</p>
-      <div className="img_con">
-        <img src={img} alt="course" />
-      </div>
-    </div>
-  </div>
-);
+const d_data = [
+  {
+    title: 'Total Courses',
+    link: 'course',
+    num: 0,
+    img: course,
+  },
+  {
+    title: 'Ongoing Courses',
+    num: 0,
+    link: 'ongoing',
+    img: ongoing,
+  },
+  {
+    title: 'Completed Courses',
+    num: 0,
+    link: 'completed',
+    img: completed,
+  },
+];
 
 const CountSection = () => {
-  const [data, setData] = useState([
-    {
-      title: "Total Courses",
-      num: 1,
-      img: course,
-    },
-    {
-      title: "Ongoing Courses",
-      num: 1,
-      img: ongoing,
-    },
-    {
-      title: "Completed Courses",
-      num: 1,
-      img: completed,
-    },
-  ]);
+  const counts = useSelector((state) => state.member.counts);
+  const dispatch = useDispatch();
+  const { isTrainer } = useSelector((state) => state.auth);
+
+  const stateCount =
+    counts && d_data.map((pre) => ({ ...pre, num: counts[pre.link] }));
+
+  const [data, setData] = useState(stateCount || d_data);
+
+  useEffect(() => {
+    (async () => {
+      await dispatch(countDetails(isTrainer ? 'trainer' : 'student'));
+    })();
+  }, [dispatch, isTrainer]);
+
+  useEffect(() => {
+    if (!counts) return;
+
+    setData((prev) => prev.map((pre) => ({ ...pre, num: counts[pre.link] })));
+
+    return () => {};
+  }, [counts]);
 
   return (
     <>

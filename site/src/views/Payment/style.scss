@@ -1,0 +1,13 @@
+.purchase_complete {
+  width: 100vh;
+  height: 100vh;
+
+  .content {
+    box-shadow: 0 0 3px rgba(#000, 0.2);
+    padding: 20px;
+
+    p {
+      margin: 20px;
+    }
+  }
+}

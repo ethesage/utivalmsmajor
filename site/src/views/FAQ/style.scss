@@ -1,0 +1,61 @@
+@import "../../media";
+
+.faq {
+  @include for-size(phone-only) {
+    flex-direction: column;
+  }
+
+  .faq_sec {
+    border: 0.5px solid rgba(29, 61, 121, 0.17);
+    border-radius: 20px;
+    overflow: hidden;
+
+    .rx_header {
+      padding: 20px;
+      margin: 0;
+      border-bottom: 0.5px solid rgba(29, 61, 121, 0.17);
+      font-weight: normal;
+      background: #f8fafd;
+      cursor: pointer;
+
+      h2 {
+        &:after {
+          content: "";
+        }
+      }
+
+      span {
+        color: color(text);
+        width: 92% !important;
+        display: block;
+      }
+    }
+
+    .drop-open {
+      margin: 0;
+
+      .inf_x {
+        div + div {
+          margin-top: 20px;
+        }
+
+        div {
+          line-height: 1.5;
+          li {
+            margin-left: 30px;
+            list-style: disc;
+          }
+
+          a {
+            color: color(theme);
+            font-weight: bold;
+          }
+        }
+      }
+
+      &.open {
+        padding: 20px;
+      }
+    }
+  }
+}

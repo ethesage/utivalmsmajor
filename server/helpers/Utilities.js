@@ -1,18 +1,34 @@
-import { v2 as cloudinary } from 'cloudinary';
+import AWS from 'aws-sdk';
+// import isBase64 from 'is-base64';
+import bluebird from 'bluebird';
 import {
-  CLOUD_NAME,
-  API_KEY,
-  API_SECRET,
+  AWS_SECRET_ACCESS_KEY,
+  AWS_ACCESS_KEY_ID,
+  AWS_REGION,
+  AWS_BUCKET_NAME,
   ENCRYPTION_SECRET,
 } from '../config/envVariables';
 
 const Cryptr = require('cryptr');
 
-cloudinary.config({
-  cloud_name: CLOUD_NAME,
-  api_key: API_KEY,
-  api_secret: API_SECRET,
+const config = {
+  aws: {
+    secret_access_key: AWS_SECRET_ACCESS_KEY,
+    access_key_id: AWS_ACCESS_KEY_ID,
+    region: AWS_REGION,
+    bucket_name: AWS_BUCKET_NAME,
+  },
+};
+
+AWS.config.update({
+  secretAccessKey: config.aws.secret_access_key,
+  accessKeyId: config.aws.access_key_id,
+  region: config.aws.region,
 });
+
+AWS.config.setPromisesDependency(bluebird);
+
+const s3 = new AWS.S3({ params: { Bucket: config.aws.bucket_name } });
 
 /**
  * @Module UserController
@@ -75,12 +91,53 @@ export function validateJoi(object, schema, req, res, next, name) {
   return next();
 }
 
+const uploadFunc = async (url, fileName, mime) => {
+  const data = {
+    ACL: 'public-read',
+    Key: fileName,
+    Body: url,
+    // ContentEncoding: 'base64',
+    ContentType: mime,
+  };
+
+  return s3.upload(data).promise();
+};
+
+export const uploadImage = async (url, fileName, mime) =>
+  uploadFunc(url, fileName, mime);
+
+export const uploadData = async (file, path, fileName, mime) =>
+  uploadFunc(file, `${path}/${fileName}`, mime);
+
+export const getFolderListings = async (key) =>
+  s3
+    .listObjects({ Bucket: AWS_BUCKET_NAME, Delimiter: '', Prefix: key })
+    .promise();
+
+export const createFileFolder = async (path) => {
+  const params = {
+    Key: path,
+  };
+
+  return s3.putObject(params).promise();
+};
+
+export const deleteImage = async (path) => {
+  const deleteParam = {
+    Key: path,
+  };
+
+  return s3.deleteObject(deleteParam).promise();
+};
+
 export const encryptQuery = (string) => {
   try {
     const cryptr = new Cryptr(ENCRYPTION_SECRET);
     const encryptedString = cryptr.encrypt(string);
     return encryptedString;
-  } catch (error) {}
+  } catch (error) {
+    //
+  }
 };
 
 export const decrypt = (string) => {
@@ -93,30 +150,56 @@ export const decrypt = (string) => {
   }
 };
 
-
 const shuffleArray = (array) => {
-  for (let i = array.length - 1; i > 0; i--) {
+  for (let i = array.length - 1; i > 0; i -= 1) {
     const j = Math.floor(Math.random() * (i + 1));
     const temp = array[i];
     array[i] = array[j];
     array[j] = temp;
   }
   return array;
-}
+};
 
+export const generatePassword = (passwordLength, coupon) => {
+  const numberChars = '0123456789';
+  const upperChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const lowerChars = 'abcdefghijklmnopqrstuvwxyz';
+  const symbols = '!@#$%&*';
 
-export const generatePassword = (passwordLength) => {
-    const numberChars = "0123456789";
-    const upperChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const lowerChars = "abcdefghijklmnopqrstuvwxyz";
-    const symbols = "!@#$%&*";
+  const allChars = coupon
+    ? upperChars
+    : numberChars + upperChars + lowerChars + symbols;
+  let randPasswordArray = Array(passwordLength);
+  randPasswordArray[0] = coupon ? upperChars : numberChars;
+  randPasswordArray[1] = upperChars;
+  randPasswordArray[2] = coupon ? upperChars : lowerChars;
+  randPasswordArray[3] = coupon ? upperChars : symbols;
+  randPasswordArray = randPasswordArray.fill(allChars, 4);
+  return shuffleArray(
+    randPasswordArray.map((x) => x[Math.floor(Math.random() * x.length)])
+  ).join('');
+};
 
-    const allChars = numberChars + upperChars + lowerChars + symbols;
-    let randPasswordArray = Array(passwordLength);
-    randPasswordArray[0] = numberChars;
-    randPasswordArray[1] = upperChars;
-    randPasswordArray[2] = lowerChars
-    randPasswordArray[3] = symbols;
-    randPasswordArray = randPasswordArray.fill(allChars, 4);
-    return shuffleArray(randPasswordArray.map((x) => { return x[Math.floor(Math.random() * x.length)] })).join('');  
-}
+export const emptyS3Directory = async (dir) => {
+  const listParams = {
+    Bucket: AWS_BUCKET_NAME,
+    Prefix: dir,
+  };
+
+  const listedObjects = await s3.listObjectsV2(listParams).promise();
+
+  if (listedObjects.Contents.length === 0) return;
+
+  const deleteParams = {
+    Bucket: AWS_BUCKET_NAME,
+    Delete: { Objects: [] },
+  };
+
+  listedObjects.Contents.forEach(({ Key }) => {
+    deleteParams.Delete.Objects.push({ Key });
+  });
+
+  await s3.deleteObjects(deleteParams).promise();
+
+  if (listedObjects.IsTruncated) await emptyS3Directory(AWS_BUCKET_NAME, dir);
+};

@@ -1,31 +1,32 @@
-import RBAC from "easy-rbac";
-import debug from "debug";
-import { config } from "dotenv";
-import chalk from "chalk";
-import helpers from "../helpers";
+import RBAC from 'easy-rbac';
+import debug from 'debug';
+import { config } from 'dotenv';
+import chalk from 'chalk';
+import helpers from '../helpers';
 
 config();
-const isProd = process.env.NODE_ENV === "production";
+// const isProd = process.env.NODE_ENV === "production";
+// const isProd = true;
 
-const log = debug("dev");
+const log = debug('dev');
 const { errorStat, generateToken, verifyToken } = helpers;
 
 module.exports.main = function easySessionMain(connect, opts) {
   if (!connect) {
     throw new TypeError(
-      "expected connect or express or express-session object as first argument"
+      'expected connect or express or express-session object as first argument'
     );
   }
   const Session = connect.Session || connect.session.Session;
 
   // Get options
   opts = opts || {};
-  if (typeof opts !== "object") {
-    throw new TypeError("expected an options object as second argument");
+  if (typeof opts !== 'object') {
+    throw new TypeError('expected an options object as second argument');
   }
 
   const uaCheck = opts.uaCheck === undefined ? true : !!opts.uaCheck;
-  const freshTimeout = opts.freshTimeout || 30 * 60 * 1000;
+  const freshTimeout = opts.freshTimeout || 100 * 60 * 1000;
   const maxFreshTimeout = opts.maxFreshTimeout || 60 * 60 * 1000;
   const userTimeout = 60 * 60 * 24 * 7 * 10000;
   let rbac;
@@ -43,8 +44,8 @@ module.exports.main = function easySessionMain(connect, opts) {
    * @returns {string} role
    */
   Session.prototype.login = async function login(role, extend, res) {
-    if (extend && typeof extend !== "object") {
-      throw new TypeError("Second parameter expected to be an object");
+    if (extend && typeof extend !== 'object') {
+      throw new TypeError('Second parameter expected to be an object');
     }
     const { req } = this;
 
@@ -56,13 +57,13 @@ module.exports.main = function easySessionMain(connect, opts) {
           return reject(err);
         }
 
-        const split = token.split(".");
-        const clientToken = [split[0], split[1]].join(".");
+        const split = token.split('.');
+        const clientToken = [split[0], split[1]].join('.');
         const [, , signature] = split;
-        res.cookie("uti_va", clientToken, {
-          maxAge: role === "student" ? userTimeout : freshTimeout,
-          sameSite: isProd || "none",
-          secure: isProd,
+        res.cookie('uti_va', clientToken, {
+          maxAge: role === 'student' ? userTimeout : freshTimeout,
+          sameSite: true,
+          secure: false,
         });
 
         // set the signature of the token in the secure token
@@ -72,7 +73,7 @@ module.exports.main = function easySessionMain(connect, opts) {
         req.session.setRole(role);
 
         if (uaCheck) {
-          req.session.ua = req.headers["user-agent"];
+          req.session.ua = req.headers['user-agent'];
         }
         if (extend) {
           Object.assign(req.session, extend);
@@ -86,19 +87,18 @@ module.exports.main = function easySessionMain(connect, opts) {
 
   /**
    * @Function
+   * @param {Object} req - Call back to be run if successful
    * @param {Object} res - Call back to be run if successful
-   * @param {Object} cb - Call back to be run if successful
    * @description logs out the user by destroting the user session
    * @returns {null} null
    * @memberof Helper
    */
-  Session.prototype.logout = async function logout(res, cb) {
-    this.regenerate((err) => (err ? new Error(err) : cb));
-    res.cookie("uti_va", "", {
-      maxAge: 0,
-      sameSite: isProd || "none",
-      secure: isProd,
-    });
+  Session.prototype.logout = async function logout(req, res) {
+    if (req) {
+      req.session = null;
+      res.clearCookie('uti_va', { domain: process.env.domain });
+      res.clearCookie('utiva', { domain: process.env.domain });
+    }
   };
 
   /**
@@ -133,28 +133,28 @@ module.exports.main = function easySessionMain(connect, opts) {
    */
   Session.prototype.isLoggedIn = async function isLoggedIn(req, res) {
     if (this.isGuest()) {
-      throw new Error("You are not logged in");
+      throw new Error('You are not logged in');
     }
 
     const { uti_va } = req.cookies;
     const signature = req.session.accessload;
 
     if (!uti_va || !signature) {
-      throw new Error("Not logged in");
+      throw new Error('Not logged in');
     }
 
-    const token = [uti_va, signature].join(".");
+    const token = [uti_va, signature].join('.');
 
     await verifyToken(token, async (err) => {
       if (err) {
-        throw new Error("Invalid Access");
+        throw new Error('Invalid Access');
       }
     });
 
-    res.cookie("uti_va", uti_va, {
-      maxAge: this.getRole() === "student" ? userTimeout : freshTimeout,
-      sameSite: isProd || "none",
-      secure: isProd,
+    res.cookie('uti_va', uti_va, {
+      maxAge: this.getRole() === 'student' ? userTimeout : freshTimeout,
+      sameSite: true,
+      secure: false,
     });
     return true;
   };
@@ -198,7 +198,7 @@ module.exports.main = function easySessionMain(connect, opts) {
    * @memberof Helper
    */
   Session.prototype.getRole = function getRole() {
-    return this.role || "guest";
+    return this.role || 'guest';
   };
 
   /**
@@ -261,32 +261,32 @@ module.exports.main = function easySessionMain(connect, opts) {
    */
   return function sessionMiddleware(req, res, next) {
     // Remove cookies from cache - a security feature
-    res.header("Cache-Control", 'no-cache="Set-Cookie, Set-Cookie2"');
+    res.header('Cache-Control', 'no-cache="Set-Cookie, Set-Cookie2"');
 
     if (!req.session) {
-      next(new Error("Session object missing"));
+      next(new Error('Session object missing'));
       return;
     }
 
     function refresh() {
-      res.removeListener("finish", refresh);
-      res.removeListener("close", refresh);
+      res.removeListener('finish', refresh);
+      res.removeListener('close', refresh);
 
       if (req.session) {
         req.session.setLastRequest();
       }
     }
 
-    res.on("finish", refresh);
-    res.on("close", refresh);
+    res.on('finish', refresh);
+    res.on('close', refresh);
 
     if (req.session.isGuest()) {
       next();
       return;
     }
 
-    if (uaCheck && req.session.ua !== req.headers["user-agent"]) {
-      log(chalk.red("The request User Agent did not match session user agent"));
+    if (uaCheck && req.session.ua !== req.headers['user-agent']) {
+      log(chalk.red('The request User Agent did not match session user agent'));
 
       // Generate a new unauthenticated session
       return req.session
@@ -308,8 +308,8 @@ module.exports.main = function easySessionMain(connect, opts) {
  * @returns {Function} resolve
  */
 module.exports.can = function can(operation, params, errorCallback) {
-  if (typeof operation !== "string") {
-    throw new TypeError("Expected first parameter to be string");
+  if (typeof operation !== 'string') {
+    throw new TypeError('Expected first parameter to be string');
   }
   return async function canAccess(req, res, next) {
     try {
@@ -319,13 +319,13 @@ module.exports.can = function can(operation, params, errorCallback) {
     }
 
     const param_result =
-      typeof params === "function" ? params(req, res) : params;
+      typeof params === 'function' ? params(req, res) : params;
 
     try {
       const accessGranted = await req.session.can(operation, param_result);
 
       if (!accessGranted) {
-        throw new Error("forbidden");
+        throw new Error('forbidden');
       }
       next();
     } catch (err) {
@@ -333,7 +333,7 @@ module.exports.can = function can(operation, params, errorCallback) {
         errorCallback(req, res, next);
         return;
       }
-      errorStat(res, 403, "Forbidden to perform this action");
+      errorStat(res, 403, 'Forbidden to perform this action');
     }
   };
 };

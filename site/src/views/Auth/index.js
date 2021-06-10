@@ -1,33 +1,29 @@
-import React, { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
-import man from "../../assets/auth/man.png";
-import QuickCheckout from "./QuickCheckout";
-import SignIn from "./Login";
-import SignUp from "./SignUp";
-import Forgot from "./Forgot";
-import Reset from "./Reset";
-import logo from "../../assets/logo.png";
-import "./style.scss";
-
-const pages = {
-  quickcheckout: <QuickCheckout />,
-  signin: <SignIn />,
-  signup: <SignUp />,
-  forgot: <Forgot />,
-  "reset-password": <Reset />,
-};
+import React, { useEffect, useState } from 'react';
+import {
+  Route,
+  Switch,
+  useRouteMatch,
+  useLocation,
+  Link,
+} from 'react-router-dom';
+import man from '../../assets/auth/man.png';
+import QuickCheckout from './QuickCheckout';
+import SignIn from './Login';
+import SignUp from './SignUp';
+import Forgot from './Forgot';
+import Reset from './Reset';
+import logo from '../../assets/logo.png';
+import './style.scss';
 
 const Auth = () => {
   const location = useLocation();
-  //   const params = useParams();
-  const [page, setPage] = useState("signup");
-
-  //   console.log(location);
+  const { path } = useRouteMatch();
+  const [page, setPage] = useState('signup');
 
   useEffect(() => {
-    const pathname = location.pathname.split("/")[1];
+    const pathname = location.pathname.split('/')[1];
     setPage(pathname);
+
     return () => {};
   }, [location]);
 
@@ -42,7 +38,21 @@ const Auth = () => {
         <div className="img-sec">
           <img src={man} alt="" className="img contain" />
         </div>
-        <div className={`pages flex-row ${page}`}>{pages[page]}</div>
+        <div className={`pages flex-row ${page}`}>
+          <Switch>
+            <Route exact path={`${path}/signin`} component={SignIn} />
+            <Route exact path={`${path}/signup`} component={SignUp} />
+            <Route
+              exact
+              path={`${path}/quickcheckout/:courseCohortId`}
+              component={QuickCheckout}
+            />
+            <Route exact path={`${path}/forgot`} component={Forgot} />
+            <Route exact path={`${path}/reset-password`} component={Reset} />
+            <Route component={SignUp} />
+          </Switch>
+          {/* {pages[page]} */}
+        </div>
       </div>
       <div className="ftr container flex-row">
         <p>

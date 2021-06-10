@@ -1,5 +1,16 @@
 import { hashPassword, comparePassword } from './passwordHash';
-import { errorStat, successStat, validateJoi, uploadLogo, generatePassword } from './Utilities';
+import {
+  errorStat,
+  successStat,
+  validateJoi,
+  uploadImage,
+  generatePassword,
+  getFolderListings,
+  uploadData,
+  deleteImage,
+  createFileFolder,
+  emptyS3Directory,
+} from './Utilities';
 import { generateToken, verifyToken } from './auth';
 
 export default {
@@ -10,6 +21,11 @@ export default {
   validateJoi,
   generateToken,
   verifyToken,
-  uploadLogo,
-  generatePassword
+  uploadImage,
+  generatePassword,
+  getFolderListings,
+  deleteImage,
+  uploadData,
+  createFileFolder,
+  emptyS3Directory,
 };

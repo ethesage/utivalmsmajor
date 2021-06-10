@@ -1,4 +1,4 @@
-@import "../../../media";
+@import '../../../media';
 
 .home_page .courses {
   .container {
@@ -21,19 +21,11 @@
         padding: 10px 20px;
         white-space: nowrap;
 
-        &[data-active="true"] {
+        &[data-active='true'] {
           background: color(theme);
           color: white;
           border-radius: 10px;
         }
-      }
-    }
-
-    .course-sec {
-      margin-top: 40px;
-
-      @include for-size(onek) {
-        flex-direction: column;
       }
     }
   }

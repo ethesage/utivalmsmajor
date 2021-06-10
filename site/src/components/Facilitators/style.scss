@@ -1,7 +1,7 @@
-@import "../../media";
+@import '../../media';
 
 .fac_xc {
-  height: 100%;
+  height: auto;
   background: color(secondary);
   border-radius: 10px;
   margin-left: 40px;
@@ -19,6 +19,7 @@
   .fac_xc_con {
     position: relative;
     height: 150px;
+    width: 100%;
 
     @include for-size(desktop-up) {
       height: 100px;
@@ -97,7 +98,7 @@
         width: 8px;
         height: 8px;
         transition: 0.3s ease;
-        &[data-active="active"] {
+        &[data-active='active'] {
           background: red;
         }
       }
@@ -114,7 +115,7 @@
       background-color: white;
       border-radius: 100%;
 
-      &[data-active="active"] {
+      &[data-active='active'] {
         background-color: color(theme);
         border: none;
       }

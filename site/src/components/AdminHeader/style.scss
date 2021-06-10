@@ -1,0 +1,26 @@
+@import '../../media';
+
+.al_nav_sec {
+  width: 100%;
+
+  h3 {
+    margin-right: 30px;
+  }
+
+  @include for-size(phone-only) {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .btn {
+      margin-top: 20px;
+    }
+
+    h3 {
+      margin-left: 0;
+    }
+  }
+
+  .btn {
+    max-width: 200px;
+  }
+}

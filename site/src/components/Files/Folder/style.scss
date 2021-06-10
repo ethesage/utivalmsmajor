@@ -1,0 +1,51 @@
+@import '../../../media';
+
+.file_folders {
+  .file_sec {
+    height: 100%;
+  }
+
+  .sx_flder {
+    margin-bottom: 20px;
+    .rx_drop {
+      .rx_hd .rx_header {
+        h2 {
+          font-size: 1em;
+          flex-wrap: nowrap;
+          margin-left: 40px;
+
+          &:before {
+            content: '\25BC';
+            font-size: inherit;
+            color: color(theme);
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+          }
+
+          &.active {
+            border: none;
+            &:after {
+              content: '\25B2';
+            }
+          }
+
+          img {
+            width: 25px;
+            margin-right: 20px;
+          }
+        }
+
+        .dots {
+          width: 30px;
+          pointer-events: all !important;
+        }
+      }
+
+      .files_con {
+        padding: 30px 0px 10px 50px;
+      }
+    }
+  }
+}

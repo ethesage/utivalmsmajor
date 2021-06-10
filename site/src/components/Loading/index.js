@@ -1,14 +1,32 @@
-import React from "react";
-import "./style.scss";
+import React from 'react';
+import './style.scss';
 
-const Loader = ({ tempLoad }) => {
+const Loader = ({ tempLoad, full }) => {
+  const styles = full
+    ? {
+        width: '100%',
+        height: '100vh',
+        position: 'fixed',
+        background: 'white',
+        top: 0,
+        left: 0,
+        zIndex: 200,
+        justifyContent: 'center',
+      }
+    : {
+        width: '100%',
+        height: '100%',
+        minHeight: '500px',
+        background: 'white',
+        position: 'relative',
+        zIndex: 200,
+        justifyContent: 'center',
+      };
+
   return (
     <>
       {tempLoad ? (
-        <main
-          className="loader_con_main flex-col"
-          style={{ width: "100%", height: "100%" }}
-        >
+        <main className="loader_con_main flex-col" style={styles}>
           <div>
             <div className="loader_main">
               <svg viewBox="0 0 80 80">

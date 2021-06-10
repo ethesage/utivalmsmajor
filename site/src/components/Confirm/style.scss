@@ -1,0 +1,32 @@
+@import '../../media';
+
+.confirm_dx {
+  background: white;
+  width: 90vw;
+  max-width: 400px;
+  min-width: 250px;
+  border-radius: 5px;
+  padding: 30px;
+
+  p {
+    text-align: center;
+  }
+
+  .mn_txt {
+    margin-bottom: 40px;
+    padding: 7px;
+  }
+
+  .clx_btn {
+    width: 50%;
+    transition: 0.5s ease;
+    border-radius: 5px;
+    padding: 7px;
+    cursor: pointer;
+
+    &:hover {
+      background: color(secondary);
+      color: #fff;
+    }
+  }
+}

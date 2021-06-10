@@ -1,14 +1,19 @@
-@import "../../media";
+@import '../../media';
 
 .cx_det__nav {
-  width: 100%;
-  max-width: 500px;
-  overflow-x: auto;
   padding-bottom: 10px;
   margin-bottom: 30px;
+  overflow: hidden;
+  width: 100%;
+
+  ul {
+    padding-right: 10px;
+    overflow-x: auto;
+  }
 
   .cx_nav_item {
     cursor: pointer;
+    margin-right: 25px;
 
     a {
       padding: 5px 15px;

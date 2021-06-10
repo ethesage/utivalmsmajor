@@ -1,63 +1,50 @@
-import React, { useState, useEffect } from "react";
-import { Route, Switch, useRouteMatch } from "react-router-dom";
-import NavBar from "./NavBar";
-// import Footer from './Footer'
-import SideBar from "../../components/SideBar";
-import Courses from "./Courses";
-import Home from "./Home";
-import "./style.scss";
+import React, { Suspense, lazy } from 'react';
+import { Route, Switch, useHistory } from 'react-router-dom';
+import LazyLoad from 'components/SiteLoader';
+import { useSelector } from 'react-redux';
+import Layout from 'Layouts/MainView';
+import './style.scss';
+
+const Courses = lazy(() => import('./Courses'));
+const FAQ = lazy(() => import('../FAQ'));
+const Home = lazy(() => import('./Home'));
+const Files = lazy(() => import('../Files'));
+const Settings = lazy(() => import('../Settings'));
 
 const Dashboard = () => {
-  const [open, setOpen] = useState(false);
-  let { path, url } = useRouteMatch();
+  const { isAdmin } = useSelector((state) => state.auth);
+  const history = useHistory();
 
-  const openBar = () => {
-    setOpen(!open);
-  };
+  if (isAdmin) {
+    history.push('/admin');
+  }
 
-  useEffect(() => {
-    const close = () => {
-      setOpen(false);
-    };
-
-    const closeSlider = () => {
-      const smallerScreen = window.matchMedia("(max-width: 900px)");
-
-      if (smallerScreen.matches) {
-        close();
-      } else {
-      }
-    };
-
-    // window.addEventListener("resize", closeSlider);
-    // window.addEventListener("scroll", close);
-    return () => {
-      window.removeEventListener("resize", closeSlider);
-      window.removeEventListener("scroll", close);
-    };
-  }, []);
+  const Routes = () => (
+    <Suspense fallback={<LazyLoad />}>
+      <Switch>
+        <Route exact path="/">
+          <Home />
+        </Route>
+        <Route path="/courses">
+          <Courses />
+        </Route>
+        <Route exact path="/faqs/:info?">
+          <FAQ />
+        </Route>
+        <Route path="/files">
+          <Files />
+        </Route>
+        <Route path="/settings">
+          <Settings />
+        </Route>
+      </Switch>
+    </Suspense>
+  );
 
   return (
-    <main className="dashboard flex-row al-start">
-      <aside className={`dh-aside ${open ? " open" : ""}`}>
-        <SideBar url={url} />
-      </aside>
-      <section className="dh-main">
-        <div className="contents flex-col">
-          <NavBar open={openBar} grow={open} />
-          <Switch>
-            <Route exact path={path}>
-              <Home />
-            </Route>
-            <Route path={`${path}/courses`}>
-              <Courses />
-            </Route>
-          </Switch>
-
-          <div className="dash-footer">(c) 2020 Utiva All Rights Reserved</div>
-        </div>
-      </section>
-    </main>
+    <Layout>
+      <Routes />
+    </Layout>
   );
 };
 

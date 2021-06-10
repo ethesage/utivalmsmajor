@@ -1,14 +1,24 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
-import logo from "../../assets/logo.png";
-import Details from "./Details";
-import Payment from "./Payment";
-import "./style.scss";
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import logo from '../../assets/logo.png';
+import Details from './Details';
+import Payment from './Payment';
+import './style.scss';
 
-const Purchase = () => {
+const Purchase = (props) => {
   const [currentPage, setPage] = useState(0);
-  const pages = [<Details proceed={setPage} />, <Payment back={setPage} />];
-  const disRef = useRef();
+  const [id, setId] = useState(0);
+  const [paymentAmount, setPaymentAmount] = useState();
+
+  const pages = [
+    <Details
+      proceed={setPage}
+      match={props.match}
+      set={setId}
+      setPaymentAmount={setPaymentAmount}
+    />,
+    <Payment back={setPage} corhortId={id} paymentAmount={paymentAmount} />,
+  ];
 
   useEffect(() => {
     return () => {};
@@ -25,11 +35,11 @@ const Purchase = () => {
       <h2 className="hd middle">Purchase Course</h2>
       <div className="purchase_con">
         <div className="nav flex-row">
-          <div data-active={currentPage === 0} className="nav-item">
+          <div data-active={!currentPage} className="nav-item">
             <p className="theme-color">Program Brief</p>
           </div>
 
-          <div data-active={currentPage === 1} className="nav-item">
+          <div data-active={currentPage} className="nav-item">
             <p className="theme-color">Payment Method</p>
           </div>
         </div>

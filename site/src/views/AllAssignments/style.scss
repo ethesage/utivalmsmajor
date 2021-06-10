@@ -1,0 +1,66 @@
+@import '../../media';
+
+.ass_ls {
+  width: 100%;
+  flex-grow: 1;
+
+  .nav-sec {
+    margin-bottom: 40px;
+
+    .nav-item {
+      .input-div {
+        margin-bottom: 0 !important;
+      }
+
+      .input-type {
+        background: white;
+        box-shadow: 0 0 5px rgba(#000, 0.1);
+      }
+
+      &:nth-child(1) {
+        margin-bottom: 50px;
+        .input-type {
+          min-width: 250px;
+          .input-div {
+            margin-right: 20px;
+          }
+        }
+      }
+
+      .inner {
+        margin-right: 30px;
+        .label {
+          margin-right: 20px;
+        }
+
+        .input-type {
+          min-width: 200px;
+        }
+      }
+    }
+  }
+
+  // .file_card {
+  //   margin-bottom: 0;
+
+  //   .txt-sec {
+  //     height: 100% !important;
+  //     small {
+  //       display: none !important;
+  //     }
+  //   }
+  // }
+
+  .g_tbl {
+    max-width: 1200px;
+  }
+
+  .td-cls {
+    min-height: unset;
+    box-shadow: none;
+    min-width: unset;
+    padding: 5px;
+    width: 100px;
+    margin: 0;
+  }
+}

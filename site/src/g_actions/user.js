@@ -1,21 +1,49 @@
-import { get_user, logout } from "../helpers";
+import { get_user, logout } from '../helpers';
+// import { axiosInstance } from '../helpers';
+
+export const loading = () => async (dispatch) => {
+  dispatch({
+    type: 'AUTH_LOADING',
+    payload: true,
+  });
+};
+
+export const doneloading = () => async (dispatch) => {
+  dispatch({
+    type: 'AUTH_LOADING',
+    payload: false,
+  });
+};
 
 export const login = () => async (dispatch) => {
-  const { user, isAdmin } = get_user();
+  // let isloggedIn;
+  dispatch(loading());
 
-  dispatch({
-    type: "Login",
-    payload: { user, isAdmin },
-  });
+  try {
+    // isloggedIn = await axiosInstance.get('/logged-in');
 
-  return { user, isAdmin };
+    dispatch({
+      type: 'Login',
+      // payload: !!isloggedIn && get_user(),
+      payload: get_user(),
+    });
+
+    dispatch(doneloading());
+  } catch (err) {
+    dispatch(doneloading());
+  }
+
+  return get_user();
 };
 
 export const log_out = () => async (dispatch) => {
-  await logout();
+  logout();
 
   dispatch({
-    type: "Log_out",
-    payload: { user: null, isAdmin: null },
+    type: 'RESET',
+  });
+
+  dispatch({
+    type: 'Log_out',
   });
 };

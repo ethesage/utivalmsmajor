@@ -1,0 +1,19 @@
+@import '../../../media';
+
+.cx_ovx {
+  &.ad {
+    max-width: 1000px;
+    .info_sec {
+      margin: 0;
+
+      .nv {
+        margin-bottom: 20px;
+        .edit {
+          color: color(theme);
+          cursor: pointer;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+}

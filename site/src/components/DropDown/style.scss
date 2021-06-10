@@ -1,0 +1,42 @@
+.dots {
+  cursor: pointer;
+  position: relative;
+
+  .hd-sec {
+    > * {
+      pointer-events: none;
+    }
+    img {
+      width: 30px;
+    }
+  }
+
+  .drops {
+    position: absolute;
+    background: white;
+    z-index: 10;
+    right: 0;
+    opacity: 0;
+    top: 0px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(black, 0.2);
+    padding: 10px 20px;
+    visibility: hidden;
+    transition: 0.3s ease;
+
+    &.op-dp_2x {
+      top: 20px;
+      visibility: visible;
+      opacity: 1;
+    }
+
+    li {
+      margin-bottom: 5px;
+      padding: 5px 5px;
+      font-size: 0.8em;
+      &:hover {
+        background: #f8fafd;
+      }
+    }
+  }
+}

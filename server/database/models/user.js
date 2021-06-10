@@ -28,6 +28,9 @@ module.exports = (sequelize, DataTypes) => {
       verifiedPayment: DataTypes.BOOLEAN,
       verifiedEmail: DataTypes.BOOLEAN,
       byadmin: DataTypes.BOOLEAN,
+      status: DataTypes.STRING,
+      providerId: DataTypes.STRING,
+      socialUid: DataTypes.STRING,
     },
     {
       getterMethods: {
@@ -39,15 +42,43 @@ module.exports = (sequelize, DataTypes) => {
         beforeCreate: async (user) => {
           user.password = await hashPassword(user.password);
         },
+        // beforeUpdate: async (user) => {
+        //   user.password = await hashPassword(user.password);
+        // },
       },
-    },
+    }
   );
 
   User.beforeCreate((user) => {
     user.id = uuid();
   });
 
-  User.associate = (models) => {};
+  User.associate = (models) => {
+    User.hasMany(models.CohortTrainer, {
+      foreignKey: 'userId',
+      onDelete: 'CASCADE',
+      hooks: true,
+    });
+
+    User.hasMany(models.StudentCourse, {
+      as: 'userId',
+      foreignKey: 'studentId',
+      onDelete: 'CASCADE',
+      hooks: true,
+    });
+
+    User.hasMany(models.AssignmentComment, {
+      foreignKey: 'userId',
+      onDelete: 'CASCADE',
+      hooks: true,
+    });
+
+    User.hasMany(models.Assignment, {
+      foreignKey: 'studentId',
+      onDelete: 'CASCADE',
+      hooks: true,
+    });
+  };
 
   User.prototype.userResponse = function userResponse() {
     const userData = {
@@ -71,6 +102,7 @@ module.exports = (sequelize, DataTypes) => {
       bio: this.bio,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
+      status: this.status,
     };
 
     return userData;

@@ -1,0 +1,71 @@
+@import '../../media';
+
+.students {
+  width: 100%;
+  height: 100%;
+
+  .filter-nav {
+    white-space: wrap;
+    width: 100%;
+    max-width: 1300px;
+
+    @include for-size(smaller-desktop) {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .inp_sec {
+      flex-grow: 1;
+    }
+
+    .input-div {
+      margin-right: 20px;
+      max-width: 250px;
+    }
+  }
+
+  .g_tbl {
+    max-width: 1300px;
+    overflow-x: auto;
+  }
+
+  table {
+    min-width: 1300px;
+    overflow-x: auto;
+
+    .input-div {
+      margin: 0;
+      width: 150px;
+
+      .input-type {
+        background: transparent;
+        padding: 5px 3px;
+
+        .dropDownButtons {
+          min-width: 150px;
+        }
+      }
+    }
+  }
+
+  td,
+  th {
+    &:nth-child(1),
+    &:nth-child(7) {
+      width: 7%;
+    }
+
+    &:nth-child(3) {
+      width: 20%;
+    }
+
+    &:nth-child(5) {
+      width: 10%;
+    }
+  }
+
+  .pn {
+    width: 100%;
+    margin-top: 30px;
+  }
+}

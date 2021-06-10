@@ -1,12 +1,21 @@
 import Sequelize from 'sequelize';
+import { paginate, calculateLimitAndOffset } from 'paginate-info';
 import models from '../database/models';
 import helpers from '../helpers';
 import Mail from '../services/mail/email';
 import { generateToken, verifyToken } from '../helpers/auth';
 
-// const userRepository = new dbRepository(models.User);
-const { successStat, errorStat, comparePassword, generatePassword } = helpers;
 const { Op } = Sequelize;
+
+// const userRepository = new dbRepository(models.User);
+const {
+  successStat,
+  errorStat,
+  comparePassword,
+  hashPassword,
+  generatePassword,
+  uploadImage,
+} = helpers;
 
 /**
  * / @static
@@ -17,19 +26,52 @@ const { Op } = Sequelize;
  * @memberof UserController
  */
 export const login = async (req, res) => {
-  const { email, password } = req.body.user;
-  const user = await models.User.findOne({ where: { email } });
+  const { email, password, providerId, socialUid } = req.body.user;
+  const { type } = req.query;
 
-  if (!user) return errorStat(res, 401, 'Incorrect Login information');
+  let user;
 
-  const matchPasswords = comparePassword(password, user.password);
-
-  if (!matchPasswords) {
+  if (type === 'social' && !providerId && !socialUid) {
     return errorStat(res, 401, 'Incorrect Login information');
   }
 
+  if (type === 'social') {
+    user = await models.User.findOne({
+      where: { email, providerId, socialUid },
+    });
+
+    if (!user) {
+      user = await models.User.findOne({ where: { email } });
+
+      if (user) {
+        user.update({
+          socialUid,
+          providerId,
+        });
+      }
+    }
+  } else {
+    user = await models.User.findOne({ where: { email } });
+  }
+
+  if (!user && type !== 'social') {
+    return errorStat(res, 401, 'Incorrect Login information');
+  }
+
+  if (!user && type === 'social') {
+    await models.User.create(req.body.user);
+  }
+
+  if (type !== 'social') {
+    const matchPasswords = await comparePassword(password, user.password);
+
+    if (!matchPasswords) {
+      return errorStat(res, 401, 'Incorrect Login information');
+    }
+  }
+
   await req.session.login(user.role, { user: user.dataValues }, res);
-  let message = 'Login successful';
+  const message = 'Login successful';
 
   return successStat(res, 200, 'user', { ...user.userResponse(), message });
 };
@@ -50,45 +92,37 @@ export const signup = async (req, res) => {
 
   const user = await models.User.create({
     role: 'student',
-    ...req.body.user
+    ...req.body.user,
   });
 
-  const token = generateToken(
-    { id: user.id, email },
-    { expiresIn: 60 * 60 * 24 * 3 }
-  );
+  // const token = generateToken(
+  //   { id: user.id, email },
+  //   { expiresIn: 60 * 60 * 24 * 3 }
+  // );
 
-  const link = `${req.protocol}://${req.headers.host}/api/v1/user/confirm_email?emailToken=${token}&id=${user.dataValues.id}`;
+  // const link = `${req.protocol}://${req.headers.host}/api/v1/user/confirm_email?emailToken=${token}&id=${user.dataValues.id}`;
 
-  const mail = new Mail({
-    to: email,
-    subject: 'Welcome to Utiva',
-    messageHeader: `Hi, ${user.firstname}!`,
-    messageBody:
-      'We are exicted to get you started. First, you have to verify your account. Just click on the link below',
-    iButton: true,
-  });
-  mail.InitButton({
-    text: 'Verify Email',
-    link: link,
-  });
-  mail.sendMail();
+  // const mail = new Mail({
+  //   to: email,
+  //   subject: 'Welcome to Utiva',
+  //   messageHeader: `Hi, ${user.firstname}!`,
+  //   messageBody:
+  // 'We are exicted to get you started. First,
+  // you have to verify your account. Just click on the link below',
+  //   iButton: true,
+  // });
+  // mail.InitButton({
+  //   text: 'Verify Email',
+  //   link,
+  // });
+  // mail.sendMail();
 
   await req.session.login(user.role, { user: user.dataValues }, res);
-  let message = 'Registration is successful';
+  const message = 'Registration is successful';
 
   return successStat(res, 201, 'user', { ...user.userResponse(), message });
 };
 
-
-/**
- * / @static
- * @description Allows a user to sign up
- * @param {Object} req - Request object
- * @param {Object} res - Response object
- * @returns {Object} object containing user data and access Token
- * @memberof UserController
- */
 export const quickCheckOut = async (req, res) => {
   const { email, fullName } = req.body.user;
   const isExist = await models.User.findOne({ where: { email } });
@@ -100,22 +134,25 @@ export const quickCheckOut = async (req, res) => {
   const password = await generatePassword(10);
 
   const user = await models.User.create({
-    role: 'user',
+    role: 'student',
     firstentry: true,
     updated: false,
     email,
     password,
     firstName: userProfile[0],
-    lastName: userProfile[1]
+    lastName: userProfile[1],
   });
 
-  const link = `${process.env.FRONTEND_URL}/login`;
+  const link =
+    process.env.NODE_ENV === 'production'
+      ? 'https://app.utiva.io/login'
+      : 'http://localhost:3000/login';
 
   const mail = new Mail({
     to: email,
     subject: 'Welcome to Utiva',
     messageHeader: `Hi, ${user.firstName}!`,
-    messageBody:`
+    messageBody: `
       'We are exicted to get you started. Below are your login details' 
       email: ${email},
       password: ${password}
@@ -125,13 +162,13 @@ export const quickCheckOut = async (req, res) => {
   });
   mail.InitButton({
     text: 'Login',
-    link: link,
+    link,
   });
 
   mail.sendMail();
 
-  await req.session.login(user.role, { user: user.dataValues }, res);
-  let message = 'Registration is successful';
+  // await req.session.login(user.role, { user: user.dataValues }, res);
+  const message = 'Registration is successful';
 
   return successStat(res, 201, 'user', { ...user.userResponse(), message });
 };
@@ -151,9 +188,57 @@ export const updateUser = async (req, res) => {
     where: { id },
   });
 
-  await user.update({ ...req.body.user });
+  const data = req.body.user;
+
+  if (data.profilePic && typeof data.profilePic === 'object') {
+    let fileName =
+      user.profilePic &&
+      user.profilePic.split('https://utiva-app.s3.amazonaws.com/media/')[1];
+
+    fileName = fileName || `${user.email.split('@')[0]}`;
+
+    const image = await uploadImage(
+      data.profilePic,
+      `media/${fileName}`,
+      data.mime
+    );
+
+    // eslint-disable-next-line prefer-destructuring
+    data.profilePic = image.Location;
+  }
+
+  const updatedUser = { id, ...data };
+
+  await user.update(updatedUser);
+  await req.session.login(user.role, { user: user.userResponse() }, res);
 
   return successStat(res, 200, 'user', { ...user.userResponse() });
+};
+
+/**
+ * / @static
+ * @description Allows a user to sign in
+ * @param {Object} req - Request object
+ * @param {Object} res - Response object
+ * @returns {Object} object containing user data and access Token
+ * @memberof UserController
+ */
+export const reset = async (req, res) => {
+  const { password, oldPassword } = req.body.user;
+  const { id } = req.session.user;
+
+  const exixtingUser = await models.User.findOne({
+    where: { id },
+  });
+  const matchPasswords = comparePassword(oldPassword, exixtingUser.password);
+
+  if (!matchPasswords) {
+    return errorStat(res, 401, 'Password is Incorrect please try again');
+  }
+
+  await exixtingUser.update({ password: await hashPassword(password) });
+
+  return successStat(res, 200, 'message', 'reset Successful');
 };
 
 /**
@@ -165,29 +250,34 @@ export const updateUser = async (req, res) => {
  */
 
 export const resetPassword = async (req, res) => {
-  let { email } = req.body.user;
+  const { email } = req.body.user;
 
   const findUser = await models.User.findOne({ where: { email } });
 
   if (!findUser) return errorStat(res, 404, 'User does not exist');
 
-  const token = generateToken(
+  const token = await generateToken(
     { id: findUser.id, email },
     { expiresIn: 60 * 15 }
   );
 
-  const link = `${req.protocol}://${req.headers.host}/api/v1/user/change_password?emailToken=${token}&id=${findUser.id}`;
+  const domain =
+    process.env.NODE_ENV === 'production'
+      ? 'https://app.utiva.io'
+      : 'http://localhost:3000';
+
+  const link = `${domain}/auth/reset-password?emailToken=${token}&id=${findUser.id}`;
 
   const mail = new Mail({
     to: email,
     subject: 'Reset Password',
-    messageHeader: `Hi, ${user.firstname}!`,
+    messageHeader: `Hi!`,
     messageBody: 'Please Click on the link below to reset your password',
     iButton: true,
   });
   mail.InitButton({
     text: 'Reset password',
-    link: link,
+    link,
   });
   mail.sendMail();
 
@@ -199,17 +289,8 @@ export const resetPassword = async (req, res) => {
   );
 };
 
-/**
- * @static
- * @description Allows a user to change password
- * @param {Object} req - Request object
- * @param {Object} res - Response object
- * @returns {Object} object containing user data and access Token
- * @memberof UserController
- */
-
 export const changePassword = async (req, res) => {
-  const { emailToken, id, resend } = req.query;
+  const { emailToken, id } = req.query;
 
   const { password } = req.body;
 
@@ -224,7 +305,7 @@ export const changePassword = async (req, res) => {
   }
 
   await findUser.update({
-    password,
+    password: await hashPassword(password),
   });
 
   return successStat(res, 200, 'Message', 'Your password has been changed');
@@ -274,7 +355,6 @@ export const confirmEmail = async (req, res) => {
   }
 };
 
-
 export const adminCreate = async (req, res) => {
   const { email } = req.body.user;
 
@@ -282,7 +362,7 @@ export const adminCreate = async (req, res) => {
     const isExist = await models.User.findOne({ where: { email } });
 
     if (isExist) return errorStat(res, 409, 'User Already Exist');
-  
+
     const password = await generatePassword(10);
 
     const user = await models.User.create({
@@ -290,12 +370,108 @@ export const adminCreate = async (req, res) => {
       password,
       byadmin: true,
       updated: false,
-      firstentry: true
+      firstentry: true,
     });
 
-    return successStat(res, 201, 'user', { ...user.userResponse(), message: 'User Created' });
+    return successStat(res, 201, 'user', {
+      ...user.userResponse(),
+      message: 'User Created',
+    });
   } catch (e) {
-    console.log(e)
     return errorStat(res, 409, 'Operation Failed, Please try again later');
   }
-}
+};
+
+export const getAllUsers = async (req, res) => {
+  const { pageLimit, currentPage } = req.query;
+  const { offset, limit } = calculateLimitAndOffset(currentPage, pageLimit);
+
+  const { rows, count } = await models.User.findAndCountAll({
+    attributes: [
+      'id',
+      'email',
+      'firstName',
+      'lastName',
+      'occupation',
+      'region',
+      'status',
+      'role',
+      'profilePic',
+    ],
+    limit,
+    offset,
+  });
+
+  const paginationMeta = paginate(currentPage, count, rows, pageLimit);
+
+  return successStat(res, 200, 'users', { paginationMeta, rows });
+};
+
+export const activateUser = async (req, res) => {
+  const { id } = req.params;
+
+  const User = await models.User.findOne({
+    where: { id },
+  });
+
+  await User.update({ status: 'active' });
+
+  return successStat(
+    res,
+    200,
+    'message',
+    `${User.firstName} ${User.lastName} succesfully activated`
+  );
+};
+
+export const deactivateUser = async (req, res) => {
+  const { id } = req.params;
+
+  const User = await models.User.findOne({
+    where: { id },
+  });
+
+  await User.update({ status: 'inactive' });
+
+  return successStat(
+    res,
+    200,
+    'message',
+    `${User.firstName} ${User.lastName} succesfully deactivated`
+  );
+};
+
+export const updateAccount = async (req, res) => {
+  const { id, role } = req.params;
+
+  const exixtingUser = await models.User.findOne({
+    where: { id },
+  });
+
+  if (!exixtingUser) {
+    return errorStat(res, 404, "User dosen't exist");
+  }
+
+  await exixtingUser.update({ role });
+
+  return successStat(res, 200, 'message', 'Successful Updated');
+};
+
+export const searchUsers = async (req, res) => {
+  const { search_query } = req.params;
+
+  const users = await models.User.findAll({
+    where: {
+      [Op.or]: [
+        { firstName: { [Op.iLike]: `%${search_query}%` } },
+        { lastName: { [Op.iLike]: `%${search_query}%` } },
+        { region: { [Op.iLike]: `%${search_query}%` } },
+        { email: { [Op.iLike]: `%${search_query}%` } },
+        { occupation: { [Op.iLike]: `%${search_query}%` } },
+        { role: { [Op.iLike]: `%${search_query}%` } },
+      ],
+    },
+  });
+
+  return successStat(res, 200, 'data', users);
+};

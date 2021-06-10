@@ -1,0 +1,25 @@
+@import '../../media';
+
+.drag_container {
+  padding: 20px;
+  width: 100%;
+  border-radius: 10px;
+  cursor: pointer;
+  display: block;
+  > * {
+    pointer-events: none;
+  }
+
+  .fx_up_sec {
+    width: 90%;
+    font-weight: bold;
+    color: color(theme);
+    padding: 10px 0;
+    font-size: 0.8em;
+
+    img {
+      width: 25px;
+      margin-right: 20px;
+    }
+  }
+}

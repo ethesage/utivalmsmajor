@@ -1,7 +1,7 @@
-import React from "react";
-import Image from "../../../components/Image";
-import believe from "../../../assets/homepage/adeola.png";
-import "./style.scss";
+import React from 'react';
+import Image from '../../../components/Image';
+import believe from '../../../assets/homepage/adeola.png';
+import './style.scss';
 
 const index = () => {
   return (
@@ -22,8 +22,8 @@ const index = () => {
             value of Big Data Analytics to your current role.
           </p>
           <div>
-            <h2>Owosho Adeola</h2>
-            <p>Data Analyst, Google Nigeria</p>
+            <h2>Technology Education.</h2>
+            <p>Helping you accelerate your career</p>
           </div>
         </div>
       </div>

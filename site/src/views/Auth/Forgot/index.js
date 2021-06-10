@@ -1,12 +1,12 @@
-import React, { useRef, useState } from "react";
-import Input from "../../../components/Input";
-import useInput from "../../../Hooks/useInput";
-import data from "../../../data/forgot";
-import Button from "../../../components/Button";
-import { useToasts } from "react-toast-notifications";
-import { Link } from "react-router-dom";
-import { axiosInstance } from "../../../helpers";
-import "../style.scss";
+import React, { useRef, useState } from 'react';
+import Input from 'components/Input';
+import useInput from 'Hooks/useInput';
+import data from 'data/forgot';
+import Button from 'components/Button';
+import { useToasts } from 'react-toast-notifications';
+import { Link } from 'react-router-dom';
+import { axiosInstance } from 'helpers';
+import '../style.scss';
 
 function QuickCheckout() {
   const submitButton = useRef();
@@ -17,15 +17,22 @@ function QuickCheckout() {
     inputs: data,
     submitButton,
     cb: async (inputs) => {
-      const response = await axiosInstance.post("/user/login", inputs);
-      addToast(`Welcome back ${response.data.user.firstName}`, {
-        appearance: "success",
-        autoDismiss: true,
+      const response = await axiosInstance.post('/user/reset_password_link', {
+        ...inputs,
+        email: inputs.email.toLowerCase(),
       });
+      if (response) {
+        addToast(`A password reset link has been sent to your email`, {
+          appearance: 'success',
+          autoDismiss: true,
+        });
+        submitButton.current.children[0].innerHTML = 'Resend';
+        submitButton.current.classList.remove('loader');
+      }
     },
     btnText: {
-      loading: "Sending...",
-      reg: "Send reset Link",
+      loading: 'Sending...',
+      reg: 'Send reset Link',
     },
   });
 
@@ -49,7 +56,7 @@ function QuickCheckout() {
             value={inputTypes[form.name]}
             errorMsg={form.errorMsg}
             required={form.required}
-            reviel={form.type === "password" ? reviel : false}
+            reviel={form.type === 'password' ? reviel : false}
             revielPassword={revielPassword}
             handleChange={handleChange}
             validateSelf={validateSelf}
@@ -65,8 +72,8 @@ function QuickCheckout() {
       </form>
       <div className="externs flex-row j-space">
         <small>
-          Don't have an account?{" "}
-          <Link to="/signup">
+          Don't have an account?{' '}
+          <Link to="/auth/signup">
             <strong className="theme-color">Sign up</strong>
           </Link>
         </small>

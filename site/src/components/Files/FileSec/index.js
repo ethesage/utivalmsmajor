@@ -1,66 +1,96 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import pdf from "../../../assets/dashboard/pdf.png";
-import delete_icon from "../../../assets/icons/delete.png";
-import word from "../../../assets/dashboard/word.png";
-import excel from "../../../assets/dashboard/excel.png";
-import video from "../../../assets/dashboard/video.png";
-import dots from "../../../assets/dashboard/dots.png";
-import "./style.scss";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import delete_icon from 'assets/icons/delete.png';
+import pdf from 'assets/file_icons/pdf.png';
+import doc from 'assets/file_icons/doc.png';
+import csv from 'assets/file_icons/csv.png';
+import file_img from 'assets/file_icons/file.png';
+import numeral from 'numeral';
+import DropDown from '../../DropDown';
+import './style.scss';
+import { s3url } from 'helpers';
 
-const FileSec = ({ personal = false }) => {
-  const onClick = (e) => {
-    e.target.nextElementSibling.classList.toggle("op-dp_2x");
+const FileSec = ({
+  file,
+  personal = false,
+  deleteFile,
+  linkExt,
+  setCurrentFile,
+  showOpt = true,
+}) => {
+  const view = async () => {
+    setCurrentFile(`${s3url}/${file.Key}`);
   };
 
-  const close = (e) => {
-    const opened = document.querySelectorAll(".op-dp_2x");
-    opened.forEach((e) => e.classList.remove("op-dp_2x"));
+  const fileObj = {
+    pdf,
+    doc,
+    docx: doc,
+    csv,
+    xls: csv,
+    xlsx: csv,
   };
+
+  const fileName = file.Key.split('/').pop();
 
   return (
-    <div className="file_card flex-row j-space">
-      <div className="left flex-row j-start">
-        <img src={pdf} alt="pdf" />
-        <div className="txt-sec">
-          <h2 className="clipped-text" style={{ "--number": 1 }}>
-            HR Analytics Fundamentals
-          </h2>
-          {personal ? (
-            <small className="theme-color">Graded</small>
-          ) : (
-            <small>10MB</small>
-          )}
+    <div className="file_card">
+      <div className="flex-row j-space">
+        <div className="left flex-row j-start al-start" onClick={view}>
+          <img src={fileObj[fileName.split('.')[1]] || file_img} alt="pdf" />
+          <div className="txt-sec">
+            <h2 className="clipped-text" style={{ '--number': 1 }}>
+              {fileName}
+            </h2>
+            {personal ? (
+              <>
+                {file.isGraded ? (
+                  <small className="theme-color">Graded</small>
+                ) : (
+                  <small className="theme-color">Not Graded</small>
+                )}
+              </>
+            ) : (
+              <small>{numeral(file.Size).format('0b')}</small>
+            )}
+          </div>
         </div>
-      </div>
 
-      {personal ? (
-        <div>
-          {true ? (
-            <Link
-              to="/dashboard/courses/assignment/view_grade/3456"
-              className="theme-color grade"
-            >
-              <small>View Grade</small>
-            </Link>
+        {showOpt &&
+          (personal ? (
+            <div>
+              {file.isGraded ? (
+                <Link
+                  to={`/courses/assignment/${linkExt.courseId}/${linkExt.classroom}/${file.id}`}
+                  className="theme-color grade"
+                >
+                  <small>View Grade</small>
+                </Link>
+              ) : (
+                <img
+                  src={delete_icon}
+                  alt="delete"
+                  className="img_grade"
+                  onClick={() => deleteFile(file.Key)}
+                />
+              )}
+            </div>
           ) : (
-            <img src={delete_icon} alt="delete" className="img_grade" />
-          )}
-        </div>
-      ) : (
-        <div className="dots" onBlur={close} tabIndex="-1">
-          <div className="img-sec" onClick={onClick}>
-            <img src={dots} alt="dots" className="img contain" />
-          </div>
-          <div className="drops">
-            <ul>
-              <li>View</li>
-              <li>Download</li>
-              <li>Delete</li>
-            </ul>
-          </div>
-        </div>
-      )}
+            <DropDown>
+              <ul>
+                <li onClick={view}>View</li>
+                <li>
+                  <a href={`${s3url}/${encodeURIComponent(file.Key)}`} download>
+                    Download
+                  </a>
+                </li>
+                {deleteFile && (
+                  <li onClick={() => deleteFile(file.Key)}>Delete</li>
+                )}
+              </ul>
+            </DropDown>
+          ))}
+      </div>
     </div>
   );
 };

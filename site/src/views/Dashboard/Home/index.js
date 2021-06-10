@@ -1,69 +1,124 @@
-import React from "react";
-import Button from "../../../components/Button";
-import CountSection from "./CountSection";
-import Classes from "../../../components/Classes";
-import Files from "../../../components/Files";
-import Activities from "../../../components/Activities";
-import Welcome from "./Welcome";
-import CourseCard from "../../../components/CourseCard";
-import categories from "../../../data/categories";
-import "./style.scss";
+import React from 'react';
+import { useSelector } from 'react-redux';
+// import Sekeleton from 'react-skeleton-loader';
+import ProfileCheck from 'components/ProfileCheck';
+import Classes from 'components/NextClassTrainer';
+// import Files from 'components/Files';
+import CountSection from './CountSection';
+import Layout from 'Layouts/HomeGrid';
+import Welcome from './Welcome';
+// import CourseCard from 'components/CourseCard';
+import girl from 'assets/utiva viretnship programme.png';
+import UserClases from 'components/UserMainClass';
+// import { getCourse } from './action';
+// import { mapCourse } from './action';
+// import useFetch from 'Hooks/useFetch';
+// import no_course from 'assets/dashboard/no_course.png';
+import './style.scss';
 
-const InfoSec = ({ txt, children }) => (
-  <div className="c_card large flex-col">
-    <nav className="c_card_nav flex-row j-space reg_text">
+const InfoSec = ({ txt, children, useSubtitle = true }) => (
+  <div className="info_fx flex-col">
+    <nav className="c_card_nav flex-row j-space _text">
       <h2>{txt}</h2>
-      <p>View All {txt}</p>
+      <p>{txt && useSubtitle && `View All ${txt}`}</p>
     </nav>
     {children}
   </div>
 );
 
-const Home = () => {
+// const Loader = () => (
+//   <div className="next_class">
+//     <Sekeleton width="120%" height="100%" />
+//   </div>
+// );
+
+// const NoCourse = () => (
+//   <div className="next_class flex-row ">
+//     <img src={no_course} alt="" className="" />
+//     <div className="text-sec flex-col">
+//       <h2>No available course</h2>
+//     </div>
+//   </div>
+// );
+
+const Home = ({ gapi }) => {
+  const { user, isStudent } = useSelector((state) => state.auth);
+  // const { allCourses, mappedCourses } = useSelector((state) => state.home);
+  // const dispatch = useDispatch();
+  // const [loading, , fetch] = useFetch(dispatch, !!!allCourses, true);
+
   return (
     <main className="dash-con dash-home">
-      <div className="com-profile flex-row j-space">
-        <p>Your profile is incomplete. Please update your profile</p>
+      <ProfileCheck user={user} />
 
-        <Button
-          className="p_btn short flex-row"
-          link="/dashboard/settings"
-          text="Update Profile"
-        />
-      </div>
+      <Welcome user={user} />
 
-      <Welcome />
-
-      <div className="p_sec flex-row j-space">
+      <Layout>
         <CountSection />
-      </div>
+      </Layout>
 
-      <div className="p_sec flex-row j-space">
-        <InfoSec txt="Classes">
-          <Classes />
-        </InfoSec>
+      {isStudent ? (
+        <UserClases />
+      ) : (
+        <Layout>
+          <InfoSec txt="Next Classes" useSubtitle={false}>
+            <Classes />
+          </InfoSec>
 
-        <InfoSec txt="Files">
-          <Files />
-        </InfoSec>
+          {/* <InfoSec txt="Files">
+            <Files />
+          </InfoSec>
 
-        <InfoSec txt="Activities">
-          <Activities />
-        </InfoSec>
-      </div>
+          <InfoSec txt=""></InfoSec> */}
+        </Layout>
+      )}
 
-      <div className="course-section">
-        <nav className="cs_nav flex-row j-space reg_text">
-          <h2>Top Skills People are Learning</h2>
-          <p>View all courses</p>
-        </nav>
+      {isStudent ? (
+        <>
+          <div className="adv flex-row j-space">
+            <div className="text_sec _text flex-col j-space al-start">
+              <div className="info">
+                <h2 className="theme-color">Utiva Virtenship Programme</h2>
+                <p>
+                  A platform that helps students gain on-the-job experience by
+                  engaging with real-life projects and business cases developed
+                  by leading technology companies.
+                </p>
+              </div>
+              <a className="theme-color" href="https://utiva.io" target="_">
+                Learn More
+              </a>
+            </div>
+            <div className="img_sec">
+              <img
+                src={girl}
+                alt="utiva Vertenship Programme"
+                className="img contain"
+              />
+            </div>
+          </div>
 
-        <div className="flex-col al-start">
-          {categories[0].data.map((course, i) => (
-            <CourseCard data={course} size="small" key={`current_cate_${i}`} />
-          ))}
-        </div>
-      </div>
+          {/* <div className="course-section">
+            <nav className="cs_nav flex-row j-space reg_text">
+              <h2>Top Skills People are Learning</h2>
+              <p>View all courses</p>
+            </nav>
+            {!mappedCourses ? (
+              [1, 2, 3].map((i) => <Loader key={`load_${i}`} />)
+            ) : mappedCourses.length === 0 ? (
+              <NoCourse />
+            ) : (
+              mappedCourses?.map((course, i) => (
+                <CourseCard
+                  data={course}
+                  size="small"
+                  key={`current_cate_${i}`}
+                />
+              ))
+            )}
+          </div> */}
+        </>
+      ) : null}
     </main>
   );
 };

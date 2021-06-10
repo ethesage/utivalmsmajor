@@ -1,1 +1,29 @@
-@import "../../media";
+@import '../../media';
+
+.info_con {
+  position: relative;
+  overflow: hidden !important;
+  width: 100%;
+
+  .info_con_sec {
+    overflow-y: auto;
+    height: 400px;
+    padding: 20px;
+
+    .file_sec {
+      width: 100%;
+    }
+  }
+
+  .add_file {
+    // position: absolute;
+    // bottom: 0;
+    // left: 0;
+    background: white;
+
+    > div {
+      background: rgba(color(theme), 0.1);
+      border-radius: 10px;
+    }
+  }
+}
