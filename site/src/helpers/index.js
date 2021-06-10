@@ -161,7 +161,7 @@ export const weeks = {
   11: 'Eleven',
   12: 'Twelve',
   13: 'Thirteen',
-  14: 'Fourtheen',
+  14: 'Fourteen',
   15: 'Fifteen',
   16: 'Sixteen',
   17: 'Seventeen',
