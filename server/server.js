@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import express from 'express';
 import session from 'express-session';
 import formData from 'express-form-data';
