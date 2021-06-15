@@ -19,9 +19,13 @@ export default {
       can: ['course:crud', 'classRoom:crud', 'admin:create', 'coupon:crud'],
       inherits: ['trainer'],
     },
+    super_admin: {
+      can: ['student_add'],
+      inherits: ['admin'],
+    },
     tech: {
       can: [''],
-      inherits: ['admin'],
+      inherits: ['super_admin'],
     },
   },
 };

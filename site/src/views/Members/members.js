@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useToasts } from 'react-toast-notifications';
 import Sekeleton from 'react-skeleton-loader';
 import moment from 'moment';
 import { CSVLink } from 'react-csv';
@@ -23,7 +24,7 @@ import './style.scss';
 const Members = ({ courseId }) => {
   const dispatch = useDispatch();
   const { enrolledStudents } = useSelector((state) => state.member);
-  const { isAdmin, isStudent } = useSelector((state) => state.auth);
+  const { isAdmin, isStudent, user } = useSelector((state) => state.auth);
   const allStudents = useSelector((state) => state.students);
   const modalRef = useRef();
   const inner_modalRef = useRef();
@@ -36,6 +37,7 @@ const Members = ({ courseId }) => {
   const single_student_modal = useRef();
   const [currentStudent, setCurrentStudent] = useState();
   const [date] = useState(moment().format('YYYY-MM-DD'));
+  const { addToast } = useToasts();
 
   useEffect(() => {
     if (allStudents) return;
@@ -70,6 +72,15 @@ const Members = ({ courseId }) => {
   };
 
   const enroll = async () => {
+    if (!user.role === 'super_admin') {
+      addToast('You are not allowed to perform this action', {
+        appearance: 'warning',
+        autoDismiss: true,
+      });
+
+      return;
+    }
+
     inner_modalRef.current.classList.add('spinner1');
 
     try {
