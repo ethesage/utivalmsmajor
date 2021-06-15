@@ -44,11 +44,10 @@ const Viewer = ({ docs, close }) => {
         onError={handleError}
         title="docs"
         sandbox="allow-scripts allow-same-origin"
-        // src={`https://docs.google.com/viewer?url=${encodeURIComponent(
-        //   docs
-        // )}&embedded=true&hl=en`}
-
-        src="https://docs.google.com/viewer?srcid=1IWA0-Uq4SMIzo_Z86sjDLSA5SAUrvtBm&pid=explorer&efh=false&a=v&chrome=false&embedded=true"
+        src={`https://docs.google.com/viewer?url=${encodeURIComponent(
+          docs
+        )}&embedded=true&hl=en`}
+        // src="https://docs.google.com/viewer?srcid=1IWA0-Uq4SMIzo_Z86sjDLSA5SAUrvtBm&pid=explorer&efh=false&a=v&chrome=false&embedded=true"
         style={{ width: '100%', height: '100%' }}
         frameBorder="0"
       ></iframe>
