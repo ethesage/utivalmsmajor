@@ -20,7 +20,7 @@ export default {
       inherits: ['trainer'],
     },
     super_admin: {
-      can: ['student_add',],
+      can: ['student_add'],
       inherits: ['admin'],
     },
     tech: {
