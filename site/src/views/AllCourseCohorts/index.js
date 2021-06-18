@@ -1,51 +1,51 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import { useToasts } from "react-toast-notifications";
-import moment from "moment";
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { useToasts } from 'react-toast-notifications';
+import moment from 'moment';
 import {
   getAllCourseCohorts,
   addCourseCohort,
   editCourseCohort,
-} from "g_actions/admin";
-import Button from "components/Button";
-import getCurrentCourse from "Hooks/getCCAdmin";
-import Loading from "components/Loading";
-import Nav from "components/AdminHeader";
-import useFetch from "Hooks/useFetch";
-import AllCohorts from "components/AllCohorts";
-import Modal from "components/Modal";
-import data from "data/createCohort";
-import Input from "components/InputType";
-import useInput from "Hooks/useInput";
-import { axiosInstance } from "helpers";
+} from 'g_actions/admin';
+import Button from 'components/Button';
+import getCurrentCourse from 'Hooks/getCCAdmin';
+import Loading from 'components/Loading';
+import Nav from 'components/AdminHeader';
+import useFetch from 'Hooks/useFetch';
+import AllCohorts from 'components/AllCohorts';
+import Modal from 'components/Modal';
+import data from 'data/createCohort';
+import Input from 'components/InputType';
+import useInput from 'Hooks/useInput';
+import { axiosInstance } from 'helpers';
 // import not_found from 'assets/not_found.png';
-import "./style.scss";
+import './style.scss';
 
 const filterDate = (date) => {
-  const dates = date.split(" - ");
+  const dates = date.split(' - ');
 
-  const endDateYear = parseInt(dates[1].split(" ")[2]);
-  const endDateMonth = moment.monthsShort().indexOf(dates[1].split(" ")[0]) + 1;
-  const endDateDate = parseInt(dates[1].split(" ")[1]);
+  const endDateYear = parseInt(dates[1].split(' ')[2]);
+  const endDateMonth = moment.monthsShort().indexOf(dates[1].split(' ')[0]) + 1;
+  const endDateDate = parseInt(dates[1].split(' ')[1]);
 
   const endDate = `${endDateYear}-${endDateMonth}-${endDateDate}`;
 
-  const startDateDate = parseInt(dates[0].split(" ")[1]);
+  const startDateDate = parseInt(dates[0].split(' ')[1]);
   const startDateMonth =
-    moment.monthsShort().indexOf(dates[0].split(" ")[0]) + 1;
+    moment.monthsShort().indexOf(dates[0].split(' ')[0]) + 1;
 
   const monthDiff = endDateMonth - startDateMonth;
 
   const expectedStartMonthYear = moment(endDate)
-    .subtract(monthDiff, "months")
-    .format("YYYY");
+    .subtract(monthDiff, 'months')
+    .format('YYYY');
 
   return {
     startDate: moment(
       `${expectedStartMonthYear}-${startDateMonth}-${startDateDate}`
-    ).format("YYYY-MM-DD"),
-    endDate: moment(endDate).format("YYYY-MM-DD"),
+    ).format('YYYY-MM-DD'),
+    endDate: moment(endDate).format('YYYY-MM-DD'),
   };
 };
 
@@ -73,57 +73,55 @@ const CourseCohorts = () => {
   }, [cohorts, fetch, courseId, currentCourse]);
 
   const btnText = currentCohort
-    ? { loading: "Editing...", reg: "Edit" }
+    ? { loading: 'Editing...', reg: 'Edit' }
     : {
-        loading: "Creating...",
-        reg: "Create",
+        loading: 'Creating...',
+        reg: 'Create',
       };
 
-  const [
-    handleSubmit,
-    handleChange,
-    inputTypes,
-    validateSelf,
-    setInputTypes,
-  ] = useInput({
-    inputs: data,
-    submitButton,
-    initials: {},
-    btnText,
-    cb: async (inputs) => {
-      const startDate = moment(new Date(inputs.startDate)).format("MMM Do");
-      const endDate = moment(new Date(inputs.endDate)).format("MMM Do YYYY");
+  const [handleSubmit, handleChange, inputTypes, validateSelf, setInputTypes] =
+    useInput({
+      inputs: data,
+      submitButton,
+      initials: {},
+      btnText,
+      cb: async (inputs) => {
+        const startDate = moment(new Date(inputs.startDate)).format('MMM Do');
+        const endDate = moment(new Date(inputs.endDate)).format('MMM Do YYYY');
 
-      const newInputs = {
-        dateRange: `${startDate} - ${endDate}`,
-        cohort: inputs.cohort,
-        folderId: inputs.folderId,
-        courseId,
-        expiresAt: new Date(inputs.endDate),
-        paymentType: inputs.paymentType,
-      };
+        const newInputs = {
+          dateRange: `${startDate} - ${endDate}`,
+          cohort: inputs.cohort,
+          folderId: inputs.folderId,
+          courseId,
+          expiresAt: new Date(inputs.endDate),
+          paymentType: inputs.paymentType,
+        };
 
-      const resp = !currentCohort
-        ? await axiosInstance.post(`/cohort/addcourse`, newInputs)
-        : await axiosInstance.patch(`/cohort/courseCohort/update`, {
-            ...newInputs,
-            courseCohortId: currentCohort.id,
-          });
+        const resp = !currentCohort
+          ? await axiosInstance.post(`/cohort/addcourse`, newInputs)
+          : await axiosInstance.patch(`/cohort/courseCohort/update`, {
+              ...newInputs,
+              courseCohortId: currentCohort.id,
+            });
 
-      addToast(`Successfully ${currentCohort ? "Edited" : "Created"} `, {
-        appearance: "success",
-        autoDismiss: true,
-      });
+        addToast(`Successfully ${currentCohort ? 'Edited' : 'Created'} `, {
+          appearance: 'success',
+          autoDismiss: true,
+        });
 
-      submitButton.current.children[0].innerHTML = btnText.reg;
-      submitButton.current.classList.remove("loader");
+        if (submitButton.current) {
+          submitButton.current.children[0].innerHTML = btnText.reg;
+          submitButton.current.classList.remove('loader');
+        }
 
-      currentCohort
-        ? dispatch(editCourseCohort(resp.data.data, currentCourse.name))
-        : dispatch(addCourseCohort(resp.data.data, currentCourse.name));
-      modalRef.current.close();
-    },
-  });
+        currentCohort
+          ? dispatch(editCourseCohort(resp.data.data, currentCourse.name))
+          : dispatch(addCourseCohort(resp.data.data, currentCourse.name));
+
+        if (submitButton.current) modalRef.current.close();
+      },
+    });
 
   useEffect(() => {
     if (!currentCohort) return;
@@ -140,7 +138,7 @@ const CourseCohorts = () => {
       Object.keys(inputTypes).reduce(
         (acc, input) => ({
           ...acc,
-          [input]: data[input] ? data[input] : "",
+          [input]: data[input] ? data[input] : '',
         }),
         {}
       )
@@ -174,7 +172,7 @@ const CourseCohorts = () => {
       Object.keys(inputTypes).reduce(
         (acc, input) => ({
           ...acc,
-          [input]: "",
+          [input]: '',
         }),
         {}
       )
@@ -227,7 +225,7 @@ const CourseCohorts = () => {
                 showAsterix={false}
                 types={form.types}
                 attr={
-                  form.name === "cohort" && currentCohort
+                  form.name === 'cohort' && currentCohort
                     ? { disabled: true }
                     : {}
                 }
@@ -242,7 +240,7 @@ const CourseCohorts = () => {
                 btnRef={submitButton}
                 onClick={handleSubmit}
                 className="s_btn flex-row"
-                text={currentCohort ? "Edit" : "Create"}
+                text={currentCohort ? 'Edit' : 'Create'}
               />
             </div>
           </form>
