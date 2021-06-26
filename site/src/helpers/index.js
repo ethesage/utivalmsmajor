@@ -138,7 +138,8 @@ export function get_user() {
     };
   }
 
-  const isAdmin = user && user.role === 'admin';
+  const isAdmin =
+    user && (user.role === 'admin' || user.role === 'super_admin');
   const isTrainer = user && user.role === 'trainer';
   const isStudent = user && user.role === 'student';
 

@@ -36,7 +36,7 @@ function Signup() {
       }
 
       const data = Object.keys(inputs).reduce((acc, input) => {
-        if (input === 'cpassword') {
+        if (input === 'cpassword' || !inputs[input]) {
           return { ...acc };
         } else if (input === 'si_password') {
           return { ...acc, password: inputs[input] };

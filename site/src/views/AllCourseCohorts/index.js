@@ -18,9 +18,36 @@ import Modal from 'components/Modal';
 import data from 'data/createCohort';
 import Input from 'components/InputType';
 import useInput from 'Hooks/useInput';
-import { axiosInstance, filterDate } from 'helpers';
+import { axiosInstance } from 'helpers';
 // import not_found from 'assets/not_found.png';
 import './style.scss';
+
+const filterDate = (date) => {
+  const dates = date.split(' - ');
+
+  const endDateYear = parseInt(dates[1].split(' ')[2]);
+  const endDateMonth = moment.monthsShort().indexOf(dates[1].split(' ')[0]) + 1;
+  const endDateDate = parseInt(dates[1].split(' ')[1]);
+
+  const endDate = `${endDateYear}-${endDateMonth}-${endDateDate}`;
+
+  const startDateDate = parseInt(dates[0].split(' ')[1]);
+  const startDateMonth =
+    moment.monthsShort().indexOf(dates[0].split(' ')[0]) + 1;
+
+  const monthDiff = endDateMonth - startDateMonth;
+
+  const expectedStartMonthYear = moment(endDate)
+    .subtract(monthDiff, 'months')
+    .format('YYYY');
+
+  return {
+    startDate: moment(
+      `${expectedStartMonthYear}-${startDateMonth}-${startDateDate}`
+    ).format('YYYY-MM-DD'),
+    endDate: moment(endDate).format('YYYY-MM-DD'),
+  };
+};
 
 const CourseCohorts = () => {
   const [loading, error, currentCourse] = getCurrentCourse();
@@ -83,13 +110,16 @@ const CourseCohorts = () => {
           autoDismiss: true,
         });
 
-        submitButton.current.children[0].innerHTML = btnText.reg;
-        submitButton.current.classList.remove('loader');
+        if (submitButton.current) {
+          submitButton.current.children[0].innerHTML = btnText.reg;
+          submitButton.current.classList.remove('loader');
+        }
 
         currentCohort
           ? dispatch(editCourseCohort(resp.data.data, currentCourse.name))
           : dispatch(addCourseCohort(resp.data.data, currentCourse.name));
-        modalRef.current.close();
+
+        if (submitButton.current) modalRef.current.close();
       },
     });
 
