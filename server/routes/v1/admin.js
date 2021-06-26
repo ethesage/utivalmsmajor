@@ -85,7 +85,7 @@ adminRoutes.get('/users/:role', usession.can(''), getAllTrainers);
 
 adminRoutes.patch(
   '/delete-student',
-  usession.can(''),
+  usession.can('student_remove'),
   validate(deleteStudentSchema),
   deleteStudent
 );
