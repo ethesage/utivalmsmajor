@@ -137,7 +137,7 @@ const Details = ({ proceed, match, set, setPaymentAmount }) => {
                   className="ext btn theme centered"
                   target="_"
                 >
-                  <p>Learn More</p>
+                  <p>Learn More...</p>
                 </a>
               </div>
               {/* <Button /> */}
