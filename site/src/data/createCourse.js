@@ -93,8 +93,8 @@ const data = [
     selects: [
       { name: 'Local', value: 'local' },
       {
-        name: 'Foriegn',
-        value: 'foriegn',
+        name: 'Foreign',
+        value: 'foreign',
       },
     ],
     itype: 'select',
