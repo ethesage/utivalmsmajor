@@ -72,7 +72,7 @@ const Members = ({ courseId }) => {
   };
 
   const enroll = async () => {
-    if (!user.role === 'super_admin') {
+    if (user.role !== 'super_admin') {
       addToast('You are not allowed to perform this action', {
         appearance: 'warning',
         autoDismiss: true,

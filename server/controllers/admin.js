@@ -299,21 +299,15 @@ export const getAllTrainers = async (req, res) => {
 export const deleteStudent = async (req, res) => {
   const { courseCohortId, studentId } = req.body.admin;
 
-  const { role } = req.session.user;
+  const isStudent = await models.StudentCourse.findOne({
+    where: { courseCohortId, studentId },
+  });
 
-  if (role === 'admin') {
-    const isStudent = await models.StudentCourse.findOne({
-      where: { courseCohortId, studentId },
-    });
-
-    if (!isStudent) {
-      return errorStat(res, 404, 'student not enrolled in this course cohort');
-    }
-
-    await isStudent.destroy();
-
-    successStat(res, 200, 'data', 'Student Successfully Deleted');
-  } else {
-    errorStat(res, 404, 'you are not permitted to perform this operation');
+  if (!isStudent) {
+    return errorStat(res, 404, 'student not enrolled in this course cohort');
   }
+
+  await isStudent.destroy();
+
+  successStat(res, 200, 'data', 'Student Successfully Deleted');
 };
