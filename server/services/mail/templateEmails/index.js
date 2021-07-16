@@ -142,9 +142,9 @@ const dataAccelerator = (user, dateObj, whatsAppLink) => {
               </li>
 
               <li style="margin-bottom:5px;font-size:0.9em">
-                Class begins with an orientation session on the 
-                ${moment(dateObj.date).format('Do MMM YYYY')} 
-                ${moment(dateObj.time, 'HH:mm:ss').format('hh:mm A')} 
+                Class begins with an orientation session on the
+                ${moment(dateObj.date).format('Do MMM YYYY')}
+                ${moment(dateObj.time, 'HH:mm:ss').format('hh:mm A')}
                 (Nigerian time). More information about this will be shared.
                 Endeavour to join in at least 10 minutes earlier so you can get a
                 head start.
@@ -176,7 +176,7 @@ const dataAccelerator = (user, dateObj, whatsAppLink) => {
               </h3>
 
               <p>
-                ${user.firstName}, 
+                ${user.firstName},
                 please feel free to reach out to me if you have any
                 questions or further information.
               </p>
@@ -219,7 +219,7 @@ const dataIncubator = (user, dateObj, whatsAppLink) => {
           />
         </div>
         <h3 class="">Dear ${user.firstName}</h3>
-  
+
         <p>
           I warmly welcome you to the Utiva Data Incubator program. We are super
           excited to have you become a part of this great ecosystem.
@@ -233,7 +233,7 @@ const dataIncubator = (user, dateObj, whatsAppLink) => {
               materials, resources, important class links, post-class recordings,
               assignments etc. (Visit app.utiva.io and login)
             </li>
-  
+
             <p>
               <strong>
                 It is imperative that you sign up on the learning platform and
@@ -242,21 +242,21 @@ const dataIncubator = (user, dateObj, whatsAppLink) => {
                 kickstart this learning journey with you).
               </strong>
             </p>
-  
+
             <li style="margin-bottom:5px;font-size:0.9em">
               On the learning platform under the "Pre-learning session", there are
               two short videos on <strong>Introduction to Excel</strong>. Please
               ensure you watch the videos before the class begins.
             </li>
-  
+
             <li style="margin-bottom:5px;font-size:0.9em">
               <p>
-              Your live classes will be held on Zoom; the link to join is available on the Learning Platform. It is also important that you install Microsoft Excel (no later than version 2016 ) AND SQL software on your laptop before coming into class. 
+              Your live classes will be held on Zoom; the link to join is available on the Learning Platform. It is also important that you install Microsoft Excel (no later than version 2016 ) AND SQL software on your laptop before coming into class.
               </p>
-  
+
               <div>
                 <h3 style="color: #0f078e;">TUTORIALS ON SQL INSTALLATION</h3>
-  
+
                 <ol style="margin-bottom: 5px;">
                   <li style="margin-bottom:5px;font-size:0.9em">
                     Click
@@ -278,28 +278,28 @@ const dataIncubator = (user, dateObj, whatsAppLink) => {
                   </li>
                 </ol>
               </div>
-  
+
               <p>
                 I will advise you to get started on the installations as soon as
                 possible. Reach out to me if you have any challenges.
               </p>
             </li>
-  
+
             <li style="margin-bottom:5px;font-size:0.9em">
               You may need to join your classes from a second screen (perhaps your
               phone). This is important so that you are able to follow the
               facilitator's screen and also practice at the same time.
             </li>
-  
+
             <li style="margin-bottom:5px;font-size:0.9em">
-              Class begins with an orientation session on the 
-              ${moment(dateObj.date).format('Do MMM YYYY')} 
-              ${moment(dateObj.time, 'HH:mm:ss').format('hh:mm A')} 
+              Class begins with an orientation session on the
+              ${moment(dateObj.date).format('Do MMM YYYY')}
+              ${moment(dateObj.time, 'HH:mm:ss').format('hh:mm A')}
               (Nigerian time). More information about this will be shared.
               Endeavour to join in at least 10 minutes earlier so you can get a
               head start.
             </li>
-  
+
             ${
               whatsAppLink
                 ? `<li style="margin-bottom:5px;font-size:0.9em">
@@ -311,24 +311,24 @@ const dataIncubator = (user, dateObj, whatsAppLink) => {
             </li>`
                 : ''
             }
-  
+
             <li style="margin-bottom:5px;font-size:0.9em">
               Finally, come with lots of enthusiasm as this is the beginning
               of an exciting journey.
             </li>
           </ol>
-  
+
           <div>
             <h3 style="color: #0f078e;">
               Note that ALL the classes are very essential if you want to get
               maximum value.
             </h3>
-  
+
             <p>
               ${user.firstName}, please feel free to reach out to me if you have
               any questions or further information.
             </p>
-  
+
             <p>Best Regards.</p>
           </div>
         </div>
@@ -493,9 +493,9 @@ const carrerStarters = (user, dateObj, whatsAppLink) => {
           </li>
 
           <li style="margin-bottom:5px;font-size:0.9em">
-            Class begins with an orientation session on the 
-            ${moment(dateObj.date).format('Do MMM YYYY')} 
-            ${moment(dateObj.time, 'HH:mm:ss').format('hh:mm A')} 
+            Class begins with an orientation session on the
+            ${moment(dateObj.date).format('Do MMM YYYY')}
+            ${moment(dateObj.time, 'HH:mm:ss').format('hh:mm A')}
             (Nigerian time). More information about this will be shared.
             Endeavour to join in at least 10 minutes earlier so you can get a
             head start.
@@ -575,9 +575,9 @@ const designSchool = (user, dateObj, whatsAppLink) => {
         </p>
         <div>
             <h3 style="color: #0f078e;">
-            Kindly note that the class begins with an orientation session on the 
-            ${moment(dateObj.date).format('Do MMM YYYY')} 
-            ${moment(dateObj.time, 'HH:mm:ss').format('hh:mm A')}. 
+            Kindly note that the class begins with an orientation session on the
+            ${moment(dateObj.date).format('Do MMM YYYY')}
+            ${moment(dateObj.time, 'HH:mm:ss').format('hh:mm A')}.
             (More information will be sent to you soon)
             </h3>
 
@@ -648,7 +648,7 @@ const designSchool = (user, dateObj, whatsAppLink) => {
             </h3>
 
             <p>
-                ${user.firstName}, 
+                ${user.firstName},
                 please feel free to reach out to me if you have
                 any questions or further information.
             </p>
@@ -693,16 +693,16 @@ const projectManagement = (user, dateObj, whatsAppLink) => {
 
         <p>
           Preparations are well underway to ensure an amazing learning experience
-          as you come into class on 
-          ${moment(dateObj.date).format('Do')}. 
+          as you come into class on
+          ${moment(dateObj.date).format('Do')}.
           However, I need to
           mention a few things:
         </p>
         <div>
           <h3 style="color: #0f078e;">
-            Kindly note that the class begins with an orientation session on the 
-            ${moment(dateObj.date).format('Do MMM YYYY')} 
-            ${moment(dateObj.time, 'HH:mm:ss').format('hh:mm A')}. 
+            Kindly note that the class begins with an orientation session on the
+            ${moment(dateObj.date).format('Do MMM YYYY')}
+            ${moment(dateObj.time, 'HH:mm:ss').format('hh:mm A')}.
             (More information will be sent to you soon)
           </h3>
 
@@ -785,7 +785,7 @@ const projectManagement = (user, dateObj, whatsAppLink) => {
                 : ''
             }
 
-            <p>See you in class on ${moment(dateObj.date).format('Do')}, 
+            <p>See you in class on ${moment(dateObj.date).format('Do')},
             ${user.firstName}.
             </p>
 
@@ -836,9 +836,9 @@ const productSchool = (user, dateObj, whatsAppLink) => {
             </p>
             <div>
               <h3 style="color: #0f078e;">
-                Kindly note that the class begins with an orientation session on the 
-                ${moment(dateObj.date).format('Do MMM YYYY')} 
-                ${moment(dateObj.time, 'HH:mm:ss').format('hh:mm A')}. 
+                Kindly note that the class begins with an orientation session on the
+                ${moment(dateObj.date).format('Do MMM YYYY')}
+                ${moment(dateObj.time, 'HH:mm:ss').format('hh:mm A')}.
                 (More information will be sent to you soon)
               </h3>
 
@@ -919,7 +919,7 @@ const productSchool = (user, dateObj, whatsAppLink) => {
                 </p>
 
                 <p>
-                ${user.firstName} 
+                ${user.firstName}
                 , please feel free to reach out to me if you have any questions or further information.</p>
 
                 <p>Warm Regards.</p>
