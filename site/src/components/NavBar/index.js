@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { NavLink, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import logo from '../../assets/logo.png';
 import Hambuger from '../../assets/icons/Hambuger';
 import { useSelector } from 'react-redux';
@@ -7,7 +7,8 @@ import Button from '../Button';
 import './style.scss';
 
 const links = [
-  { title: 'Login', link: '/auth/signin' },
+  // { title: 'Login', link: '/auth/signin' },
+  { title: 'Login', link: 'https://learn.utiva.io/users/sign_in' },
   { title: 'Get Started', link: '/auth/signup', classname: ' nav_btn' },
   { title: 'Dashboard', link: '/', classname: ' nav_btn' },
 ];
@@ -74,33 +75,39 @@ const NavBar = () => {
 
           <div className={`contents flex-row j-end${checked ? ' open' : ''}`}>
             <div className="l_s flex-row j-start">
-              {!!user ? (
+              {/* {!!user ? (
                 <Button
                   link={links[2].link}
                   text={links[2].title}
                   className="mx_auto flex-row"
                 />
-              ) : (
+              )  */}
+              {/* : ( */}
                 <>
                   {links.slice(0, 1).map((link, i) => (
                     <div className="lin_con" key={`sublink_${i}`}>
-                      <NavLink
+                      {/* <NavLink
                         to={link.link}
                         className={`links${link.classname || ''}`}
                         activeClassName="link_active"
                         as="div"
                       >
                         {link.title}
-                      </NavLink>
+                      </NavLink> */}
+                      <a
+                        href={link.link}
+                        className={`links${link.classname}`}>
+                        {link.title}
+                      </a>
                     </div>
                   ))}
-                  <Button
+                  {/* <Button
                     link={links[1].link}
                     text={links[1].title}
                     className="mx_auto flex-row"
-                  />
+                  /> */}
                 </>
-              )}
+              {/* )} */}
             </div>
           </div>
         </div>
