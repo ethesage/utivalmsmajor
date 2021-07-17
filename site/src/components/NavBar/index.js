@@ -9,7 +9,7 @@ import './style.scss';
 const links = [
   // { title: 'Login', link: '/auth/signin' },
   { title: 'Login', link: 'https://learn.utiva.io/users/sign_in' },
-  { title: 'Get Started', link: '/auth/signup', classname: ' nav_btn' },
+  // { title: 'Get Started', link: '/auth/signup', classname: ' nav_btn' },
   { title: 'Dashboard', link: '/', classname: ' nav_btn' },
 ];
 
