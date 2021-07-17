@@ -75,14 +75,14 @@ const NavBar = () => {
 
           <div className={`contents flex-row j-end${checked ? ' open' : ''}`}>
             <div className="l_s flex-row j-start">
-              {/* {!!user ? (
+              {!!user ? (
                 <Button
                   link={links[2].link}
                   text={links[2].title}
                   className="mx_auto flex-row"
                 />
-              )  */}
-              {/* : ( */}
+              )
+              : (
                 <>
                   {links.slice(0, 1).map((link, i) => (
                     <div className="lin_con" key={`sublink_${i}`}>
@@ -107,7 +107,7 @@ const NavBar = () => {
                     className="mx_auto flex-row"
                   /> */}
                 </>
-              {/* )} */}
+              )}
             </div>
           </div>
         </div>
